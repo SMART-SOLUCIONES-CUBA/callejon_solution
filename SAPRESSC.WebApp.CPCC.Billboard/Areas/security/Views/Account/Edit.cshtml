@@ -1,0 +1,31 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View
+
+@model SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Models.View.UserProfileViewModel
+
+@{
+    ViewData["Heading"] = "Modificar Datos";
+
+    ViewData["Title"] = ViewData["Heading"];
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Mi Cuenta",
+            Url = Url.Action("index", "account", new { Area = "security" })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = ViewData["Heading"].ToString()
+        }
+    };
+
+    Layout = "/Areas/Security/Views/Shared/_BaseAccountLayout.cshtml";
+}
+
+<a class="btn btn-default" href="@Url.Action("index")">Cancelar</a>

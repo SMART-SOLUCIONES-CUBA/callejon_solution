@@ -1,0 +1,44 @@
+﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer ViewLocalizer
+@inject SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Helpers.Localization.GlobalViewLocalizationHelper GlobalViewLocalizationHelper
+
+@model Dictionary<string, ICollection<SmartSolucionesCuba.SAPRESSC.Core.Web.Management.Models.View.DashboardManageItemViewModel>>
+
+<ul class="nav nav-sidebar">
+    @if (Context.Request.Path.Value == "/management")
+    {
+        <li class="active"><a href="#"><span class="glyphicon glyphicon-dashboard"></span> Vistazo</a></li>
+    }
+    else
+    {
+        <li><a href="@Url.Action("index", "management", new { area = string.Empty, key = string.Empty })"><span class="glyphicon glyphicon-dashboard"></span> Vistazo</a></li>
+    }
+</ul>
+
+@foreach (var group in Model)
+{
+    <div style="text-decoration: underline; font-weight: bold; margin-bottom: 8px;">@group.Key</div>
+    <ul class="nav nav-sidebar">
+    @foreach (var item in group.Value)
+    {
+        if (User.HasClaim(claim => claim.Type.Equals(SmartSolucionesCuba.SAPRESSC.Core.Web.Security.ClaimTypes.AccountWithFullAccess) && claim.Value.Equals(true.ToString())) || User.IsInRole(item.Role))
+        {
+            if (Context.Request.Path.Value.StartsWith("/management/" + item.Area + "/" + item.Controller))
+            {
+                <li class="active"><a href="@Url.Action(item.Action, item.Controller, new { area = item.Area, sheet = string.Empty })">@Html.Raw(SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Helpers.DashboardManagementItemIconographyHelper.GetIconography(item)) <span>@GlobalViewLocalizationHelper.Localize(item.Title, ViewLocalizer)</span></a></li>
+            }
+            else
+            {
+                <li><a href="@Url.Action(item.Action, item.Controller, new { area = item.Area, sheet = string.Empty })">@Html.Raw(SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Helpers.DashboardManagementItemIconographyHelper.GetIconography(item)) <span>@GlobalViewLocalizationHelper.Localize(item.Title, ViewLocalizer)</span></a></li>
+            }
+        }
+        else
+        {
+            <li class="disabled">
+                <a>
+                    @Html.Raw(SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Helpers.DashboardManagementItemIconographyHelper.GetIconography(item)) <span>@GlobalViewLocalizationHelper.Localize(item.Title, ViewLocalizer)</span>
+                </a>
+            </li>
+        }
+    }
+    </ul>
+}

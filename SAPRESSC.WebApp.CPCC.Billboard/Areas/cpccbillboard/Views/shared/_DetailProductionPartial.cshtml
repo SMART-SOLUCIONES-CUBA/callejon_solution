@@ -1,0 +1,57 @@
+﻿@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.ProductionDisplayViewModel
+
+@{ 
+    var duration = string.Format("{0} hora {1} minutos", Model.Duration.Hours, Model.Duration.Minutes);
+
+    if (Model.Duration.Hours < 1)
+    {
+        duration = string.Format("{0} minutos", Model.Duration.Minutes);
+    }
+    else if (Model.Duration.Hours > 1)
+    {
+        duration = string.Format("{0} horas {1} minutos", Model.Duration.Hours, Model.Duration.Minutes);
+    }
+}
+
+<div class="row">
+    <div class="col-md-6" style="text-align: center; margin-bottom: 20px;">
+        <img class="img-thumbnail" src="@Url.Action("image", "default", new { Area = "media", key = Model.PosterImageId })" />
+    </div>
+    <div class="col-md-6">
+        <dl style="margin-bottom: 0;">
+            <dt>Título</dt>
+            <dd>@Html.DisplayFor(model => model.Title)</dd>
+            @if (Model.LocalizedTitle != null)
+            {
+                <dt>Título en Español</dt>
+                <dd>@Html.DisplayFor(model => model.LocalizedTitle)</dd>
+            }
+            <dt>Categoría</dt>
+            <dd>@Model.Category.Name</dd>
+            <dt>Valoración</dt>
+            <dd>
+                @for (int i = 1; i <= 5; i++)
+                {
+                    if (Model.Rate >= i)
+                    {
+                        <span class="glyphicon glyphicon-star"></span>
+                    }
+                    else
+                    {
+                        <span class="glyphicon glyphicon-star-empty"></span>
+                    }
+                }
+            </dd>
+            <dt>País</dt>
+            <dd>@Model.Country.Name</dd>
+            <dt>Idioma</dt>
+            <dd>@Model.Language.Name</dd>
+            <dt>Año</dt>
+            <dd>@Html.DisplayFor(model => model.Year)</dd>
+            <dt>Duración</dt>
+            <dd>@duration</dd>
+            <dt>Sinopsis</dt>
+            <dd>@Html.DisplayFor(model => model.About)</dd>
+        </dl>
+    </div>
+</div>

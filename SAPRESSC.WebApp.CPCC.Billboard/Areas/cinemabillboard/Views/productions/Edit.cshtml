@@ -1,0 +1,310 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+
+@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.ProductionInputViewModel
+
+@{
+    ViewData["Title"] = "Modificar Película";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Películas",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Modificar"
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+@section styles {
+    <style type="text/css">
+        #grind-player-wrapper {
+            height: 360px;
+            padding: 4px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        @@media (min-width: 1200px) {
+            #grind-player-wrapper {
+                height: 520px;
+            }
+        }
+
+        @@media (min-width: 992px) and (max-width: 1199px)
+        {
+            #grind-player-wrapper {
+                height: 480px;
+            }
+        }
+    </style>
+}
+
+@section scripts {
+    @if (Model.TrailerVideoId != System.Guid.Empty)
+    {
+        <script type="text/javascript" src="~/swfobject.js"></script>
+
+        <script type="text/javascript">
+            var player = null;
+
+            function jsbridge(playerId, event, data) {
+                if (player == null) {
+                    player = document.getElementById(playerId);
+                }
+
+                switch (event) {
+                    case "onJavaScriptBridgeCreated":
+                        listStreams(teststreams, "streamlist");
+
+                        break;
+	                case "timeChange":
+	                case "timeupdate":
+	                case "progress":
+	                    break;
+                }
+
+                console.log(event, data);
+            }
+
+	        // Collect query parameters in an object that we can
+	        // forward to SWFObject:
+
+            var parameters = {
+                src: "@string.Format("rtmp://{0}:1935/cpccbillboard_vod/{1}{2}", Context.Request.Host.Host, Model.TrailerVideoId, Model.TrailerVideoExtension)",
+                autoPlay: false,
+                verbose: true,
+                controlBarAutoHide: "true",
+                controlBarPosition: "bottom",
+                javascriptCallbackFunction: "jsbridge",
+                plugin_hls: "/flashlsOSMF.swf",
+                hls_minbufferlength: -1,
+                hls_maxbufferlength: 30,
+                hls_lowbufferlength: 3,
+                hls_seekmode: "KEYFRAME",
+                hls_startfromlevel: -1,
+                hls_seekfromlevel: -1,
+                hls_live_flushurlcache: false,
+                hls_info: true,
+                hls_debug: false,
+                hls_debug2: false,
+                hls_warn: true,
+                hls_error: true,
+                hls_fragmentloadmaxretry: -1,
+                hls_manifestloadmaxretry: -1,
+                hls_capleveltostage: false,
+                hls_maxlevelcappingmode: "downscale"
+	        };
+
+	        var wmodeValue = "direct";
+	        var wmodeOptions = ["direct", "opaque", "transparent", "window"];
+	        if (parameters.hasOwnProperty("wmode"))
+	        {
+		        if (wmodeOptions.indexOf(parameters.wmode) >= 0)
+		        {
+			        wmodeValue = parameters.wmode;
+		        }
+		        delete parameters.wmode;
+	        }
+
+	        // Embed the player SWF:
+	        swfobject.embedSWF(
+		        "/GrindPlayer.swf"
+                , "grind-player"
+		        , "100%"
+		        , "100%"
+		        , "10.1.0"
+		        , "expressInstall.swf"
+		        , parameters
+		        , {
+			        allowFullScreen: "true",
+                    wmode: wmodeValue,
+                    bgcolor: "#000000"
+		        }
+		        , {
+                    name: "GrindPlayer"
+		        }
+            );
+        </script>
+    }
+}
+
+@using (Html.BeginForm("edit", "productions", new { Area = "cinemabillboard", key = string.Empty }, FormMethod.Post, true, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(model => model.Id)
+
+    @Html.HiddenFor(model => model.PosterImageId)
+
+    @Html.HiddenFor(model => model.TrailerVideoId)
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4>@ViewData["Title"]</h4></div>
+
+        <div class="panel-body">
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.Title, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Title, null, new { @class = "text-danger" })
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.LocalizedTitle, new { @class = "control-label" }) (Opcional)
+                @Html.TextBoxFor(model => model.LocalizedTitle, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.LocalizedTitle, null, new { @class = "text-danger" })
+            </div>
+
+            <div class="row">
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.CategoryId, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.CategoryId, Model.Categories, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CategoryId, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.Rate, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Rate, new { @class = "form-control", type = "range", min = "1", max = "5" })
+                    @Html.ValidationMessageFor(model => model.Rate, null, new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.CountryId, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.CountryId, Model.Countries, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CountryId, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.LanguageId, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.LanguageId, Model.Languages, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.LanguageId, null, new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.Year, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Year, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Year, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.Duration, new { @class = "control-label" }) <span class="text-info">(Minutos)</span>
+                    @Html.TextBoxFor(model => model.Duration, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Duration, null, new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.About, new { @class = "control-label" })
+                @Html.TextAreaFor(model => model.About, 3, 0, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.About, null, new { @class = "text-danger" })
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.Argument, new { @class = "control-label" })
+                @Html.TextAreaFor(model => model.Argument, 5, 0, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Argument, null, new { @class = "text-danger" })
+            </div>
+
+            <div class="row">
+                <div class="col-md-6" style="margin-bottom: 20px; text-align: center;">
+                    @Html.HiddenFor(model => model.PosterImageId)
+                    <img class="img-thumbnail" src="@Url.Action("image", "default", new { Area = "media", key = Model.PosterImageId })" />
+                </div>
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.PosterImageFile, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.PosterImageFile, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PosterImageFile, null, new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <fieldset style="margin-bottom: 20px;">
+                <legend>@Html.LabelFor(model => model.TrailerVideoFile)</legend>
+                @Html.HiddenFor(model => model.TrailerVideoId)
+                @if (Model.TrailerVideoId != System.Guid.Empty)
+                {
+                    <div style="margin-bottom: 20px; text-align: center;">
+                        <div id="grind-player-wrapper">
+                            <div id="grind-player" style="background-color: black;">
+                                <p style="color:white;">Adobe Flash Player no instalado.</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.TrailerVideoFile, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.TrailerVideoFile, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TrailerVideoFile, null, new { @class = "text-danger" })
+                </div>
+
+                @if (Model.TrailerVideoId != System.Guid.Empty)
+                {
+                    <div style="margin-bottom: 20px;">
+                        <div class="checkbox">
+                            <label>
+                                @Html.EditorFor(model => model.ResetTrailerVideo) Quitar Trailer
+                                @Html.ValidationMessageFor(model => model.ResetTrailerVideo)
+                            </label>
+                        </div>
+                    </div>
+                }
+            </fieldset>                
+
+            <fieldset style="margin-bottom: 20px;">
+                <legend style="margin-bottom: 0;">@Html.LabelFor(model => model.SelectableGenres)</legend>
+                <div class="row">
+                    @if (Model.SelectableGenres != null && Model.SelectableGenres.Count() > 0)
+                    {
+                        for (int i = 0; i < Model.SelectableGenres.Count(); i++)
+                        {
+                            @Html.EditorFor(subModel => subModel.SelectableGenres[i], "SelectionIntIDItemInputViewModel");
+                        }
+                    }
+                    else
+                    {
+                        <div class="col-md-12"><h5>Sin elementos que mostrar.</h5></div>
+                    }
+                </div>
+            </fieldset>
+
+            <fieldset style="margin-bottom: 20px;">
+                <legend style="margin-bottom: 0;">@Html.LabelFor(model => model.SelectableProducerHouses)</legend>
+                <div class="row">
+                    @if (Model.SelectableProducerHouses != null && Model.SelectableProducerHouses.Count() > 0)
+                    {
+                        for (int i = 0; i < Model.SelectableProducerHouses.Count(); i++)
+                        {
+                            @Html.EditorFor(subModel => subModel.SelectableProducerHouses[i], "SelectionLongIDItemInputViewModel");
+                        }
+                    }
+                    else
+                    {
+                        <div class="col-md-12"><h5>Sin elementos que mostrar.</h5></div>
+                    }
+                </div>
+            </fieldset>
+
+            <div>
+                <button type="submit" class="btn btn-primary">Modificar</button>
+                <a class="btn btn-default" href="@Url.Action("index")">Regresar al listado</a>
+            </div>
+        </div>
+    </div>
+}

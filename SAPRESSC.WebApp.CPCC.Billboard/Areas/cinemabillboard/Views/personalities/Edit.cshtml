@@ -1,0 +1,135 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+@using SmartSolucionesCuba.SAPRESSC.Middleware.Identity.Persistence.Enumerations;
+
+@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.PersonalityInputViewModel
+
+@{
+    ViewData["Title"] = "Modificar Personalidad";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Personalidades",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Modificar"
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+}
+
+@section scripts {
+    <script src="~/lib/moment/min/moment.min.js"></script>
+<script src="~/lib/moment/min/locales.min.js"></script>
+    <script src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script type="text/javascript">
+        $('#borndate-picker').datetimepicker({
+            locale: 'es',
+            ignoreReadonly: true,
+            format: 'DD/MM/YYYY'
+        });
+    </script>
+}
+
+@using (Html.BeginForm("edit", "personalities", new { Area = "cinemabillboard", key = string.Empty }, FormMethod.Post, true, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(model => model.Id)
+
+    var sexDropDownListItems = new[]
+    {
+        new SelectListItem { Value = Sex.Male.ToString(), Text = "Masculino" },
+        new SelectListItem { Value = Sex.Famale.ToString(), Text = "Femenino" }
+    };
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4>@ViewData["Title"]</h4></div>
+
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.LastName, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.LastName, null, new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.BornDate, new { @class = "control-label" })
+                    <div class="input-group date" id="borndate-picker">
+                        @Html.TextBoxFor(model => model.BornDate, new { @class = "form-control", @readonly = "readonly" })
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.BornDate, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.Sex, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.Sex, sexDropDownListItems, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Sex, null, new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-2 col-md-3" style="margin-bottom: 20px;">
+                    @{
+                        var imageUrl = Model.ImageId != System.Guid.Empty ? Url.Action("image", "default", new { Area = "media", key = Model.ImageId }) : "/img/default-person-picture.jpg";
+                    }
+                    <img class="img-circle img-responsive" src="@imageUrl" />
+                </div>
+                <div class="col-lg-10 col-md-9" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.ImageFile, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.ImageFile, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ImageFile, null, new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <div class="checkbox">
+                    <label>
+                        @Html.EditorFor(model => model.ResetImage) Quitar imagen
+                        @Html.ValidationMessageFor(model => model.ResetImage)
+                    </label>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.About, new { @class = "control-label" })
+                @Html.TextAreaFor(model => model.About, 5, 0, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.About, null, new { @class = "text-danger" })
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-primary">Modificar</button>
+                <a class="btn btn-default" href="@Url.Action("index")">Regresar al listado</a>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,25 @@
+﻿@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Models.View.EventDisplayViewModel
+
+<div class="row">
+    <div class="col-md-6" style="text-align: center; margin-bottom: 20px;">
+        <img class="img-thumbnail" src="@Url.Action("image", "default", new { Area = "media", key = Model.PosterImageId })" />
+    </div>
+    <div class="col-md-6">
+        <dl>
+            <dt>Cabecera</dt>
+            <dd>@Model.Header</dd>
+            <dt>Título</dt>
+            <dd>@Html.DisplayFor(model => model.Title)</dd>
+            <dt>Organizador</dt>
+            <dd>@Html.DisplayFor(model => model.Organizer)</dd>
+            <dt>Lugar</dt>
+            <dd>@Html.DisplayFor(model => model.Place)</dd>
+            <dt>Inicia</dt>
+            <dd>@Html.DisplayFor(model => model.Start)</dd>
+            <dt>Finaliza</dt>
+            <dd>@Html.DisplayFor(model => model.End)</dd>
+            <dt>Acerca de</dt>
+            <dd>@Html.DisplayFor(model => model.About)</dd>
+        </dl>
+    </div>
+</div>

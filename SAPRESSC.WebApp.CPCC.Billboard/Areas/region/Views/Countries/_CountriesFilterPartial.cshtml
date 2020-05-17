@@ -1,0 +1,18 @@
+﻿@model SmartSolucionesCuba.SAPRESSC.Middleware.Region.Web.Manager.Models.Filter.CountryFilterModel
+
+@using (Html.BeginForm("filter", "countries", new { Area = "region" }, FormMethod.Post, true, null))
+{
+    <fieldset>
+        <legend>Filtro de Países</legend>
+        <div style="margin-bottom: 20px;">
+            @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-filter"></span> Filtrar</button>
+            <button type="button" class="btn btn-default filter-form-reseter"><span class="glyphicon glyphicon-remove-circle"></span> Limpiar</button>
+        </div>
+    </fieldset>
+}
+

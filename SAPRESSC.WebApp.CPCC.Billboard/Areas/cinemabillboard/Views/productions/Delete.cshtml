@@ -1,0 +1,219 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+
+@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.ProductionDisplayViewModel
+
+@{
+    ViewData["Title"] = "Eliminar Película";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Películas",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Eliminar"
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+<h3>Esta seguro que desea eliminar la película detallada a continuación?</h3>
+
+@using (Html.BeginForm("delete", "productions", new { Area = "cinemabillboard", key = string.Empty }, FormMethod.Post, true, null))
+{
+    @Html.HiddenFor(model => model.Id)
+
+    @Html.HiddenFor(model => model.PosterImageId)
+
+    @Html.HiddenFor(model => model.TrailerVideoId)
+
+    <div class="row">
+        <div class="col-md-6" style="text-align: center; margin-bottom: 20px;">
+            <img class="img-thumbnail" src="@Url.Action("image", "default", new { Area = "media", key = Model.PosterImageId })" />
+        </div>
+        <div class="col-md-6">
+            <dl style="margin-bottom: 0;">
+                <dt>Título</dt>
+                <dd>@Html.DisplayFor(model => model.Title)</dd>
+                @if (Model.LocalizedTitle != null)
+                {
+                    <dt>Título en Español</dt>
+                    <dd>@Html.DisplayFor(model => model.LocalizedTitle)</dd>
+                }
+                <dt>Categoría</dt>
+                <dd>@Model.Category.Name</dd>
+                <dt>Valoración</dt>
+                <dd>
+                    @for (int i = 1; i <= 5; i++)
+                {
+                    if (Model.Rate >= i)
+                    {
+                            <span class="glyphicon glyphicon-star"></span>
+                        }
+                        else
+                        {
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                        }
+                    }
+                </dd>
+                <dt>País</dt>
+                <dd>@Model.Country.Name</dd>
+                <dt>Idioma</dt>
+                <dd>@Model.Language.Name</dd>
+                <dt>Año</dt>
+                <dd>@Html.DisplayFor(model => model.Year)</dd>
+                <dt>Duración</dt>
+                <dd>@Html.DisplayFor(model => model.Duration)</dd>
+                <dt>Sinopsis</dt>
+                <dd>@Html.DisplayFor(model => model.About)</dd>
+                <dt>Géneros</dt>
+                <dd>
+                    @if (Model.Genres.Count() > 0)
+                    {
+                        @string.Join(", ", Model.Genres.Select(item => item.Name).ToArray())
+                    }
+                    else
+                    {
+                        <span>Sin elementos que mostrar</span>
+                    }
+                </dd>
+                <dt>Casas Productoras</dt>
+                <dd>
+                    @if (Model.ProducerHouses.Count() > 0)
+                    {
+                        @string.Join(", ", Model.ProducerHouses.Select(item => item.Name).ToArray())
+                    }
+                    else
+                    {
+                        <span>Sin elementos que mostrar</span>
+                    }
+                </dd>
+                <dt>Condecoraciones</dt>
+                <dd>
+                    @if (Model.AwardWinnings.Count() > 0)
+                    {
+                        @string.Join(", ", Model.AwardWinnings.Select(item => string.Join(" ", new string[]
+                        {
+                            item.Type.ToString(),
+                            item.Award.Name,
+                            item.Edition,
+                            "Mejor",
+                            item.Category
+                        })).ToArray())
+                    }
+                    else
+                    {
+                        <span>Sin elementos que mostrar</span>
+                    }
+                </dd>
+                <dt>Producción</dt>
+                <dd>
+                    @if (Model.Productors.Count() > 0)
+                {
+                        @string.Join(", ", Model.Productors.Select(item => item.Name + " " + item.LastName).ToArray())
+                    }
+                    else
+                    {
+                        <span>Sin elementos que mostrar</span>
+                    }
+                </dd>
+                <dt>Dirección</dt>
+                <dd>
+                    @if (Model.Directors.Count() > 0)
+                {
+                        @string.Join(", ", Model.Directors.Select(item => item.Name + " " + item.LastName).ToArray())
+                    }
+                    else
+                    {
+                        <span>Sin elementos que mostrar</span>
+                    }
+                </dd>
+                <dt>Interpretación</dt>
+                <dd>
+                    @if (Model.Interpreters.Count() > 0)
+                {
+                        @string.Join(", ", Model.Interpreters.Select(item => item.Name + " " + item.LastName).ToArray())
+                    }
+                    else
+                    {
+                        <span>Sin elementos que mostrar</span>
+                    }
+                </dd>
+                <dt>Guión</dt>
+                <dd>
+                    @if (Model.Screenplayers.Count() > 0)
+                {
+                        @string.Join(", ", Model.Screenplayers.Select(item => item.Name + " " + item.LastName).ToArray())
+                    }
+                    else
+                    {
+                        <span>Sin elementos que mostrar</span>
+                    }
+                </dd>
+                <dt>Fotografía</dt>
+                <dd>
+                    @if (Model.Photographers.Count() > 0)
+                {
+                        @string.Join(", ", Model.Photographers.Select(item => item.Name + " " + item.LastName).ToArray())
+                    }
+                    else
+                    {
+                        <span>Sin elementos que mostrar</span>
+                    }
+                </dd>
+                <dt>Sonido</dt>
+                <dd>
+                    @if (Model.Sounders.Count() > 0)
+                {
+                        @string.Join(", ", Model.Sounders.Select(item => item.Name + " " + item.LastName).ToArray())
+                    }
+                    else
+                    {
+                        <span>Sin elementos que mostrar</span>
+                    }
+                </dd>
+                <dt>Edición</dt>
+                <dd>
+                    @if (Model.Editors.Count() > 0)
+                {
+                        @string.Join(", ", Model.Editors.Select(item => item.Name + " " + item.LastName).ToArray())
+                    }
+                    else
+                    {
+                        <span>Sin elementos que mostrar</span>
+                    }
+                </dd>
+                <dt>Dirección Artística</dt>
+                <dd>
+                    @if (Model.ArtisticManagers.Count() > 0)
+                {
+                        @string.Join(", ", Model.ArtisticManagers.Select(item => item.Name + " " + item.LastName).ToArray())
+                    }
+                    else
+                    {
+                        <span>Sin elementos que mostrar</span>
+                    }
+                </dd>
+            </dl>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a class="btn btn-default" href="@Url.Action("index")">Cancelar</a>
+    </div>
+}

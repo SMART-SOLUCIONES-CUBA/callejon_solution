@@ -1,0 +1,13 @@
+﻿@model SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View.SelectionItemInputViewModel<long>
+
+<div class="col-md-6">
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Label)
+    
+    <div class="checkbox">
+        <label class="h4">
+            @Html.CheckBoxFor(model => model.Selected)
+            @Model.Label
+        </label>
+    </div>
+</div>

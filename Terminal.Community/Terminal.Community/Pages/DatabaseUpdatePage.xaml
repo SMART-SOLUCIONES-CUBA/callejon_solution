@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sscxftoolkitmvvmpages:ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.DatabaseUpdatePage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <sscxftoolkitpresentationconverters:BoolToBoolNegationConverter x:Key="BoolToBoolNegation" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid>
+            <StackLayout 
+                VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" 
+                Spacing="20">
+                <Label 
+                    HorizontalTextAlignment="Center" 
+                    Text="&#xE02E;"
+                    TextColor="Accent" 
+                    FontFamily="Iconmonstr Iconic" 
+                    FontSize="72" />
+                <Label 
+                    HorizontalTextAlignment="Center" 
+                    TextColor="Accent" 
+                    FontFamily="Helvetica LT Std Bold Condensed" 
+                    Text="Actualizando Datos" 
+                    FontSize="Medium" />
+                <ActivityIndicator 
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    WidthRequest="150"
+                    HeightRequest="150"
+                    IsRunning="{Binding Path=IsBusy}" />
+                <Label 
+                    HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" 
+                    Text="{Binding Path=BusyProgressMessage}" 
+                    TextColor="Accent" 
+                    FontFamily="Helvetica LT Std Condensed" />
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</sscxftoolkitmvvmpages:ContentPage>

@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sscxftoolkitmvvmpages:CarouselPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:jmci="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+    xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
+    xmlns:sscxftoolkitpresentationviews="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Views;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.SessionConfigurationPage">
+    <CarouselPage.Resources>
+        <ResourceDictionary>
+            <sscxftoolkitpresentationconverters:FractionConverter x:Key="Fraction" />
+            <sscxftoolkitpresentationconverters:FactorConverter x:Key="Factor" />
+            <sscxftoolkitpresentationconverters:BoolToBinaryConverter x:Key="BoolToBinary" />
+        </ResourceDictionary>
+    </CarouselPage.Resources>
+    <sscxftoolkitmvvmpages:ContentPage>
+        <ContentPage.Padding>
+            <OnPlatform x:TypeArguments="Thickness" iOS="0, 20, 0, 0" />
+        </ContentPage.Padding>
+        <ContentPage.Content>
+            <StackLayout>
+                <StackLayout 
+                    VerticalOptions="CenterAndExpand" 
+                    HorizontalOptions="CenterAndExpand"
+                    Spacing="30">
+                    <Image 
+                        Source="{StaticResource LogoImageSource}" />
+                    <Label 
+                        HorizontalOptions="CenterAndExpand"
+                        FontFamily="Helvetica LT Std Bold Condensed"
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}"
+                        TextColor="Accent"
+                        Text="Bienvenido" />
+                    <Label 
+                        Margin="20,0,20,0"
+                        HorizontalTextAlignment="Center"
+                        HorizontalOptions="CenterAndExpand"
+                        FontFamily="Helvetica LT Std Condensed"
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                        TextColor="Accent"
+                        Text="A continuación te serán solicitados los datos que necesita la aplicación para su primer uso." />
+                </StackLayout>
+                <Button 
+                    Margin="10"
+                    HorizontalOptions="End"
+                    Text="Comenzar"
+                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                    Clicked="NextPageButton_Clicked" />
+            </StackLayout>
+        </ContentPage.Content>
+    </sscxftoolkitmvvmpages:ContentPage>
+    <sscxftoolkitmvvmpages:ContentPage>
+        <ContentPage.Padding>
+            <OnPlatform x:TypeArguments="Thickness" iOS="0, 20, 0, 0" />
+        </ContentPage.Padding>
+        <ContentPage.Content>
+            <Grid>
+                <StackLayout>
+                    <ScrollView VerticalOptions="FillAndExpand">
+                        <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="Center">
+                            <Label 
+                                Text="Perfil de Usuario"
+                                FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}"
+                                FontFamily="Helvetica LT Std Bold Condensed"
+                                TextColor="Accent"
+                                VerticalOptions="CenterAndExpand"
+                                HorizontalOptions="CenterAndExpand"/>
+                            <Grid
+                                Margin="0,15">
+                                <jmci:CircleImage
+                                    x:Name="ProfileImage"
+                                    HorizontalOptions="Center"
+                                    BorderThickness="2"
+                                    BorderColor="{StaticResource SecoundaryBrandColor}"
+                                    HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileImageSize}"
+                                    WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileImageSize}" />
+                                <Button
+                                    HorizontalOptions="Center"
+                                    BackgroundColor="#33000000"
+                                    BorderRadius="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileImageSize, Converter={StaticResource Fraction}, ConverterParameter=2}"
+                                    HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileImageSize}"
+                                    WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileImageSize}"
+                                    FontFamily="Iconmonstr Iconic"
+                                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileImageSize, Converter={StaticResource Fraction}, ConverterParameter=3}"
+                                    Text="&#xE020;"
+                                    TextColor="#AAFFFFFF"
+                                    Clicked="PickImageButton_Clicked" />
+                            </Grid>
+                            <Entry 
+                                HorizontalOptions="Center"
+                                PlaceholderColor="DimGray" 
+                                Placeholder="Nombre(s)" 
+                                Text="{Binding Profile.FirstName}"
+                                TextColor="Accent" 
+                                FontFamily="Helvetica LT Std Condensed" 
+                                FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                                WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileImageSize, Converter={StaticResource Factor}, ConverterParameter=2}" />
+                            <Entry 
+                                HorizontalOptions="Center"
+                                PlaceholderColor="DimGray" 
+                                Placeholder="Apellidos" 
+                                Text="{Binding Profile.LastName}"
+                                TextColor="Accent"
+                                FontFamily="Helvetica LT Std Condensed"
+                                FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" 
+                                WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileImageSize, Converter={StaticResource Factor}, ConverterParameter=2}" />
+                            <StackLayout 
+                                Orientation="Horizontal" 
+                                HorizontalOptions="Center"
+                                WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileImageSize, Converter={StaticResource Factor}, ConverterParameter=2}">
+                                <Label 
+                                    Text="Sexo" 
+                                    Margin="0,10,0,10" 
+                                    FontFamily="Helvetica LT Std Condensed"
+                                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                                    TextColor="Accent"  />
+                                <Picker 
+                                    TextColor="Accent" 
+                                    SelectedIndex="{Binding Path=Profile.IsMale, Converter={StaticResource BoolToBinary}}">
+                                    <Picker.Items>
+                                        <x:String>Femenino</x:String>
+                                        <x:String>Masculino</x:String>
+                                    </Picker.Items>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                    </ScrollView>
+                    <Button 
+                        Margin="10"
+                        HorizontalOptions="End"
+                        Text="Continuar"
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                        Clicked="NextPageButton_Clicked" />
+                </StackLayout>
+
+                <sscxftoolkitpresentationviews:BusyView />
+            </Grid>
+        </ContentPage.Content>
+    </sscxftoolkitmvvmpages:ContentPage>
+    <sscxftoolkitmvvmpages:ContentPage>
+        <ContentPage.Padding>
+            <OnPlatform x:TypeArguments="Thickness" iOS="0, 20, 0, 0" />
+        </ContentPage.Padding>
+        <ContentPage.Content>
+            <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="30">
+                <Image Source="{StaticResource LogoImageSource}" />
+                <Label 
+                    HorizontalOptions="CenterAndExpand" 
+                    Text="Completado" 
+                    TextColor="Accent"
+                    FontFamily="Helvetica LT Std Bold Condensed"
+                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}" />
+                <Label 
+                    Margin="20,0,20,0" 
+                    HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand"
+                    TextColor="Accent" 
+                    Text="Todo está listo para que puedas disfrutar de nuestra aplicación." 
+                    FontFamily="Helvetica LT Std Condensed" 
+                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                <Button 
+                    Text="Finalizar" 
+                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                    HorizontalOptions="Center" 
+                    Clicked="EndSetupButton_Clicked" />
+            </StackLayout>
+        </ContentPage.Content>
+    </sscxftoolkitmvvmpages:ContentPage>
+</sscxftoolkitmvvmpages:CarouselPage>

@@ -1,0 +1,429 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CreationSuccessMessage" xml:space="preserve">
+    <value>Cambios aplicados con éxito.</value>
+  </data>
+  <data name="CurrentUserNotRemovableMessage" xml:space="preserve">
+    <value>El usuario actual no puede ser eliminado</value>
+  </data>
+  <data name="DeletionSuccessMessage" xml:space="preserve">
+    <value>Cambios aplicados con éxito.</value>
+  </data>
+  <data name="DisableSuccessMessage" xml:space="preserve">
+    <value>Elemento deshabilitado con éxito.</value>
+  </data>
+  <data name="EditionSuccessMessage" xml:space="preserve">
+    <value>Cambios aplicados con éxito.</value>
+  </data>
+  <data name="EnableSuccessMessage" xml:space="preserve">
+    <value>Elemento habilitado con éxito.</value>
+  </data>
+  <data name="InvalidAuthenticationDataMessage" xml:space="preserve">
+    <value>Usuario y/o contraseña incorrectos.</value>
+  </data>
+  <data name="InvalidMessage" xml:space="preserve">
+    <value>Los datos introducidos no son válidos.</value>
+  </data>
+  <data name="NotFoundMessage" xml:space="preserve">
+    <value>El elemento especificado no encontrado.</value>
+  </data>
+  <data name="Awards" xml:space="preserve">
+    <value>Premios</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>Categorías</value>
+  </data>
+  <data name="Cinemas" xml:space="preserve">
+    <value>Cines</value>
+  </data>
+  <data name="Countries" xml:space="preserve">
+    <value>Países</value>
+  </data>
+  <data name="Genres" xml:space="preserve">
+    <value>Géneros</value>
+  </data>
+  <data name="Languages" xml:space="preserve">
+    <value>Lenguajes</value>
+  </data>
+  <data name="Personalities" xml:space="preserve">
+    <value>Personalidades</value>
+  </data>
+  <data name="Presentations" xml:space="preserve">
+    <value>Presentaciones</value>
+  </data>
+  <data name="ProducerHouses" xml:space="preserve">
+    <value>Casas Productoras</value>
+  </data>
+  <data name="Productions" xml:space="preserve">
+    <value>Películas</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Acerca de</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Dirección</value>
+  </data>
+  <data name="ArtisticManagement" xml:space="preserve">
+    <value>Dirección Artística</value>
+  </data>
+  <data name="AtLastOneAwardRequiredMessage" xml:space="preserve">
+    <value>Se require al menos un Premio registrado en el sistema. Debe agregarlo para continuar.</value>
+  </data>
+  <data name="AtLastOneCategoryRequiredMessage" xml:space="preserve">
+    <value>Se require al menos una Categoría registrada en el sistema. Debe agregarla para continuar.</value>
+  </data>
+  <data name="AtLastOneCountryRequiredMessage" xml:space="preserve">
+    <value>Se require al menos un País registrado en el sistema. Debe agregarlo para continuar.</value>
+  </data>
+  <data name="AtLastOneLanguageRequiredMessage" xml:space="preserve">
+    <value>Se require al menos un Lenguaje registrado en el sistema. Debe agregarlo para continuar.</value>
+  </data>
+  <data name="AtLastOnePersonalityRequiredMessage" xml:space="preserve">
+    <value>Se require al menos una Personalidad registrada en el sistema. Debe agregarla para continuar.</value>
+  </data>
+  <data name="AtLastOneRoomRequiredMessage" xml:space="preserve">
+    <value>Se require al menos una Sala registrada en el sistema. Debe agregarla en su respectivo Cine para continuar.</value>
+  </data>
+  <data name="Award" xml:space="preserve">
+    <value>Premio</value>
+  </data>
+  <data name="BornDate" xml:space="preserve">
+    <value>Fecha de Nacimiento</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Categoría</value>
+  </data>
+  <data name="CategorySelectionRequiredMessage" xml:space="preserve">
+    <value>La selección de una Categoría es obligatoria.</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>País</value>
+  </data>
+  <data name="CountrySelectionRequiredMessage" xml:space="preserve">
+    <value>La selección de un País es obligatoria.</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Fecha</value>
+  </data>
+  <data name="DateTime" xml:space="preserve">
+    <value>Fecha y Hora</value>
+  </data>
+  <data name="DateTimeRangeInvalidMessage" xml:space="preserve">
+    <value>El rando de fecha especificado no es correcto.</value>
+  </data>
+  <data name="Direction" xml:space="preserve">
+    <value>Dirección</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Duración</value>
+  </data>
+  <data name="Edition" xml:space="preserve">
+    <value>Edición</value>
+  </data>
+  <data name="EmailAddress" xml:space="preserve">
+    <value>Correo Electrónico</value>
+  </data>
+  <data name="EmailAddressValidationErrorMessage" xml:space="preserve">
+    <value>El campo {0} no es una dirección de correo válida.</value>
+  </data>
+  <data name="Film" xml:space="preserve">
+    <value>Película</value>
+  </data>
+  <data name="FirstDate" xml:space="preserve">
+    <value>Fecha Inicial</value>
+  </data>
+  <data name="ImageFile" xml:space="preserve">
+    <value>Archivo de Imagen</value>
+  </data>
+  <data name="Interpretation" xml:space="preserve">
+    <value>Interpretación</value>
+  </data>
+  <data name="Label" xml:space="preserve">
+    <value>Etiqueta</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Lenguaje</value>
+  </data>
+  <data name="LanguageSelectionRequiredMessage" xml:space="preserve">
+    <value>La selección de un Lenguaje es obligatoria.</value>
+  </data>
+  <data name="LastDate" xml:space="preserve">
+    <value>Fecha Final</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Apellidos</value>
+  </data>
+  <data name="Latitude" xml:space="preserve">
+    <value>Latitud</value>
+  </data>
+  <data name="LocalizedTitle" xml:space="preserve">
+    <value>Título en Español</value>
+  </data>
+  <data name="Longitude" xml:space="preserve">
+    <value>Longitud</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Número</value>
+  </data>
+  <data name="Personality" xml:space="preserve">
+    <value>Personalidad</value>
+  </data>
+  <data name="PhoneValidationErrorMessage" xml:space="preserve">
+    <value>El campo {0} no es un número telefónico válido.</value>
+  </data>
+  <data name="Photography" xml:space="preserve">
+    <value>Fotografía</value>
+  </data>
+  <data name="PNG_JPEG_FileAllowedOnlyMessage" xml:space="preserve">
+    <value>Solo son admitidos archivos de tipo PNG(*.png) y JPEG(*.jpg).</value>
+  </data>
+  <data name="PosterImage" xml:space="preserve">
+    <value>Imagen del Poster</value>
+  </data>
+  <data name="Presentation" xml:space="preserve">
+    <value>Presentación</value>
+  </data>
+  <data name="PresentationDateTimeColisionMesssage" xml:space="preserve">
+    <value>Ya existe una Presentación planificada para la Fecha y Hora especificada.</value>
+  </data>
+  <data name="Production" xml:space="preserve">
+    <value>Producción</value>
+  </data>
+  <data name="ProductionPickUpRequiredMessage" xml:space="preserve">
+    <value>Se requiere la seleccion previa de la Película a presentar.</value>
+  </data>
+  <data name="Rate" xml:space="preserve">
+    <value>Valoración</value>
+  </data>
+  <data name="RequiredDataIncompleteMessage" xml:space="preserve">
+    <value>Algunos relacionados no pueden encontrarse.</value>
+  </data>
+  <data name="RequiredDataIncompleteTitle" xml:space="preserve">
+    <value>Datos necesarios para continuar</value>
+  </data>
+  <data name="RequiredValidationErrorMessage" xml:space="preserve">
+    <value>El campo {0} es obligatorio.</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Rol</value>
+  </data>
+  <data name="Room" xml:space="preserve">
+    <value>Sala</value>
+  </data>
+  <data name="RoomNotExistMessage" xml:space="preserve">
+    <value>La Sala especificada no está definida en el sistema.</value>
+  </data>
+  <data name="RoomSelectionRequiredMessage" xml:space="preserve">
+    <value>La selección de una Sala es obligatoria.</value>
+  </data>
+  <data name="Screenplay" xml:space="preserve">
+    <value>Guión</value>
+  </data>
+  <data name="Sex" xml:space="preserve">
+    <value>Sexo</value>
+  </data>
+  <data name="Sinopse" xml:space="preserve">
+    <value>Sinopsis</value>
+  </data>
+  <data name="Sound" xml:space="preserve">
+    <value>Sonido</value>
+  </data>
+  <data name="Specification" xml:space="preserve">
+    <value>Especificaciones</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Título</value>
+  </data>
+  <data name="WinType" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>Año</value>
+  </data>
+  <data name="MaxLengthValidationErrorMessage" xml:space="preserve">
+    <value>El campo {0} no debe exceder los {1} caracteres.</value>
+  </data>
+  <data name="RangeValidationErrorMessage" xml:space="preserve">
+    <value>El valor del campo {0} de estar entre {1} y {2}.</value>
+  </data>
+  <data name="CompareValidationErrorMessage" xml:space="preserve">
+    <value>Los campos {0} y {1} no coinciden.</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirmación de la Contraseña</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Descripción</value>
+  </data>
+  <data name="Groups" xml:space="preserve">
+    <value>Grupos</value>
+  </data>
+  <data name="IsoCode" xml:space="preserve">
+    <value>Código ISO</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Contraseña</value>
+  </data>
+  <data name="StringLengthMinMaxValidationErrorMessage" xml:space="preserve">
+    <value>El valor del campo {0} debe tener como mínimo {2} y como máximo {1} caracteres.</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>Usuario</value>
+  </data>
+  <data name="UniqueValueConvinationValidationErrorMessage" xml:space="preserve">
+    <value>La combinación de valores de los campos {0} y {1} ya existe en el sistema y esta debe ser única.</value>
+  </data>
+  <data name="ProductionCountryColisionMesssage" xml:space="preserve">
+    <value>El país seleccionado ya ha sido especificado como principal para esta producción.</value>
+  </data>
+  <data name="RTMP_VIDEO_FileAllowedOnlyMessage" xml:space="preserve">
+    <value>Solo son admitidos archivos de tipo MP4(*.mp4) y FLV(*.flv).</value>
+  </data>
+  <data name="TrailerVideo" xml:space="preserve">
+    <value>Trailer</value>
+  </data>
+  <data name="PasswordChangeRequiredMessage" xml:space="preserve">
+    <value>Cambio de contraseña requerido.</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>Nueva Contraseña</value>
+  </data>
+  <data name="OldPassword" xml:space="preserve">
+    <value>Contraseña Actual</value>
+  </data>
+  <data name="ChangePasswordSuccessMessage" xml:space="preserve">
+    <value>Cambio de contraseña realizado con éxito. Inicie sesión nuevamente.</value>
+  </data>
+  <data name="EventRequiredDataIncompleteTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Argument" xml:space="preserve">
+    <value>Argumento</value>
+  </data>
+  <data name="UserDisabledMessage" xml:space="preserve">
+    <value>Usuario deshabilitado.</value>
+  </data>
+  <data name="Phrase" xml:space="preserve">
+    <value>Frase</value>
+  </data>
+</root>

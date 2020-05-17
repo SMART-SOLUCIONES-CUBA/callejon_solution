@@ -1,0 +1,17 @@
+﻿@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Models.Filter.ProductionCommentFilterModel
+
+@using (Html.BeginForm("filter", "productioncomments", new { Area = "cpccbillboard" }, FormMethod.Post, true, null))
+{
+    <fieldset>
+        <legend>Filtro de Comentarios de Películas</legend>
+        <div style="margin-bottom: 20px;">
+            @Html.LabelFor(model => model.Message, "Mensaje", new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Message, new { @class = "form-control" })
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-filter"></span> Filtrar</button>
+            <button type="button" class="btn btn-default filter-form-reseter"><span class="glyphicon glyphicon-remove-circle"></span> Limpiar</button>
+        </div>
+    </fieldset>
+}

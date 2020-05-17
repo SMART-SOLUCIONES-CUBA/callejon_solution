@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd</AssemblyName>
+    <RootNamespace>SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd</RootNamespace>
+    <PackageId>SAPRESSC.Business.Billboard.CPCC.Web.BackEnd</PackageId>
+    <Version>0.2.0-alpha</Version>
+    <Authors>SSC DevTeam</Authors>
+    <Company>SMART SOLUCIONES CUBA (SSC)</Company>
+    <Copyright>SMART SOLUCIONES CUBA 2018 - Todos los derechos reservados.</Copyright>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="MediaToolkit.NetCore" Version="0.1.0-preview" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
+    <PackageReference Include="SAPRESSC.Core.Web.Management" Version="0.9.0-beta" />
+    <PackageReference Include="SAPRESSC.Core.Web.Security" Version="0.8.0-beta" />
+    <PackageReference Include="SAPRESSC.Middleware.Media.Web.FrontEnd" Version="0.6.0-alpha" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SAPRESSC.Business.Billboard.Cinema.Web.Manager\SAPRESSC.Business.Billboard.Cinema.Web.Manager.csproj" />
+    <ProjectReference Include="..\SAPRESSC.Business.Billboard.CPCC.SecurityShared\SAPRESSC.Business.Billboard.CPCC.SecurityShared.csproj" />
+    <ProjectReference Include="..\SAPRESSC.Business.Billboard.CPCC.Web.Common\SAPRESSC.Business.Billboard.CPCC.Web.Common.csproj" />
+  </ItemGroup>
+</Project>

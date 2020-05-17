@@ -1,0 +1,18 @@
+﻿@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.Filter.ProductionFilterModel
+
+@using (Html.BeginForm("pickproduction", "presentations", new { Area = "cinemabillboard" }, FormMethod.Post, true, null))
+{
+    <fieldset>
+        <legend>Filtro de Películas</legend>
+        <div style="margin-bottom: 20px;">
+            @Html.LabelFor(model => model.Title, "Título", new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-filter"></span> Filtrar</button>
+            <button type="button" class="btn btn-default filter-form-reseter"><span class="glyphicon glyphicon-remove-circle"></span> Limpiar</button>
+        </div>
+    </fieldset>
+}
+

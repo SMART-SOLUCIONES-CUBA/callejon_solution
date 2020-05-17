@@ -1,0 +1,40 @@
+﻿@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.Filter.ProductionFilterModel
+
+@using (Html.BeginForm("filter", "productions", new { Area = "cinemabillboard" }, FormMethod.Post, true, null))
+{
+<fieldset>
+    <legend>Filtro de Películas</legend>
+    <div style="margin-bottom: 20px;">
+        @Html.LabelFor(model => model.Title, "Título", new { @class = "control-label" })
+        @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+    </div>
+
+    <div class="row">
+        <div class="col-sm-8" style="margin-bottom: 20px;">
+            @Html.LabelFor(model => model.PersonalityId, "Participante", new { @class = "control-label" })
+            @Html.DropDownListFor(model => model.PersonalityId, Model.Personalities, new { @class = "form-control personality-filter-select" })
+        </div>
+        <div class="col-sm-4" style="margin-bottom: 20px;">
+            @Html.LabelFor(model => model.Year, "Año", new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Year, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6" style="margin-bottom: 20px;">
+            @Html.LabelFor(model => model.CountryId, "País", new { @class = "control-label" })
+            @Html.DropDownListFor(model => model.CountryId, Model.Countries, new { @class = "form-control" })
+        </div>
+        <div class="col-sm-6" style="margin-bottom: 20px;">
+            @Html.LabelFor(model => model.GenreId, "Género", new { @class = "control-label" })
+            @Html.DropDownListFor(model => model.GenreId, Model.Genres, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-filter"></span> Filtrar</button>
+        <button type="button" class="btn btn-default filter-form-reseter"><span class="glyphicon glyphicon-remove-circle"></span> Limpiar</button>
+    </div>
+</fieldset>
+}
+

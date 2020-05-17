@@ -1,0 +1,37 @@
+﻿@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.AwardWinningDisplayViewModel
+
+<div class="modal fade" id="delete-awardwinning-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="delete-awardwinning-@Model.Id-lable" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @using (Html.BeginForm("deleteawardwinning", "productions", null, FormMethod.Post, true, new { @class = "modal-content" }))
+            {
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.ProductionId)
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="delete-awardwinning-@Model.Id-lable">Eliminar Condecoración</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Esta seguro que desea eliminar la condecoración detallada a continuación?</p>
+
+                    <dl>
+                        <dt>Distinción</dt>
+                        <dd>@Model.WinType</dd>
+                        <dt>Premio</dt>
+                        <dd>@Model.Award.Name</dd>
+                        <dt>Edición</dt>
+                        <dd>@Model.Edition</dd>
+                        <dt>Categoría</dt>
+                        <dd>@Model.Category</dd>
+                    </dl>
+                </div>
+
+                <div class="modal-footer" style="margin-top: 0;">
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

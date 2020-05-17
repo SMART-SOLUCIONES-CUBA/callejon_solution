@@ -1,0 +1,339 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+@using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations;
+@using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View;
+
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer ViewLocalizer
+@inject SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Helpers.Localization.GlobalViewLocalizationHelper GlobalViewLocalizationHelper
+
+@model PresentationChangeProductionInputViewModel
+
+@{
+    ViewData["Title"] = "Cambiar Producción";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Presentaciones",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Modificar",
+            Url = Url.Action("edit", new { key = Model.Id })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = ViewData["Title"].ToString()
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+<div class="page-header">
+    <h3>Seleccionando la película a presentar</h3>
+</div>
+
+<p class="text-info"><span class="glyphicon glyphicon-asterisk"></span> Solo serán elegibles aquellas películas en el sistema que tenga definidas al menos una participación en el rol de @GlobalViewLocalizationHelper.Localize(ProductionRole.Direction.ToString()).</p>
+
+@if (Model.ProductionsPagination.MaxPageCount > 0)
+{
+    if (Model.ProductionsPagination.HasNext || Model.ProductionsPagination.HasPrevious)
+    {
+        var paginationStart = (Model.ProductionsPagination.Page - 1) * Model.ProductionsPagination.Limit + 1;
+        var paginationEnd = paginationStart - 1 + Model.ProductionsPagination.List.Count;
+
+        <div class="text-center">
+            <ul class="pagination" style="margin: 0;">
+                @if (Model.ProductionsPagination.HasPrevious)
+                {
+                    <li><a href="@Url.Action(Model.ProductionsPagination.Action, new Microsoft.AspNetCore.Routing.RouteValueDictionary(Model.ProductionsPagination.RouteValues) {{"page", Model.ProductionsPagination.Page - 1}})">&laquo;</a></li>
+                }
+                else
+                {
+                    <li class="disabled"><a href="#">&laquo;</a></li>
+                }
+
+                @if (Model.ProductionsPagination.MaxPageCount > 5)
+                {
+                    if (Model.ProductionsPagination.Page > 3)
+                    {
+                        if (Model.ProductionsPagination.MaxPageCount - Model.ProductionsPagination.Page < 3)
+                        {
+                            for (var i = Model.ProductionsPagination.MaxPageCount - 4; i <= Model.ProductionsPagination.MaxPageCount; i++)
+                            {
+                                if (i == Model.ProductionsPagination.Page)
+                                {
+                                    <li class="active"><a href="#">@i <span class="sr-only">(current)</span></a></li>
+                                }
+                                else
+                                {
+                                    <li><a href="@Url.Action(Model.ProductionsPagination.Action, new Microsoft.AspNetCore.Routing.RouteValueDictionary(Model.ProductionsPagination.RouteValues) {{"page", i}})">@i</a></li>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (var i = Model.ProductionsPagination.Page - 2; i <= Model.ProductionsPagination.Page + 2; i++)
+                            {
+                                if (i == Model.ProductionsPagination.Page)
+                                {
+                                    <li class="active"><a href="#">@i <span class="sr-only">(current)</span></a></li>
+                                }
+                                else
+                                {
+                                    <li><a href="@Url.Action(Model.ProductionsPagination.Action, new Microsoft.AspNetCore.Routing.RouteValueDictionary(Model.ProductionsPagination.RouteValues) {{"page", i}})">@i</a></li>
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (var i = 1; i <= 5; i++)
+                        {
+                            if (i == Model.ProductionsPagination.Page)
+                            {
+                                <li class="active"><a href="#">@i <span class="sr-only">(current)</span></a></li>
+                            }
+                            else
+                            {
+                                <li><a href="@Url.Action(Model.ProductionsPagination.Action, new Microsoft.AspNetCore.Routing.RouteValueDictionary(Model.ProductionsPagination.RouteValues) {{"page", i}})">@i</a></li>
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    for (var i = 1; i <= Model.ProductionsPagination.MaxPageCount; i++)
+                    {
+                        if (i == Model.ProductionsPagination.Page)
+                        {
+                            <li class="active"><a href="#">@i <span class="sr-only">(current)</span></a></li>
+                        }
+                        else
+                        {
+                            <li><a href="@Url.Action(Model.ProductionsPagination.Action, new Microsoft.AspNetCore.Routing.RouteValueDictionary(Model.ProductionsPagination.RouteValues) {{"page", i}})">@i</a></li>
+                        }
+                    }
+                }
+
+                @if (Model.ProductionsPagination.HasNext)
+                {
+                    <li><a href="@Url.Action(Model.ProductionsPagination.Action, new Microsoft.AspNetCore.Routing.RouteValueDictionary(Model.ProductionsPagination.RouteValues) {{"page", Model.ProductionsPagination.Page + 1}})">&raquo;</a></li>
+                }
+                else
+                {
+                    <li class="disabled"><a href="#">&raquo;</a></li>
+                }
+            </ul>
+            <div class="text-info" style="margin-top: 10px; margin-bottom: 20px;">
+                <span style="font-weight: 600;">Página @Model.ProductionsPagination.Page</span>: del @paginationStart al @paginationEnd, <span style="font-weight: 600;">Total de páginas</span>: @Model.ProductionsPagination.MaxPageCount
+            </div>
+        </div>
+    }
+
+    <table class="table" style="margin: 0;">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Año</th>
+                <th>País</th>
+                <th style="width: 152px;">Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ProductionsPagination.List)
+            {
+                <tr>
+                    <td style="vertical-align: middle;" title="Título">@item.Title @if (item.LocalizedTitle != null) { <span>(@item.LocalizedTitle)</span> }</td>
+                    <td style="vertical-align: middle;" title="Año">@item.Year</td>
+                    <td style="vertical-align: middle;" title="País">@item.Country.Name</td>
+                    <td style="vertical-align: middle;">
+                        <div class="btn-group btn-group-sm">
+                            <a role="button" href="#" class="btn btn-default" data-toggle="modal" data-target="#detail-view-production-@item.Id"><span class="glyphicon glyphicon-list-alt"></span></a>
+                            <a role="button" class="btn btn-primary" href="#" data-toggle="modal" data-target="#presentation-change-production-@item.Id"><span class="glyphicon glyphicon-ok-circle"></span> Seleccionar</a>
+                        </div>
+
+                        <div class="modal fade" id="presentation-change-production-@item.Id" tabindex="-1" role="dialog" aria-labelledby="presentation-change-production-@item.Id-lable" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                @using (Html.BeginForm("changeproduction", "presentations", new { key = string.Empty }, FormMethod.Post, true, new { @class = "modal-content" }))
+                                {
+                                    @Html.HiddenFor(model => model.Id)
+                                    @Html.Hidden("ProductionId", item.Id)
+
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="presentation-change-production-@item.Id-lable">Confirmación</h4>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <p>Está seguro que desea seleccionar esta producción?</p>
+                                        <div class="row">
+                                            <div class="col-xs-4" style="margin-bottom: 20px; text-align: center;">
+                                                <img class="img-thumbnail" src="@Url.Action("image", "default", new { Area = "media", key = item.PosterImageId })" />
+                                            </div>
+                                            <div class="col-xs-8" style="margin-bottom: 20px;">
+                                                <dl>
+                                                    <dt>Título</dt>
+                                                    <dd>@item.Title @if (item.LocalizedTitle != null) { <span>(@item.LocalizedTitle)</span> }</dd>
+                                                    <dt>Año</dt>
+                                                    <dd>@item.Year</dd>
+                                                    <dt>País</dt>
+                                                    <dd>@item.Country.Name</dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer" style="margin-top: 0;">
+                                        <button type="submit" class="btn btn-primary">Cambiar</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                    </div>
+                                }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="detail-view-production-@item.Id" tabindex="-1" role="dialog" aria-labelledby="detail-view-production-@item.Id-lable" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="detail-view-production-@item.Id-lable">Vista de Detalles de Producción</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        @await Html.PartialAsync("_DetailProductionPartial", item)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    if (Model.ProductionsPagination.HasNext || Model.ProductionsPagination.HasPrevious)
+    {
+        var paginationStart = (Model.ProductionsPagination.Page - 1) * Model.ProductionsPagination.Limit + 1;
+        var paginationEnd = paginationStart - 1 + Model.ProductionsPagination.List.Count;
+
+        <div class="text-center">
+            <ul class="pagination" style="margin: 0;">
+                @if (Model.ProductionsPagination.HasPrevious)
+                {
+                    <li><a href="@Url.Action(Model.ProductionsPagination.Action, new Microsoft.AspNetCore.Routing.RouteValueDictionary(Model.ProductionsPagination.RouteValues) {{"page", Model.ProductionsPagination.Page - 1}})">&laquo;</a></li>
+                }
+                else
+                {
+                    <li class="disabled"><a href="#">&laquo;</a></li>
+                }
+
+                @if (Model.ProductionsPagination.MaxPageCount > 5)
+                {
+                    if (Model.ProductionsPagination.Page > 3)
+                    {
+                        if (Model.ProductionsPagination.MaxPageCount - Model.ProductionsPagination.Page < 3)
+                        {
+                            for (var i = Model.ProductionsPagination.MaxPageCount - 4; i <= Model.ProductionsPagination.MaxPageCount; i++)
+                            {
+                                if (i == Model.ProductionsPagination.Page)
+                                {
+                                    <li class="active"><a href="#">@i <span class="sr-only">(current)</span></a></li>
+                                }
+                                else
+                                {
+                                    <li><a href="@Url.Action(Model.ProductionsPagination.Action, new Microsoft.AspNetCore.Routing.RouteValueDictionary(Model.ProductionsPagination.RouteValues) {{"page", i}})">@i</a></li>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (var i = Model.ProductionsPagination.Page - 2; i <= Model.ProductionsPagination.Page + 2; i++)
+                            {
+                                if (i == Model.ProductionsPagination.Page)
+                                {
+                                    <li class="active"><a href="#">@i <span class="sr-only">(current)</span></a></li>
+                                }
+                                else
+                                {
+                                    <li><a href="@Url.Action(Model.ProductionsPagination.Action, new Microsoft.AspNetCore.Routing.RouteValueDictionary(Model.ProductionsPagination.RouteValues) {{"page", i}})">@i</a></li>
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (var i = 1; i <= 5; i++)
+                        {
+                            if (i == Model.ProductionsPagination.Page)
+                            {
+                                <li class="active"><a href="#">@i <span class="sr-only">(current)</span></a></li>
+                            }
+                            else
+                            {
+                                <li><a href="@Url.Action(Model.ProductionsPagination.Action, new Microsoft.AspNetCore.Routing.RouteValueDictionary(Model.ProductionsPagination.RouteValues) {{"page", i}})">@i</a></li>
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    for (var i = 1; i <= Model.ProductionsPagination.MaxPageCount; i++)
+                    {
+                        if (i == Model.ProductionsPagination.Page)
+                        {
+                            <li class="active"><a href="#">@i <span class="sr-only">(current)</span></a></li>
+                        }
+                        else
+                        {
+                            <li><a href="@Url.Action(Model.ProductionsPagination.Action, new Microsoft.AspNetCore.Routing.RouteValueDictionary(Model.ProductionsPagination.RouteValues) {{"page", i}})">@i</a></li>
+                        }
+                    }
+                }
+
+                @if (Model.ProductionsPagination.HasNext)
+                {
+                    <li><a href="@Url.Action(Model.ProductionsPagination.Action, new Microsoft.AspNetCore.Routing.RouteValueDictionary(Model.ProductionsPagination.RouteValues) {{"page", Model.ProductionsPagination.Page + 1}})">&raquo;</a></li>
+                }
+                else
+                {
+                    <li class="disabled"><a href="#">&raquo;</a></li>
+                }
+            </ul>
+            <div class="text-info" style="margin-top: 10px; margin-bottom: 20px;">
+                <span style="font-weight: 600;">Página @Model.ProductionsPagination.Page</span>: del @paginationStart al @paginationEnd, <span style="font-weight: 600;">Total de páginas</span>: @Model.ProductionsPagination.MaxPageCount
+            </div>
+        </div>
+    }
+}
+else
+{
+    <table class="table" style="margin: 0;">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Año</th>
+                <th>País</th>
+                <th style="width: 152px;">Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="4"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
+            </tr>
+        </tbody>
+    </table>
+}

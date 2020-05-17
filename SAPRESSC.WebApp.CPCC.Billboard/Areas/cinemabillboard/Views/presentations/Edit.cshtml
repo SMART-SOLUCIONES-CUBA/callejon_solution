@@ -1,0 +1,118 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+
+@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.PresentationInputViewModel
+
+@{
+    ViewData["Title"] = "Modificar Presentación";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Presentaciones",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Modificar"
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+}
+
+@section scripts {
+    <script src="~/lib/moment/min/moment.min.js"></script>
+<script src="~/lib/moment/locale/es.js"></script>
+    <script src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script type="text/javascript">
+        $('#presentationdate-picker').datetimepicker({
+            locale: 'es',
+            ignoreReadonly: true,
+            format: 'DD/MM/YYYY h:mm A'
+        });
+    </script>
+}
+
+@using (Html.BeginForm("edit", "presentations", new { Area = "cinemabillboard", key = string.Empty }, FormMethod.Post, true, null))
+{
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.ProductionId)
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4>@ViewData["Title"]</h4></div>
+
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.PresentationDate, new { @class = "control-label" })
+                    <div class="input-group date" id="presentationdate-picker">
+                        @Html.TextBoxFor(model => model.PresentationDate, new { @class = "form-control", @readonly = "readonly" })
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.PresentationDate, null, new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    <div class="checkbox">
+                        <label>
+                            @Html.EditorFor(model => model.Enabled) Público?
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.RoomId, new { @class = "control-label" })
+                @Html.DropDownListFor(model => model.RoomId, Model.Rooms, new { @class = "form-control", size = 8 })
+                @Html.ValidationMessageFor(model => model.RoomId, null, new { @class = "text-danger" })
+            </div>
+
+            <fieldset>
+                <legend>@Html.DisplayNameFor(model => model.ProductionId)</legend>
+
+                <div class="row">
+                    <div class="col-xs-2" style="margin-bottom: 20px; text-align: center;">
+                        <img class="img-thumbnail" src="@Url.Action("image", "default", new { Area = "media", key = Model.Production.PosterImage.Id })" />
+                    </div>
+                    <div class="col-xs-10" style="margin-bottom: 20px;">
+                        <dl>
+                            <dt>Título</dt>
+                            <dd>@Model.Production.Title @if (Model.Production.LocalizedTitle != null) { <span>(@Model.Production.LocalizedTitle)</span> }</dd>
+                            <dt>Año</dt>
+                            <dd>@Model.Production.Year</dd>
+                            <dt>País</dt>
+                            <dd>@Model.Production.Country.Name</dd>
+                        </dl>
+                        <a class="btn btn-default" href="@Url.Action("changeproduction", new { key = Model.Id })">Cambiar</a>
+                    </div>
+                </div>
+            </fieldset>
+
+            <div>
+                <button type="submit" class="btn btn-primary">Modificar</button>
+                <a class="btn btn-default" href="@Url.Action("calendar")">Regresar al calendario</a>
+                <a class="btn btn-default" href="@Url.Action("index")">Regresar al listado</a>
+            </div>
+        </div>
+    </div>
+}

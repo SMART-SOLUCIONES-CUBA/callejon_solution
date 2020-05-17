@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.App">
+    <Application.Resources>
+        <OnPlatform x:Key="LogoImageSource" x:TypeArguments="ImageSource">
+            <On Platform="iOS" Value="logo.png" />
+            <On Platform="Android" Value="logo.png" />
+            <On Platform="UWP" Value="Images/logo.png" />
+        </OnPlatform>
+        <OnPlatform x:Key="SSCLogoImageSource" x:TypeArguments="ImageSource">
+            <On Platform="iOS" Value="ssc_logo.png" />
+            <On Platform="Android" Value="ssc_logo.png" />
+            <On Platform="UWP" Value="Images/ssc_logo.png" />
+        </OnPlatform>
+        <OnPlatform x:Key="ProjectWebPortalScreenshutImageSource" x:TypeArguments="FileImageSource">
+            <On Platform="Android" Value="img_project_portal.png" />
+        </OnPlatform>
+
+        <Color x:Key="PrimaryBrandColor">#001832</Color>
+        <Color x:Key="SecoundaryBrandColor">#3e7c9f</Color>
+        <Color x:Key="AlertColor">#C22926</Color>
+
+        <Style TargetType="Button">
+            <Setter Property="BackgroundColor">
+                <Setter.Value>
+                    <OnPlatform x:TypeArguments="Color">
+                        <On Platform="iOS" Value="#f6f6fc" />
+                        <On Platform="Android" Value="LightGray" />
+                    </OnPlatform>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Padding">
+                <Setter.Value>
+                    <OnPlatform x:TypeArguments="Thickness">
+                        <On Platform="iOS" Value="10" />
+                        <On Platform="Android" Value="10" />
+                    </OnPlatform>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="TextColor" Value="{StaticResource PrimaryBrandColor}" />
+        </Style>
+
+        <Style x:Key="EmphasisLabelStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="{StaticResource SecoundaryBrandColor}" />
+        </Style>
+        <Style x:Key="TitleLabelStyle" TargetType="Label" BasedOn="{StaticResource EmphasisLabelStyle}">
+            <Setter Property="FontFamily" Value="Helvetica LT Std Ultra Compresed" />
+        </Style>
+        <Style x:Key="PresentationTitleLabelStyle" TargetType="Label" BasedOn="{StaticResource TitleLabelStyle}">
+            <Setter Property="TextColor" Value="{StaticResource AlertColor}" />
+        </Style>        
+    </Application.Resources>
+</Application>

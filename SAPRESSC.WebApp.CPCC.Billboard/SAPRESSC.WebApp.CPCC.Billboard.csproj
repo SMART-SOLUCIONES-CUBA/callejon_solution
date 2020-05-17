@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AssemblyName>SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard</AssemblyName>
+    <RootNamespace>SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard</RootNamespace>
+    <PackageId>SAPRESSC.WebApp.CPCC.Billboard</PackageId>
+    <Version>0.9.9-relese-candidate</Version>
+    <Authors>SSC DevTeam</Authors>
+    <Company>SMART SOLUCIONES CUBA (SSC)</Company>
+    <Copyright>SMART SOLUCIONES CUBA 2018 - Todos los derechos reservados.</Copyright>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="logs\**" />
+    <Compile Remove="packages\**" />
+    <Compile Remove="wwwroot\temp\**" />
+    <Content Remove="logs\**" />
+    <Content Remove="packages\**" />
+    <Content Remove="wwwroot\temp\**" />
+    <EmbeddedResource Remove="logs\**" />
+    <EmbeddedResource Remove="packages\**" />
+    <EmbeddedResource Remove="wwwroot\temp\**" />
+    <None Remove="logs\**" />
+    <None Remove="packages\**" />
+    <None Remove="wwwroot\temp\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Migrations\20190219171954_FixCinemaBillboardSchemaForLocalization.cs" />
+    <Compile Remove="Migrations\20190219171954_FixCinemaBillboardSchemaForLocalization.Designer.cs" />
+    <Compile Remove="Migrations\20190219172556_FixCinemaBillboardSchemaForLocalizationFirstStep.cs" />
+    <Compile Remove="Migrations\20190219172556_FixCinemaBillboardSchemaForLocalizationFirstStep.Designer.cs" />
+    <Compile Remove="Migrations\20190328162432_CommentClassifierIncludeSchema.cs" />
+    <Compile Remove="Migrations\20190328162432_CommentClassifierIncludeSchema.Designer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.1" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
+    <PackageReference Include="SAPRESSC.Middleware.Region.Web.Manager" Version="0.5.0-alpha" />
+    <PackageReference Include="SAPRESSC.Middleware.Region.Web.SecurityLocal" Version="0.5.0-alpha" />
+    <PackageReference Include="Serilog.Extensions.Logging.File" Version="1.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SAPRESSC.Business.Billboard.Cinema.Persistence\SAPRESSC.Business.Billboard.Cinema.Persistence.csproj" />
+    <ProjectReference Include="..\SAPRESSC.Business.Billboard.Cinema.Web.FrontEnd\SAPRESSC.Business.Billboard.Cinema.Web.FrontEnd.csproj" />
+    <ProjectReference Include="..\SAPRESSC.Business.Billboard.Cinema.Web.Manager\SAPRESSC.Business.Billboard.Cinema.Web.Manager.csproj" />
+    <ProjectReference Include="..\SAPRESSC.Business.Billboard.Cinema.Web.SecurityLocal\SAPRESSC.Business.Billboard.Cinema.Web.SecurityLocal.csproj" />
+    <ProjectReference Include="..\SAPRESSC.Business.Billboard.CPCC.Web.BackEnd\SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.csproj" />
+    <ProjectReference Include="..\SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd\SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.csproj" />
+    <ProjectReference Include="..\SAPRESSC.Business.Billboard.CPCC.Web.SecurityLocal\SAPRESSC.Business.Billboard.CPCC.Web.SecurityLocal.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\SharedResources.es.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ProjectExtensions><VisualStudio><UserProperties Properties_4launchSettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
+</Project>

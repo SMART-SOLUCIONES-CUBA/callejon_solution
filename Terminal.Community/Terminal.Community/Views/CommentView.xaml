@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ic="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+    xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
+    xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Converters"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.CommentView">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:DateTimeToInvarianCultureRelativeDateTimeStringConverter x:Key="DateTimeToInvarianCultureRelativeDateTimeString" />
+
+            <sscxftoolkitpresentationconverters:FractionConverter x:Key="Fraction" />
+            <sscxftoolkitpresentationconverters:FactorConverter x:Key="Factor" />
+            <sscxftoolkitpresentationconverters:NotNullToBooleanConverter x:Key="NotNullToBoolean" />
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <ic:CircleImage
+                Grid.RowSpan="4" Grid.Column="0"
+                VerticalOptions="Start"
+                Source="{Binding ClientImageSource}"
+                BorderColor="{StaticResource SecoundaryBrandColor}"
+                BorderThickness="1.5"
+                WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=PersonalityCommentImageSize}"
+                HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=PersonalityCommentImageSize}"/>
+
+            <Button
+                Grid.Column="2" Grid.Row="0" Grid.RowSpan="2"
+                BackgroundColor="Transparent"
+                WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize, Converter={StaticResource Factor}, ConverterParameter=2}"
+                HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize, Converter={StaticResource Factor}, ConverterParameter=3}"
+                Text="&#xE046;"
+                FontFamily="Iconmonstr Iconic"
+                FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                Clicked="OptionButton_Clicked" />
+
+            <Label
+                Grid.Column="1" Grid.Row="0"
+                Text="{Binding ClientName}"
+                FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                FontFamily="Myriad Pro Bold Condensed Italic" />
+
+            <Label
+                Grid.Column="1" Grid.Row="1"
+                Text="{Binding Path=Created, Converter={StaticResource DateTimeToInvarianCultureRelativeDateTimeString}}"
+                TextColor="SlateGray"
+                FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                FontFamily="Helvetica LT Std Condensed" />
+
+            <StackLayout                
+                Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2">
+                <Grid
+                    x:Name="ReferenceContainerGrid"
+                    IsVisible="False">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <BoxView
+                        Grid.Column="0" Grid.RowSpan="2"
+                        BackgroundColor="DarkGray"
+                        WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize, Converter={StaticResource Fraction}, ConverterParameter=3}"/>
+
+                    <Label
+                        Grid.Column="1" Grid.Row="0"
+                        x:Name="ReferenceClientNameLabel"
+                        TextColor="Gray"
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                        FontFamily="Myriad Pro Bold Condensed Italic" />
+
+                    <Label
+                        Grid.Column="2" Grid.Row="0"
+                        Text="dijo:"
+                        TextColor="DarkGray"
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                        FontFamily="Helvetica LT Std Condensed" />
+
+                    <Label
+                        Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1"
+                        x:Name="ReferenceMessageLabel"
+                        TextColor="DarkGray"
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                        FontFamily="Helvetica LT Std Condensed" />
+                </Grid>
+
+                <Label
+                    x:Name="DelationIdicatorLabel"
+                    Text="[Comentario Denunciado]"
+                    TextColor="IndianRed"
+                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                    FontFamily="Myriad Pro Bold Condensed Italic"
+                    IsVisible="False" />
+
+                <Label
+                    Text="{Binding Message}"
+                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                    FontFamily="Helvetica LT Std Condensed" />
+            </StackLayout>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

@@ -1,0 +1,140 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+@using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View;
+
+@model CinemaDisplayViewModel
+
+@{
+    ViewData["Title"] = "Modificar Cine (Contactos)";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Cines",
+            Url = Url.Action("index", "cinemas", new { key = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = ViewData["Title"].ToString()
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+<div class="page-header">
+    <h3>Datos del Cine</h3>
+</div>
+<dl>
+    <dt>Nombre</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+</dl>
+<div class="row">
+    <div class="col-md-6">
+        <div class="page-header">
+            <h3>Correos Electrónicos<a class="btn btn-primary pull-right" href="#" data-toggle="modal" data-target="#add-email" title="Nuevo Correo Electrónico">Agregar</a></h3>
+        </div>
+
+        @await Html.PartialAsync("_CreateEmailPartial", new EmailContactInputViewModel { CinemaId = Model.Id })
+
+        <table class="table" style="margin: 0;">
+            <thead>
+                <tr>
+                    <th>Dirección</th>
+                    <th>Etiqueta</th>
+                    <th style="width: 186px;">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.EmailContacts.Count > 0)
+                {
+                    foreach (var email in Model.EmailContacts)
+                    {
+                        <tr>
+                            <td style="vertical-align: middle;" title="Dirección">@email.EmailAddress</td>
+                            <td style="vertical-align: middle;" title="Etiqueta">@email.Label</td>
+                            <td style="vertical-align: middle;">
+                                <div class="btn-group btn-group-sm">
+                                    <a role="button" href="#" class="btn btn-default" data-toggle="modal" data-target="#edit-email-@email.Id"><span class="glyphicon glyphicon-edit"></span> Modificar</a>
+                                    <a role="button" href="#" class="btn btn-danger" data-toggle="modal" data-target="#delete-email-@email.Id"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+                                </div>
+
+                                @{
+                                    var emailModelInput = new EmailContactInputViewModel { Id = email.Id, Address = email.EmailAddress, Label = email.Label, CinemaId = Model.Id };
+                                }
+
+                                @await Html.PartialAsync("_EditEmailPartial", emailModelInput)
+                                @await Html.PartialAsync("_DeleteEmailPartial", emailModelInput)
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <div class="page-header">
+            <h3>Teléfonos<a class="btn btn-primary pull-right" href="#" data-toggle="modal" data-target="#add-phone" title="Nuevo Teléfono">Agregar</a></h3>
+        </div>
+
+        @await Html.PartialAsync("_CreatePhonePartial", new PhoneContactInputViewModel { CinemaId = Model.Id })
+
+        <table class="table" style="margin: 0;">
+            <thead>
+                <tr>
+                    <th>Número</th>
+                    <th>Etiqueta</th>
+                    <th style="width: 186px;">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.PhoneContacts.Count > 0)
+                {
+                    foreach (var phone in Model.PhoneContacts)
+                    {
+                        <tr>
+                            <td style="vertical-align: middle;" title="Número">@phone.PhoneNumber</td>
+                            <td style="vertical-align: middle;" title="Etiqueta">@phone.Label</td>
+                            <td style="vertical-align: middle;">
+                                <div class="btn-group btn-group-sm">
+                                    <a role="button" href="#" class="btn btn-default" data-toggle="modal" data-target="#edit-phone-@phone.Id"><span class="glyphicon glyphicon-edit"></span> Modificar</a>
+                                    <a role="button" href="#" class="btn btn-danger" data-toggle="modal" data-target="#delete-phone-@phone.Id"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+                                </div>
+
+                                @{
+                                    var phoneModelInput = new PhoneContactInputViewModel { Id = phone.Id, Number = phone.PhoneNumber, Label = phone.Label, CinemaId = Model.Id };
+                                }
+
+                                @await Html.PartialAsync("_EditPhonePartial", phoneModelInput)
+                                @await Html.PartialAsync("_DeletePhonePartial", phoneModelInput)
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

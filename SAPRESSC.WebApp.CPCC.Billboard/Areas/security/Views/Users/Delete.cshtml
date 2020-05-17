@@ -1,0 +1,51 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+
+@model SmartSolucionesCuba.SAPRESSC.Core.Web.SecurityLocal.Models.View.UserDisplayViewModel
+
+@{
+    ViewData["Title"] = "Eliminar Usuario";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Usuarios",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Eliminar"
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+<h3>Esta seguro que desea eliminar el usuario detallado a continuación?</h3>
+
+<dl>
+    <dt>@Html.DisplayNameFor(model => model.Id)</dt>
+    <dd>@Html.DisplayFor(model => model.Id)</dd>
+    <dt>@Html.DisplayNameFor(model => model.Enabled)</dt>
+    <dd>@if (Model.Enabled) { <span class="glyphicon glyphicon-check"></span> } else { <span class="glyphicon glyphicon-unchecked"></span> }</dd>
+    <dt>@Html.DisplayNameFor(model => model.Created)</dt>
+    <dd>@Html.DisplayFor(model => model.Created)</dd>
+</dl>
+@using (Html.BeginForm("delete", "users", new { Area = "security", key = string.Empty }, FormMethod.Post, true, null))
+{
+    @Html.HiddenFor(model => model.Id)
+    <div>
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a class="btn btn-default" href="@Url.Action("index")">Cancelar</a>
+    </div>
+}

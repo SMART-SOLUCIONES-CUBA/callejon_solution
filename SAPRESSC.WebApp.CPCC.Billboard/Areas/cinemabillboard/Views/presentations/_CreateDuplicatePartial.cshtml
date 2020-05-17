@@ -1,0 +1,43 @@
+﻿@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.PresentationDuplicateInputViewModel
+
+<div style="text-align:left;" class="modal fade" id="duplicate-presentation-@Model.PresentationId" tabindex="-1" role="dialog" aria-labelledby="duplicate-presentation-@Model.PresentationId-lable" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @using (Html.BeginForm("duplicate", "presentations", null, FormMethod.Post, true, new { @class = "modal-content" }))
+            {
+                @Html.HiddenFor(model => model.PresentationId)
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="duplicate-presentation-@Model.PresentationId-lable">Duplicar Presentación</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6" style="margin-bottom: 20px;">
+                            @Html.Label("ProductionName", "Película", new { @class = "control-label" })
+                            <div>@Html.DisplayFor(model => model.ProductionName, new { @class = "form-control" })</div>
+                        </div>
+                        <div class="col-sm-6" style="margin-bottom: 20px;">
+                            @Html.Label("PresentationDate", null, new { @class = "control-label" })
+                            <div class="input-group date presentationdate-picker">
+                                @Html.TextBoxFor(model => model.PresentationDate, new { @class = "form-control", @readonly = "readonly" })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        @Html.LabelFor(model => model.RoomId, new { @class = "control-label" })
+                        @Html.DropDownListFor(model => model.RoomId, Model.Rooms, new { @class = "form-control", size = 6 })
+                        @Html.ValidationMessageFor(model => model.RoomId, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="modal-footer" style="margin-top: 0;">
+                    <button type="submit" class="btn btn-primary">Duplicar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

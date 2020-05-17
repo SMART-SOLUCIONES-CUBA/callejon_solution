@@ -1,0 +1,33 @@
+﻿@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.PersonalityDisplayViewModel
+
+<div class="row">
+    <div class="col-md-3">
+        @if (Model.ImageId != System.Guid.Empty)
+        {
+            <img class="img-circle" src="@Url.Action("image", "default", new { Area = "media", key = Model.ImageId })" />
+        }
+        else
+        {
+            <img class="img-circle" src="/img/default-person-picture.jpg" />
+        }
+    </div>
+    <div class="col-md-9">
+        <dl>
+            <dt>Nombre(s)</dt>
+            <dd>@Html.DisplayFor(model => model.Name)</dd>
+            <dt>Apellido(s)</dt>
+            <dd>@Html.DisplayFor(model => model.LastName)</dd>
+            <dt>Fecha de Nacimiento</dt>
+            <dd>@Model.BornDate.ToShortDateString()</dd>
+            <dt>Sexo</dt>
+            <dd>
+                @if (Model.Sex == SmartSolucionesCuba.SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male)
+                {<span>Masculino</span> }
+                else
+                { <span>Femenino</span>}
+            </dd>
+            <dt>Acerca de</dt>
+            <dd>@Html.DisplayFor(model => model.About)</dd>
+        </dl>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+
+@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Models.View.EventDisplayViewModel
+
+@{
+    ViewData["Title"] = "Eliminar Evento";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Eventos",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Eliminar"
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+<h3>Esta seguro que desea eliminar el evento detallado a continuación?</h3>
+
+<dl>
+    <dt>Cabecera</dt>
+    <dd>@Model.Header</dd>
+    <dt>Título</dt>
+    <dd>@Html.DisplayFor(model => model.Title)</dd>
+    <dt>Acerca de</dt>
+    <dd>@Html.DisplayFor(model => model.About)</dd>
+</dl>
+@using (Html.BeginForm("delete", "events", new { Area = "cpccbillboard", key = string.Empty }, FormMethod.Post, true, null))
+{
+    @Html.HiddenFor(model => model.Id)
+
+    @Html.HiddenFor(model => model.PosterImageId)
+
+    @Html.HiddenFor(model => model.PromoVideoId)
+    <div>
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a class="btn btn-default" href="@Url.Action("index")">Cancelar</a>
+    </div>
+}

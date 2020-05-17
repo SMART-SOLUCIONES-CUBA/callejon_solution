@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sscxftoolkitmvvmpages:ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
+    xmlns:ffilviewforms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:dltkcontrols="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.BillboardPage"
+    Title="Cartelera de Cine">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <sscxftoolkitpresentationconverters:BoolToBoolNegationConverter x:Key="BoolToBoolNegation" />
+            <sscxftoolkitpresentationconverters:NullToBooleanConverter x:Key="NullToBoolean" />
+            <sscxftoolkitpresentationconverters:FractionConverter x:Key="Fraction" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid>
+            <dltkcontrols:FlowListView
+                IsRefreshing="{Binding Path=IsBusy}"
+                HasUnevenRows="True"
+                SeparatorVisibility="None"
+                FlowItemsSource="{Binding Path=Cinemas}"
+                FlowColumnMinWidth="320"
+                FlowItemTapped="FlowListView_FlowItemTapped">
+                <dltkcontrols:FlowListView.FlowEmptyTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout>
+                                <Label 
+                                    Margin="6"
+                                    Text="Sin elementos que mostrar"
+                                    TextColor="DimGray"
+                                    FontFamily="Helvetica LT Std Condensed"
+                                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}"
+                                    HorizontalTextAlignment="Center" />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </dltkcontrols:FlowListView.FlowEmptyTemplate>
+                <dltkcontrols:FlowListView.FlowColumnTemplate>
+                    <DataTemplate>
+                        <Frame
+                            Margin="4" Padding="0" 
+                            CornerRadius="3" 
+                            BackgroundColor="#F3F3F3">
+                            <StackLayout IsClippedToBounds="True">
+                                <ffilviewforms:CachedImage
+                                    x:Name="CardTumbnailImage"
+                                    BackgroundColor="Gray"
+                                    HeightRequest="{Binding Source={x:Reference CardTumbnailImage}, Path=Width, Converter={StaticResource Fraction}, ConverterParameter=1.777777777777778}"
+                                    Aspect="AspectFill"
+                                    Source="{Binding ImageSource}"
+                                    DownsampleToViewSize="True" />
+                                <StackLayout Padding="10,6,10,10">
+                                    <Label 
+                                        Text="{Binding Name}" 
+                                        FontSize="18"
+                                        TextColor="Accent"
+                                        FontFamily="Helvetica LT Std Bold Condensed" />
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label 
+                                            VerticalOptions="CenterAndExpand"
+                                            Text="&#xf352;"
+                                            TextColor="Accent"
+                                            FontFamily="Material Design Icons"
+                                            FontSize="Medium" />
+                                        <Label 
+                                            Text="{Binding Address}" 
+                                            FontFamily="Helvetica LT Std Condensed"
+                                            TextColor="Accent" />
+                                    </StackLayout>
+                                </StackLayout>
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </dltkcontrols:FlowListView.FlowColumnTemplate>
+            </dltkcontrols:FlowListView>
+            <StackLayout 
+                VerticalOptions="Start"
+                IsVisible="{Binding Path=IsBusy, Converter={StaticResource BoolToBoolNegation}}">
+                <StackLayout 
+                    IsVisible="{Binding Path=Cinemas, Converter={StaticResource NullToBoolean}}"
+                    Padding="6"
+                    BackgroundColor="IndianRed">
+                    <Label 
+                        Text="Sin elementos que mostrar"
+                        TextColor="White"
+                        FontFamily="Helvetica LT Std Bold Condensed"
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}"
+                        HorizontalTextAlignment="Center" />
+                    <Label 
+                        Text="No se ha realizado ninguna actualización de los datos de la cartelera del proyecto."
+                        TextColor="White"
+                        FontFamily="Helvetica LT Std Condensed"
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                        HorizontalTextAlignment="Center" />
+                    <Button
+                        HorizontalOptions="Center"
+                        Text="Actualizar"
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                        Clicked="DatabaseUpdateButton_Clicked" />
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</sscxftoolkitmvvmpages:ContentPage>

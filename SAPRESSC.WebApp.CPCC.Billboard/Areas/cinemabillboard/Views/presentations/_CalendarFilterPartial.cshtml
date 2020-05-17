@@ -1,0 +1,40 @@
+﻿@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.Filter.CalendarFilterModel
+
+@using (Html.BeginForm("calendar", "presentations", new { Area = "cinemabillboard" }, FormMethod.Post, true, null))
+{
+    <fieldset>
+        <legend>Filtro de Calendario</legend>
+        <div class="row">
+            <div class="col-sm-6" style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.RoomId, new { @class = "control-label" })
+                @Html.DropDownListFor(model => model.RoomId, Model.Rooms, new { @class = "form-control", size = 6 })
+                @Html.ValidationMessageFor(model => model.RoomId, null, new { @class = "text-danger" })
+            </div>
+            <div class="col-sm-6">
+                <div style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.FirstDate, new { @class = "control-label" })
+                    <div class="input-group date" id="firstdate-picker">
+                        @Html.TextBoxFor(model => model.FirstDate, new { @class = "form-control", @readonly = "readonly" })
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.FirstDate, null, new { @class = "text-danger" })
+                </div>
+                <div style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.LastDate, new { @class = "control-label" })
+                    <div class="input-group" id="lastdate-picker">
+                        @Html.TextBoxFor(model => model.LastDate, new { @class = "form-control", @readonly = "readonly" })
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-filter"></span> Filtrar</button>
+        </div>
+    </fieldset>
+}

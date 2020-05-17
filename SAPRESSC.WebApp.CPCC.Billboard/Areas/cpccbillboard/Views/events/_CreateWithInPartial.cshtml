@@ -1,0 +1,101 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Middleware.Identity.Persistence.Enumerations;
+
+@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Models.View.WithInInputViewModel
+
+<div class="modal fade" id="add-within" tabindex="-1" role="dialog" aria-labelledby="add-within-lable" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="add-within-lable">Agregar Invitado</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#pick" data-toggle="tab">Seleccionando Personalidad</a></li>
+                    <li><a href="#create" data-toggle="tab">Creando Personalidad</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="pick">
+                        @using (Html.BeginForm("addwithin", "events", null, FormMethod.Post, true, new { style = "margin-top: 20px;" }))
+                        {
+                            @Html.HiddenFor(model => model.EventId)
+
+                            @Html.LabelFor(model => model.PersonalityId, new { @class = "control-label" })
+                            @Html.DropDownListFor(model => model.PersonalityId, Model.Personalities, new { @class = "form-control", id = "create-widthin-personality-select" })
+
+                            <div style="margin-bottom: 20px;">
+                                <div class="checkbox">
+                                    <label>
+                                        @Html.EditorFor(model => model.IsPresenter) Es Presentador
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer" style="margin-top: 20px;">
+                                <button type="submit" class="btn btn-primary">Agregar</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                            </div>
+                        }
+                    </div>
+                    <div class="tab-pane" id="create">
+                        @using (Html.BeginForm("addpersonalitywithin", "events", null, FormMethod.Post, true, new { style = "margin-top: 20px;" }))
+                        {
+                            var sexDropDownListItems = new[]
+                            {
+                                new SelectListItem { Value = Sex.Male.ToString(), Text = "Masculino" },
+                                new SelectListItem { Value = Sex.Famale.ToString(), Text = "Femenino" }
+                            };
+                        
+                            @Html.HiddenFor(model => model.EventId)
+
+                            <div class="row">
+                                <div class="col-md-6" style="margin-bottom: 20px;">
+                                    @Html.Label("Name", "Nombre", new { @class = "control-label" })
+                                    @Html.TextBox("Name", null, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-6" style="margin-bottom: 20px;">
+                                    @Html.Label("LastName", "Apellidos", new { @class = "control-label" })
+                                    @Html.TextBox("LastName", null, new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6" style="margin-bottom: 20px;">
+                                    @Html.Label("BornDate", "Fecha de Nacimiento", new { @class = "control-label" })
+                                    <div class="input-group date" id="borndate-picker">
+                                        @Html.TextBox("BornDate", System.DateTime.Now.Date.AddYears(-30).ToString(), new { @class = "form-control", @readonly = "readonly" })
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="margin-bottom: 20px;">
+                                    @Html.Label("Sex", "Sexo", new { @class = "control-label" })
+                                    @Html.DropDownList("Sex", sexDropDownListItems, new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 20px;">
+                                @Html.Label("About", "Acerca de", new { @class = "control-label" })
+                                @Html.TextArea("About", null, 5, 0, new { @class = "form-control" })
+                            </div>
+
+                            <div style="margin-bottom: 20px;">
+                                <div class="checkbox">
+                                    <label>
+                                        @Html.EditorFor(model => model.IsPresenter) Es Presentador
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer" style="margin-top: 0;">
+                                <button type="submit" class="btn btn-primary">Agregar</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

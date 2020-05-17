@@ -1,0 +1,75 @@
+﻿@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Models.View.ClientViewDisplayModel
+
+<div class="row">
+    <div class="col-md-3">
+        @if (Model.ImageId != System.Guid.Empty)
+        {
+            <img class="img-circle" src="@Url.Action("image", "default", new { Area = "media", key = Model.ImageId })" />
+        }
+        else
+        {
+            <img class="img-circle" src="/img/default-person-picture.jpg" />
+        }
+    </div>
+    <div class="col-md-9">
+        <dl>
+            <dt>Nombre Completo</dt>
+            <dd>@Html.DisplayFor(model => model.FullName)</dd>
+            <dt>Sexo</dt>
+            <dd>
+                @if (Model.IsMale)
+                {
+                    @Html.Raw("Masculino");
+                }
+                else
+                {
+                    @Html.Raw("Femenino");
+                }
+            </dd>
+            <dt>Fecha de Nacimiento</dt>
+            <dd>
+                @if (Model.BornDate > System.DateTime.MinValue)
+                {
+                    @Html.Raw(Model.BornDate.ToLongDateString());
+                }
+                else
+                {
+                    @Html.Raw("-");
+                }
+            </dd>
+            <dt>Teléfono</dt>
+            <dd>
+                @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                {
+                    @Html.Raw(Model.PhoneNumber);
+                }
+                else
+                {
+                    @Html.Raw("-");
+                }
+            </dd>
+            <dt>Correo Electrónico</dt>
+            <dd>
+                @if (!string.IsNullOrEmpty(Model.EmailAddress))
+                {
+                    @Html.Raw(Model.EmailAddress);
+                }
+                else
+                {
+                    @Html.Raw("-");
+                }
+            </dd>
+            <dt>Acerca de</dt>
+            <dd>
+                @if (!string.IsNullOrEmpty(Model.About))
+                {
+                    @Html.Raw(Model.About);
+                }
+                else
+                {
+                    @Html.Raw("-");
+                }
+            </dd>
+        </dl>
+    </div>
+</div>

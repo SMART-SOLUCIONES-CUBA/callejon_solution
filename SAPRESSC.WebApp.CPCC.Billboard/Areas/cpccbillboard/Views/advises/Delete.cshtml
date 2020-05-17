@@ -1,0 +1,54 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+
+@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Models.View.AdviseDisplayViewModel
+
+@{
+    ViewData["Title"] = "Eliminar Aviso";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Avisos",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Eliminar"
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+<h3>Esta seguro que desea eliminar el aviso detallado a continuación?</h3>
+
+<dl>
+    <dt>Publicado</dt>
+    <dd>
+        @if (Model.Enabled)
+        { <span class="glyphicon glyphicon-check"></span> }
+        else
+        { <span class="glyphicon glyphicon-unchecked"></span> }
+    </dd>
+    <dt>Mensaje</dt>
+    <dd>@Html.DisplayFor(model => model.Message)</dd>
+</dl>
+@using (Html.BeginForm("delete", "advises", new { Area = "cpccbillboard", key = string.Empty }, FormMethod.Post, true, null))
+{
+    @Html.HiddenFor(model => model.Id)
+    <div>
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a class="btn btn-default" href="@Url.Action("index")">Cancelar</a>
+    </div>
+}

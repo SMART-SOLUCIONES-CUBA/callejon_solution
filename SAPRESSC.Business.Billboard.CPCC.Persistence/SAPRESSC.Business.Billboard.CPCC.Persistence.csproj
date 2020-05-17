@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Persistence</AssemblyName>
+    <RootNamespace>SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Persistence</RootNamespace>
+    <PackageId>SAPRESSC.Business.Billboard.CPCC.Persistence</PackageId>
+    <Version>0.5.5-alpha</Version>
+    <Authors>SSC DevTeam</Authors>
+    <Company>SMART SOLUCIONES CUBA (SSC)</Company>
+    <Copyright>SMART SOLUCIONES CUBA 2018 - Todos los derechos reservados.</Copyright>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SAPRESSC.Business.Billboard.Cinema.Persistence\SAPRESSC.Business.Billboard.Cinema.Persistence.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,103 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+@using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Models.View;
+
+@model ProductionCommentDelationsViewModel
+
+@{
+    ViewData["Title"] = "Denuncias de Comentario de Película";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+{
+new BreadcrumbViewModel
+{
+    Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+    Url = "/"
+},
+new BreadcrumbViewModel
+{
+    Caption = "Administración",
+    Url = Url.Action("index", "management", new { Area = string.Empty })
+},
+new BreadcrumbViewModel
+{
+    Caption = "Comentarios de Películas",
+    Url = Url.Action("index", "productioncomments", new { key = string.Empty })
+},
+new BreadcrumbViewModel
+{
+    Caption = "Denuncias"
+}
+};
+
+    Layout = "_BackendLayout";
+}
+
+<div class="page-header">
+    <h3>Datos del Comentario de Película</h3>
+</div>
+<dl>
+    <dt>Creado</dt>
+    <dd>@Model.ProductionCommet.Created</dd>
+    <dt>Mensaje</dt>
+    <dd>@Model.ProductionCommet.Message</dd>
+</dl>
+
+@using (Html.BeginForm(Model.ProductionCommet.Banish ? "unblock" : "block", "productioncomments", new { Area = "cpccbillboard" }, FormMethod.Post, true, null))
+{
+    <input type="hidden" name="key" value="@Html.Raw(Model.ProductionCommet.Id)" />
+
+    <div class="btn-group btn-group pull-right">
+        
+        @if (Model.ProductionCommet.Banish)
+        { <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-thumbs-up"></span> Desbloquear</button> }
+        else
+        { <button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-thumbs-down"></span> Bloquear</button>}
+
+        <a role="button" href="@Url.Action("delete", new {key = Model.ProductionCommet.Id})" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+    </div>
+}
+
+<div class="page-header">
+    <h3>Denuncias</h3>
+</div>
+
+@if (Model.Delations.Count() > 0)
+{
+    @foreach (var item in Model.Delations)
+    {
+        var compoundId = item.CommentId + "-" + item.Id;
+
+        <div class="panel panel-default">
+            <div class="panel-heading">@item.Created</div>
+            <div class="panel-body">
+                <div class="pull-left" style="margin-right: 15px;">
+                    @if (item.Client.ImageId != System.Guid.Empty)
+                    {
+                        <img class="img-circle img-responsive" src="@Url.Action("image", "default", new { Area = "media", key = item.Client.ImageId })" />
+                    }
+                    else
+                    {
+                        <img class="img-circle img-responsive" src="/img/default-person-picture.jpg" />
+                    }
+                </div>
+
+                <h4>@item.Client.FullName</h4>
+                <p>@item.Note</p>
+
+                <div class="clearfix"></div>
+
+                <a role="button" href="#" class="btn btn-danger pull-right" data-toggle="modal" data-target="#delete-delation-@compoundId"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+
+                @await Html.PartialAsync("_DeleteDelationPartial", item);
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p>
+}
+
+
+
+

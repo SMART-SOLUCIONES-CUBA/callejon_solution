@@ -1,0 +1,345 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sscxftoolkitmvvmpages:ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
+    xmlns:templateselectors="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Template.Selector"
+    xmlns:ffilviewforms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:ffiltransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+    xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Converters"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.RoomBillboardPage"
+    x:Name="Page"
+    Title="Cartelera de Cine">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:DateTimeToInvarianCultureTimeStringConverter x:Key="DateTimeToInvarianCultureTimeString" />
+            <converters:PagePortraitOrientationToBooleanConverter x:Key="PagePortraitOrientationToBoolean" />
+            <converters:TimeSpanToCustomStringBindingConverter x:Key="TimeSpanToCustomString" />
+            <sscxftoolkitpresentationconverters:EnumerableEmptyToBooleanConverter x:Key="EnumerableEmptyToBoolean" Inverse="True" />
+            <sscxftoolkitpresentationconverters:EnumerationToJoinedStringBindingConverter x:Key="EnumerationToJoinedStringDefault" />
+            <sscxftoolkitpresentationconverters:NotNullToBooleanConverter x:Key="NotNullToBoolean" />
+            <sscxftoolkitpresentationconverters:NullToBooleanConverter x:Key="NullToBoolean" />
+            <sscxftoolkitpresentationconverters:BoolToBoolNegationConverter x:Key="BoolToBoolNegation" />
+
+            <DataTemplate x:Key="DayPresentationsTemplate">
+                <ViewCell>
+                    <StackLayout>
+                        <StackLayout 
+                            HeightRequest="24"
+                            Orientation="Horizontal"
+                            Padding="4,20,4,4">
+                            <BoxView 
+                                WidthRequest="4"
+                                BackgroundColor="Accent" />
+                            <Label
+                                HorizontalTextAlignment="Start" VerticalTextAlignment="End"
+                                Text="{Binding Date, StringFormat='{0:MMMM dd, dddd}' }"
+                                TextColor="Accent"
+                                FontFamily="Helvetica LT Std Bold Condensed"
+                                FontSize="{Binding helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                        </StackLayout>
+                        <ScrollView Orientation="Horizontal">
+                            <FlexLayout
+                                BindableLayout.ItemsSource="{Binding .}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Frame 
+                                            Margin="6" Padding="0" 
+                                            CornerRadius="3" 
+                                            BackgroundColor="#F3F3F3"
+                                            WidthRequest="320" HeightRequest="425">
+                                            <Frame.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="PresentationOverviewFrame_Tapped" />
+                                            </Frame.GestureRecognizers>
+                                            <Grid RowSpacing="0">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition />
+                                                    <RowDefinition />
+                                                </Grid.RowDefinitions>
+                                                <ffilviewforms:CachedImage 
+                                                    Grid.Row="0"
+                                                    FadeAnimationEnabled="False"
+                                                    Aspect="AspectFill"
+                                                    Source="{Binding Path=Production.PosterImageSource}" 
+                                                    DownsampleHeight="240"
+                                                    DownsampleUseDipUnits="True"
+                                                    CacheType="All"
+                                                    CacheDuration="8760:00:00">
+                                                    <ffilviewforms:CachedImage.Transformations>
+                                                        <ffiltransformations:BlurredTransformation />
+                                                    </ffilviewforms:CachedImage.Transformations>
+                                                </ffilviewforms:CachedImage>
+                                                <ffilviewforms:CachedImage
+                                                    Grid.Row="0"
+                                                    Source="{Binding Path=Production.PosterImageSource}"
+                                                    Aspect="AspectFit" 
+                                                    DownsampleHeight="240"
+                                                    DownsampleUseDipUnits="True"
+                                                    CacheDuration="8760:00:00" />
+                                                <Grid Grid.Row="1" Margin="10">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition />
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="Auto" />
+                                                    </Grid.RowDefinitions>
+                                                    <Label 
+                                                        Grid.Row="0"
+                                                        Text="{Binding Path=Production.Title}"  
+                                                        Style="{StaticResource PresentationTitleLabelStyle}"
+                                                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventTitleStyleFontSize}"
+                                                        LineBreakMode="TailTruncation"
+                                                        MaxLines="2" />
+                                                    <StackLayout Grid.Row="1" Orientation="Horizontal">
+                                                        <Label 
+                                                            Text="{Binding Path=PresentationDate, Converter={StaticResource DateTimeToInvarianCultureTimeString}}"
+                                                            TextColor="Accent"
+                                                            FontFamily="Helvetica LT Std Bold Condensed"
+                                                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                                        <Label 
+                                                            Text="/"
+                                                            TextColor="Accent"
+                                                            FontFamily="Helvetica LT Std Bold Condensed"
+                                                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                                        <Label 
+                                                            Text="{Binding Path=Production.MainCountry}"
+                                                            TextColor="Accent"
+                                                            FontFamily="Helvetica LT Std Bold Condensed"
+                                                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                                        <Label 
+                                                            Text="/"
+                                                            TextColor="Accent"
+                                                            FontFamily="Helvetica LT Std Bold Condensed"
+                                                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                                        <Label 
+                                                            Text="{Binding Path=Production.Year}"
+                                                            TextColor="Accent"
+                                                            FontFamily="Helvetica LT Std Bold Condensed"
+                                                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                                    </StackLayout>
+                                                    <Grid Grid.Row="2">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition />
+                                                        </Grid.ColumnDefinitions>
+                                                        <Label 
+                                                            Grid.Column="0" 
+                                                            Text="Dirección"
+                                                            TextColor="Accent"
+                                                            FontFamily="Helvetica LT Std Bold Condensed"
+                                                            LineBreakMode="NoWrap"
+                                                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                                        <Label 
+                                                            Grid.Column="1"
+                                                            Text="{Binding Path=Production.Directors, Converter={StaticResource EnumerationToJoinedStringDefault}}"
+                                                            TextColor="Accent"
+                                                            FontFamily="Helvetica LT Std Condensed"
+                                                            LineBreakMode="TailTruncation"
+                                                            Margin="0,0,3,0"
+                                                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                                    </Grid>
+                                                    <Label 
+                                                        Grid.Row="3" 
+                                                        Text="{Binding Path=Production.Category}"
+                                                        TextColor="Accent"
+                                                        FontFamily="Helvetica LT Std Condensed"
+                                                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                                    <Label 
+                                                        Grid.Row="4"
+                                                        Margin="0,0,0,6" 
+                                                        Text="{Binding Path=Production.Duration, Converter={StaticResource TimeSpanToCustomString}}"
+                                                        TextColor="#2a2a2a"
+                                                        FontFamily="Helvetica LT Std Condensed"
+                                                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                                </Grid>
+                                            </Grid>
+                                        </Frame>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </FlexLayout>
+                        </ScrollView>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+
+            <DataTemplate x:Key="PresentationOverviewTemplate">
+                <ViewCell>
+                    <Frame 
+                        Margin="6" Padding="0" 
+                        CornerRadius="3" 
+                        BackgroundColor="#F3F3F3">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="PresentationOverviewFrame_Tapped" />
+                        </Frame.GestureRecognizers>
+                        <Grid ColumnSpacing="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <ffilviewforms:CachedImage 
+                                Grid.Column="0"
+                                BackgroundColor="Gray"
+                                Aspect="AspectFill"
+                                Source="{Binding Path=Production.PosterImageSource}"
+                                HeightRequest="240"
+                                WidthRequest="160" 
+                                DownsampleHeight="240"
+                                DownsampleUseDipUnits="True"
+                                CacheType="All"
+                                CacheDuration="8760:00:00" />
+                            <Grid Grid.Column="1" Margin="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Label 
+                                    Grid.Row="0"
+                                    Text="{Binding Path=Production.Title}"  
+                                    Style="{StaticResource PresentationTitleLabelStyle}"
+                                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventTitleStyleFontSize}"
+                                    LineBreakMode="TailTruncation"
+                                    MaxLines="3" />
+                                <StackLayout Grid.Row="1" Orientation="Horizontal">
+                                    <Label 
+                                        Text="{Binding Path=PresentationDate, Converter={StaticResource DateTimeToInvarianCultureTimeString}}"
+                                        TextColor="Accent"
+                                        FontFamily="Helvetica LT Std Bold Condensed"
+                                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                    <Label 
+                                        Text="/"
+                                        TextColor="Accent"
+                                        FontFamily="Helvetica LT Std Bold Condensed"
+                                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                    <Label 
+                                        Text="{Binding Path=Production.MainCountry}"
+                                        TextColor="Accent"
+                                        FontFamily="Helvetica LT Std Bold Condensed"
+                                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                    <Label 
+                                        Text="/"
+                                        TextColor="Accent"
+                                        FontFamily="Helvetica LT Std Bold Condensed"
+                                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                    <Label 
+                                        Text="{Binding Path=Production.Year}"
+                                        TextColor="Accent"
+                                        FontFamily="Helvetica LT Std Bold Condensed"
+                                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                </StackLayout>
+                                <Grid Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Label 
+                                        Grid.Column="0" 
+                                        Text="Dirección"
+                                        TextColor="Accent"
+                                        FontFamily="Helvetica LT Std Bold Condensed"
+                                        LineBreakMode="NoWrap"
+                                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                    <Label 
+                                        Grid.Column="1"
+                                        Text="{Binding Path=Production.Directors, Converter={StaticResource EnumerationToJoinedStringDefault}}"
+                                        TextColor="Accent"
+                                        FontFamily="Helvetica LT Std Condensed"
+                                        LineBreakMode="TailTruncation"
+                                        Margin="0,0,3,0"
+                                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                </Grid>
+                                <Label 
+                                    Grid.Row="3" 
+                                    Text="{Binding Path=Production.Category}"
+                                    TextColor="Accent"
+                                    FontFamily="Helvetica LT Std Condensed"
+                                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                <Label 
+                                    Grid.Row="4"
+                                    Margin="0,0,0,6" 
+                                    Text="{Binding Path=Production.Duration, Converter={StaticResource TimeSpanToCustomString}}"
+                                    TextColor="#2a2a2a"
+                                    FontFamily="Helvetica LT Std Condensed"
+                                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                            </Grid>
+                        </Grid>
+                    </Frame>
+                </ViewCell>
+            </DataTemplate>
+
+            <templateselectors:DayRoomBillboardTemplateSelector
+                x:Key="DayRoomBillboardTemplateSelector"
+                DayPresentationsDataTemplate="{StaticResource DayPresentationsTemplate}"
+                PresentationOveriewDataTemplate="{StaticResource PresentationOverviewTemplate}" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout Spacing="0">
+            <StackLayout 
+                Spacing="0" 
+                BackgroundColor="{StaticResource SecoundaryBrandColor}">
+                <Label 
+                    Text="{Binding Path=Room.Name, StringFormat='Sala {0}'}" 
+                    Margin="10,6,10,0" 
+                    FontSize="Medium"
+                    FontFamily="Helvetica LT Std Bold Condensed"
+                    TextColor="White" />
+                <Label 
+                    Text="{Binding Path=Room.CinemaName}" 
+                    Margin="10,0,10,8"
+                    FontFamily="Helvetica LT Std Bold Condensed" 
+                    TextColor="GhostWhite" />
+            </StackLayout>
+            <Grid>
+                <ListView
+                    SelectionMode="None"
+                    HasUnevenRows="True"
+                    SeparatorVisibility="None"
+                    IsRefreshing="{Binding IsBusy}"
+                    IsGroupingEnabled="{Binding Source={x:Reference Page}, Path=Width, Converter={StaticResource PagePortraitOrientationToBoolean}}"
+                    ItemsSource="{Binding Path=DayPresentations}"
+                    ItemTemplate="{StaticResource DayRoomBillboardTemplateSelector}">
+                    <ListView.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout 
+                                    HeightRequest="24"
+                                    Orientation="Horizontal"
+                                    Padding="6,20,6,6">
+                                    <BoxView 
+                                        WidthRequest="4"
+                                        BackgroundColor="Accent" />
+                                    <Label
+                                        HorizontalTextAlignment="Start" VerticalTextAlignment="End"
+                                        Text="{Binding Date, StringFormat='{0:MMMM dd, dddd}' }"
+                                        TextColor="Accent"
+                                        FontFamily="Helvetica LT Std Bold Condensed"
+                                        FontSize="{Binding helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.GroupHeaderTemplate>
+                </ListView>
+                <StackLayout 
+                    VerticalOptions="Start"
+                    IsVisible="{Binding Path=IsBusy, Converter={StaticResource BoolToBoolNegation}}">
+                    <Label 
+                        IsVisible="{Binding Path=DayPresentations, Converter={StaticResource EnumerableEmptyToBoolean}}"
+                        Text="Sin elementos que mostrar"
+                        TextColor="DimGray"
+                        FontFamily="Helvetica LT Std Condensed"
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}"
+                        HorizontalTextAlignment="Center" />
+                </StackLayout>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</sscxftoolkitmvvmpages:ContentPage>

@@ -1,0 +1,788 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer ViewLocalizer
+@inject SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Helpers.Localization.GlobalViewLocalizationHelper GlobalViewLocalizationHelper
+
+@model SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Models.View.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Vistazo";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = ViewData["Title"].ToString()
+        }
+    };
+
+    Layout = "_BackendLayout";
+
+    var securityCount = 
+        Model.PersistenceSecurityUserCount +
+        Model.PersistenceSecurityGroupCount +
+        Model.PersistenceSecurityRoleCount +
+        Model.PersistenceSecurityTraceCount;
+
+    var commentCount = 
+        Model.PersistenceBillboardProductionCommentCount + 
+        Model.PersistenceBillboardEventCommentCount + 
+        Model.PersistenceBillboardPersonalityCommentCount;
+
+    var billboardCount =
+        Model.PersistenceBillboardConfigCount +
+        Model.PersistenceBillboardEventCount +
+        Model.PersistenceBillboardHighlightCount +
+        Model.PersistenceBillboardPresentationCount +
+        Model.PersistenceBillboardProductionCount;
+
+    var supportCount =
+        Model.PersistenceSupportAwardCount +
+        Model.PersistenceSupportCategoryCount +
+        Model.PersistenceSupportCinemaCount +
+        Model.PersistenceSupportClasifiersCount +
+        Model.PersistenceSupportCountryCount +
+        Model.PersistenceSupportGenreCount +
+        Model.PersistenceSupportLanguageCount +
+        Model.PersistenceSupportPersonalityCount +
+        Model.PersistenceSupportProductionHouseCount;
+
+    var entityCount =
+        securityCount +
+        billboardCount +
+        supportCount +
+        commentCount;
+}
+
+@section styles {
+    <link rel="stylesheet" type="text/css" href="~/lib/iconmonstr/css/iconmonstr-iconic-font.min.css" />
+    <style type="text/css">
+        .panel .glyphicon {
+            font-size: 28px;
+        }
+    </style>
+}
+
+@section scripts {
+    <script type="text/javascript" src="~/lib/chartjs/Chart.min.js"></script>
+    <script type="text/javascript" src="~/lib/chartjs/Chart.bundle.min.js"></script>
+    <script type="text/javascript">
+        var mobiledbupdateWeek1ChartContext = document.getElementById('week1_mobiledbupdate_chart_canvas').getContext('2d');
+
+        var mobiledbupdateWeek1Chart = new Chart(mobiledbupdateWeek1ChartContext, {
+            // The type of chart we want to create
+            type: 'line',
+
+            // The data for our dataset
+            data: {
+                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.WeekStatisticsColumns)),
+                datasets: [{
+                    label: "Solicitudes",
+                    backgroundColor: 'rgba(255, 99, 132, 0.3)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.WeekMobileDatabaseUpdateStatisticsValues)),
+                }]
+            },
+
+            // Configuration options go here
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'bottom',
+                },
+                title: {
+                    display: true,
+                    text: 'Actualizaciones Base de Datos Móvil'
+                }
+            }
+        });
+
+        var commentWeek1ChartContext = document.getElementById('week1_comment_chart_canvas').getContext('2d');
+
+        var commentWeek1Chart = new Chart(commentWeek1ChartContext, {
+            // The type of chart we want to create
+            type: 'bar',
+
+            // The data for our dataset
+            data: {
+                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.WeekStatisticsColumns)),
+                datasets: [{
+                    type: 'bar',
+                    label: "Presentaciones",
+                    borderColor: 'rgb(54, 162, 235)',
+                    backgroundColor: 'rgb(54, 162, 235)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.WeekPresentationCommentStatisticsValues))
+                }, {
+                    type: 'bar',
+                    label: "Eventos",
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgb(75, 192, 192)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.WeekEventCommentStatisticsValues))
+                }, {
+                    type: 'bar',
+                    label: "Personalidades",
+                    borderColor: 'rgb(255, 159, 64)',
+                    backgroundColor: 'rgb(255, 159, 64)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.WeekPersonalityCommentStatisticsValues))
+                }, {
+                    type: 'line',
+                    label: "Total",
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.WeekTotalCommentStatisticsValues)),
+                    fill: false
+                }]
+            },
+
+            // Configuration options go here
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'bottom',
+                },
+                title: {
+                    display: true,
+                    text: 'Comentarios de los consumidores'
+                }
+            }
+        });
+
+        // Mensual
+
+        var mobiledbupdateMonth1ChartContext = document.getElementById('month1_mobiledbupdate_chart_canvas').getContext('2d');
+
+        var mobiledbupdateMonth1Chart = new Chart(mobiledbupdateMonth1ChartContext, {
+            // The type of chart we want to create
+            type: 'line',
+
+            // The data for our dataset
+            data: {
+                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MonthStatisticsColumns)),
+                datasets: [{
+                    label: "Solicitudes",
+                    backgroundColor: 'rgba(255, 99, 132, 0.3)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MonthMobileDatabaseUpdateStatisticsValues)),
+                }]
+            },
+
+            // Configuration options go here
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'bottom',
+                },
+                title: {
+                    display: true,
+                    text: 'Actualizaciones de Base de Datos Móvil'
+                }
+            }
+        });
+
+        var commentMonth1ChartContext = document.getElementById('month1_comment_chart_canvas').getContext('2d');
+
+        var commentMonth1Chart = new Chart(commentMonth1ChartContext, {
+            // The type of chart we want to create
+            type: 'bar',
+
+            // The data for our dataset
+            data: {
+                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MonthStatisticsColumns)),
+                datasets: [{
+                    type: 'bar',
+                    label: "Presentaciones",
+                    borderColor: 'rgb(54, 162, 235)',
+                    backgroundColor: 'rgb(54, 162, 235)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MonthPresentationCommentStatisticsValues))
+                }, {
+                    type: 'bar',
+                    label: "Eventos",
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgb(75, 192, 192)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MonthEventCommentStatisticsValues))
+                }, {
+                    type: 'bar',
+                    label: "Personalidades",
+                    borderColor: 'rgb(255, 159, 64)',
+                    backgroundColor: 'rgb(255, 159, 64)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MonthPersonalityCommentStatisticsValues))
+                }, {
+                    type: 'line',
+                    label: "Total",
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MonthTotalCommentStatisticsValues)),
+                    fill: false
+                }]
+            },
+
+            // Configuration options go here
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'bottom',
+                },
+                title: {
+                    display: true,
+                    text: 'Comentarios de los consumidores'
+                }
+            }
+        });
+
+        // Semestral
+
+        var mobiledbupdateMonth6ChartContext = document.getElementById('month6_mobiledbupdate_chart_canvas').getContext('2d');
+
+        var mobiledbupdateMonth6Chart = new Chart(mobiledbupdateMonth6ChartContext, {
+            // The type of chart we want to create
+            type: 'line',
+
+            // The data for our dataset
+            data: {
+                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.SemesterStatisticsColumns)),
+                datasets: [{
+                    label: "Solicitudes",
+                    backgroundColor: 'rgba(255, 99, 132, 0.3)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.SemesterMobileDatabaseUpdateStatisticsValues)),
+                }]
+            },
+
+            // Configuration options go here
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'bottom',
+                },
+                title: {
+                    display: true,
+                    text: 'Actualizaciones Base de Datos Móvil'
+                }
+            }
+        });
+
+        var commentMonth6ChartContext = document.getElementById('month6_comment_chart_canvas').getContext('2d');
+
+        var commentMonth6Chart = new Chart(commentMonth6ChartContext, {
+            // The type of chart we want to create
+            type: 'bar',
+
+            // The data for our dataset
+            data: {
+                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.SemesterStatisticsColumns)),
+                datasets: [{
+                    type: 'bar',
+                    label: "Presentaciones",
+                    borderColor: 'rgb(54, 162, 235)',
+                    backgroundColor: 'rgb(54, 162, 235)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.SemesterPresentationCommentStatisticsValues))
+                }, {
+                    type: 'bar',
+                    label: "Eventos",
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgb(75, 192, 192)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.SemesterEventCommentStatisticsValues))
+                }, {
+                    type: 'bar',
+                    label: "Personalidades",
+                    borderColor: 'rgb(255, 159, 64)',
+                    backgroundColor: 'rgb(255, 159, 64)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.SemesterPersonalityCommentStatisticsValues))
+                }, {
+                    type: 'line',
+                    label: "Total",
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.SemesterTotalCommentStatisticsValues)),
+                    fill: false
+                }]
+            },
+
+            // Configuration options go here
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'bottom',
+                },
+                title: {
+                    display: true,
+                    text: 'Comentarios de los consumidores'
+                }
+            }
+        });
+
+        // Anual
+
+        var mobiledbupdateYear1ChartContext = document.getElementById('year1_mobiledbupdate_chart_canvas').getContext('2d');
+
+        var mobiledbupdateYear1Chart = new Chart(mobiledbupdateYear1ChartContext, {
+            // The type of chart we want to create
+            type: 'line',
+
+            // The data for our dataset
+            data: {
+                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.YearStatisticsColumns)),
+                datasets: [{
+                    label: "Solicitudes",
+                    backgroundColor: 'rgba(255, 99, 132, 0.3)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.YearMobileDatabaseUpdateStatisticsValues)),
+                }]
+            },
+
+            // Configuration options go here
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'bottom',
+                },
+                title: {
+                    display: true,
+                    text: 'Actualizaciones Base de Datos Móvil'
+                }
+            }
+        });
+
+        var commentYear1ChartContext = document.getElementById('year1_comment_chart_canvas').getContext('2d');
+
+        var commentYear1Chart = new Chart(commentYear1ChartContext, {
+            // The type of chart we want to create
+            type: 'bar',
+
+            // The data for our dataset
+            data: {
+                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.YearStatisticsColumns)),
+                datasets: [{
+                    type: 'bar',
+                    label: "Presentaciones",
+                    borderColor: 'rgb(54, 162, 235)',
+                    backgroundColor: 'rgb(54, 162, 235)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.YearPresentationCommentStatisticsValues))
+                }, {
+                    type: 'bar',
+                    label: "Eventos",
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgb(75, 192, 192)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.YearEventCommentStatisticsValues))
+                }, {
+                    type: 'bar',
+                    label: "Personalidades",
+                    borderColor: 'rgb(255, 159, 64)',
+                    backgroundColor: 'rgb(255, 159, 64)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.YearPersonalityCommentStatisticsValues))
+                }, {
+                    type: 'line',
+                    label: "Total",
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.YearTotalCommentStatisticsValues)),
+                    fill: false
+                }]
+            },
+
+            // Configuration options go here
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'bottom',
+                },
+                title: {
+                    display: true,
+                    text: 'Comentarios de los consumidores'
+                }
+            }
+        });
+    </script>
+}
+
+<div class="row">
+    <div class="col-sm-6 col-md-4">
+        <div class="alert alert-success">
+            <table>
+                <tr>
+                    <td valign="middle"><span class="im im-database" style="font-size: 32px; margin-top: 3px;"></span></td>
+                    <td valign="middle" style="padding-left: 15px; padding-right: 15px; width: 100%;">
+                        <div style="font-weight: bold;">Actual Base de Datos Móvil</div>
+                        @if (string.IsNullOrEmpty(Model.CurrentPortableDatabaseDateTimeFormated))
+                        {
+                            <div><i>no se ha generado aún</i></div>
+                        }
+                        else
+                        {
+                            <div>@Model.CurrentPortableDatabaseDateTimeFormated</div>
+                        }
+                    </td>
+                    <td valign="middle">
+                        <a class="btn btn-success" href="@Url.Action("build", "database")" title="Genera manualmente la actualización de la base de datos para las aplicaciones móviles. El proceso puede demorar entre 3 y 5 minutos. La actualización estará disponible automáticamente cuando termine el proceso.">
+                            <span class="glyphicon glyphicon-refresh"></span>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4">
+        <div class="alert alert-warning">
+            <table>
+                <tr>
+                    <td valign="middle"><span class="glyphicon glyphicon-hdd" style="font-size: 32px; margin-top: 3px;"></span></td>
+                    <td valign="middle" style="padding-left: 15px; padding-right: 15px; width: 100%;">
+                        <div style="font-weight: bold;">Empaquetar Actualización</div>
+                        <div>Actualización portable</div>
+                    </td>
+                    <td valign="middle">
+                        <a class="btn btn-warning" href="@Url.Action("pack", "database")">
+                            <span class="glyphicon glyphicon-download-alt"></span>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4">
+        <div class="alert alert-info">
+            <table>
+                <tr>
+                    <td valign="middle"><span class="im im-flip-chart-o" style="font-size: 32px; margin-top: 3px;"></span></td>
+                    <td valign="middle" style="padding-left: 15px; padding-right: 15px; width: 100%;">
+                        <div style="font-weight: bold;">Programación (próximos 7 días)</div>
+                        <div>Eventos: <span style="color: #444;">@Model.NextWeekBillboardEventCount</span>, Películas: <span style="color: #444;">@Model.NextWeekBillboardPresentationCount</span></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<h3 class="page-header" style="margin-top: 0;">Interacción</h3>
+
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#week1" data-toggle="tab">Semanal</a></li>
+    <li><a href="#month1" data-toggle="tab">Mensual</a></li>
+    <li><a href="#month6" data-toggle="tab">Semestral</a></li>
+    <li><a href="#year1" data-toggle="tab">Anual</a></li>
+</ul>
+
+<div class="tab-content" style="margin-bottom: 25px; padding-top: 15px;">
+    <div class="tab-pane active" id="week1">
+        <div class="row">
+            <div class="col-sm-6">
+                <canvas id="week1_comment_chart_canvas"></canvas>
+            </div>
+            <div class="col-sm-6">
+                <canvas id="week1_mobiledbupdate_chart_canvas"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane" id="month1">
+        <div class="row">
+            <div class="col-sm-6">
+                <canvas id="month1_comment_chart_canvas"></canvas>
+            </div>
+            <div class="col-sm-6">
+                <canvas id="month1_mobiledbupdate_chart_canvas"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane" id="month6">
+        <div class="row">
+            <div class="col-sm-6">
+                <canvas id="month6_comment_chart_canvas"></canvas>
+            </div>
+            <div class="col-sm-6">
+                <canvas id="month6_mobiledbupdate_chart_canvas"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane" id="year1">
+        <div class="row">
+            <div class="col-sm-6">
+                <canvas id="year1_comment_chart_canvas"></canvas>
+            </div>
+            <div class="col-sm-6">
+                <canvas id="year1_mobiledbupdate_chart_canvas"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3 class="page-header" style="margin-top: 0;">Estadísticas</h3>
+
+<div class="row">
+    <div class="col-md-6">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="text-info" colspan="2" style="font-style: italic;">Seguridad</th>
+                </tr>
+                <tr>
+                    <th>Entidad</th>
+                    <th class="text-info" style="width: 1px; text-align: center;">Registros</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Usuarios</td>
+                    <td style="text-align: right;">@Model.PersistenceSecurityUserCount</td>
+                </tr>
+                <tr>
+                    <td>Grupos</td>
+                    <td style="text-align: right;">@Model.PersistenceSecurityGroupCount</td>
+                </tr>
+                <tr>
+                    <td>Roles</td>
+                    <td style="text-align: right;">@Model.PersistenceSecurityRoleCount</td>
+                </tr>
+                <tr>
+                    <td>Trazas</td>
+                    <td style="text-align: right;">@Model.PersistenceSecurityTraceCount</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="text-info" colspan="2" style="font-style: italic;">Complementarios</th>
+                </tr>
+                <tr>
+                    <th>Entidad</th>
+                    <th style="width: 1px; text-align: center;">Registros</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Países</td>
+                    <td style="text-align: right;">@Model.PersistenceSupportCountryCount</td>
+                </tr>
+                <tr>
+                    <td>Categorias</td>
+                    <td style="text-align: right;">@Model.PersistenceSupportCategoryCount</td>
+                </tr>
+                <tr>
+                    <td>Personalidades</td>
+                    <td style="text-align: right;">@Model.PersistenceSupportPersonalityCount</td>
+                </tr>
+                <tr>
+                    <td>Géneros</td>
+                    <td style="text-align: right;">@Model.PersistenceSupportGenreCount</td>
+                </tr>
+                <tr>
+                    <td>Premios</td>
+                    <td style="text-align: right;">@Model.PersistenceSupportAwardCount</td>
+                </tr>
+                <tr>
+                    <td>Lenguajes</td>
+                    <td style="text-align: right;">@Model.PersistenceSupportLanguageCount</td>
+                </tr>
+                <tr>
+                    <td>Casa Productoras</td>
+                    <td style="text-align: right;">@Model.PersistenceSupportProductionHouseCount</td>
+                </tr>
+                <tr>
+                    <td>Cines</td>
+                    <td style="text-align: right;">@Model.PersistenceSupportCinemaCount</td>
+                </tr>
+                <tr>
+                    <td>Clasificadores de Comentarios</td>
+                    <td style="text-align: right;">@Model.PersistenceSupportClasifiersCount</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="text-info" colspan="2" style="font-style: italic;">Cartelera</th>
+                </tr>
+                <tr>
+                    <th>Entidad</th>
+                    <th style="width: 1px; text-align: center;">Registros</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Películas</td>
+                    <td style="text-align: right;">@Model.PersistenceBillboardProductionCount</td>
+                </tr>
+                <tr>
+                    <td>Presentaciones</td>
+                    <td style="text-align: right;">@Model.PersistenceBillboardPresentationCount</td>
+                </tr>
+                <tr>
+                    <td>Avisos</td>
+                    <td style="text-align: right;">@Model.PersistenceBillboardHighlightCount</td>
+                </tr>
+                <tr>
+                    <td>Eventos</td>
+                    <td style="text-align: right;">@Model.PersistenceBillboardEventCount</td>
+                </tr>
+                <tr>
+                    <td>Configuración de Pantalla Fija</td>
+                    <td style="text-align: right;">@Model.PersistenceBillboardConfigCount</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="text-info" colspan="2" style="font-style: italic;">Cometarios</th>
+                </tr>
+                <tr>
+                    <th>Grupo</th>
+                    <th style="width: 1px; text-align: center;">Registros</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Películas</td>
+                    <td style="text-align: right;">@Model.PersistenceBillboardProductionCommentCount</td>
+                </tr>
+                <tr>
+                    <td>Eventos</td>
+                    <td style="text-align: right;">@Model.PersistenceBillboardEventCommentCount</td>
+                </tr>
+                <tr>
+                    <td>Personalidades</td>
+                    <td style="text-align: right;">@Model.PersistenceBillboardPersonalityCommentCount</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="text-info" colspan="2" style="font-style: italic;">Totales</th>
+                </tr>
+                <tr>
+                    <th>Áreas</th>
+                    <th style="width: 1px; text-align: center;">Registros</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Seguridad</td>
+                    <td style="text-align: right;">@securityCount</td>
+                </tr>
+                <tr>
+                    <td>Cartelera</td>
+                    <td style="text-align: right;">@billboardCount</td>
+                </tr>
+                <tr>
+                    <td>Complementarios</td>
+                    <td style="text-align: right;">@supportCount</td>
+                </tr>
+                <tr>
+                    <td>Comentarios</td>
+                    <td style="text-align: right;">@commentCount</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="2" style="text-align: right;">@entityCount</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+    @for (int i = 0; i < Model.Groups.Count; i += 2)
+    {
+        var group = Model.Groups.ElementAt(i);
+
+        <div class="panel panel-default">
+            <div class="panel-heading">@group.Key</div>
+            <div class="panel-body">
+                @{
+                    var total = group.Value.Count;
+                    var count = 0;
+                }
+                @while (count < total)
+                {
+                    var subList = group.Value.Skip(count).Take(3);
+
+                    <div class="row">
+                    @foreach (var item in subList)
+                    {
+                        <div class="col-sm-4" style="text-align: center; padding-bottom: 15px; padding-top: 15px;">
+                            @if (User.HasClaim(claim => claim.Type.Equals(SmartSolucionesCuba.SAPRESSC.Core.Web.Security.ClaimTypes.AccountWithFullAccess) && claim.Value.Equals(true.ToString())) || User.IsInRole(item.Role))
+                            {
+                                <a href="@Url.Action(item.Action, item.Controller, new { item.Area })">
+                                    @Html.Raw(SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Helpers.DashboardManagementItemIconographyHelper.GetIconography(item))
+                                    <div>@GlobalViewLocalizationHelper.Localize(item.Title, ViewLocalizer)</div>
+                                </a>
+                            }
+                            else
+                            {
+                                <div class="text-muted">
+                                    @Html.Raw(SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Helpers.DashboardManagementItemIconographyHelper.GetIconography(item))
+                                    <div>@GlobalViewLocalizationHelper.Localize(item.Title, ViewLocalizer)</div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    </div>
+                    {
+                        count += 3;
+                    }
+                }
+            </div>
+        </div>
+    }
+    </div>
+    <div class="col-sm-6">
+    @if (Model.Groups.Count > 1)
+    {
+        for (int i = 1; i < Model.Groups.Count; i += 2)
+        {
+            var group = Model.Groups.ElementAt(i);
+
+            <div class="panel panel-default">
+                <div class="panel-heading">@group.Key</div>
+                <div class="panel-body">
+                    @{
+                        var total = group.Value.Count;
+                        var count = 0;
+                    }
+                    @while (count < total)
+                    {
+                        var subList = group.Value.Skip(count).Take(3);
+
+                        <div class="row">
+                            @foreach (var item in subList)
+                            {
+                                <div class="col-sm-4" style="text-align: center; padding-bottom: 15px; padding-top: 15px;">
+                                    @if (User.HasClaim(claim => claim.Type.Equals(SmartSolucionesCuba.SAPRESSC.Core.Web.Security.ClaimTypes.AccountWithFullAccess) && claim.Value.Equals(true.ToString())) || User.IsInRole(item.Role))
+                                    {
+                                        <a href="@Url.Action(item.Action, item.Controller, new { item.Area })">
+                                            @Html.Raw(SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Helpers.DashboardManagementItemIconographyHelper.GetIconography(item))
+                                            <div>@GlobalViewLocalizationHelper.Localize(item.Title, ViewLocalizer)</div>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <div class="text-muted">
+                                            @Html.Raw(SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Helpers.DashboardManagementItemIconographyHelper.GetIconography(item))
+                                            <div>@GlobalViewLocalizationHelper.Localize(item.Title, ViewLocalizer)</div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                        {
+                            count += 3;
+                        }
+                    }
+                </div>
+            </div>
+        }
+    }
+    </div>
+</div>

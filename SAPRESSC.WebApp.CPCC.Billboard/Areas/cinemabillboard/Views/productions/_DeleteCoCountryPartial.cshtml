@@ -1,0 +1,31 @@
+﻿@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.CoCountryDisplayViewModel
+
+<div class="modal fade" id="delete-cocountry-@Model.CountryId" tabindex="-1" role="dialog" aria-labelledby="delete-cocountry-@Model.CountryId-lable" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @using (Html.BeginForm("deletecocountry", "productions", null, FormMethod.Post, true, new { @class = "modal-content" }))
+            {
+                @Html.HiddenFor(model => model.CountryId)
+                @Html.HiddenFor(model => model.ProductionId)
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="delete-cocountry-@Model.CountryId-lable">Eliminar País Co-Productor</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Esta seguro que desea eliminar el país co-productor detallado a continuación?</p>
+
+                    <dl>
+                        <dt>País</dt>
+                        <dd>@Model.Country.Name</dd>
+                    </dl>
+                </div>
+
+                <div class="modal-footer" style="margin-top: 0;">
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

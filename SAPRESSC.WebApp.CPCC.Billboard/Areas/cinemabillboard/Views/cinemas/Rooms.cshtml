@@ -1,0 +1,86 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+@using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View;
+
+@model CinemaDisplayViewModel
+
+@{
+    ViewData["Title"] = "Modificar Cine (Salas)";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Cines",
+            Url = Url.Action("index", "cinemas", new { key = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = ViewData["Title"].ToString()
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+<div class="page-header">
+    <h3>Datos del Cine</h3>
+</div>
+<dl>
+    <dt>Nombre</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+</dl>
+<div class="page-header">
+    <h3>Salas<a class="btn btn-primary pull-right" href="#" data-toggle="modal" data-target="#add-room">Agregar Sala</a></h3>
+</div>
+
+@await Html.PartialAsync("_CreateRoomPartial", new RoomInputViewModel { CinemaId = Model.Id })
+
+<table class="table" style="margin: 0;">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th style="width: 186px;">Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Rooms.Count > 0)
+        {
+            foreach (var room in Model.Rooms)
+            {
+                <tr>
+                    <td style="vertical-align: middle;" title="Nombre">@room.Name</td>
+                    <td style="vertical-align: middle;">
+                        <div class="btn-group btn-group-sm">
+                            <a role="button" href="#" class="btn btn-default" data-toggle="modal" data-target="#edit-room-@room.Id"><span class="glyphicon glyphicon-edit"></span> Modificar</a>
+                            <a role="button" href="#" class="btn btn-danger" data-toggle="modal" data-target="#delete-room-@room.Id"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+                        </div>
+
+                        @{
+                            var roomModelInput = new RoomInputViewModel { Id = room.Id, Name = room.Name, CinemaId = Model.Id };
+                        }
+
+                        @await Html.PartialAsync("_EditRoomPartial", roomModelInput)
+                        @await Html.PartialAsync("_DeleteRoomPartial", roomModelInput)
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="2"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
+            </tr>
+        }
+    </tbody>
+</table>
+

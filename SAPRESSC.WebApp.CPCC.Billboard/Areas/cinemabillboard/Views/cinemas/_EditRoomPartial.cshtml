@@ -1,0 +1,29 @@
+﻿@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.RoomInputViewModel
+
+<div class="modal fade" id="edit-room-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="edit-room-@Model.Id-lable" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @using (Html.BeginForm("editroom", "cinemas", null, FormMethod.Post, true, new { @class = "modal-content" }))
+            {
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.CinemaId)
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="edit-room-@Model.Id-lable">Modificar Sala</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="margin-bottom: 20px;">
+                        @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="modal-footer" style="margin-top: 0;">
+                    <button type="submit" class="btn btn-primary">Modificar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

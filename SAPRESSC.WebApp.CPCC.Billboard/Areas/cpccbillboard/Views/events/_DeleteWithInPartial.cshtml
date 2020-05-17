@@ -1,0 +1,48 @@
+﻿@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Models.View.WithInDisplayViewModel
+
+@{ 
+    var compoundId = Model.EventId + "-" + Model.PersonalityId;
+}
+
+<div class="modal fade" id="delete-within-@compoundId" tabindex="-1" role="dialog" aria-labelledby="delete-within-@compoundId-lable" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @using (Html.BeginForm("deletewithin", "events", null, FormMethod.Post, true, new { @class = "modal-content" }))
+            {
+                @Html.HiddenFor(model => model.EventId)
+                @Html.HiddenFor(model => model.PersonalityId)
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="delete-within-@compoundId-lable">Eliminar Invitado</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Está seguro que desea eliminar el invitado detallado a continuación?</p>
+
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col-sm-3" style="margin-bottom: 20px;">
+                            @if (Model.Personality.Image != null)
+                            {
+                                <img class="img-circle img-responsive" src="@Url.Action("image", "default", new { Area = "media", key = Model.Personality.Image.Id })" />
+                            }
+                            else
+                            {
+                                <img class="img-circle img-responsive" src="/img/default-person-picture.jpg" />
+                            }
+                        </div>
+                        <div class="col-sm-9" style="margin-bottom: 20px;">
+                            <p>@Model.Personality.Name @Model.Personality.LastName</p>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="modal-footer" style="margin-top: 0;">
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

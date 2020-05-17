@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sscxftoolkitmvvmpages:ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Converters"
+    xmlns:ffilviewforms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:renderedviews="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Rendered"
+    xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.DatabaseShareSendPage"
+    Title="Compartir con Amigos">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:WiFiHostPotDetailToQRImageSourceConverter x:Key="WiFiHostPotDetailToQRImageSourceConverter" />
+            <sscxftoolkitpresentationconverters:BoolToBoolNegationConverter x:Key="BoolToBoolNegationConverter" />
+            <sscxftoolkitpresentationconverters:FactorConverter x:Key="FactorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid>
+            <StackLayout 
+                IsVisible="{Binding IsBusy, Converter={StaticResource BoolToBoolNegationConverter}}"
+                HorizontalOptions="Center"
+                HeightRequest="320"
+                Padding="20">
+                <Button 
+                    HorizontalOptions="End"
+                    BackgroundColor="Transparent"
+                    Padding="0"
+                    WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize, Converter={StaticResource FactorConverter}, ConverterParameter=2}"
+                    HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize, Converter={StaticResource FactorConverter}, ConverterParameter=2}"
+                    Text="&#xf5ad;"
+                    TextColor="Accent"
+                    FontFamily="Material Design Icons"
+                    FontSize="Large"
+                    Clicked="CloseButton_Clicked" />
+                <Label 
+                    Grid.Row="0"
+                    VerticalOptions="EndAndExpand"
+                    HorizontalTextAlignment="Center"
+                    Text="Compartir Datos"
+                    TextColor="Accent"
+                    FontSize="Large" />
+                <ffilviewforms:CachedImage 
+                    Source="{Binding Path=WiFiHostPotDetail, Converter={StaticResource WiFiHostPotDetailToQRImageSourceConverter}, ConverterParameter=320}"
+                    CacheType="None" />
+                <Label 
+                    HorizontalTextAlignment="Center"
+                    TextColor="Black">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Para que tus amigos se conecten deberán escanear este código QR o conectarse a la red WiFi " />
+                            <Span Text="{Binding Path=WiFiHostPotDetail.SSID}" FontAttributes="Bold" TextColor="Accent" />
+                            <Span Text=" con seguridad WPA Personal y la contraseña " />
+                            <Span Text="{Binding Path=WiFiHostPotDetail.Password}" FontAttributes="Bold" TextColor="Accent" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </StackLayout>
+            <Grid 
+                IsVisible="{Binding IsBusy}">
+                <StackLayout VerticalOptions="Center">
+                    <renderedviews:CircularProgressBar 
+                        Grid.Row="1"
+                        HorizontalOptions="Center"
+                        WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventPersonalityImageSize}"
+                        HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventPersonalityImageSize}"
+                        Indeterminate="True" />
+                    <Label
+                        Grid.Row="2"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding BusyProgressMessage}"
+                        TextColor="Black"
+                        FontSize="Medium" />
+                    <Label
+                        Grid.Row="3"
+                        VerticalOptions="Start"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding BusyProgressMessageDetail}"
+                        TextColor="DimGray"
+                        FontSize="Default" />
+                </StackLayout>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</sscxftoolkitmvvmpages:ContentPage>

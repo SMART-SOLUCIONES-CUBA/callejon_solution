@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<popup:PopupPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
+    xmlns:renderedviews="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Rendered"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.Popup.CommentProductionPopupPage"
+    BackgroundClicked="PopupPage_BackgroundClicked">
+
+    <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Margin="20">
+        <Frame>
+            <Grid ColumnSpacing="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label 
+                    x:Name="HeaderLabel"
+                    Grid.ColumnSpan="2" Grid.Row="0"
+                    FontFamily="Helvetica LT Std Condensed"
+                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}"
+                    Text="Comentar Película"
+                    TextColor="Accent" />
+                <renderedviews:ExtendedEditor
+                    x:Name="CommentEditor"
+                    Grid.ColumnSpan="2" Grid.Row="1"
+                    FontFamily="Helvetica LT Std Condensed"
+                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                    Placeholder="Escribe aquí lo que deseas compartir ..."
+                    PlaceholderColor="Gray"
+                    BorderColor="Accent"
+                    BorderWidth="4"
+                    CornerRadius="16"
+                    TextColor="Accent" />
+                <Button 
+                    Grid.Column="0" Grid.Row="2"
+                    Text="Cancelar"
+                    Clicked="CancelButton_Clicked"/>
+                <Button 
+                    Grid.Column="1" Grid.Row="2"
+                    Text="Comentar"
+                    Clicked="ApplyButton_Clicked" />
+                <StackLayout
+                    x:Name="WorkingIndicationContainer"
+                    Grid.ColumnSpan="2"
+                    Grid.RowSpan="3"
+                    IsVisible="False"
+                    BackgroundColor="#EEFFFFFF">
+                    <StackLayout
+                        VerticalOptions="CenterAndExpand"
+                        HorizontalOptions="CenterAndExpand">
+                        <ActivityIndicator IsRunning="True" />
+                    </StackLayout>
+                </StackLayout>
+            </Grid>
+        </Frame>
+    </StackLayout>
+</popup:PopupPage>

@@ -1,0 +1,102 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+
+@model SmartSolucionesCuba.SAPRESSC.Core.Web.SecurityLocal.Models.View.UserInputViewModel
+
+@{
+    ViewData["Title"] = "Modificar Usuario";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Usuarios",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Modificar"
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+@using (Html.BeginForm("edit", "users", new { Area = "security", key = string.Empty }, FormMethod.Post, true, null))
+{
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4>@ViewData["Title"]</h4></div>
+
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.Id, new { @class = "control-label" })
+                    <div>@Model.Id</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4 style="margin-bottom: 20px;"">
+                    <div class="checkbox">
+                        <label>
+                            @Html.EditorFor(model => model.Enabled) Habilitado
+                        </label>
+                        @Html.ValidationMessageFor(model => model.Enabled, null, new { @class = "text-danger", style = "display: inline-block;" })
+                    </div>
+                </div>
+
+                <div class="col-sm-4" style="margin-bottom: 20px;">
+                    <div class="checkbox">
+                        <label>
+                            @Html.EditorFor(model => model.PasswordChangeRequired) Debe cambiar la contraseña?
+                        </label>
+                        @Html.ValidationMessageFor(model => model.PasswordChangeRequired, null, new { @class = "text-danger", style = "display: inline-block;" })
+                    </div>
+                </div>
+
+                <div class="col-sm-4" style="margin-bottom: 20px;">
+                    <div class="checkbox">
+                        <label>
+                            @Html.EditorFor(model => model.HasFullAccess) Es super usuario?
+                        </label>
+                        @Html.ValidationMessageFor(model => model.HasFullAccess, null, new { @class = "text-danger", style = "display: inline-block;" })
+                    </div>
+                </div>
+            </div>
+
+            <fieldset style="margin-bottom: 20px;">
+                <legend>@Html.LabelFor(model => model.SelectableGroups)</legend>
+                <div class="row">
+                @if (Model.SelectableGroups != null && Model.SelectableGroups.Count() > 0)
+                {
+                    for (int i = 0; i < Model.SelectableGroups.Count(); i++)
+                    {
+                        @Html.EditorFor(subModel => subModel.SelectableGroups[i], "SelectionDescriptedGuidIDItemInputViewModel");
+                    }
+                }
+                else
+                {
+                    <div class="editor-field col-md-12">Sin elementos que mostrar.</div>
+                }
+                </div>
+            </fieldset>
+            <div>
+                <button type="submit" class="btn btn-primary">Modificar</button>
+                <a class="btn btn-default" href="@Url.Action("index")">Regresar al listado</a>
+            </div>
+        </div>
+    </div>
+}

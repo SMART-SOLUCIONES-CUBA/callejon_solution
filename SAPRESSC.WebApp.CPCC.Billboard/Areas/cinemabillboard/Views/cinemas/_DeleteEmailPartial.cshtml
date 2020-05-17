@@ -1,0 +1,33 @@
+﻿@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.EmailContactInputViewModel
+
+<div class="modal fade" id="delete-email-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="delete-email-@Model.Id-lable" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @using (Html.BeginForm("deleteemail", "cinemas", null, FormMethod.Post, true, new { @class = "modal-content" }))
+            {
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.CinemaId)
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="delete-email-@Model.Id-lable">Eliminar Correo Electrónico</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Esta seguro que desea eliminar el correo electrónico detallado a continuación?</p>
+
+                    <dl>
+                        <dt>Dirección</dt>
+                        <dd>@Html.DisplayFor(model => model.Address)</dd>
+                        <dt>Etiqueta</dt>
+                        <dd>@Html.DisplayFor(model => model.Label)</dd>
+                    </dl>
+                </div>
+
+                <div class="modal-footer" style="margin-top: 0;">
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

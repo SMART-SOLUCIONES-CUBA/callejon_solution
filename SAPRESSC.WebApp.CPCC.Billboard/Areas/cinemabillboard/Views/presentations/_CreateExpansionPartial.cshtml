@@ -1,0 +1,70 @@
+﻿@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.PresentationExpandInputViewModel
+
+<div style="text-align:left;" class="modal fade" id="expand-presentation-@Model.PresentationId" tabindex="-1" role="dialog" aria-labelledby="expand-presentation-@Model.PresentationId-lable" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @using (Html.BeginForm("expand", "presentations", null, FormMethod.Post, true, new { @class = "modal-content" }))
+            {
+                @Html.HiddenFor(model => model.PresentationId)
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="expand-presentation-@Model.PresentationId-lable">Expandir Presentación</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="margin-bottom: 20px;">
+                        @Html.Label("ProductionName", "Película", new { @class = "control-label" })
+                        <div>
+                            @Html.DisplayFor(model => model.ProductionName, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6" style="margin-bottom: 20px;">
+                            @Html.Label("PresentationStartDate", "Fecha Incial", new { @class = "control-label" })
+                            <div class="input-group date presentationstartdate-picker">
+                                @Html.TextBoxFor(model => model.PresentationStartDate, new { @class = "form-control", @readonly = "readonly" })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6" style="margin-bottom: 20px;">
+                            @Html.Label("PresentationEndDate", "Fecha Final", new { @class = "control-label" })
+                            <div class="input-group date presentationenddate-picker">
+                                @Html.TextBoxFor(model => model.PresentationEndDate, new { @class = "form-control", @readonly = "readonly" })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6" style="margin-bottom: 20px;">
+                            @Html.Label("PresentationTime", "Hora", new { @class = "control-label" })
+                            <div class="input-group date presentationtime-picker">
+                                @Html.TextBoxFor(model => model.PresentationTime, new { @class = "form-control", @readonly = "readonly" })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6" style="margin-bottom: 20px;">
+                            <div class="checkbox">
+                                <label>
+                                    @Html.EditorFor(model => model.OverrideColision) <span>Remplazar otras presentaciones planificadas que coincidan en hora dentro intervalo de fecha.</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer" style="margin-top: 0;">
+                    <button type="submit" class="btn btn-primary">Expandir</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

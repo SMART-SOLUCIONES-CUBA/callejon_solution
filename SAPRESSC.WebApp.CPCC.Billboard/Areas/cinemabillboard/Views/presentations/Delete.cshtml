@@ -1,0 +1,51 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+
+@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.PresentationDisplayViewModel
+
+@{
+    ViewData["Title"] = "Eliminar Presentación";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Presentaciones",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Eliminar"
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+<h3>Esta seguro que desea eliminar la presentación detallada a continuación?</h3>
+
+<dl>
+    <dt>Producción</dt>
+    <dd>@Model.Production.Title @if (Model.Production.LocalizedTitle != null) { <span>(@Model.Production.LocalizedTitle)</span> }</dd>
+    <dt>Fecha</dt>
+    <dd>@Model.PresentationDate</dd>
+    <dt>Sala</dt>
+    <dd>@Model.Room.Name, @Model.Room.Cinema.Name</dd>
+</dl>
+@using (Html.BeginForm("delete", "presentations", new { Area = "cinemabillboard", key = string.Empty }, FormMethod.Post, true, null))
+{
+    @Html.HiddenFor(model => model.Id)
+    <div>
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a class="btn btn-default" href="@Url.Action("index")">Cancelar</a>
+    </div>
+}

@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sscxftoolkitmvvmpages:ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
+    xmlns:ffilviewforms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:ffiltransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+    xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Converters"
+    xmlns:templateselectors="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Template.Selector"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.EventsPage"
+    x:Name="Page"
+    Title="Próximos Eventos">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:DateTimeToInvarianCultureRelativeDateTimeStringConverter x:Key="DateTimeToInvarianCultureTimeString" />
+            <converters:PagePortraitOrientationToBooleanConverter x:Key="PagePortraitOrientationToBoolean" />
+            <sscxftoolkitpresentationconverters:EnumerableEmptyToBooleanConverter x:Key="EnumerableEmptyToBoolean" Inverse="True" />
+            <sscxftoolkitpresentationconverters:NotNullToBooleanConverter x:Key="NotNullToBoolean" />
+            <sscxftoolkitpresentationconverters:NullToBooleanConverter x:Key="NullToBoolean" />
+            <sscxftoolkitpresentationconverters:BoolToBoolNegationConverter x:Key="BoolToBoolNegation" />
+
+            <DataTemplate x:Key="DayEventsTemplate">
+                <ViewCell>
+                    <StackLayout>
+                        <StackLayout 
+                            HeightRequest="24"
+                            Orientation="Horizontal"
+                            Padding="4,20,4,4">
+                            <BoxView 
+                                WidthRequest="4"
+                                BackgroundColor="Accent" />
+                            <Label
+                                HorizontalTextAlignment="Start" VerticalTextAlignment="End"
+                                Text="{Binding Date, StringFormat='{0:MMMM dd, dddd}' }"
+                                TextColor="Accent"
+                                FontFamily="Helvetica LT Std Bold Condensed"
+                                FontSize="{Binding helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                        </StackLayout>
+                        <ScrollView Orientation="Horizontal">
+                            <FlexLayout
+                                BindableLayout.ItemsSource="{Binding .}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Frame 
+                                            Margin="6" Padding="0" 
+                                            CornerRadius="3" 
+                                            BackgroundColor="#F3F3F3"
+                                            WidthRequest="320" HeightRequest="480">
+                                            <Frame.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="EventOverviewFrame_Tapped" />
+                                            </Frame.GestureRecognizers>
+                                            <Grid RowSpacing="0">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition />
+                                                    <RowDefinition />
+                                                </Grid.RowDefinitions>
+                                                <ffilviewforms:CachedImage 
+                                                    Grid.Row="0"
+                                                    FadeAnimationEnabled="False"
+                                                    Aspect="AspectFill"
+                                                    Source="{Binding PosterImageSource}" 
+                                                    DownsampleHeight="240"
+                                                    DownsampleUseDipUnits="True"
+                                                    CacheType="All"
+                                                    CacheDuration="8760:00:00">
+                                                    <ffilviewforms:CachedImage.Transformations>
+                                                        <ffiltransformations:BlurredTransformation />
+                                                    </ffilviewforms:CachedImage.Transformations>
+                                                </ffilviewforms:CachedImage>
+                                                <ffilviewforms:CachedImage
+                                                    Grid.Row="0"
+                                                    Source="{Binding PosterImageSource}"
+                                                    Aspect="AspectFit" 
+                                                    DownsampleHeight="240"
+                                                    DownsampleUseDipUnits="True"
+                                                    CacheDuration="8760:00:00" />
+                                                <Grid Grid.Row="1" Margin="10">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition />
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="Auto" />
+                                                    </Grid.RowDefinitions>
+                                                    <Label 
+                                                        Grid.Row="0"
+                                                        Text="{Binding Title}"  
+                                                        Style="{StaticResource PresentationTitleLabelStyle}"
+                                                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventTitleStyleFontSize}"
+                                                        LineBreakMode="TailTruncation"
+                                                        MaxLines="2" />
+                                                    <Label 
+                                                        Grid.Row="1"
+                                                        Text="{Binding Header}" 
+                                                        FontFamily="Myriad Pro Bold Condensed Italic" 
+                                                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"  />
+                                                    <Label 
+                                                        Grid.Row="2"
+                                                        LineBreakMode="TailTruncation" 
+                                                        Text="{Binding Thematic}" 
+                                                        TextColor="Accent" 
+                                                        FontFamily="Helvetica LT Std Condensed" 
+                                                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                                    <Label 
+                                                        Grid.Row="3"
+                                                        TextColor="Accent" FontFamily="Helvetica LT Std Bold Condensed"  
+                                                        Text="{Binding Path=Start, Converter={StaticResource DateTimeToInvarianCultureTimeString}}" 
+                                                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                                    <Label 
+                                                        Grid.Row="4"
+                                                        TextColor="Accent" 
+                                                        FontFamily="Helvetica LT Std Condensed" 
+                                                        Text="{Binding Place}" 
+                                                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                                                        LineBreakMode="TailTruncation"
+                                                        MaxLines="2" />
+                                                    <Grid Grid.Row="5">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition />
+                                                        </Grid.ColumnDefinitions>
+                                                        <Label Grid.Column="0"
+                                                            Text="Organiza"
+                                                            TextColor="Accent"
+                                                            FontFamily="Helvetica LT Std Bold Condensed"
+                                                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                                                            LineBreakMode="NoWrap" />
+                                                        <Label Grid.Column="1"
+                                                            Text="{Binding Organizer}"
+                                                            TextColor="Accent"
+                                                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                                                            FontFamily="Helvetica LT Std Condensed"
+                                                            LineBreakMode="TailTruncation" />
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
+                                        </Frame>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </FlexLayout>
+                        </ScrollView>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+
+            <DataTemplate x:Key="EventOverviewTemplate">
+                <ViewCell>
+                    <Frame 
+                        Margin="6" Padding="0" 
+                        CornerRadius="3" 
+                        BackgroundColor="#F3F3F3">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="EventOverviewFrame_Tapped" />
+                        </Frame.GestureRecognizers>
+                        <Grid ColumnSpacing="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <ffilviewforms:CachedImage 
+                                Grid.Column="0"
+                                BackgroundColor="Gray"
+                                Aspect="AspectFill"
+                                Source="{Binding PosterImageSource}"
+                                HeightRequest="240"
+                                WidthRequest="160" 
+                                DownsampleHeight="240"
+                                DownsampleUseDipUnits="True"
+                                CacheType="All"
+                                CacheDuration="8760:00:00" />
+                            <Grid Grid.Column="1" Margin="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Label 
+                                    Grid.Row="0"
+                                    Text="{Binding Title}"  
+                                    Style="{StaticResource PresentationTitleLabelStyle}"
+                                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventTitleStyleFontSize}"
+                                    LineBreakMode="TailTruncation"
+                                    MaxLines="3" />
+                                <Label 
+                                    Grid.Row="1"
+                                    Text="{Binding Header}" 
+                                    FontFamily="Myriad Pro Bold Condensed Italic" 
+                                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"  />
+                                <Label 
+                                    Grid.Row="2"
+                                    LineBreakMode="TailTruncation" 
+                                    Text="{Binding Thematic}" 
+                                    TextColor="Accent" 
+                                    FontFamily="Helvetica LT Std Condensed" 
+                                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                <Label 
+                                    Grid.Row="3"
+                                    TextColor="Accent" FontFamily="Helvetica LT Std Bold Condensed"  
+                                    Text="{Binding Path=Start, Converter={StaticResource DateTimeToInvarianCultureTimeString}}" 
+                                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                <Label 
+                                    Grid.Row="4"
+                                    TextColor="Accent" 
+                                    FontFamily="Helvetica LT Std Condensed" 
+                                    Text="{Binding Place}" 
+                                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                                    LineBreakMode="TailTruncation"
+                                    MaxLines="2" />
+                                <Grid Grid.Row="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Column="0"
+                                        Text="Organiza"
+                                        TextColor="Accent"
+                                        FontFamily="Helvetica LT Std Bold Condensed"
+                                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                                        LineBreakMode="NoWrap" />
+                                    <Label Grid.Column="1"
+                                        Text="{Binding Organizer}"
+                                        TextColor="Accent"
+                                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                                        FontFamily="Helvetica LT Std Condensed"
+                                        LineBreakMode="TailTruncation" />
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Frame>
+                </ViewCell>
+            </DataTemplate>
+
+            <templateselectors:DayEventTemplateSelector
+                x:Key="DayEventTemplateSelector"
+                DayEventsDataTemplate="{StaticResource DayEventsTemplate}"
+                EventOveriewDataTemplate="{StaticResource EventOverviewTemplate}" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid>
+            <ListView
+                SelectionMode="None"
+                HasUnevenRows="True"
+                SeparatorVisibility="None"
+                IsRefreshing="{Binding IsBusy}"
+                IsGroupingEnabled="{Binding Source={x:Reference Page}, Path=Width, Converter={StaticResource PagePortraitOrientationToBoolean}}"
+                ItemsSource="{Binding Path=DayEvents}"
+                ItemTemplate="{StaticResource DayEventTemplateSelector}">
+                <ListView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout 
+                                HeightRequest="24"
+                                Orientation="Horizontal"
+                                Padding="6,20,6,6">
+                                <BoxView 
+                                    WidthRequest="4"
+                                    BackgroundColor="Accent" />
+                                <Label
+                                    HorizontalTextAlignment="Start" VerticalTextAlignment="End"
+                                    Text="{Binding Date, StringFormat='{0:MMMM dd, dddd}' }"
+                                    TextColor="Accent"
+                                    FontFamily="Helvetica LT Std Bold Condensed"
+                                    FontSize="{Binding helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.GroupHeaderTemplate>
+            </ListView>
+            <StackLayout 
+                VerticalOptions="Start"
+                IsVisible="{Binding Path=IsBusy, Converter={StaticResource BoolToBoolNegation}}">
+                <StackLayout 
+                    IsVisible="{Binding Path=DayEvents, Converter={StaticResource NullToBoolean}}"
+                    Padding="6"
+                    BackgroundColor="IndianRed">
+                    <Label 
+                        Text="Sin elementos que mostrar"
+                        TextColor="White"
+                        FontFamily="Helvetica LT Std Bold Condensed"
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}"
+                        HorizontalTextAlignment="Center" />
+                    <Label 
+                        Text="No se ha realizado ninguna actualización de los datos de la cartelera del proyecto."
+                        TextColor="White"
+                        FontFamily="Helvetica LT Std Condensed"
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                        HorizontalTextAlignment="Center" />
+                    <Button
+                        HorizontalOptions="Center"
+                        Text="Actualizar"
+                        Clicked="DatabaseUpdateButton_Clicked" />
+                </StackLayout>
+                <Label 
+                    IsVisible="{Binding Path=DayEvents, Converter={StaticResource EnumerableEmptyToBoolean}}"
+                    Text="Sin elementos que mostrar"
+                    TextColor="DimGray"
+                    FontFamily="Helvetica LT Std Condensed"
+                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}"
+                    HorizontalTextAlignment="Center" />
+            </StackLayout>
+        </Grid>     
+    </ContentPage.Content>
+</sscxftoolkitmvvmpages:ContentPage>

@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Converters"
+    xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
+    xmlns:jmci="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+    xmlns:renderedviews="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Rendered"
+    xmlns:specializedviews="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.MasterPage"
+    x:Name="Page"
+    Title="Navegación">
+    <ContentPage.IconImageSource>
+        <FontImageSource
+            Glyph="&#xE017;"
+            FontFamily="Iconmonstr Iconic" />
+    </ContentPage.IconImageSource>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <sscxftoolkitpresentationconverters:FractionConverter x:Key="Fraction" />
+            <sscxftoolkitpresentationconverters:NullToBooleanConverter x:Key="NullToBoolean" />
+            <sscxftoolkitpresentationconverters:NotNullToBooleanConverter x:Key="NotNullToBoolean" />
+            <converters:ProfileViewModelToImageSourceConverter x:Key="ProfileViewModelToImageSource" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <ListView 
+            x:Name="NavigationListView"
+            BackgroundColor="GhostWhite"
+            Header="{Binding .}"
+            IsGroupingEnabled="True"
+            GroupDisplayBinding="{Binding Title}"
+            ItemsSource="{Binding NavigationSectionGroups}"
+            ItemSelected="NavigationListView_ItemSelected">
+            <ListView.HeaderTemplate>
+                <DataTemplate>
+                    <Grid
+                        RowSpacing="0"
+                        HeightRequest="{Binding Source={x:Reference Page}, Path=Width, Converter={StaticResource Fraction}, ConverterParameter=1.5, Mode=OneWay}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <specializedviews:MasterHeaderBackgroudCanvasView Grid.RowSpan="2" />
+                        <BoxView 
+                            Grid.Row="1"
+                            BackgroundColor="Transparent"
+                            HeightRequest="{Binding Source={x:Reference Page}, Path=Width, Converter={StaticResource Fraction}, ConverterParameter=10}" />
+                        <Grid 
+                            Grid.Row="0"
+                            Margin="20"
+                            IsVisible="{Binding Path=Profile, Converter={StaticResource NotNullToBoolean}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <StackLayout Grid.Column="0" Grid.Row="0" VerticalOptions="Center">
+                                <jmci:CircleImage
+                                    Source="{Binding Path=Profile, Converter={StaticResource ProfileViewModelToImageSource}, Mode=OneWay}"
+                                    BorderThickness="2"
+                                    BorderColor="{StaticResource PrimaryBrandColor}"
+                                    HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileOverviewImageSize}"
+                                    WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileOverviewImageSize}" />
+                            </StackLayout>
+                            <StackLayout Grid.Column="1" Grid.Row="0" VerticalOptions="Center">
+                                <Label 
+                                    Text="{Binding Path=Profile.FirstName}" 
+                                    TextColor="White"
+                                    FontSize="22"
+                                    FontFamily="Helvetica LT Std Condensed"
+                                    VerticalTextAlignment="End" />
+                                <Label 
+                                    Text="{Binding Path=Profile.LastName}" 
+                                    TextColor="WhiteSmoke"
+                                    FontSize="18"
+                                    FontFamily="Helvetica LT Std Condensed" />
+                            </StackLayout>
+                        </Grid>
+                        <ActivityIndicator 
+                            Grid.Row="0"
+                            VerticalOptions="Center" HorizontalOptions="Center"
+                            Color="White" 
+                            IsRunning="True" 
+                            IsVisible="{Binding Path=Profile, Converter={StaticResource NullToBoolean}}" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.HeaderTemplate>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <renderedviews:ResponsiveImageCell 
+                        Text="{Binding Title}" 
+                        TextColor="{StaticResource PrimaryBrandColor}">
+                        <ImageCell.ImageSource>
+                            <FontImageSource 
+                                Glyph="{Binding Glyph}"
+                                FontFamily="Material Design Icons"
+                                Color="{StaticResource PrimaryBrandColor}" />
+                        </ImageCell.ImageSource>
+                    </renderedviews:ResponsiveImageCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.Footer>
+                <Grid>
+                    <StackLayout Spacing="0" Margin="10,40,10,10">
+                        <Label 
+                                FontSize="Small"
+                                HorizontalTextAlignment="Center"
+                                Text="Centro Provincial de Cine de Camagüey"
+                                TextColor="Black" />
+                        <Label 
+                                FontSize="Micro" 
+                                HorizontalTextAlignment="Center"
+                                Text="SMART SOLUCIONES CUBA (SSC)"
+                                TextColor="DimGray" />
+                        <Label 
+                                FontSize="Micro" 
+                                HorizontalTextAlignment="Center"
+                                Text="2020"
+                                TextColor="Gray" />
+                    </StackLayout>
+                </Grid>
+            </ListView.Footer>
+        </ListView>
+    </ContentPage.Content>
+</ContentPage>

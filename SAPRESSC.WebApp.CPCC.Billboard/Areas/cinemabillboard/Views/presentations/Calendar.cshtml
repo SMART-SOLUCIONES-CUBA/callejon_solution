@@ -1,0 +1,171 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+@using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View;
+
+@model CalendarViewModel
+
+@{
+    ViewData["Title"] = "Gestión de Presentaciones";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Presentaciones"
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    <style type="text/css">
+        
+    </style>
+}
+
+@section scripts {
+    <script src="~/lib/moment/min/moment.min.js"></script>
+    <script src="~/lib/moment/locale/es.js"></script>
+    <script src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script type="text/javascript">
+        $('#firstdate-picker').datetimepicker({
+            locale: 'es',
+            ignoreReadonly: true,
+            format: 'DD/MM/YYYY'
+        });
+        $('#lastdate-picker').datetimepicker({
+            locale: 'es',
+            ignoreReadonly: true,
+            format: 'DD/MM/YYYY'
+        });
+        $('.presentationdate-picker').datetimepicker({
+            locale: 'es',
+            ignoreReadonly: true,
+            format: 'DD/MM/YYYY h:mm A'
+        });
+        $('.presentationstartdate-picker').datetimepicker({
+            locale: 'es',
+            ignoreReadonly: true,
+            format: 'DD/MM/YYYY'
+        });
+        $('.presentationenddate-picker').datetimepicker({
+            locale: 'es',
+            ignoreReadonly: true,
+            format: 'DD/MM/YYYY'
+        });
+        $('.presentationtime-picker').datetimepicker({
+            locale: 'es',
+            ignoreReadonly: true,
+            format: 'h:mm A'
+        });
+    </script>
+}
+
+<div class="row" style="margin-bottom: 20px;">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4" style="text-align: center;">
+        <div class="btn-group">
+            <button class="btn btn-primary" style="cursor:default;"><span class="glyphicon glyphicon-calendar"></span> Calendario</button>
+            <a class="btn btn-default" href="@Url.Action("index")"><span class="glyphicon glyphicon-list-alt"></span> Listado</a>
+        </div>
+    </div>
+    <div class="col-sm-4"><a class="btn btn-primary pull-right" href="@Url.Action("pickproduction")">Agregar Presentación</a></div>
+</div>
+
+@await Html.PartialAsync("_CalendarFilterPartial", Model.Filter)
+
+<hr />
+
+@if (Model.DailyPresentationsBillboards.Count > 0)
+{
+    foreach (var item in Model.DailyPresentationsBillboards)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">@item.Date.ToLongDateString()</div>
+            <div class="panel-body">
+                @if (item.Presentations.Count > 0)
+                {
+                    <div class="row">
+                        @foreach (var present in item.Presentations)
+                        {
+                            <div class="col-md-3 col-sm-4" style="text-align: center;">
+                                <span style="font-weight: bold; font-size: 20px;">@present.Date.ToString("h:mm tt", System.Globalization.CultureInfo.InvariantCulture)</span>
+                                @using (Html.BeginForm(present.Enabled ? "disable" : "enable", "presentations", new { Area = "cinemabillboard" }, FormMethod.Post, true, new { @class = "pull-right" }))
+                                {
+                                    var title = "Públicado";
+
+                                    if (!present.Enabled) { title = "No " + title; }
+
+                                    <input type="hidden" name="key" value="@Html.Raw(present.Id)" />
+
+                                    <button type="submit" class="btn btn-link" title="@title">
+                                        @if (present.Enabled)
+                                        { <span class="glyphicon glyphicon-eye-open"></span> }
+                                        else
+                                        { <span class="glyphicon glyphicon-eye-close"></span> }
+                                    </button>
+                                }
+                                <img class="img-thumbnail" src="@Url.Action("image", "default", new { Area = "media", key = present.Production.PosterImage.Id })" />
+                                <div style="margin-top: 10px;">
+                                    <button type="button" class="btn btn-primary btn-xs pull-right dropdown-toggle" data-toggle="dropdown" id="dropdown-menu-@present.Id" style="margin-left: 5px;">
+                                        <span class="glyphicon glyphicon-cog"></span> <span class="caret" style="margin-left: 2px;"></span>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdown-menu-@present.Id">
+                                        <li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#duplicate-presentation-@present.Id" title="Crear presentación de esta producción en otra fecha."><span style="margin-right: 2px;" class="glyphicon glyphicon-duplicate"></span> Duplicar</a></li>
+                                        <li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#expand-presentation-@present.Id" title="Repetir presentación de esta producción en un rango de fecha."><span style="margin-right: 2px;" class="glyphicon glyphicon-duplicate"></span> Expandir</a></li>
+                                        <li role="presentation"><a role="menuitem" href="@Url.Action("edit", new { key = present.Id })" title="Editar"><span style="margin-right: 2px;" class="glyphicon glyphicon-edit"></span> Modificar</a></li>
+                                        <li role="presentation"><a role="menuitem" href="@Url.Action("delete", new {key = present.Id})"><span style="margin-right: 2px;" class="glyphicon glyphicon-trash"></span> Eliminar</a></li>
+                                    </ul>
+                                    <span>@present.Production.Title</span>
+                                </div>
+                                @{ 
+                                    var duplicateModel = new PresentationDuplicateInputViewModel
+                                    {
+                                        PresentationId = present.Id,
+                                        PresentationDate = present.Date.AddDays(1),
+                                        ProductionName = present.Production.Title,
+                                        RoomId = @present.Room.Id,
+                                        Rooms = Model.Filter.Rooms
+                                    };
+
+                                    var expandModel = new PresentationExpandInputViewModel
+                                    {
+                                        PresentationId = present.Id,
+                                        PresentationTime = present.Date,
+                                        PresentationStartDate = Model.Filter.FirstDate,
+                                        PresentationEndDate = Model.Filter.LastDate,
+                                        ProductionName = present.Production.Title
+                                    };
+                                }
+
+                                @await Html.PartialAsync("_CreateDuplicatepartial", duplicateModel)
+                                @await Html.PartialAsync("_CreateExpansionPartial", expandModel)
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p>
+                }
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p>
+}

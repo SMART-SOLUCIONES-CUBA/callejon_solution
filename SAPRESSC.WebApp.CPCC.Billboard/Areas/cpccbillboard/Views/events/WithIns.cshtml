@@ -1,0 +1,148 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+@using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Models.View;
+
+@model EventWithInsViewModel
+
+@{
+    ViewData["Title"] = "Modificar Evento (Invitados)";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Eventos",
+            Url = Url.Action("index", "events", new { key = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = ViewData["Title"].ToString()
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/lib/bootstrap-combobox/css/bootstrap-combobox.css" />
+}
+
+@section scripts {
+    <script src="~/lib/moment/min/moment.min.js"></script>
+    <script src="~/lib/moment/locale/es.js"></script>
+    <script src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script type="text/javascript">
+        $('#startdate-picker').datetimepicker({
+            locale: 'es',
+            ignoreReadonly: true,
+            format: 'DD/MM/YYYY h:mm A'
+        });
+        $('#enddate-picker').datetimepicker({
+            locale: 'es',
+            ignoreReadonly: true,
+            format: 'DD/MM/YYYY h:mm A'
+        });
+    </script>
+
+    <script src="~/lib/bootstrap-combobox/js/bootstrap-combobox.js"></script>
+
+    <script type="text/javascript">
+        $('#create-widthin-personality-select').combobox();
+    </script>
+}
+
+<div class="page-header">
+    <h3>Datos del Evento</h3>
+</div>
+<dl>
+    <dt>Título</dt>
+    <dd>@Model.Event.Title</dd>
+    <dt>Organizador</dt>
+    <dd>@Model.Event.Organizer</dd>
+    <dt>Fecha</dt>
+    <dd>
+        @if (Model.Event.Start == Model.Event.End)
+        {
+            <span>@Model.Event.Start (Todo el día)</span>
+        }
+        else
+        { 
+            <span>@Model.Event.Start - @Model.Event.End</span>
+        }
+    </dd>
+</dl>
+<div class="page-header">
+    <h3>Invitados<a class="btn btn-primary pull-right" href="#" data-toggle="modal" data-target="#add-within">Agregar Invitado</a></h3>
+</div>
+
+@await Html.PartialAsync("_CreateWithInPartial", new WithInInputViewModel { EventId = Model.Event.Id, Personalities = Model.Personalities })
+
+@if (Model.Event.EventPersonalityBridges.Count > 0)
+{
+    <div class="row">
+        @foreach (var item in Model.Event.EventPersonalityBridges)
+        {
+            var compoundId = Model.Event.Id + "-" + item.PersonalityId;
+
+            <div class="col-sm-3 col-md-2" style="text-align: center; margin-bottom: 20px;">
+                @if (item.Personality.Image != null)
+                {
+                    <img class="img-circle img-responsive" style="display: inline-block;" src="@Url.Action("image", "default", new { Area = "media", key = item.Personality.Image.Id })" />
+                }
+                else
+                {
+                    <img class="img-circle img-responsive" style="display: inline-block;" src="/img/default-person-picture.jpg" />
+                }
+
+                <h4>@item.Personality.Name @item.Personality.LastName</h4>
+
+                <div style="margin-bottom: 10px;">
+                    @using (Html.BeginForm("withinsetispresenter", "events", new { Area = "cpccbillboard" }, FormMethod.Post, true, null))
+                    {
+                        <input type="hidden" name="EventId" value="@Html.Raw(item.EventId)" />
+                        <input type="hidden" name="PersonalityId" value="@Html.Raw(item.PersonalityId)" />
+                        <input type="hidden" name="IsPresenter" value="@Html.Raw(!item.IsPresenter)" />
+
+                        <button type="submit" class="btn btn-link" style="padding: 0;">
+                            @if (item.IsPresenter)
+                            { <span class="glyphicon glyphicon-check"></span> }
+                            else
+                            { <span class="glyphicon glyphicon-unchecked"></span> }
+                        </button>
+
+                        <span>Es Presentador</span>
+                    }
+                </div>
+                
+                <a role="button" href="#" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#delete-within-@compoundId"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+            </div>
+
+            var modelDisplay = new WithInDisplayViewModel
+            {
+                Event = Model.Event,
+                EventId = Model.Event.Id,
+                PersonalityId = item.PersonalityId,
+                Personality = item.Personality,
+                IsPresenter = item.IsPresenter
+            };
+
+            @await Html.PartialAsync("_DeleteWithInPartial", modelDisplay)
+        }
+    </div>
+}
+else
+{
+    <p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p>
+}
+
+

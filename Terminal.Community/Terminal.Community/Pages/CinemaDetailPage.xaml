@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sscxftoolkitmvvmpages:ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Converters"
+    xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
+    xmlns:ffilviewforms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:ffiltransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.CinemaDetailPage"
+    x:Name="Page"
+    Title="Cartelera de Cine">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:PageWidthToResponsiveColumnWidthConverter x:Key="PageWidthToResponsiveColumnWidth" Columns="2" />
+            <converters:PagePortraitOrientationToBooleanConverter x:Key="NoPagePortraitOrientationToBoolean" Inverse="True" />
+            <sscxftoolkitpresentationconverters:FactorConverter x:Key="Factor" />
+
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="Accent" />
+                <Setter Property="FontFamily" Value="Helvetica LT Std Condensed" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Spacing="0">
+                <Grid>
+                    <ffilviewforms:CachedImage
+                        IsVisible="{Binding Source={x:Reference Page}, Path=Width, Converter={StaticResource NoPagePortraitOrientationToBoolean}}"
+                        Aspect="AspectFill"
+                        Source="{Binding Path=ImageSource}"
+                        CacheType="All"
+                        CacheDuration="8760:00:00">
+                        <ffilviewforms:CachedImage.Transformations>
+                            <ffiltransformations:BlurredTransformation />
+                        </ffilviewforms:CachedImage.Transformations>
+                    </ffilviewforms:CachedImage>
+                    <ffilviewforms:CachedImage 
+                        Source="{Binding Path=ImageSource}"
+                        CacheType="All"
+                        CacheDuration="8760:00:00" />
+                </Grid>
+                <StackLayout Margin="20,20,20,0">
+                    <Label 
+                        Text="{Binding Path=Name}" 
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventTitleStyleFontSize}"
+                        TextColor="{StaticResource SecoundaryBrandColor}"
+                        FontFamily="Helvetica LT Std Bold Condensed" />
+                    <StackLayout Orientation="Horizontal" Padding="0,10,0,0" HeightRequest="24">
+                        <BoxView WidthRequest="4" BackgroundColor="Accent" />
+                        <Label Text="Salas"
+                            Margin="0"
+                            HorizontalTextAlignment="Start"
+                            VerticalTextAlignment="End"
+                            TextColor="Accent"
+                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                            FontFamily="Helvetica LT Std Bold Condensed" />
+                    </StackLayout>
+                    <StackLayout
+                        Margin="0,10,0,25"
+                        Spacing="10"
+                        BindableLayout.ItemsSource="{Binding Path=Rooms}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label
+                                        VerticalOptions="Center"
+                                        Text="&#xf50d;"
+                                        FontFamily="Material Design Icons"
+                                        FontSize="Title" />
+                                    <Label
+                                        VerticalOptions="Center"
+                                        HorizontalOptions="FillAndExpand"
+                                        Text="{Binding Path=Name}"
+                                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}" />
+                                    <Button 
+                                        VerticalOptions="Center"
+                                        BackgroundColor="LightGray"
+                                        Padding="0"
+                                        WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize, Converter={StaticResource Factor}, ConverterParameter=2}"
+                                        HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize, Converter={StaticResource Factor}, ConverterParameter=2}"
+                                        CornerRadius="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}"
+                                        Text="&#xf142;"
+                                        TextColor="Accent"
+                                        FontFamily="Material Design Icons"
+                                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}"
+                                        Clicked="RoomActionButton_Clicked" />
+                                </StackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                    <Label 
+                        Text="Contacto" 
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}"
+                        TextColor="LightSlateGray"
+                        FontFamily="Helvetica LT Std Bold Condensed" />
+                    <StackLayout Orientation="Horizontal" Padding="0,10,0,0" HeightRequest="24">
+                        <BoxView WidthRequest="4" BackgroundColor="Accent" />
+                        <Label Text="Dirección"
+                            Margin="0"
+                            HorizontalTextAlignment="Start"
+                            VerticalTextAlignment="End"
+                            TextColor="Accent"
+                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                            FontFamily="Helvetica LT Std Bold Condensed" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Label
+                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}" 
+                            Text="{Binding Path=Address}"
+                            VerticalTextAlignment="Center"
+                            HorizontalOptions="FillAndExpand" />
+                        <Button 
+                            VerticalOptions="Center"
+                            BackgroundColor="LightGray"
+                            Padding="0"
+                            WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize, Converter={StaticResource Factor}, ConverterParameter=2}"
+                            HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize, Converter={StaticResource Factor}, ConverterParameter=2}"
+                            CornerRadius="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}"
+                            Text="&#xf352;"
+                            TextColor="Accent"
+                            FontFamily="Material Design Icons"
+                            Clicked="LocationActionButton_Clicked"/>
+                    </StackLayout>
+                </StackLayout>
+                <FlexLayout 
+                    Margin="10,0,10,10"
+                    Wrap="Wrap" 
+                    JustifyContent="SpaceAround">
+                    <StackLayout 
+                        Padding="10"
+                        Spacing="0" 
+                        WidthRequest="{Binding Source={x:Reference Page}, Path=Width, Converter={StaticResource PageWidthToResponsiveColumnWidth}, ConverterParameter=60}">
+                        <StackLayout Orientation="Horizontal" Padding="0,10,0,4" HeightRequest="24">
+                            <BoxView WidthRequest="4" BackgroundColor="Accent" />
+                            <Label 
+                                Text="Teléfonos"
+                                Margin="0"
+                                HorizontalTextAlignment="Start"
+                                VerticalTextAlignment="End"
+                                TextColor="Accent"
+                                FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                                FontFamily="Helvetica LT Std Bold Condensed" />
+                        </StackLayout>
+                        <StackLayout 
+                            Spacing="10"
+                            BindableLayout.ItemsSource="{Binding Path=PhoneContacts}">
+                            <BindableLayout.EmptyView>
+                                <Label 
+                                    Margin="0,10"
+                                    Text="Sin elementos que mostrar"
+                                    TextColor="DimGray" />
+                            </BindableLayout.EmptyView>
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label
+                                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}" 
+                                            Text="{Binding Path=PhoneNumber}"
+                                            VerticalTextAlignment="Center"
+                                            HorizontalOptions="FillAndExpand" />
+                                        <Button 
+                                            VerticalOptions="Center"
+                                            BackgroundColor="LightGray"
+                                            Padding="0"
+                                            WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize, Converter={StaticResource Factor}, ConverterParameter=2}"
+                                            HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize, Converter={StaticResource Factor}, ConverterParameter=2}"
+                                            CornerRadius="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}"
+                                            Text="&#xf3f2;"
+                                            TextColor="Accent"
+                                            FontFamily="Material Design Icons"
+                                            Clicked="PhoneContactActionButton_Clicked"/>
+                                    </StackLayout>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout 
+                        Padding="10"
+                        Spacing="0" 
+                        WidthRequest="{Binding Source={x:Reference Page}, Path=Width, Converter={StaticResource PageWidthToResponsiveColumnWidth}, ConverterParameter=60}">
+                        <StackLayout Orientation="Horizontal" Padding="0,10,0,4" HeightRequest="24">
+                            <BoxView WidthRequest="4" BackgroundColor="Accent" />
+                            <Label 
+                                Text="Correo Electrónico"
+                                Margin="0"
+                                HorizontalTextAlignment="Start"
+                                VerticalTextAlignment="End"
+                                TextColor="Accent"
+                                FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                                FontFamily="Helvetica LT Std Bold Condensed" />
+                        </StackLayout>
+                        <StackLayout 
+                            Spacing="10"
+                            BindableLayout.ItemsSource="{Binding Path=EmailContacts}">
+                            <BindableLayout.EmptyView>
+                                <Label 
+                                    Margin="0,10"
+                                    Text="Sin elementos que mostrar"
+                                    TextColor="DimGray" />
+                            </BindableLayout.EmptyView>
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label
+                                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}" 
+                                            Text="{Binding Path=EmailAddress}"
+                                            VerticalTextAlignment="Center"
+                                            HorizontalOptions="FillAndExpand" />
+                                        <Button 
+                                            VerticalOptions="Center"
+                                            BackgroundColor="LightGray"
+                                            Padding="0"
+                                            WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize, Converter={StaticResource Factor}, ConverterParameter=2}"
+                                            HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize, Converter={StaticResource Factor}, ConverterParameter=2}"
+                                            CornerRadius="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}"
+                                            Text="&#xf1ee;"
+                                            TextColor="Accent"
+                                            FontFamily="Material Design Icons"
+                                            Clicked="PhoneContactActionButton_Clicked"/>
+                                    </StackLayout>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </StackLayout>
+                    </StackLayout>
+                </FlexLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</sscxftoolkitmvvmpages:ContentPage>

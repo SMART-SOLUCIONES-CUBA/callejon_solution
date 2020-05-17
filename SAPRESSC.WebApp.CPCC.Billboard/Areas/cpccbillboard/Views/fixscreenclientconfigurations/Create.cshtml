@@ -1,0 +1,139 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+
+@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Models.View.FixScreenClientConfigurationInputViewModel
+
+@{
+    ViewData["Title"] = "Agregar Configuración de Cliente de Pantalla Fija";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Configuraciones de Cliente de Pantalla Fija",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Agregar"
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+@using (Html.BeginForm("create", "fixscreenclientconfigurations", new { Area = "cpccbillboard" }, FormMethod.Post, true, null))
+{
+    @Html.ValidationSummary(true)
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4>@ViewData["Title"]</h4></div>
+
+        <div class="panel-body">
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.Id, new { @class = "control-label" })
+                @Html.TextBox("Id", Model.Id.ToString().ToUpper(), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Id, null, new { @class = "text-danger" })
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.Description, new { @class = "control-label" }) (Opcional)
+                @Html.TextAreaFor(model => model.Description, 2, 0, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Description, null, new { @class = "text-danger" })
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.AdvisesChainPlaceholder, new { @class = "control-label" })
+                    @Html.TextAreaFor(model => model.AdvisesChainPlaceholder, 2, 0, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.AdvisesChainPlaceholder, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-lg-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.AdvisesChainWellcome, new { @class = "control-label" })
+                    @Html.TextAreaFor(model => model.AdvisesChainWellcome, 2, 0, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.AdvisesChainWellcome, null, new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.StartUpDelayTime, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.StartUpDelayTime, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.StartUpDelayTime, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-lg-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.CinemaOverviewDisplayTime, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.CinemaOverviewDisplayTime, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CinemaOverviewDisplayTime, null, new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.DailyRoomBillboardItemMaxCount, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.DailyRoomBillboardItemMaxCount, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.DailyRoomBillboardItemMaxCount, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-lg-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.DailyRoomBillboardDisplayTime, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.DailyRoomBillboardDisplayTime, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.DailyRoomBillboardDisplayTime, null, new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.PresentationDetailDisplayTime, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.PresentationDetailDisplayTime, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PresentationDetailDisplayTime, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-lg-6" style="margin-bottom: 20px;">
+                    <div class="checkbox">
+                        <label>
+                            @Html.EditorFor(model => model.ShowPresentations) <span>Mostrar Presentaciones</span>
+                            @Html.ValidationMessageFor(model => model.ShowPresentations)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.EventDetailDisplayTime, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.EventDetailDisplayTime, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EventDetailDisplayTime, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-lg-6" style="margin-bottom: 20px;">
+                    <div class="checkbox">
+                        <label>
+                            @Html.EditorFor(model => model.ShowEvents) <span>Mostrar Eventos</span>
+                            @Html.ValidationMessageFor(model => model.ShowEvents)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.PlaylistSidebarItemsCount, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.PlaylistSidebarItemsCount, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PlaylistSidebarItemsCount, null, new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-primary">Crear</button>
+                <a class="btn btn-default" href="@Url.Action("index")">Cancelar</a>
+            </div>
+        </div>
+    </div>
+}

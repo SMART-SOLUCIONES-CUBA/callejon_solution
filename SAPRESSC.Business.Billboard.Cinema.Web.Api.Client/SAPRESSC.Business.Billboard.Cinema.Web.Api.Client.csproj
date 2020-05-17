@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard1.2;netstandard2.0</TargetFrameworks>
+    <AssemblyName>SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Api.Client</AssemblyName>
+    <RootNamespace>SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Api.Client</RootNamespace>
+    <PackageId>SAPRESSC.Business.Billboard.Cinema.Web.Api.Client</PackageId>
+    <Version>0.3.1-alpha</Version>
+    <Authors>SSC DevTeam</Authors>
+    <Company>SMART SOLUCIONES CUBA (SSC)</Company>
+    <Copyright>SMART SOLUCIONES CUBA 2018 - Todos los derechos reservados.</Copyright>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SAPRESSC.Business.Billboard.Cinema.Web.Api.Common\SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.csproj" />
+  </ItemGroup>
+</Project>

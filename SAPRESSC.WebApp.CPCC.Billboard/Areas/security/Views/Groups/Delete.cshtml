@@ -1,0 +1,50 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+
+@model SmartSolucionesCuba.SAPRESSC.Core.Web.SecurityLocal.Models.View.GroupDisplayViewModel
+
+@{
+    ViewData["Title"] = "Eliminar Grupo";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Grupos",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Eliminar"
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+<h3>Esta seguro que desea eliminar el grupo detallado a continuación?</h3>
+
+<dl>
+    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+    <dt>@Html.DisplayNameFor(model => model.Description)</dt>
+    <dd>@Html.DisplayFor(model => model.Description)</dd>
+</dl>
+@using (Html.BeginForm("delete", "groups", new { Area = "security", key = string.Empty }, FormMethod.Post, true, null))
+{
+    @Html.HiddenFor(model => model.Id)
+    <div>
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a class="btn btn-default" href="@Url.Action("index")">Cancelar</a>
+    </div>
+}
+

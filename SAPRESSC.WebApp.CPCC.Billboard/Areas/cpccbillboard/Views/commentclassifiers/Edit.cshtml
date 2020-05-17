@@ -1,0 +1,56 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+
+@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Models.View.CommentClassifierInputViewModel
+
+@{
+    ViewData["Title"] = "Modificar Clasificador de Comentarios";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Clasificadores de Comentarios",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Modificar"
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+@using (Html.BeginForm("edit", "commentclassifiers", new { Area = "cpccbillboard", key = string.Empty }, FormMethod.Post, true, null))
+{
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4>@ViewData["Title"]</h4></div>
+
+        <div class="panel-body">
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.Phrase, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.Phrase, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Phrase, null, new { @class = "text-danger" })
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-primary">Modificar</button>
+                <a class="btn btn-default" href="@Url.Action("index")">Regresar al listado</a>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,33 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View
+
+@model SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Models.View.UserProfileViewModel
+
+@{
+    ViewData["Heading"] = "Mi Cuenta";
+
+    ViewData["Title"] = ViewData["Heading"];
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = ViewData["Heading"].ToString()
+        }
+    };
+
+    Layout = "/Areas/Security/Views/Shared/_BaseAccountLayout.cshtml";
+}
+
+<dl style="margin-bottom: 0;">
+    <dt>Usuario</dt>
+    <dd>@User.Identity.Name</dd>
+</dl>
+
+<div class="actions" style="margin-top: 10px; margin-bottom: 20px;">
+    <a href="@Url.Action("password")" class="btn btn-default"><span class="glyphicon glyphicon-lock"></span> Modificar Contraseña</a>
+</div>

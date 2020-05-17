@@ -1,0 +1,26 @@
+﻿@model SmartSolucionesCuba.SAPRESSC.Core.Web.Security.Models.View.LoginViewModel
+
+@{
+    Layout = "/Areas/Security/Views/Shared/_BaseAccountLayout.cshtml";
+}
+
+@section styles {
+    <style type="text/css">
+        body {
+            background-color: #eee;
+        }
+    </style>
+}
+
+<div class="row">
+    <div class="col-lg-5 col-md-4 hidden-xs">
+    </div>
+    <div class="col-lg-2 col-md-4" style="text-align: center;">
+        <img style="margin: 30px 0;" src="~/img/project-logo.png" />
+
+        @await Html.PartialAsync("_LoginFormPartial", Model)
+    </div>
+    <div class="col-lg-5 col-md-4 hidden-xs">
+    </div>
+</div>
+

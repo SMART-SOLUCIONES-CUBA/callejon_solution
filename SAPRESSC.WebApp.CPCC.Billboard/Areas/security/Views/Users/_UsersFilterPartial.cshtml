@@ -1,0 +1,17 @@
+﻿@model SmartSolucionesCuba.SAPRESSC.Core.Web.SecurityLocal.Models.Filter.UsersFilterModel
+
+@using (Html.BeginForm("filter", "users", new { Area = "security" }, FormMethod.Post, true, null))
+{
+    <fieldset>
+        <legend>Filtro de Usuarios</legend>
+        <div style="margin-bottom: 20px;">
+            @Html.Label("Id", "Nombre de Usuario", new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Id, new { @class = "form-control" })
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-filter"></span> Filtrar</button>
+            <button type="button" class="btn btn-default filter-form-reseter"><span class="glyphicon glyphicon-remove-circle"></span> Limpiar</button>
+        </div>
+    </fieldset>
+}

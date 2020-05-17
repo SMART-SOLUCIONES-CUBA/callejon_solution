@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common</AssemblyName>
+    <RootNamespace>SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common</RootNamespace>
+    <PackageId>SAPRESSC.Business.Billboard.Cinema.Web.Common</PackageId>
+    <Version>0.2.0</Version>
+    <Authors>SSC DevTeam</Authors>
+    <Company>SMART SOLUCIONES CUBA (SSC)</Company>
+    <Copyright>SMART SOLUCIONES CUBA 2018 - Todos los derechos reservados.</Copyright>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="SAPRESSC.Middleware.Identity.Web.Common" Version="0.4.0-alpha" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SAPRESSC.Business.Billboard.Cinema.Persistence\SAPRESSC.Business.Billboard.Cinema.Persistence.csproj" />
+  </ItemGroup>
+</Project>

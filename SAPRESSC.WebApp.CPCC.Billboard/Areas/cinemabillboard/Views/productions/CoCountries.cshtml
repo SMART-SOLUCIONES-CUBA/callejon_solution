@@ -1,0 +1,85 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+@using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View;
+
+@inject SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Helpers.Localization.GlobalViewLocalizationHelper GlobalViewLocalizationHelper
+
+@model ProductionCoCountriesManagementViewModel
+
+@{
+    ViewData["Title"] = "Modificar Película (Países Co-Productores)";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Películas",
+            Url = Url.Action("index", "productions", new { key = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = ViewData["Title"].ToString()
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+<div class="page-header">
+    <h3>Datos de la Producción</h3>
+</div>
+<dl>
+    <dt>Título</dt>
+    <dd>@Model.Display.Title @if (Model.Display.LocalizedTitle != null) { <span>(@Model.Display.LocalizedTitle)</span> }</dd>
+    <dt>Año</dt>
+    <dd>@Model.Display.Year</dd>
+    <dt>País</dt>
+    <dd>@Model.Display.Country.Name</dd>
+</dl>
+<div class="page-header">
+    <h3>Países Co-Productores<a class="btn btn-primary pull-right" href="#" data-toggle="modal" data-target="#add-cocountry">Agregar País</a></h3>
+</div>
+
+@await Html.PartialAsync("_CreateCoCountryPartial", new CoCountryInputViewModel { ProductionId = Model.Display.Id, Countries = Model.CountrySelecItems })
+
+<table class="table" style="margin: 0;">
+    <thead>
+        <tr>
+            <th>País</th>
+            <th style="width: 96px;">Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Countries.Count > 0)
+        {
+            foreach (var item in Model.Countries)
+            {
+                <tr>
+                    <td style="vertical-align: middle;" title="País">@item.Name</td>
+                    <td style="vertical-align: middle;">
+                        <a role="button" href="#" class="btn btn-danger" data-toggle="modal" data-target="#delete-cocountry-@item.Id"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+
+                        @await Html.PartialAsync("_DeleteCoCountryPartial", new CoCountryDisplayViewModel { Country = item, CountryId = item.Id, ProductionDisplay = Model.Display, ProductionId = Model.Display.Id })
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="2"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <integer name="event_title_fontsize_dip">27</integer>
+  <integer name="event_little_emphasis_fontsize_dip">16</integer>
+  <integer name="event_middle_emphasis_fontsize_dip">19</integer>
+  <integer name="event_small_fontsize_dip">11</integer>
+  <integer name="event_default_fontsize_dip">14</integer>
+  <integer name="event_personality_overview_container_size">100</integer>
+  <integer name="event_personality_overview_image_size">72</integer>
+  <integer name="event_personality_image_size">144</integer>
+  <integer name="profile_image_size">96</integer>
+  <integer name="profile_overview_image_size">96</integer>
+  <integer name="personality_comment_image_size">48</integer>
+</resources>

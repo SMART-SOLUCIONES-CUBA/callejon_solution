@@ -1,0 +1,116 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+@using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View;
+
+@model ProductionAwardWinningsViewModel
+
+@{
+    ViewData["Title"] = "Modificar Película (Condecoraciones)";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Películas",
+            Url = Url.Action("index", "productions", new { key = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = ViewData["Title"].ToString()
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+<div class="page-header">
+    <h3>Datos de la Producción</h3>
+</div>
+<dl>
+    <dt>Título</dt>
+    <dd>@Model.Display.Title @if (Model.Display.LocalizedTitle != null) { <span>(@Model.Display.LocalizedTitle)</span> }</dd>
+    <dt>Año</dt>
+    <dd>@Model.Display.Year</dd>
+    <dt>País</dt>
+    <dd>@Model.Display.Country.Name</dd>
+</dl>
+<div class="page-header">
+    <h3>Condecoraciones<a class="btn btn-primary pull-right" href="#" data-toggle="modal" data-target="#add-awardwinning">Agregar Condecoración</a></h3>
+</div>
+
+@await Html.PartialAsync("_CreateAwardWinningPartial", new AwardWinningInputViewModel { ProductionId = Model.Display.Id, Awards = Model.Awards })
+
+<table class="table" style="margin: 0;">
+    <thead>
+        <tr>
+            <th>Distinción</th>
+            <th>Premio</th>
+            <th>Edición</th>
+            <th>Categoría</th>
+            <th style="width: 186px;">Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Display.AwardWinnings.Count > 0)
+        {
+            foreach (var item in Model.Display.AwardWinnings)
+            {
+                <tr>
+                    <td style="vertical-align: middle;" title="Distinción">@item.Type</td>
+                    <td style="vertical-align: middle;" title="Premio">@item.Award.Name</td>
+                    <td style="vertical-align: middle;" title="Edición">@item.Edition</td>
+                    <td style="vertical-align: middle;" title="Categoría">@item.Category</td>
+                    <td style="vertical-align: middle;">
+                        <div class="btn-group btn-group-sm">
+                            <a role="button" href="#" class="btn btn-default" data-toggle="modal" data-target="#edit-awardwinning-@item.Id"><span class="glyphicon glyphicon-edit"></span> Modificar</a>
+                            <a role="button" href="#" class="btn btn-danger" data-toggle="modal" data-target="#delete-awardwinning-@item.Id"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+                        </div>
+
+                        @{
+                            var modelInput = new AwardWinningInputViewModel
+                            {
+                                Id = item.Id,
+                                AwardId = item.Award.Id,
+                                Awards = Model.Awards,
+                                Category = item.Category,
+                                WinType = item.Type,
+                                Edition = item.Edition,
+                                ProductionId = Model.Display.Id
+                            };
+
+                            var modelDisplay = new AwardWinningDisplayViewModel
+                            {
+                                Id = item.Id,
+                                Award = item.Award,
+                                Edition = item.Edition,
+                                WinType = item.Type,
+                                Category = item.Category,
+                                ProductionId = Model.Display.Id
+                            };
+                        }
+
+                        @await Html.PartialAsync("_EditAwardWinningPartial", modelInput)
+                        @await Html.PartialAsync("_DeleteAwardWinningPartial", modelDisplay)
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

@@ -1,0 +1,141 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <AssemblyName>SmartSolucionesCuba.CPCC.PCM.Terminal.Community</AssemblyName>
+    <RootNamespace>SmartSolucionesCuba.CPCC.PCM.Terminal.Community</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Fonts\HelveticaLTStdBoldCond.otf" />
+    <None Remove="Resources\Fonts\HelveticaLTStdCond.otf" />
+    <None Remove="Resources\Fonts\HelveticaLTStdUltraComp.otf" />
+    <None Remove="Resources\Fonts\IconmonstrIconic.ttf" />
+    <None Remove="Resources\Fonts\materialdesignicons-webfont.ttf" />
+    <None Remove="Resources\Fonts\MyriadProBoldCondIt.otf" />
+    <None Remove="Resources\Images\1.jpg" />
+    <None Remove="Resources\Images\2.jpg" />
+    <None Remove="Resources\Images\3.jpg" />
+    <None Remove="Resources\Images\4.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Fonts\HelveticaLTStdBoldCond.otf" />
+    <EmbeddedResource Include="Resources\Fonts\HelveticaLTStdCond.otf" />
+    <EmbeddedResource Include="Resources\Fonts\HelveticaLTStdUltraComp.otf" />
+    <EmbeddedResource Include="Resources\Fonts\IconmonstrIconic.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\materialdesignicons-webfont.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\MyriadProBoldCondIt.otf" />
+    <EmbeddedResource Include="Resources\Images\1.jpg" />
+    <EmbeddedResource Include="Resources\Images\2.jpg" />
+    <EmbeddedResource Include="Resources\Images\3.jpg" />
+    <EmbeddedResource Include="Resources\Images\4.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CClarke.Plugin.Calendars" Version="1.0.14" />
+    <PackageReference Include="DLToolkit.Forms.Controls.FlowListView" Version="2.0.11" />
+    <PackageReference Include="ImageCropper.Forms.Fix.v5" Version="0.2.1" />
+    <PackageReference Include="LeoJHarris.XForms.Plugin.EnhancedEntry" Version="1.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.1" />
+    <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.2" />
+    <PackageReference Include="SkiaSharp.QrCode" Version="0.3.2" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.2.1" />
+    <PackageReference Include="SSCXFToolKit.Mvvm" Version="0.4.0-alpha" />
+    <PackageReference Include="SSCXFToolKit.Presentation" Version="0.4.5-alpha" />
+    <PackageReference Include="Xam.Plugin.Media" Version="4.0.1.5" />
+    <PackageReference Include="Xam.Plugins.Forms.ImageCircle" Version="3.0.0.5" />
+    <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
+    <PackageReference Include="Xamarin.FFImageLoading.Transformations" Version="2.4.11.982" />
+    <PackageReference Include="Xamarin.Forms" Version="4.6.0.772" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\SAPRESSC.Business.Billboard.Cinema.Persistence\SAPRESSC.Business.Billboard.Cinema.Persistence.csproj" />
+    <ProjectReference Include="..\..\SAPRESSC.Business.Billboard.Cinema.Web.Api.Client\SAPRESSC.Business.Billboard.Cinema.Web.Api.Client.csproj" />
+    <ProjectReference Include="..\..\SAPRESSC.Business.Billboard.CPCC.Persistence\SAPRESSC.Business.Billboard.CPCC.Persistence.csproj" />
+    <ProjectReference Include="..\..\SAPRESSC.Business.Billboard.CPCC.Web.Api.Client\SAPRESSC.Business.Billboard.CPCC.Web.Api.Client.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Pages\BillboardPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\CinemaDetailPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\DatabaseShareReceivePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\DatabaseShareSendPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\DatabaseStatusPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\DatabaseUpdatePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\EventDetailPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\EventsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\HomePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\MasterPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\PersonalityDetailPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\Popup\CommentEventPopupPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\Popup\CommentPersonalityPopupPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\Popup\CommentProductionPopupPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\Popup\DelateCommentPopupPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\PresentationDetailPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\ProfileEditPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\ProfileOverviewPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\ProjectWebPortalPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\RoomBillboardPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\SessionConfigurationPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\SignOutPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\SupportPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\CommentView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

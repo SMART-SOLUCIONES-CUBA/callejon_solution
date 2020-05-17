@@ -1,0 +1,49 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+
+@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Models.View.FixScreenClientConfigurationDisplayViewModel
+
+@{
+    ViewData["Title"] = "Eliminar Configuración de Cliente de Pantalla Fija";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Configuraciones de Cliente de Pantalla Fija",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Eliminar"
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+<h3>Esta seguro que desea eliminar la configuración de cliente de pantalla fija detallada a continuación?</h3>
+
+<dl>
+    <dt>Identificador</dt>
+    <dd>@Model.Id.ToString().ToUpper()</dd>
+    <dt>Descripción</dt>
+    <dd>@Html.DisplayFor(model => model.Description)</dd>
+</dl>
+@using (Html.BeginForm("delete", "fixscreenclientconfigurations", new { Area = "cpccbillboard", key = string.Empty }, FormMethod.Post, true, null))
+{
+    @Html.HiddenFor(model => model.Id)
+    <div>
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a class="btn btn-default" href="@Url.Action("index")">Cancelar</a>
+    </div>
+}

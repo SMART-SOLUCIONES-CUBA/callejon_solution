@@ -1,0 +1,259 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<sscxftoolkitmvvmpages:ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
+    xmlns:ic="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+    xmlns:ffilviewforms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Converters"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.EventDetailPage"
+    Title="Próximos Eventos">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:TimeSpanToCustomStringBindingConverter x:Key="TimeSpanToCustomString" />
+            <converters:IntToStarsBase5BindingConverter x:Key="InToStarsBase5" />
+            <converters:DateTimeToInvarianCultureRelativeDateTimeStringConverter x:Key="DateTimeToInvarianCultureRelativeDateTimeString" />
+            <sscxftoolkitpresentationconverters:EnumerationToJoinedStringBindingConverter x:Key="EnumerationToJoinedStringDefault" />
+            <sscxftoolkitpresentationconverters:NotNullOrEmptyStringToBooleanConverter x:Key="NotNullOrEmptyStringToBoolean" />
+            <sscxftoolkitpresentationconverters:EnumerableEmptyToBooleanConverter x:Key="EnumerableEmptyToBoolean" Inverse="True" />
+
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="Accent" />
+                <Setter Property="FontFamily" Value="Helvetica LT Std Condensed" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Text="Programar Alerta"
+            Order="Primary"
+            Clicked="SheduleEventToolbarItem_Clicked">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="Material Design Icons" Glyph="&#xf09f;" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <ToolbarItem 
+            Text="Comentar"
+            Order="Primary"
+            Clicked="CommentToolbarItem_Clicked">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="Material Design Icons" Glyph="&#xf189;" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <ScrollView Orientation="Vertical">
+            <StackLayout Spacing="0">
+                <StackLayout Spacing="2">
+                    <Grid 
+                        BackgroundColor="Accent" 
+                        HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDetailPosterWrapperHeight}" 
+                        Padding="0,20,0,0">
+                        <ffilviewforms:CachedImage 
+                            Source="{Binding Path=PosterImageSource}"
+                            DownsampleToViewSize="True"
+                            CacheType="All"
+                            CacheDuration="8760:00:00" />
+                    </Grid>
+                    <Label 
+                        HorizontalOptions="Center" HorizontalTextAlignment="Center" 
+                        Margin="10,10,10,5" 
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" 
+                        Text="{Binding Path=Header}" 
+                        FontFamily="Myriad Pro Bold Condensed Italic" />
+                    <Label 
+                        HorizontalOptions="Center" HorizontalTextAlignment="Center" 
+                        Margin="10,0" 
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventTitleStyleFontSize}" 
+                        Text="{Binding Path=Title}" 
+                        Style="{StaticResource PresentationTitleLabelStyle}" />
+                    <Label 
+                        HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" HorizontalTextAlignment="Center" 
+                        Margin="10,5" 
+                        Text="{Binding Path=Thematic}" 
+                        LineBreakMode="WordWrap" 
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                    <Label HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="{StaticResource SecoundaryBrandColor}" Margin="10,0,10,5" FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}" FontFamily="Helvetica LT Std Bold Condensed"  Text="{Binding Path=Start, Converter={StaticResource DateTimeToInvarianCultureRelativeDateTimeString}}" />
+                </StackLayout>
+                <StackLayout Margin="10,20,10,10">
+                    <StackLayout HeightRequest="24" Orientation="Horizontal" Padding="0,10,0,0">
+                        <BoxView WidthRequest="4" BackgroundColor="Accent" />
+                        <Label 
+                            Text="Lugar"
+                            Margin="0"
+                            HorizontalTextAlignment="Start" VerticalTextAlignment="End"
+                            TextColor="Accent"
+                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                            FontFamily="Helvetica LT Std Bold Condensed" />
+                    </StackLayout>
+                    <Label 
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}" 
+                        Text="{Binding Path=Place}" />
+
+                    <StackLayout HeightRequest="24" Orientation="Horizontal" Padding="0,10,0,0">
+                        <BoxView WidthRequest="4" BackgroundColor="Accent" />
+                        <Label 
+                            Text="Organiza"
+                            Margin="0"
+                            HorizontalTextAlignment="Start" VerticalTextAlignment="End"
+                            TextColor="Accent"
+                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                            FontFamily="Helvetica LT Std Bold Condensed" />
+                    </StackLayout>
+                    <Label 
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}" 
+                        Text="{Binding Path=Organizer}" />
+
+                    <StackLayout HeightRequest="24" Orientation="Horizontal" Padding="0,10,0,4">
+                        <BoxView WidthRequest="4" BackgroundColor="Accent" />
+                        <Label 
+                            Text="Presentador(es)"
+                            Margin="0"
+                            HorizontalTextAlignment="Start" VerticalTextAlignment="End"
+                            TextColor="Accent"
+                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                            FontFamily="Helvetica LT Std Bold Condensed" />
+                    </StackLayout>
+                    <ScrollView Orientation="Horizontal">
+                        <FlexLayout BindableLayout.ItemsSource="{Binding Path=Presenters}">
+                            <BindableLayout.EmptyView>
+                                <Label Text="Sin elementos que mostrar" TextColor="DimGray" />
+                            </BindableLayout.EmptyView>
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventPersonalityOverviewContainerSize}">
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="PersonalityOverview_Tapped" />
+                                        </StackLayout.GestureRecognizers>
+                                        <ic:CircleImage
+                                            HorizontalOptions="Center"
+                                            Source="{Binding Path=ImageSource}"
+                                            BorderThickness="2"
+                                            BorderColor="{StaticResource SecoundaryBrandColor}"
+                                            WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventPersonalityOverviewImageSize}"
+                                            HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventPersonalityOverviewImageSize}"/>
+                                        <Label HorizontalTextAlignment="Center">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <FormattedString.Spans>
+                                                        <Span Text="{Binding Path=Name}" />
+                                                        <Span Text=" " />
+                                                        <Span Text="{Binding Path=LastName}" />
+                                                    </FormattedString.Spans>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </StackLayout>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </FlexLayout>
+                    </ScrollView>
+
+                    <StackLayout HeightRequest="24" Orientation="Horizontal" Padding="0,10,0,4">
+                        <BoxView WidthRequest="4" BackgroundColor="Accent" />
+                        <Label 
+                            Text="Invitados"
+                            Margin="0"
+                            HorizontalTextAlignment="Start" VerticalTextAlignment="End"
+                            TextColor="Accent"
+                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                            FontFamily="Helvetica LT Std Bold Condensed" />
+                    </StackLayout>
+                    <ScrollView Orientation="Horizontal">
+                        <FlexLayout BindableLayout.ItemsSource="{Binding Path=Guests}">
+                            <BindableLayout.EmptyView>
+                                <Label Text="Sin elementos que mostrar" TextColor="DimGray" />
+                            </BindableLayout.EmptyView>
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventPersonalityOverviewContainerSize}">
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="PersonalityOverview_Tapped" />
+                                        </StackLayout.GestureRecognizers>
+                                        <ic:CircleImage
+                                            HorizontalOptions="Center"
+                                            Source="{Binding Path=ImageSource}"
+                                            BorderThickness="2"
+                                            BorderColor="{StaticResource SecoundaryBrandColor}"
+                                            WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventPersonalityOverviewImageSize}"
+                                            HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventPersonalityOverviewImageSize}"/>
+                                        <Label HorizontalTextAlignment="Center">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <FormattedString.Spans>
+                                                        <Span Text="{Binding Path=Name}" />
+                                                        <Span Text=" " />
+                                                        <Span Text="{Binding Path=LastName}" />
+                                                    </FormattedString.Spans>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </StackLayout>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </FlexLayout>
+                    </ScrollView>
+
+                    <StackLayout HeightRequest="24" Orientation="Horizontal" Padding="0,10,0,0">
+                        <BoxView WidthRequest="4" BackgroundColor="Accent" />
+                        <Label 
+                            Text="Finaliza"
+                            Margin="0"
+                            HorizontalTextAlignment="Start" VerticalTextAlignment="End"
+                            TextColor="Accent"
+                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                            FontFamily="Helvetica LT Std Bold Condensed" />
+                    </StackLayout>
+                    <Label 
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}" 
+                        Text="{Binding Path=End, Converter={StaticResource DateTimeToInvarianCultureRelativeDateTimeString}}" />
+
+                    <StackLayout HeightRequest="24" Orientation="Horizontal" Padding="0,10,0,0">
+                        <BoxView WidthRequest="4" BackgroundColor="Accent" />
+                        <Label 
+                            Text="Detalles"
+                            Margin="0"
+                            HorizontalTextAlignment="Start" VerticalTextAlignment="End"
+                            TextColor="Accent"
+                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                            FontFamily="Helvetica LT Std Bold Condensed" />
+                    </StackLayout>
+                    <Label 
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}" 
+                        Text="{Binding Path=About}" />
+                    <Label 
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}" 
+                        IsVisible="{Binding Path=Description, Converter={StaticResource NotNullOrEmptyStringToBoolean}}"
+                        Text="{Binding Path=Description}" />
+
+                    <StackLayout HeightRequest="24" Orientation="Horizontal" Padding="0,10,0,0">
+                        <BoxView WidthRequest="4" BackgroundColor="Accent" />
+                        <Label 
+                            Text="Comentarios"
+                            Margin="0"
+                            HorizontalTextAlignment="Start" VerticalTextAlignment="End"
+                            TextColor="Accent"
+                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                            FontFamily="Helvetica LT Std Bold Condensed" />
+                    </StackLayout>
+                    <StackLayout x:Name="CommentsContainer" Spacing="15" Margin="10,15">
+                        <StackLayout Orientation="Horizontal" Spacing="0">
+                            <ActivityIndicator 
+                                IsRunning="True" 
+                                HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventTitleStyleFontSize}" />
+                            <Label 
+                                VerticalOptions="CenterAndExpand"
+                                Text="Cargando ..."
+                                FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                        </StackLayout>
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</sscxftoolkitmvvmpages:ContentPage>

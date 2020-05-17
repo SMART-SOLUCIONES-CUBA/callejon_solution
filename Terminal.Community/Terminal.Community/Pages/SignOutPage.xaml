@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sscxftoolkitmvvmpages:ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
+    xmlns:sscxftoolkitpresentationviews="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Views;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.SignOutPage"
+    Title="Cerrar Sesión">
+    <ContentPage.Content>
+        <Grid>
+            <ScrollView>
+                <StackLayout Padding="20" Spacing="20">
+                    <Label 
+                        Margin="0,20"
+                        HorizontalOptions="Center"
+                        Text="&#xf1f8;"
+                        TextColor="Accent"
+                        FontFamily="Material Design Icons"
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventPersonalityImageSize}" />
+                    <Label
+                        TextColor="Accent"
+                        Text="En esta sección podrá cerrar su sesión y con ella eliminar permanente de los datos especificados en su perfil, configuraciones realizadas a la aplicación, la actualización de la cartelera de cine y eventos, así como los comentarios y denuncias de comentarios no sincronizados."
+                        HorizontalTextAlignment="Center"
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                    <Button
+                        HorizontalOptions="Center"
+                        Text="Cerrar Sesión"
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                        Clicked="SignOutButton_Clicked"/>
+                </StackLayout>
+            </ScrollView>
+            <sscxftoolkitpresentationviews:BusyView />
+        </Grid>
+    </ContentPage.Content>
+</sscxftoolkitmvvmpages:ContentPage>

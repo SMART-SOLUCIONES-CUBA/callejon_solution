@@ -1,0 +1,137 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+@using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View;
+
+@inject SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Helpers.Localization.GlobalViewLocalizationHelper GlobalViewLocalizationHelper
+
+@model ProductionParticipationsManagementViewModel
+
+@{
+    ViewData["Title"] = "Modificar Película (Participaciones)";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Películas",
+            Url = Url.Action("index", "productions", new { key = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = ViewData["Title"].ToString()
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/lib/bootstrap-combobox/css/bootstrap-combobox.css" />
+    <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+}
+
+@section scripts {
+    <script src="~/lib/bootstrap-combobox/js/bootstrap-combobox.js"></script>
+<script src="~/lib/moment/min/moment.min.js"></script>
+<script src="~/lib/moment/locale/es.js"></script>
+<script src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script type="text/javascript">
+        $('.create-participation-personality-select').combobox();
+        $('.edit-participation-personality-select').combobox();
+        $('#borndate-picker').datetimepicker({
+            locale: 'es',
+            ignoreReadonly: true,
+            format: 'DD/MM/YYYY'
+        });
+    </script>
+}
+
+<div class="page-header">
+    <h3>Datos de la Producción</h3>
+</div>
+<dl>
+    <dt>Título</dt>
+    <dd>@Model.Display.Title @if (Model.Display.LocalizedTitle != null) { <span>(@Model.Display.LocalizedTitle)</span> }</dd>
+    <dt>Año</dt>
+    <dd>@Model.Display.Year</dd>
+    <dt>País</dt>
+    <dd>@Model.Display.Country.Name</dd>
+</dl>
+<div class="page-header">
+    <h3>Participaciones<a class="btn btn-primary pull-right" href="#" data-toggle="modal" data-target="#add-participation">Agregar Participación</a></h3>
+</div>
+
+@await Html.PartialAsync("_CreateParticipationPartial", new ParticipationInputViewModel { ProductionId = Model.Display.Id, Personalities = Model.Personalities, ProductionRoles = Model.ProductionRoles })
+
+<table class="table" style="margin: 0;">
+    <thead>
+        <tr>
+            <th>Personalidad</th>
+            <th>Rol</th>
+            <th>Especificación</th>
+            <th style="width: 186px;">Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Participations.Count > 0)
+        {
+            foreach (var item in Model.Participations)
+            {
+                <tr>
+                    <td style="vertical-align: middle;" title="Personalidad">@item.Personality.Name @item.Personality.LastName</td>
+                    <td style="vertical-align: middle;" title="Rol">@GlobalViewLocalizationHelper.Localize(item.Role.ToString())</td>
+                    <td style="vertical-align: middle;" title="Especificación">@item.Specification</td>
+                    <td style="vertical-align: middle;">
+                        <div class="btn-group btn-group-sm">
+                            <a role="button" href="#" class="btn btn-default" data-toggle="modal" data-target="#edit-participation-@item.Id"><span class="glyphicon glyphicon-edit"></span> Modificar</a>
+                            <a role="button" href="#" class="btn btn-danger" data-toggle="modal" data-target="#delete-participation-@item.Id"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+                        </div>
+
+                        @{
+                            var modelInput = new ParticipationInputViewModel
+                            {
+                                Id = item.Id,
+                                PersonalityId = item.Personality.Id,
+                                Personalities = Model.Personalities,
+                                ProductionRole = item.Role,
+                                ProductionId = Model.Display.Id,
+                                Specification = item.Specification,
+                                ProductionRoles = Model.ProductionRoles
+                            };
+
+                            var modelDisplay = new ParticipationDisplayViewModel
+                            {
+                                Id = item.Id,
+                                Personality = item.Personality,
+                                ProductionRole = item.Role,
+                                ProductionId = Model.Display.Id,
+                                Specification = item.Specification
+                            };
+                        }
+
+                        @await Html.PartialAsync("_EditParticipationPartial", modelInput)
+                        @await Html.PartialAsync("_DeleteParticipationPartial", modelDisplay)
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

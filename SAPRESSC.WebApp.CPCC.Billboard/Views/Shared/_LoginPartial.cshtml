@@ -1,0 +1,20 @@
+﻿@if (User.Identity.IsAuthenticated)
+{
+    @using (Html.BeginForm("logout", "account", new { Area = "security" }, FormMethod.Post, true, new { @class = "navbar-form navbar-right", style = "margin-top: 0; margin-bottom: 0;" }))
+    {
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="@Url.Action("index", "account", new { Area = "security" })"><span class="glyphicon glyphicon-user" style="margin-right: 8px;"></span>@User.Identity.Name</a>
+            </li>
+            <li>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link"><span class="glyphicon glyphicon-log-out" style="margin-right: 8px;"></span>Salir</button>
+            </li>
+        </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="@Url.Action("login", "account", new { Area = "security" })"><span class="glyphicon glyphicon-log-in" style="margin-right: 8px;"></span>Entrar</a></li>
+    </ul>
+}

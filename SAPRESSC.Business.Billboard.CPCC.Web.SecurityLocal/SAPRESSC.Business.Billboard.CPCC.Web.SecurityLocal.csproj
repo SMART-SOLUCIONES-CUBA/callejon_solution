@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.SecurityLocal</AssemblyName>
+    <RootNamespace>SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.SecurityLocal</RootNamespace>
+    <PackageId>SAPRESSC.Business.Billboard.CPCC.Web.SecurityLocal</PackageId>
+    <Version>0.1.0-alpha</Version>
+    <Authors>SSC DevTeam</Authors>
+    <Company>SMART SOLUCIONES CUBA (SSC)</Company>
+    <Copyright>SMART SOLUCIONES CUBA 2018 - Todos los derechos reservados.</Copyright>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="SAPRESSC.Core.Web.SecurityLocal" Version="0.9.1-beta" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SAPRESSC.Business.Billboard.CPCC.SecurityShared\SAPRESSC.Business.Billboard.CPCC.SecurityShared.csproj" />
+  </ItemGroup>
+</Project>

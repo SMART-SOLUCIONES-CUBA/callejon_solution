@@ -1,0 +1,312 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+
+@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Models.View.EventInputViewModel
+
+@{
+    ViewData["Title"] = "Modificar Evento";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Eventos",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Modificar"
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-combobox/css/bootstrap-combobox.css" />
+    <style type="text/css">
+        #grind-player-wrapper {
+            height: 360px;
+            padding: 4px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        @@media (min-width: 1200px) {
+            #grind-player-wrapper {
+                height: 520px;
+            }
+        }
+
+        @@media (min-width: 992px) and (max-width: 1199px)
+        {
+            #grind-player-wrapper {
+                height: 480px;
+            }
+        }
+    </style>
+}
+
+@section scripts {
+@if (Model.PromoVideoId != System.Guid.Empty)
+{
+    <script type="text/javascript" src="~/swfobject.js"></script>
+
+        <script type="text/javascript">
+            var player = null;
+
+            function jsbridge(playerId, event, data) {
+                if (player == null) {
+                    player = document.getElementById(playerId);
+                }
+
+                switch (event) {
+                    case "onJavaScriptBridgeCreated":
+                        listStreams(teststreams, "streamlist");
+
+                        break;
+	                case "timeChange":
+	                case "timeupdate":
+	                case "progress":
+	                    break;
+                }
+
+                console.log(event, data);
+            }
+
+	        // Collect query parameters in an object that we can
+	        // forward to SWFObject:
+
+            var parameters = {
+                src: "@string.Format("rtmp://{0}:1935/cpccbillboard_vod/{1}{2}", Context.Request.Host.Host, Model.PromoVideoId, Model.PromoVideoExtension)",
+                autoPlay: false,
+                verbose: true,
+                controlBarAutoHide: "true",
+                controlBarPosition: "bottom",
+                javascriptCallbackFunction: "jsbridge",
+                plugin_hls: "/flashlsOSMF.swf",
+                hls_minbufferlength: -1,
+                hls_maxbufferlength: 30,
+                hls_lowbufferlength: 3,
+                hls_seekmode: "KEYFRAME",
+                hls_startfromlevel: -1,
+                hls_seekfromlevel: -1,
+                hls_live_flushurlcache: false,
+                hls_info: true,
+                hls_debug: false,
+                hls_debug2: false,
+                hls_warn: true,
+                hls_error: true,
+                hls_fragmentloadmaxretry: -1,
+                hls_manifestloadmaxretry: -1,
+                hls_capleveltostage: false,
+                hls_maxlevelcappingmode: "downscale"
+	        };
+
+	        var wmodeValue = "direct";
+	        var wmodeOptions = ["direct", "opaque", "transparent", "window"];
+	        if (parameters.hasOwnProperty("wmode"))
+	        {
+		        if (wmodeOptions.indexOf(parameters.wmode) >= 0)
+		        {
+			        wmodeValue = parameters.wmode;
+		        }
+		        delete parameters.wmode;
+	        }
+
+	        // Embed the player SWF:
+	        swfobject.embedSWF(
+		        "/GrindPlayer.swf"
+                , "grind-player"
+		        , "100%"
+		        , "100%"
+		        , "10.1.0"
+		        , "expressInstall.swf"
+		        , parameters
+		        , {
+			        allowFullScreen: "true",
+                    wmode: wmodeValue,
+                    bgcolor: "#000000"
+		        }
+		        , {
+                    name: "GrindPlayer"
+		        }
+            );
+        </script>
+}
+    <script src="~/lib/moment/min/moment.min.js"></script>
+    <script src="~/lib/moment/locale/es.js"></script>
+    <script src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script type="text/javascript">
+        $('#startdate-picker').datetimepicker({
+            locale: 'es',
+            ignoreReadonly: true,
+            format: 'DD/MM/YYYY h:mm A'
+        });
+        $('#enddate-picker').datetimepicker({
+            locale: 'es',
+            ignoreReadonly: true,
+            format: 'DD/MM/YYYY h:mm A'
+        });
+    </script>
+
+    <script src="~/lib/bootstrap-combobox/js/bootstrap-combobox.js"></script>
+
+    <script type="text/javascript">
+        $('#PresentatorId').combobox();
+    </script>
+}
+
+@using (Html.BeginForm("edit", "events", new { Area = "cpccbillboard", key = string.Empty }, FormMethod.Post, true, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(model => model.Id)
+
+    @Html.HiddenFor(model => model.PosterImageId)
+
+    @Html.HiddenFor(model => model.PromoVideoId)
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4>@ViewData["Title"]</h4></div>
+
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.Header, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Header, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Header, null, new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.Title, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Title, null, new { @class = "text-danger" })
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <div class="checkbox">
+                    <label>
+                        @Html.EditorFor(model => model.Enabled) Público
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.Start, new { @class = "control-label" })
+                    <div class="input-group date" id="startdate-picker">
+                        @Html.TextBoxFor(model => model.Start, new { @class = "form-control", @readonly = "readonly" })
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Start, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.End, new { @class = "control-label" })
+                    <div class="input-group date" id="enddate-picker">
+                        @Html.TextBoxFor(model => model.End, new { @class = "form-control", @readonly = "readonly" })
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.End, null, new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.Place, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.Place, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Place, null, new { @class = "text-danger" })
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.Thematic, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.Thematic, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Thematic, null, new { @class = "text-danger" })
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.Organizer, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.Organizer, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Organizer, null, new { @class = "text-danger" })
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.About, new { @class = "control-label" })
+                @Html.TextAreaFor(model => model.About, 3, 0, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.About, null, new { @class = "text-danger" })
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.Description, new { @class = "control-label" })
+                @Html.TextAreaFor(model => model.Description, 5, 0, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Description, null, new { @class = "text-danger" })
+            </div>
+
+            <div class="row">
+                <div class="col-md-6" style="margin-bottom: 20px; text-align: center;">
+                    @Html.HiddenFor(model => model.PosterImageId)
+                    <img class="img-thumbnail" src="@Url.Action("image", "default", new { Area = "media", key = Model.PosterImageId })" />
+                </div>
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.PosterImageFile, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.PosterImageFile, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PosterImageFile, null, new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <fieldset style="margin-bottom: 20px;">
+                <legend>@Html.LabelFor(model => model.PromoVideoFile)</legend>
+                @Html.HiddenFor(model => model.PromoVideoId)
+                @if (Model.PromoVideoId != System.Guid.Empty)
+                {
+                    <div style="margin-bottom: 20px; text-align: center;">
+                        <div id="grind-player-wrapper">
+                            <div id="grind-player" style="background-color: black;">
+                                <p style="color:white;">Adobe Flash Player no instalado.</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.PromoVideoFile, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.PromoVideoFile, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PromoVideoFile, null, new { @class = "text-danger" })
+                </div>
+
+                @if (Model.PromoVideoId != System.Guid.Empty)
+                {
+                    <div style="margin-bottom: 20px;">
+                        <div class="checkbox">
+                            <label>
+                                @Html.EditorFor(model => model.ResetPromoVideo) Quitar Trailer
+                                @Html.ValidationMessageFor(model => model.ResetPromoVideo)
+                            </label>
+                        </div>
+                    </div>
+                }
+            </fieldset>
+
+            <div>
+                <button type="submit" class="btn btn-primary">Modificar</button>
+                <a class="btn btn-default" href="@Url.Action("index")">Regresar al listado</a>
+            </div>
+        </div>
+    </div>
+}
