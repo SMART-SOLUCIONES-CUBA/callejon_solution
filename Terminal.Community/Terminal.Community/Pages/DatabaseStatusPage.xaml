@@ -4,12 +4,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
     xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
     xmlns:sscxftoolkitpresentationviews="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Views;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
     xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
     xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
     mc:Ignorable="d"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.DatabaseStatusPage"
+    ios:Page.UseSafeArea="True"
     Title="Actualización de Datos">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -52,13 +54,20 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <Label 
+                    <Label
                         Grid.Row="0" Grid.Column="0" 
                         FontFamily="Material Design Icons" 
                         FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}"
                         Text="&#xf6af;"
-                        TextColor="{StaticResource PrimaryBrandColor}" />
-                    <Label 
+                        TextColor="{StaticResource PrimaryBrandColor}">
+                        <Label.Padding>
+                            <OnPlatform x:TypeArguments="Thickness">
+                                <On Platform="iOS" Value="0,0,0,4" />
+                            </OnPlatform>
+                        </Label.Padding>
+                    </Label>
+                    <Label
+                        VerticalOptions="Center"
                         Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3"
                         FontFamily="Helvetica LT Std Bold Condensed" 
                         TextColor="{StaticResource PrimaryBrandColor}" Text="Última actualización" />
@@ -67,16 +76,22 @@
                         Grid.Row="1" Grid.ColumnSpan="4"
                         Text="{Binding Status, Converter={StaticResource IfNullOrEmptyToString}}"
                         TextColor="{Binding Updated, Converter={StaticResource UpdatedToColorConverter}}"
-                        FontFamily="Helvetica LT Std Condensed" 
                         Margin="0,0,0,15" />
                     <Label 
                         Grid.Row="2" Grid.Column="0" 
                         FontFamily="Material Design Icons"  
                         Text="&#xf352;"
                         TextColor="{StaticResource PrimaryBrandColor}"
-                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}" />
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}">
+                        <Label.Padding>
+                            <OnPlatform x:TypeArguments="Thickness">
+                                <On Platform="iOS" Value="0,0,0,4" />
+                            </OnPlatform>
+                        </Label.Padding>
+                    </Label>
                     <Label 
                         Grid.Row="2" Grid.Column="1"
+                        VerticalOptions="Center"
                         FontFamily="Helvetica LT Std Bold Condensed" 
                         TextColor="{StaticResource PrimaryBrandColor}" Text="Cines" />
                     <Label 
@@ -84,31 +99,43 @@
                         FontFamily="Material Design Icons"  
                         Text="&#xf50d;"
                         TextColor="{StaticResource PrimaryBrandColor}"
-                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}" />
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}">
+                        <Label.Padding>
+                            <OnPlatform x:TypeArguments="Thickness">
+                                <On Platform="iOS" Value="0,0,0,4" />
+                            </OnPlatform>
+                        </Label.Padding>
+                    </Label>
                     <Label 
                         Grid.Row="2" Grid.Column="3"
+                        VerticalOptions="Center"
                         FontFamily="Helvetica LT Std Bold Condensed" 
                         TextColor="{StaticResource PrimaryBrandColor}" Text="Salas" />
                     <Label 
                         x:Name="DatabaseCinemaCountLabel" 
                         Grid.Row="3" Grid.ColumnSpan="2"
                         Text="{Binding CinemaCount}"
-                        FontFamily="Helvetica LT Std Condensed"
                         Margin="0,0,0,15" />
                     <Label 
                         x:Name="DatabaseRoomCountLabel" 
                         Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="2"
                         Text="{Binding RoomCount}"
-                        FontFamily="Helvetica LT Std Condensed"
                         Margin="0,0,0,15" />
                     <Label 
                         Grid.Row="4" Grid.Column="0" 
                         FontFamily="Material Design Icons"  
                         Text="&#xF381;"
                         TextColor="{StaticResource PrimaryBrandColor}"
-                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}" />
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}">
+                        <Label.Padding>
+                            <OnPlatform x:TypeArguments="Thickness">
+                                <On Platform="iOS" Value="0,0,0,4" />
+                            </OnPlatform>
+                        </Label.Padding>
+                    </Label>
                     <Label 
                         Grid.Row="4" Grid.Column="1"
+                        VerticalOptions="Center"
                         FontFamily="Helvetica LT Std Bold Condensed" 
                         TextColor="{StaticResource PrimaryBrandColor}" Text="Películas" />
                     <Label 
@@ -116,31 +143,43 @@
                         FontFamily="Material Design Icons" 
                         Text="&#xFA31;" 
                         TextColor="{StaticResource PrimaryBrandColor}"
-                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}" />
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}">
+                        <Label.Padding>
+                            <OnPlatform x:TypeArguments="Thickness">
+                                <On Platform="iOS" Value="0,0,0,4" />
+                            </OnPlatform>
+                        </Label.Padding>
+                    </Label>
                     <Label 
                         Grid.Row="4" Grid.Column="3"
+                        VerticalOptions="Center"
                         FontFamily="Helvetica LT Std Bold Condensed" 
                         TextColor="{StaticResource PrimaryBrandColor}" Text="Eventos" />
                     <Label 
                         x:Name="DatabasePresentationCountLabel" 
                         Grid.Row="5" Grid.ColumnSpan="2"
                         Text="{Binding PresentationCount}"
-                        FontFamily="Helvetica LT Std Condensed"
                         Margin="0,0,0,15" />
                     <Label 
                         x:Name="DatabaseEventCountLabel" 
                         Grid.Row="5" Grid.ColumnSpan="2" Grid.Column="2"
                         Text="{Binding EventCount}"
-                        FontFamily="Helvetica LT Std Condensed"
                         Margin="0,0,0,15" />
                     <Label 
                         Grid.Row="6" Grid.Column="0" 
                         FontFamily="Material Design Icons"  
                         Text="&#xf006;"
                         TextColor="{StaticResource PrimaryBrandColor}"
-                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}" />
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}">
+                        <Label.Padding>
+                            <OnPlatform x:TypeArguments="Thickness">
+                                <On Platform="iOS" Value="0,0,0,4" />
+                            </OnPlatform>
+                        </Label.Padding>
+                    </Label>
                     <Label 
                         Grid.Row="6" Grid.Column="1"
+                        VerticalOptions="Center"
                         FontFamily="Helvetica LT Std Bold Condensed" 
                         TextColor="{StaticResource PrimaryBrandColor}" Text="Personalidades" />
                     <Label 
@@ -148,38 +187,49 @@
                         FontFamily="Material Design Icons"  
                         Text="&#xf85f;"
                         TextColor="{StaticResource PrimaryBrandColor}"
-                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}" />
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}">
+                        <Label.Padding>
+                            <OnPlatform x:TypeArguments="Thickness">
+                                <On Platform="iOS" Value="0,0,0,4" />
+                            </OnPlatform>
+                        </Label.Padding>
+                    </Label>
                     <Label 
                         Grid.Row="6" Grid.Column="3"
+                        VerticalOptions="Center"
                         FontFamily="Helvetica LT Std Bold Condensed" 
                         TextColor="{StaticResource PrimaryBrandColor}" Text="Comentarios" />
                     <Label 
                         x:Name="DatabasePersonalityCountLabel" 
                         Grid.Row="7" Grid.ColumnSpan="2"
                         Text="{Binding PersonalityCount}"
-                        FontFamily="Helvetica LT Std Condensed"
                         Margin="0,0,0,15" />
                     <Label 
                         x:Name="DatabaseCommentCountLabel" 
                         Grid.Row="7" Grid.ColumnSpan="2" Grid.Column="2"
                         Text="{Binding CommentCount}"
-                        FontFamily="Helvetica LT Std Condensed"
                         Margin="0,0,0,15" />
                     <Label 
                         Grid.Row="8" Grid.Column="0" 
                         FontFamily="Material Design Icons"  
                         Text="&#xf2eb;"
                         TextColor="{StaticResource PrimaryBrandColor}"
-                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}" />
+                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}">
+                        <Label.Padding>
+                            <OnPlatform x:TypeArguments="Thickness">
+                                <On Platform="iOS" Value="0,0,0,3" />
+                            </OnPlatform>
+                        </Label.Padding>
+                    </Label>
                     <Label 
                         Grid.Row="8" Grid.Column="1"
+                        VerticalOptions="Center"
                         FontFamily="Helvetica LT Std Bold Condensed" 
                         TextColor="{StaticResource PrimaryBrandColor}" Text="Imágenes" />
                     <Label 
                         x:Name="DatabaseImageCountLabel" 
                         Grid.Row="9" Grid.ColumnSpan="2"
-                        Text="{Binding ImageCount}"
-                        FontFamily="Helvetica LT Std Condensed" />
+                        Text="{Binding ImageCount}" />
                 </Grid>
             </ScrollView>
             <Grid 

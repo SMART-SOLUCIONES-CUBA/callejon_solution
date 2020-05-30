@@ -33,11 +33,9 @@
                         <ViewCell>
                             <StackLayout>
                                 <Label 
-                                    Margin="6"
+                                    Margin="10"
                                     Text="Sin elementos que mostrar"
                                     TextColor="DimGray"
-                                    FontFamily="Helvetica LT Std Condensed"
-                                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}"
                                     HorizontalTextAlignment="Center" />
                             </StackLayout>
                         </ViewCell>
@@ -86,24 +84,22 @@
                 IsVisible="{Binding Path=IsBusy, Converter={StaticResource BoolToBoolNegation}}">
                 <StackLayout 
                     IsVisible="{Binding Path=Cinemas, Converter={StaticResource NullToBoolean}}"
-                    Padding="6"
+                    Padding="10"
                     BackgroundColor="IndianRed">
                     <Label 
                         Text="Sin elementos que mostrar"
                         TextColor="White"
                         FontFamily="Helvetica LT Std Bold Condensed"
-                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}"
+                        FontSize="Medium"
                         HorizontalTextAlignment="Center" />
                     <Label 
                         Text="No se ha realizado ninguna actualización de los datos de la cartelera del proyecto."
                         TextColor="White"
-                        FontFamily="Helvetica LT Std Condensed"
-                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                        FontSize="Small"
                         HorizontalTextAlignment="Center" />
                     <Button
                         HorizontalOptions="Center"
                         Text="Actualizar"
-                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
                         Clicked="DatabaseUpdateButton_Clicked" />
                 </StackLayout>
             </StackLayout>

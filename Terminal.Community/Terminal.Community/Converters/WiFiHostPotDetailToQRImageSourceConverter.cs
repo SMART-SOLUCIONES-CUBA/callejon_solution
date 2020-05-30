@@ -3,17 +3,17 @@ using SkiaSharp.QrCode;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Converters
 {
-    public class WiFiHostPotDetailToQRImageSourceConverter : Xamarin.Forms.IValueConverter
+    public class WiFiHostpotDetailToQRImageSourceConverter : Xamarin.Forms.IValueConverter
     {
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value == null) return null;
 
-            var model = value as Models.View.WiFiHostPotDetailViewModel;
+            var model = value as Models.View.WiFiHostpotDetailViewModel;
 
-            var imageSize = (int)parameter;
+            var imageSize = int.Parse(parameter.ToString());
 
-            var uri = string.Format("wifi://:{1}@{0}", model.SSID, model.Password);
+            var uri = string.Format("WIFI:T:WPA;S:{0};P:{1};H:false;", model.SSID, model.Password);
 
             byte[] qrImageData = null;
 
@@ -24,6 +24,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Converters
 
                 // Render to canvas
                 var info = new SKImageInfo(imageSize, imageSize);
+
                 using (var surface = SKSurface.Create(info))
                 {
                     surface.Canvas.Render(qr, info.Width, info.Height);

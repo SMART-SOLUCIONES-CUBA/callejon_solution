@@ -102,7 +102,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                         LastName = p.Personality.LastName,
                                         IsMale = p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male,
                                         About = p.Personality.About,
-                                        ImageSource = p.Personality.Image != null ? Providers.ImageSourceProvider.Instance.Cached(p.Personality.Image.Id) : (p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male ? Providers.ImageSourceProvider.Instance.ProfileMaleDefault() : Providers.ImageSourceProvider.Instance.ProfileFemaleDefault())
+                                        ImageId = p.Personality.Image.Id
                                     }).ToArray(),
                                     Interpreters = presentation.Production.Participations.Where(p => p.Role == SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations.ProductionRole.Interpretation).Select(p => new PersonalityViewModel
                                     {
@@ -112,7 +112,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                         LastName = p.Personality.LastName,
                                         IsMale = p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male,
                                         About = p.Personality.About,
-                                        ImageSource = p.Personality.Image != null ? Providers.ImageSourceProvider.Instance.Cached(p.Personality.Image.Id) : (p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male ? Providers.ImageSourceProvider.Instance.ProfileMaleDefault() : Providers.ImageSourceProvider.Instance.ProfileFemaleDefault())
+                                        ImageId = p.Personality.Image.Id
                                     }).ToArray(),
                                     Productors = presentation.Production.Participations.Where(p => p.Role == SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations.ProductionRole.Production).Select(p => new PersonalityViewModel
                                     {
@@ -122,7 +122,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                         LastName = p.Personality.LastName,
                                         IsMale = p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male,
                                         About = p.Personality.About,
-                                        ImageSource = p.Personality.Image != null ? Providers.ImageSourceProvider.Instance.Cached(p.Personality.Image.Id) : (p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male ? Providers.ImageSourceProvider.Instance.ProfileMaleDefault() : Providers.ImageSourceProvider.Instance.ProfileFemaleDefault())
+                                        ImageId = p.Personality.Image.Id
                                     }).ToArray(),
                                     Editors = presentation.Production.Participations.Where(p => p.Role == SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations.ProductionRole.Edition).Select(p => new PersonalityViewModel
                                     {
@@ -132,7 +132,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                         LastName = p.Personality.LastName,
                                         IsMale = p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male,
                                         About = p.Personality.About,
-                                        ImageSource = p.Personality.Image != null ? Providers.ImageSourceProvider.Instance.Cached(p.Personality.Image.Id) : (p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male ? Providers.ImageSourceProvider.Instance.ProfileMaleDefault() : Providers.ImageSourceProvider.Instance.ProfileFemaleDefault())
+                                        ImageId = p.Personality.Image.Id
                                     }).ToArray(),
                                     Photographers = presentation.Production.Participations.Where(p => p.Role == SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations.ProductionRole.Photography).Select(p => new PersonalityViewModel
                                     {
@@ -142,7 +142,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                         LastName = p.Personality.LastName,
                                         IsMale = p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male,
                                         About = p.Personality.About,
-                                        ImageSource = p.Personality.Image != null ? Providers.ImageSourceProvider.Instance.Cached(p.Personality.Image.Id) : (p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male ? Providers.ImageSourceProvider.Instance.ProfileMaleDefault() : Providers.ImageSourceProvider.Instance.ProfileFemaleDefault())
+                                        ImageId = p.Personality.Image.Id
                                     }).ToArray(),
                                     ArtisticManagers = presentation.Production.Participations.Where(p => p.Role == SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations.ProductionRole.ArtisticManagement).Select(p => new PersonalityViewModel
                                     {
@@ -152,7 +152,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                         LastName = p.Personality.LastName,
                                         IsMale = p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male,
                                         About = p.Personality.About,
-                                        ImageSource = p.Personality.Image != null ? Providers.ImageSourceProvider.Instance.Cached(p.Personality.Image.Id) : (p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male ? Providers.ImageSourceProvider.Instance.ProfileMaleDefault() : Providers.ImageSourceProvider.Instance.ProfileFemaleDefault())
+                                        ImageId = p.Personality.Image.Id
                                     }).ToArray(),
                                     Screenplayers = presentation.Production.Participations.Where(p => p.Role == SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations.ProductionRole.Screenplay).Select(p => new PersonalityViewModel
                                     {
@@ -162,7 +162,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                         LastName = p.Personality.LastName,
                                         IsMale = p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male,
                                         About = p.Personality.About,
-                                        ImageSource = p.Personality.Image != null ? Providers.ImageSourceProvider.Instance.Cached(p.Personality.Image.Id) : (p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male ? Providers.ImageSourceProvider.Instance.ProfileMaleDefault() : Providers.ImageSourceProvider.Instance.ProfileFemaleDefault())
+                                        ImageId = p.Personality.Image.Id
                                     }).ToArray(),
                                     Sounders = presentation.Production.Participations.Where(p => p.Role == SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations.ProductionRole.Sound).Select(p => new PersonalityViewModel
                                     {
@@ -172,7 +172,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                         LastName = p.Personality.LastName,
                                         IsMale = p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male,
                                         About = p.Personality.About,
-                                        ImageSource = p.Personality.Image != null ? Providers.ImageSourceProvider.Instance.Cached(p.Personality.Image.Id) : (p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male ? Providers.ImageSourceProvider.Instance.ProfileMaleDefault() : Providers.ImageSourceProvider.Instance.ProfileFemaleDefault())
+                                        ImageId = p.Personality.Image.Id
                                     }).ToArray()
                                 }
                             });

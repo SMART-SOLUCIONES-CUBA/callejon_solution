@@ -5,8 +5,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
     [Xamarin.Forms.Xaml.XamlCompilation(Xamarin.Forms.Xaml.XamlCompilationOptions.Compile)]
     public partial class ProfileEditPage : XFToolKit.Mvvm.Pages.ContentPage
     {
-        private bool imagePicked;
-        private bool imageCropping;
+        private byte[] imagePickedData;
 
         public ProfileEditPage()
         {
@@ -45,18 +44,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                 return;
             }
-
-            if (imageCropping)
-            {
-                (BindingContext as Models.Page.ProfileEditPageModel).IsBusy = false;
-
-                imageCropping = false;
-            }
         }
 
         protected void SaveButton_Clicked(object sender, System.EventArgs e)
         {
-            if (!IsEnabled || imageCropping) return;
+            if (!IsEnabled) return;
 
             var profile = (BindingContext as Models.Page.ProfileEditPageModel).Profile;
 
@@ -66,14 +58,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                 System.Threading.Tasks.Task.Run(async () =>
                 {
-                    if (imagePicked)
+                    if (imagePickedData != null)
                     {
                         using (var profileImageFileStream = System.IO.File.OpenWrite(Helpers.LocalFileStorageHelper.GetImageFilePath(profile.Id)))
                         {
-                            using (var pickImageFileStream = new System.IO.FileStream((ProfileImage.Source as Xamarin.Forms.FileImageSource).File, System.IO.FileMode.Open))
-                            {
-                                pickImageFileStream.CopyTo(profileImageFileStream);
-                            }
+                            await profileImageFileStream.WriteAsync(imagePickedData, 0, imagePickedData.Length);
                         }
                     }
 
@@ -84,6 +73,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                         ((Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Master.BindingContext as Models.Page.MasterPageModel).Profile = profile;
 
                         this.NavigationPopPageAsync();
+
+                        imagePickedData = null;
                     });                    
                 });
             }
@@ -95,45 +86,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
         private async void PickImageButton_Clicked(object sender, System.EventArgs eventArgs)
         {
-            var cropper = new Stormlion.ImageCropper.ImageCropper()
-            {
-                PageTitle = "Seleccionar Imágen de Perfil",
-                AspectRatioX = 1,
-                AspectRatioY = 1,
-                CropShape = Stormlion.ImageCropper.ImageCropper.CropShapeType.Rectangle,
-                SelectSourceTitle = "Seleccionar desde",
-                TakePhotoTitle = "Cámara",
-                PhotoLibraryTitle = "Galería de Imágenes",
-                Success = (imageFile) =>
-                {
-                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
-                    {
-                        ProfileImage.Source = Xamarin.Forms.ImageSource.FromFile(imageFile);
+            Plugin.Media.Abstractions.MediaFile mediaFile;
 
-                        imagePicked = true;
-                        imageCropping = false;
+            var action = await DisplayActionSheet("Seleccionar Imágen de Perfil desde", "Cancelar", null, Providers.ConstantsProvider.ACTIONSHEET_PICKIMAGE_OPTION_CAMARA, Providers.ConstantsProvider.ACTIONSHEET_PICKIMAGE_OPTION_GALLERY);
 
-                        (BindingContext as Models.Page.ProfileEditPageModel).IsBusy = false;
-                        (BindingContext as Models.Page.ProfileEditPageModel).BusyProgressMessage = string.Empty;
-                    });
-                },
-                Faiure = () =>
-                {
-                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
-                    {
-                        imageCropping = false;
-
-                        (BindingContext as Models.Page.ProfileEditPageModel).IsBusy = false;
-                        (BindingContext as Models.Page.ProfileEditPageModel).BusyProgressMessage = string.Empty;
-                    });                    
-                }
-            };
-
-            Plugin.Media.Abstractions.MediaFile file;
-
-            var action = await DisplayActionSheet(cropper.SelectSourceTitle, cropper.CancelButtonTitle, null, cropper.TakePhotoTitle, cropper.PhotoLibraryTitle);
-
-            if (action == cropper.TakePhotoTitle)
+            if (action == Providers.ConstantsProvider.ACTIONSHEET_PICKIMAGE_OPTION_CAMARA)
             {
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
@@ -147,7 +104,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                 {
                     await DisplayAlert("No Camera", ":( No camera available.", "OK");
 
-                    cropper.Faiure?.Invoke();
+                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                    {
+                        (BindingContext as Models.Page.ProfileEditPageModel).IsBusy = false;
+                        (BindingContext as Models.Page.ProfileEditPageModel).BusyProgressMessage = string.Empty;
+                    });
 
                     return;
                 }
@@ -163,9 +124,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                     });
                 });
 
-                file = await Plugin.Media.CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions());
+                mediaFile = await Plugin.Media.CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions());
             }
-            else if (action == cropper.PhotoLibraryTitle)
+            else if (action == Providers.ConstantsProvider.ACTIONSHEET_PICKIMAGE_OPTION_GALLERY)
             {
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
@@ -179,7 +140,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                 {
                     await DisplayAlert("Error", "This device is not supported to pick photo.", "OK");
 
-                    cropper.Faiure?.Invoke();
+                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                    {
+                        (BindingContext as Models.Page.ProfileEditPageModel).IsBusy = false;
+                        (BindingContext as Models.Page.ProfileEditPageModel).BusyProgressMessage = string.Empty;
+                    });
 
                     return;
                 }
@@ -195,25 +160,74 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                     });
                 });
 
-                file = await Plugin.Media.CrossMedia.Current.PickPhotoAsync();
+                mediaFile = await Plugin.Media.CrossMedia.Current.PickPhotoAsync();
             }
             else
             {
                 return;
             }
 
-            if (file == null)
+            if (mediaFile == null)
             {
-                cropper.Faiure?.Invoke();
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                {
+                    (BindingContext as Models.Page.ProfileEditPageModel).IsBusy = false;
+                    (BindingContext as Models.Page.ProfileEditPageModel).BusyProgressMessage = string.Empty;
+                });
 
                 return;
             }
 
             await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromMilliseconds(100));
 
-            imageCropping = true;
+            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+            {
+                (BindingContext as Models.Page.ProfileEditPageModel).BusyProgressMessage = "Preparando imagen para recortar ...";
+            });
 
-            Xamarin.Forms.DependencyService.Get<Stormlion.ImageCropper.IImageCropperWrapper>().ShowFromFile(cropper, file.Path);
+            SkiaSharp.SKBitmap croppingImageTarget = null;
+
+            using (var imageFileStream = System.IO.File.OpenRead(mediaFile.Path))
+            {
+                using (var skStream = new SkiaSharp.SKManagedStream(imageFileStream))
+                {
+                    croppingImageTarget = SkiaSharp.SKBitmap.Decode(skStream);
+                }
+            }
+
+            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+            {
+                (BindingContext as Models.Page.ProfileEditPageModel).BusyProgressMessage = "Recortando imagen ...";
+            });
+
+            await this.NavigationPushModalPageAsync(new Xamarin.Forms.NavigationPage(new ProfileImageCroppingPage(croppingImageTarget, OnPickedImageCroppingComplete))
+            {
+                BarBackgroundColor = (Xamarin.Forms.Color)Xamarin.Forms.Application.Current.Resources["PrimaryBrandColor"],
+                BarTextColor = Xamarin.Forms.Color.White
+            });
+        }
+
+        private void OnPickedImageCroppingComplete(SkiaSharp.SKBitmap result)
+        {
+            if (result != null)
+            {
+                using (var skImage = SkiaSharp.SKImage.FromBitmap(result))
+                {
+                    using (var skData = skImage.Encode(SkiaSharp.SKEncodedImageFormat.Jpeg, 75))
+                    {
+                        imagePickedData = skData.ToArray();
+                    }
+                }
+
+                result.Dispose();
+
+                ProfileImage.Source = Xamarin.Forms.ImageSource.FromStream(() => new System.IO.MemoryStream(imagePickedData));
+            }
+
+            this.NavigationPopModalPageAsync();
+
+            (BindingContext as Models.Page.ProfileEditPageModel).IsBusy = false;
+            (BindingContext as Models.Page.ProfileEditPageModel).BusyProgressMessage = string.Empty;
         }
     }
 }

@@ -6,7 +6,9 @@
 
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return System.DateTime.MinValue.Equals(value) ? DefaultDateTimeString : ((System.DateTime)value).ToLongDateString();
+            var datetimeValue = (System.DateTime)value;
+
+            return datetimeValue.Year <= 1900 ? DefaultDateTimeString : datetimeValue.ToLongDateString();
         }
 
         public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)

@@ -73,7 +73,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                     LastName = p.Personality.LastName,
                                     IsMale = p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male,
                                     About = p.Personality.About,
-                                    ImageSource = p.Personality.Image != null ? Providers.ImageSourceProvider.Instance.Cached(p.Personality.Image.Id) : (p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male ? Providers.ImageSourceProvider.Instance.ProfileMaleDefault() : Providers.ImageSourceProvider.Instance.ProfileFemaleDefault())
+                                    ImageId = p.Personality.Image?.Id ?? System.Guid.Empty
                                 }).ToArray(),
                                 Guests = @event.EventPersonalityBridges.Where(e => !e.IsPresenter).Select(p => new Models.View.PersonalityViewModel
                                 {
@@ -83,11 +83,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                     LastName = p.Personality.LastName,
                                     IsMale = p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male,
                                     About = p.Personality.About,
-                                    ImageSource = p.Personality.Image != null ? Providers.ImageSourceProvider.Instance.Cached(p.Personality.Image.Id) : (p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male ? Providers.ImageSourceProvider.Instance.ProfileMaleDefault() : Providers.ImageSourceProvider.Instance.ProfileFemaleDefault())
+                                    ImageId = p.Personality.Image?.Id ?? System.Guid.Empty
                                 }).ToArray(),
                                 About = @event.About,
                                 Description = @event.Description,
-                                PosterImageSource = Providers.ImageSourceProvider.Instance.Cached(@event.PosterImage.Id)
+                                PosterImageId = @event.PosterImage.Id
                             });
                         }
 
@@ -111,10 +111,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                     Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                     {
-                        model.IsBusy = false;
-
-                        IsEnabled = true;
-
                         if (task.Exception == null)
                         {
                             model.DayEvents = new System.Collections.ObjectModel.ObservableCollection<Models.View.DayEventsViewModel>(task.Result);
@@ -148,7 +144,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                     });
                                 });
                             }
-                        }                        
+                        }
+
+                        model.IsBusy = false;
+
+                        IsEnabled = true;
                     });
                 });
             }

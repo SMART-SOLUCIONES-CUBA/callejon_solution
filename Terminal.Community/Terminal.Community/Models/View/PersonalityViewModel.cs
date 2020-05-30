@@ -14,7 +14,7 @@
 
         public string About { get; set; }
 
-        public Xamarin.Forms.ImageSource ImageSource { get; set; }
+        public System.Guid ImageId { get; set; }
 
         public string FullName => ToString();
 

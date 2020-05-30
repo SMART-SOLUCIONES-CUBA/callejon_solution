@@ -5,13 +5,15 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
     [Xamarin.Forms.Xaml.XamlCompilation(Xamarin.Forms.Xaml.XamlCompilationOptions.Compile)]
     public partial class DatabaseShareSendPage : XFToolKit.Mvvm.Pages.ContentPage
     {
+        private System.Threading.CancellationTokenSource cancellationTokenSource;
+
         public DatabaseShareSendPage()
         {
             InitializeComponent();
 
             IsEnabled = false;
 
-            BindingContext = new Models.Page.DatabaseSharePageModel
+            BindingContext = new Models.Page.DatabaseShareSendPageModel
             {
                 IsBusy = true,
                 BusyProgressMessage = "Configurando",
@@ -27,9 +29,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             {
                 IsEnabled = true;
 
-                Xamarin.Forms.DependencyService.Get<Managers.Facade.IWiFiHostPotManagerFacade>().RegisterCallbackActions(CheckPermissionsCallback, StartupRequestCallback, ShutdownRequestCallback);
+                Xamarin.Forms.DependencyService.Get<Managers.Facade.IWiFiHostpotManagerFacade>().RegisterCallbackActions(OnCheckPermissionsCallback, OnStartupRequestCallback, OnShutdownRequestCallback);
 
-                Xamarin.Forms.DependencyService.Get<Managers.Facade.IWiFiHostPotManagerFacade>().CheckPermissions();
+                Xamarin.Forms.DependencyService.Get<Managers.Facade.IWiFiHostpotManagerFacade>().CheckPermissions();
             }
         }
 
@@ -53,7 +55,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(async () =>
                 {
-                    var pageModel = BindingContext as Models.Page.DatabaseSharePageModel;
+                    var pageModel = BindingContext as Models.Page.DatabaseShareSendPageModel;
 
                     pageModel.IsBusy = true;
                     pageModel.BusyProgressMessage = "Terminado";
@@ -61,7 +63,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                     IsEnabled = false;
 
-                    Xamarin.Forms.DependencyService.Get<Managers.Facade.IWiFiHostPotManagerFacade>().RequestShutdown();
+                    Xamarin.Forms.DependencyService.Get<Managers.Facade.IWiFiHostpotManagerFacade>().RequestShutdown();
+
+                    cancellationTokenSource.Cancel();
 
                     await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(2));
 
@@ -70,11 +74,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             });
         }
 
-        private void CheckPermissionsCallback(bool success)
+        private void OnCheckPermissionsCallback(bool success)
         {
             if (success)
             {
-                Xamarin.Forms.DependencyService.Get<Managers.Facade.IWiFiHostPotManagerFacade>().RequestStartup();
+                Xamarin.Forms.DependencyService.Get<Managers.Facade.IWiFiHostpotManagerFacade>().RequestStartup();
             }
             else
             {
@@ -84,23 +88,54 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             }
         }
 
-        private void StartupRequestCallback(Models.View.WiFiHostPotDetailViewModel model)
+        private void OnStartupRequestCallback(Models.View.WiFiHostpotDetailViewModel model)
         {
-            System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(2)).ContinueWith(task =>
+            System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(2)).ContinueWith(async task =>
             {
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
-                    var pageModel = BindingContext as Models.Page.DatabaseSharePageModel;
+                    var pageModel = BindingContext as Models.Page.DatabaseShareSendPageModel;
 
-                    pageModel.WiFiHostPotDetail = model;
+                    pageModel.WiFiHostpotDetail = model;
                     pageModel.IsBusy = false;
                 });
-            });            
+
+                cancellationTokenSource = new System.Threading.CancellationTokenSource();
+
+                var userProfile = Managers.ProfileManager.Instance.GetCurrentProfile();
+
+                var hostFriendDataModel = new Models.Data.FriendDataModel
+                {
+                    FirstName = userProfile.FirstName,
+                    LastName = userProfile.LastName,
+                    IsMale = userProfile.IsMale,
+                    Terminal = new Models.Data.TerminalDataModel
+                    {
+                        Manufacturer = Xamarin.Essentials.DeviceInfo.Manufacturer,
+                        DeviceType = Xamarin.Essentials.DeviceInfo.DeviceType,
+                        Idiom = Xamarin.Essentials.DeviceInfo.Idiom,
+                        Model = Xamarin.Essentials.DeviceInfo.Model,
+                        Name = Xamarin.Essentials.DeviceInfo.Name,
+                        Platform = Xamarin.Essentials.DeviceInfo.Platform,
+                        Version = Xamarin.Essentials.DeviceInfo.Version,
+                        VersionString = Xamarin.Essentials.DeviceInfo.VersionString
+                    }
+                };
+
+                Net.PresenceSocketServer.Instance.Run(hostFriendDataModel, cancellationTokenSource.Token, OnPresenceDataReceiveCallback);
+
+                await Net.BonjourBroadcastSocketServer.Instance.RunAsync(hostFriendDataModel, cancellationTokenSource.Token);
+            });
         }
 
-        private void ShutdownRequestCallback(bool success)
+        private void OnShutdownRequestCallback(bool success)
         {
             if (!IsEnabled) return;
+        }
+
+        private void OnPresenceDataReceiveCallback(Models.Data.PresenceDataModel model)
+        {
+            (BindingContext as Models.Page.DatabaseShareSendPageModel).Presences.Add(model);
         }
     }
 }

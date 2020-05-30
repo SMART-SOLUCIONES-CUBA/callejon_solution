@@ -15,7 +15,6 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
     <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
     <AndroidUseAapt2>true</AndroidUseAapt2>
@@ -64,9 +63,6 @@
     <PackageReference Include="HotSpotManager">
       <Version>1.0.7</Version>
     </PackageReference>
-    <PackageReference Include="ImageCropper.Forms.Fix.v5">
-      <Version>0.2.1</Version>
-    </PackageReference>
     <PackageReference Include="LeoJHarris.XForms.Plugin.EnhancedEntry">
       <Version>1.0.6</Version>
     </PackageReference>
@@ -80,7 +76,7 @@
       <Version>2.0.0.2</Version>
     </PackageReference>
     <PackageReference Include="SkiaSharp.Views.Forms">
-      <Version>1.68.2.1</Version>
+      <Version>1.68.3</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugin.Media">
       <Version>4.0.1.5</Version>
@@ -102,6 +98,12 @@
     </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="4.6.0.772" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
+    <PackageReference Include="ZXing.Net.Mobile.Forms">
+      <Version>2.4.1</Version>
+    </PackageReference>
+    <PackageReference Include="ZXing.Net.Mobile">
+      <Version>2.4.1</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Callbacks\WifiManagerLocalOnlyHotspotCallback.cs" />
@@ -110,8 +112,8 @@
     <Compile Include="Listeners\WiFiDataShareP2pManagerPeerListListener.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Managers\ApplicationManager.cs" />
-    <Compile Include="Managers\OreoPlusWiFiHostPotManager.cs" />
-    <Compile Include="Managers\LegancyByReflectionWiFiHostPotManager.cs" />
+    <Compile Include="Managers\OreoPlusWiFiHostpotManager.cs" />
+    <Compile Include="Managers\LegancyByReflectionWiFiHostpotManager.cs" />
     <Compile Include="Managers\WiFiDataShareManager.cs" />
     <Compile Include="Providers\ConstantsProvider.cs" />
     <Compile Include="Providers\SizeProvider.cs" />
@@ -165,7 +167,7 @@
       <Name>Xam.Android.Binding.Zhanghai.MaterialProgressbar</Name>
     </ProjectReference>
     <ProjectReference Include="..\Terminal.Community\Terminal.Community.csproj">
-      <Project>{E73904A9-90E7-42DE-B31A-3DA634029036}</Project>
+      <Project>{F379CF64-C31F-496A-935E-56146CD5DD70}</Project>
       <Name>Terminal.Community</Name>
     </ProjectReference>
   </ItemGroup>

@@ -6,12 +6,22 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
     mc:Ignorable="d"
-    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.DatabaseShareReceivePage">
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.DatabaseShareReceivePage"
+    NavigationPage.BackButtonTitle="Atrás"
+    Title="Recibir de un Amigo">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Text="Código QR"
+            Order="Primary"
+            Clicked="QrCodeScanToolbarItem_Clicked">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="Material Design Icons" Glyph="&#xf433;" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <Grid>
+
+        </Grid>
     </ContentPage.Content>
 </sscxftoolkitmvvmpages:ContentPage>

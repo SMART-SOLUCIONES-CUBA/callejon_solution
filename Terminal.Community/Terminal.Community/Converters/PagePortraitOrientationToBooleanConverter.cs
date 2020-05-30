@@ -11,7 +11,9 @@
 
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return !Inverse ? Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Orientation == Xamarin.Essentials.DisplayOrientation.Portrait : Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Orientation != Xamarin.Essentials.DisplayOrientation.Portrait;
+            var isLanscape = Xamarin.Forms.Device.Idiom != Xamarin.Forms.TargetIdiom.Phone || Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Orientation == Xamarin.Essentials.DisplayOrientation.Landscape;
+
+            return !Inverse ? !isLanscape : isLanscape;
         }
 
         public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)

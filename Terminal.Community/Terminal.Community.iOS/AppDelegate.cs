@@ -17,15 +17,19 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.iOS
         //
         public override bool FinishedLaunching(UIApplication app, Foundation.NSDictionary options)
         {
+            UISwitch.Appearance.OnTintColor = UIColor.FromRGB(0, 24, 50);
+
+            SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_sqlite3());
+
             Rg.Plugins.Popup.Popup.Init();
 
             LeoJHarris.FormsPlugin.iOS.EnhancedEntryRenderer.Init();
 
             ImageCircle.Forms.Plugin.iOS.ImageCircleRenderer.Init();
 
-            Stormlion.ImageCropper.iOS.Platform.Init();
-
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
+
+            ZXing.Net.Mobile.Forms.iOS.Platform.Init();
 
             Xamarin.Forms.Forms.Init();
             
@@ -33,8 +37,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.iOS
 
             var result = base.FinishedLaunching(app, options); 
             
-            UIApplication.SharedApplication.KeyWindow.TintColor = UIColor.FromRGB(0, 24, 50); 
-            
+            UIApplication.SharedApplication.KeyWindow.TintColor = UIColor.FromRGB(0, 24, 50);
+
             return result;
         }
     }

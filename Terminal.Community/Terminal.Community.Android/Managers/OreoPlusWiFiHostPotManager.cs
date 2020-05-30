@@ -1,16 +1,16 @@
 ﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Droid.Managers
 {
     [Android.Support.Annotation.RequiresApi(Api = (int)Android.OS.BuildVersionCodes.O)]
-    public sealed class OreoPlusWiFiHostPotManager : Community.Managers.Facade.IWiFiHostPotManagerFacade
+    public sealed class OreoPlusWiFiHostpotManager : Community.Managers.Facade.IWiFiHostpotManagerFacade
     {
         private System.Action<bool> checkPermissionsCallbackAction;
 
-        internal System.Action<Models.View.WiFiHostPotDetailViewModel> StartupRequestCallbackAction { get; private set; }
+        internal System.Action<Models.View.WiFiHostpotDetailViewModel> StartupRequestCallbackAction { get; private set; }
         internal System.Action<bool> ShutdownRequestCallbackAction { get; private set; }
 
         internal Android.Net.Wifi.WifiManager.LocalOnlyHotspotReservation Reservation { get; set; }
 
-        public void RegisterCallbackActions(System.Action<bool> checkPermissionsCallbackAction, System.Action<Models.View.WiFiHostPotDetailViewModel> startupRequestCallbackAction, System.Action<bool> shutdownRequestCallbackAction)
+        public void RegisterCallbackActions(System.Action<bool> checkPermissionsCallbackAction, System.Action<Models.View.WiFiHostpotDetailViewModel> startupRequestCallbackAction, System.Action<bool> shutdownRequestCallbackAction)
         {
             this.checkPermissionsCallbackAction = checkPermissionsCallbackAction;
 

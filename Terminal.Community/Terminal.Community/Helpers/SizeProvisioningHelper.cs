@@ -87,7 +87,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
 
         private int GetScreenWidthDPI()
         {
-            return System.Convert.ToInt32(Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Width / Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Density);
+            var deviceScreenMinSize = System.Math.Min(Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Width, Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Height);
+
+            return System.Convert.ToInt32(deviceScreenMinSize / Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Density);
         }
     }
 }

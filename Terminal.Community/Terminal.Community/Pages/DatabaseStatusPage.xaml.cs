@@ -7,7 +7,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
     [Xamarin.Forms.Xaml.XamlCompilation(Xamarin.Forms.Xaml.XamlCompilationOptions.Compile)]
     public partial class DatabaseStatusPage : XFToolKit.Mvvm.Pages.ContentPage
     {
-        private const string SEND_SHARE_ACTION_CAPTION = "Enviar a un Amigo";
+        private const string SEND_SHARE_ACTION_CAPTION = "Enviar a los Amigos";
         private const string RECEIVE_SHARE_ACTION_CAPTION = "Recibir de un Amigo";
 
         public DatabaseStatusPage()
@@ -35,7 +35,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
         {
             // TODO Restore to default behavior!!
             //if (!updateForceModeRequired)
-            if (true)
+
+            if (Xamarin.Forms.DependencyService.Get<Managers.Facade.IWiFiHostpotManagerFacade>() != null)
             {
                 DisplayActionSheet("Compartir Datos", "Cancelar", null, SEND_SHARE_ACTION_CAPTION, RECEIVE_SHARE_ACTION_CAPTION).ContinueWith(task =>
                 {
@@ -49,7 +50,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                 break;
 
                             case RECEIVE_SHARE_ACTION_CAPTION:
-                                this.NavigationPushModalPageAsync(new DatabaseShareReceivePage());
+                                this.NavigationPushPageAsync(new DatabaseShareReceivePage());
 
                                 break;
                         }
@@ -58,6 +59,10 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                 });
 
                 return;
+            }
+            else
+            {
+                this.NavigationPushPageAsync(new DatabaseShareReceivePage());
             }
         }
 

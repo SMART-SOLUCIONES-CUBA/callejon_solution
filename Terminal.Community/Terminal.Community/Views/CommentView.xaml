@@ -13,6 +13,7 @@
     <ContentView.Resources>
         <ResourceDictionary>
             <converters:DateTimeToInvarianCultureRelativeDateTimeStringConverter x:Key="DateTimeToInvarianCultureRelativeDateTimeString" />
+            <converters:PersonalityViewModelToImageSourceConverter x:Key="PersonalityViewModelToImageSource" />
 
             <sscxftoolkitpresentationconverters:FractionConverter x:Key="Fraction" />
             <sscxftoolkitpresentationconverters:FactorConverter x:Key="Factor" />
@@ -35,7 +36,7 @@
             <ic:CircleImage
                 Grid.RowSpan="4" Grid.Column="0"
                 VerticalOptions="Start"
-                Source="{Binding ClientImageSource}"
+                Source="{Binding ., Converter={StaticResource PersonalityViewModelToImageSource}}"
                 BorderColor="{StaticResource SecoundaryBrandColor}"
                 BorderThickness="1.5"
                 WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=PersonalityCommentImageSize}"
@@ -44,8 +45,8 @@
             <Button
                 Grid.Column="2" Grid.Row="0" Grid.RowSpan="2"
                 BackgroundColor="Transparent"
-                WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize, Converter={StaticResource Factor}, ConverterParameter=2}"
-                HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize, Converter={StaticResource Factor}, ConverterParameter=3}"
+                WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize, Converter={StaticResource Factor}, ConverterParameter=3}"
+                HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize, Converter={StaticResource Factor}, ConverterParameter=4}"
                 Text="&#xE046;"
                 FontFamily="Iconmonstr Iconic"
                 FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"

@@ -3,7 +3,7 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"    
     xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Converters"
     xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
     xmlns:jmci="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
@@ -14,10 +14,15 @@
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.MasterPage"
     x:Name="Page"
     Title="Navegación">
+    <ContentPage.BackgroundColor>
+        <OnPlatform x:TypeArguments="Color">
+            <On Platform="iOS" Value="{StaticResource PrimaryBrandColor}" />
+        </OnPlatform>
+    </ContentPage.BackgroundColor>
     <ContentPage.IconImageSource>
         <FontImageSource
-            Glyph="&#xE017;"
-            FontFamily="Iconmonstr Iconic" />
+            Glyph="&#xf35c;"
+            FontFamily="Material Design Icons" />
     </ContentPage.IconImageSource>
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -110,21 +115,23 @@
             <ListView.Footer>
                 <Grid>
                     <StackLayout Spacing="0" Margin="10,40,10,10">
+                        <Label
+                            FontFamily="Default"
+                            FontSize="Small"
+                            HorizontalTextAlignment="Center"
+                            Text="Centro Provincial de Cine de Camagüey" />
                         <Label 
-                                FontSize="Small"
-                                HorizontalTextAlignment="Center"
-                                Text="Centro Provincial de Cine de Camagüey"
-                                TextColor="Black" />
+                            FontFamily="Default"
+                            FontSize="Micro" 
+                            HorizontalTextAlignment="Center"
+                            Text="SMART SOLUCIONES CUBA (SSC)"
+                            TextColor="DimGray" />
                         <Label 
-                                FontSize="Micro" 
-                                HorizontalTextAlignment="Center"
-                                Text="SMART SOLUCIONES CUBA (SSC)"
-                                TextColor="DimGray" />
-                        <Label 
-                                FontSize="Micro" 
-                                HorizontalTextAlignment="Center"
-                                Text="2020"
-                                TextColor="Gray" />
+                            FontFamily="Default"
+                            FontSize="Micro" 
+                            HorizontalTextAlignment="Center"
+                            Text="2020"
+                            TextColor="Gray" />
                     </StackLayout>
                 </Grid>
             </ListView.Footer>

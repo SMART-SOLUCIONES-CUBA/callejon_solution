@@ -8,7 +8,7 @@
 
         protected override Xamarin.Forms.DataTemplate OnSelectTemplate(object item, Xamarin.Forms.BindableObject container)
         {
-            if (Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Orientation == Xamarin.Essentials.DisplayOrientation.Landscape)
+            if (Xamarin.Forms.Device.Idiom != Xamarin.Forms.TargetIdiom.Phone || Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Orientation == Xamarin.Essentials.DisplayOrientation.Landscape)
             {
                 return DayEventsDataTemplate;
             }

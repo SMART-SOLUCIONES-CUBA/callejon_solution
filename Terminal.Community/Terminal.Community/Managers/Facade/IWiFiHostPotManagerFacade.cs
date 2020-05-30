@@ -1,8 +1,8 @@
 ﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Managers.Facade
 {
-    public interface IWiFiHostPotManagerFacade
+    public interface IWiFiHostpotManagerFacade
     {
-        void RegisterCallbackActions(System.Action<bool> checkPermissionsCallbackAction, System.Action<Models.View.WiFiHostPotDetailViewModel> startupRequestCallbackAction, System.Action<bool> shutdownRequestCallbackAction);
+        void RegisterCallbackActions(System.Action<bool> checkPermissionsCallbackAction, System.Action<Models.View.WiFiHostpotDetailViewModel> startupRequestCallbackAction, System.Action<bool> shutdownRequestCallbackAction);
 
         void CheckPermissions();
 

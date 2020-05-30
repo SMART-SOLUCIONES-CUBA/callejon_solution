@@ -9,6 +9,39 @@
     <Company>SMART SOLUCIONES CUBA (SSC)</Company>
     <Copyright>SMART SOLUCIONES CUBA 2018 - Todos los derechos reservados.</Copyright>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Console (Development)' ">
+    <StartAction>Project</StartAction>
+    <ApplicationURL>https://localhost:5001;http://localhost:5000</ApplicationURL>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Public (Development)' ">
+    <StartAction>Project</StartAction>
+    <LaunchBrowser></LaunchBrowser>
+    <ApplicationURL>http://0.0.0.0:80</ApplicationURL>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Console (Staging)' ">
+    <StartAction>Project</StartAction>
+    <EnvironmentVariables>
+      <Variable name="ASPNETCORE_ENVIRONMENT" value="Staging" />
+    </EnvironmentVariables>
+    <LaunchBrowser></LaunchBrowser>
+    <ApplicationURL>https://localhost:5001;http://localhost:5000</ApplicationURL>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Console (Production)' ">
+    <StartAction>Project</StartAction>
+    <EnvironmentVariables>
+      <Variable name="ASPNETCORE_ENVIRONMENT" value="Production" />
+    </EnvironmentVariables>
+    <LaunchBrowser></LaunchBrowser>
+    <ApplicationURL>https://localhost:5001;http://localhost:5000</ApplicationURL>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Public (Production)' ">
+    <StartAction>Project</StartAction>
+    <EnvironmentVariables>
+      <Variable name="ASPNETCORE_ENVIRONMENT" value="Production" />
+    </EnvironmentVariables>
+    <LaunchBrowser></LaunchBrowser>
+    <ApplicationURL>http://0.0.0.0:80</ApplicationURL>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Remove="logs\**" />
     <Compile Remove="packages\**" />
@@ -32,7 +65,10 @@
     <Compile Remove="Migrations\20190328162432_CommentClassifierIncludeSchema.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.App">
+      <PrivateAssets Condition="'%(PackageReference.Version)' == ''">all</PrivateAssets>
+      <Publish Condition="'%(PackageReference.Version)' == ''">true</Publish>
+    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.1" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
     <PackageReference Include="SAPRESSC.Middleware.Region.Web.Manager" Version="0.5.0-alpha" />

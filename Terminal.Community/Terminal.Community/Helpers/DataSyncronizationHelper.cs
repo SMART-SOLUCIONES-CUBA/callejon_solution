@@ -62,11 +62,12 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
             }
         }
 
-        public void SyncronizeData(System.Action<int, bool, string> reportProgressAction, System.Action<System.Threading.Tasks.Task<bool>> continueAction, bool force = false)
+        public void SyncronizeDataFromCloud(System.Action<int, bool, string> reportProgressAction, System.Action<System.Threading.Tasks.Task<bool>> continueAction, bool force = false)
         {
             var protocol = "http";
-            //var host = "192.168.201.1";
-            var host = "cartelera.elcallejon.net";
+            var host = "192.168.1.100";
+            //var host = "cartelera.elcallejon.net";
+            //var host = "192.168.200.201";
             var port = 80;
 
             var url = protocol + "://" + host;
@@ -80,10 +81,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
 
             var apiBaseQuery = "api/cpccbillboard";
 
-            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
-            {
-                reportProgressAction.Invoke(0, true, "Conectando ...");
-            });
+            reportProgressAction.Invoke(0, true, "Conectando ...");
+
+            var deviceScreenMinSize = System.Convert.ToInt32(System.Math.Min(Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Width, Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Height));
 
             System.Threading.Tasks.Task.Run(async () =>
             {
@@ -329,7 +329,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
                     databaseFileStream.Close();
                 }
 
-
                 using (var dbContext = Providers.DdContextProvider.GetDbContext())
                 {
                     Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
@@ -544,8 +543,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
                         }
 
                         dbContext.SaveChanges("system");
-
-                        var deviceScreenMinSize = System.Convert.ToInt32(System.Math.Min(Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Width, Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Height));
 
                         var imageCount = dbContext.Images.Count();
 

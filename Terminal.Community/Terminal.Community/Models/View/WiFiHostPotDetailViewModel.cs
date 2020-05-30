@@ -1,6 +1,6 @@
 ﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Models.View
 {
-    public class WiFiHostPotDetailViewModel
+    public class WiFiHostpotDetailViewModel
     {
         public string SSID { get; set; }
 

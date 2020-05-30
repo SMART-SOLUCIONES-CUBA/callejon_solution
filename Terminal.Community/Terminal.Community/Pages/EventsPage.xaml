@@ -17,8 +17,12 @@
     Title="Próximos Eventos">
     <ContentPage.Resources>
         <ResourceDictionary>
+            <Color x:Key="ListViewBackgroundTintColor">#F3F3F3</Color>
+
             <converters:DateTimeToInvarianCultureRelativeDateTimeStringConverter x:Key="DateTimeToInvarianCultureTimeString" />
             <converters:PagePortraitOrientationToBooleanConverter x:Key="PagePortraitOrientationToBoolean" />
+            <converters:ImageIdToImageSourceConverter x:Key="ImageIdToImageSource" />
+
             <sscxftoolkitpresentationconverters:EnumerableEmptyToBooleanConverter x:Key="EnumerableEmptyToBoolean" Inverse="True" />
             <sscxftoolkitpresentationconverters:NotNullToBooleanConverter x:Key="NotNullToBoolean" />
             <sscxftoolkitpresentationconverters:NullToBooleanConverter x:Key="NullToBoolean" />
@@ -33,11 +37,11 @@
                             Padding="4,20,4,4">
                             <BoxView 
                                 WidthRequest="4"
-                                BackgroundColor="Accent" />
+                                BackgroundColor="{StaticResource PrimaryBrandColor}" />
                             <Label
                                 HorizontalTextAlignment="Start" VerticalTextAlignment="End"
                                 Text="{Binding Date, StringFormat='{0:MMMM dd, dddd}' }"
-                                TextColor="Accent"
+                                TextColor="{StaticResource PrimaryBrandColor}"
                                 FontFamily="Helvetica LT Std Bold Condensed"
                                 FontSize="{Binding helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
                         </StackLayout>
@@ -49,8 +53,14 @@
                                         <Frame 
                                             Margin="6" Padding="0" 
                                             CornerRadius="3" 
-                                            BackgroundColor="#F3F3F3"
-                                            WidthRequest="320" HeightRequest="480">
+                                            BackgroundColor="{StaticResource ListViewBackgroundTintColor}"
+                                            WidthRequest="320">
+                                            <Frame.HeightRequest>
+                                                <OnPlatform x:TypeArguments="x:Double">
+                                                    <On Platform="iOS" Value="420" />
+                                                    <On Platform="Android" Value="480" />
+                                                </OnPlatform>
+                                            </Frame.HeightRequest>
                                             <Frame.GestureRecognizers>
                                                 <TapGestureRecognizer Tapped="EventOverviewFrame_Tapped" />
                                             </Frame.GestureRecognizers>
@@ -63,7 +73,7 @@
                                                     Grid.Row="0"
                                                     FadeAnimationEnabled="False"
                                                     Aspect="AspectFill"
-                                                    Source="{Binding PosterImageSource}" 
+                                                    Source="{Binding PosterImageId, Converter={StaticResource ImageIdToImageSource}}" 
                                                     DownsampleHeight="240"
                                                     DownsampleUseDipUnits="True"
                                                     CacheType="All"
@@ -74,7 +84,7 @@
                                                 </ffilviewforms:CachedImage>
                                                 <ffilviewforms:CachedImage
                                                     Grid.Row="0"
-                                                    Source="{Binding PosterImageSource}"
+                                                    Source="{Binding PosterImageId, Converter={StaticResource ImageIdToImageSource}}"
                                                     Aspect="AspectFit" 
                                                     DownsampleHeight="240"
                                                     DownsampleUseDipUnits="True"
@@ -103,18 +113,16 @@
                                                     <Label 
                                                         Grid.Row="2"
                                                         LineBreakMode="TailTruncation" 
-                                                        Text="{Binding Thematic}" 
-                                                        TextColor="Accent" 
+                                                        Text="{Binding Thematic}"
                                                         FontFamily="Helvetica LT Std Condensed" 
                                                         FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
                                                     <Label 
                                                         Grid.Row="3"
-                                                        TextColor="Accent" FontFamily="Helvetica LT Std Bold Condensed"  
+                                                        FontFamily="Helvetica LT Std Bold Condensed"  
                                                         Text="{Binding Path=Start, Converter={StaticResource DateTimeToInvarianCultureTimeString}}" 
                                                         FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
                                                     <Label 
                                                         Grid.Row="4"
-                                                        TextColor="Accent" 
                                                         FontFamily="Helvetica LT Std Condensed" 
                                                         Text="{Binding Place}" 
                                                         FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
@@ -127,13 +135,11 @@
                                                         </Grid.ColumnDefinitions>
                                                         <Label Grid.Column="0"
                                                             Text="Organiza"
-                                                            TextColor="Accent"
                                                             FontFamily="Helvetica LT Std Bold Condensed"
                                                             FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
                                                             LineBreakMode="NoWrap" />
                                                         <Label Grid.Column="1"
                                                             Text="{Binding Organizer}"
-                                                            TextColor="Accent"
                                                             FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
                                                             FontFamily="Helvetica LT Std Condensed"
                                                             LineBreakMode="TailTruncation" />
@@ -154,7 +160,7 @@
                     <Frame 
                         Margin="6" Padding="0" 
                         CornerRadius="3" 
-                        BackgroundColor="#F3F3F3">
+                        BackgroundColor="{StaticResource ListViewBackgroundTintColor}">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Tapped="EventOverviewFrame_Tapped" />
                         </Frame.GestureRecognizers>
@@ -167,7 +173,7 @@
                                 Grid.Column="0"
                                 BackgroundColor="Gray"
                                 Aspect="AspectFill"
-                                Source="{Binding PosterImageSource}"
+                                Source="{Binding PosterImageId, Converter={StaticResource ImageIdToImageSource}}"
                                 HeightRequest="240"
                                 WidthRequest="160" 
                                 DownsampleHeight="240"
@@ -199,17 +205,15 @@
                                     Grid.Row="2"
                                     LineBreakMode="TailTruncation" 
                                     Text="{Binding Thematic}" 
-                                    TextColor="Accent" 
                                     FontFamily="Helvetica LT Std Condensed" 
                                     FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
                                 <Label 
                                     Grid.Row="3"
-                                    TextColor="Accent" FontFamily="Helvetica LT Std Bold Condensed"  
+                                    FontFamily="Helvetica LT Std Bold Condensed"  
                                     Text="{Binding Path=Start, Converter={StaticResource DateTimeToInvarianCultureTimeString}}" 
                                     FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
                                 <Label 
                                     Grid.Row="4"
-                                    TextColor="Accent" 
                                     FontFamily="Helvetica LT Std Condensed" 
                                     Text="{Binding Place}" 
                                     FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
@@ -222,13 +226,11 @@
                                     </Grid.ColumnDefinitions>
                                     <Label Grid.Column="0"
                                         Text="Organiza"
-                                        TextColor="Accent"
                                         FontFamily="Helvetica LT Std Bold Condensed"
                                         FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
                                         LineBreakMode="NoWrap" />
                                     <Label Grid.Column="1"
                                         Text="{Binding Organizer}"
-                                        TextColor="Accent"
                                         FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
                                         FontFamily="Helvetica LT Std Condensed"
                                         LineBreakMode="TailTruncation" />
@@ -255,22 +257,19 @@
                 IsGroupingEnabled="{Binding Source={x:Reference Page}, Path=Width, Converter={StaticResource PagePortraitOrientationToBoolean}}"
                 ItemsSource="{Binding Path=DayEvents}"
                 ItemTemplate="{StaticResource DayEventTemplateSelector}">
+                <ListView.BackgroundColor>
+                    <OnPlatform x:TypeArguments="Color">
+                        <On Platform="iOS" Value="#FAFAFA" />
+                    </OnPlatform>
+                </ListView.BackgroundColor>
                 <ListView.GroupHeaderTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <StackLayout 
-                                HeightRequest="24"
-                                Orientation="Horizontal"
-                                Padding="6,20,6,6">
-                                <BoxView 
-                                    WidthRequest="4"
-                                    BackgroundColor="Accent" />
+                            <StackLayout Orientation="Horizontal" Padding="6,20,6,6">
+                                <BoxView Style="{StaticResource BlockquoteBoxViewStyle}" />
                                 <Label
-                                    HorizontalTextAlignment="Start" VerticalTextAlignment="End"
-                                    Text="{Binding Date, StringFormat='{0:MMMM dd, dddd}' }"
-                                    TextColor="Accent"
-                                    FontFamily="Helvetica LT Std Bold Condensed"
-                                    FontSize="{Binding helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                    Style="{StaticResource BlockquoteHeaderLabelStyle}"
+                                    Text="{Binding Date, StringFormat='{0:MMMM dd, dddd}' }" />
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>
@@ -281,19 +280,18 @@
                 IsVisible="{Binding Path=IsBusy, Converter={StaticResource BoolToBoolNegation}}">
                 <StackLayout 
                     IsVisible="{Binding Path=DayEvents, Converter={StaticResource NullToBoolean}}"
-                    Padding="6"
+                    Padding="10"
                     BackgroundColor="IndianRed">
                     <Label 
                         Text="Sin elementos que mostrar"
                         TextColor="White"
                         FontFamily="Helvetica LT Std Bold Condensed"
-                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}"
+                        FontSize="Medium"
                         HorizontalTextAlignment="Center" />
                     <Label 
                         Text="No se ha realizado ninguna actualización de los datos de la cartelera del proyecto."
                         TextColor="White"
-                        FontFamily="Helvetica LT Std Condensed"
-                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
+                        FontSize="Small"
                         HorizontalTextAlignment="Center" />
                     <Button
                         HorizontalOptions="Center"
@@ -302,10 +300,9 @@
                 </StackLayout>
                 <Label 
                     IsVisible="{Binding Path=DayEvents, Converter={StaticResource EnumerableEmptyToBoolean}}"
+                    Margin="10"
                     Text="Sin elementos que mostrar"
                     TextColor="DimGray"
-                    FontFamily="Helvetica LT Std Condensed"
-                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}"
                     HorizontalTextAlignment="Center" />
             </StackLayout>
         </Grid>     

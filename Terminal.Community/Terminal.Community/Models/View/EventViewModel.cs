@@ -26,6 +26,6 @@
 
         public string Description { get; set; }
 
-        public Xamarin.Forms.ImageSource PosterImageSource { get; set; }
+        public System.Guid PosterImageId { get; set; }
     }
 }

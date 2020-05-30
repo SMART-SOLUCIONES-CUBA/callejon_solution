@@ -18,18 +18,14 @@
                         Margin="0,20"
                         HorizontalOptions="Center"
                         Text="&#xf1f8;"
-                        TextColor="Accent"
                         FontFamily="Material Design Icons"
                         FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventPersonalityImageSize}" />
                     <Label
-                        TextColor="Accent"
                         Text="En esta sección podrá cerrar su sesión y con ella eliminar permanente de los datos especificados en su perfil, configuraciones realizadas a la aplicación, la actualización de la cartelera de cine y eventos, así como los comentarios y denuncias de comentarios no sincronizados."
-                        HorizontalTextAlignment="Center"
-                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                        HorizontalTextAlignment="Center" />
                     <Button
                         HorizontalOptions="Center"
                         Text="Cerrar Sesión"
-                        FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
                         Clicked="SignOutButton_Clicked"/>
                 </StackLayout>
             </ScrollView>

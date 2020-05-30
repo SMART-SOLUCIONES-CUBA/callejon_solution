@@ -21,15 +21,15 @@
                 <Label 
                     HorizontalTextAlignment="Center" 
                     Text="&#xE02E;"
-                    TextColor="Accent" 
+                    TextColor="{StaticResource PrimaryBrandColor}"
                     FontFamily="Iconmonstr Iconic" 
-                    FontSize="72" />
-                <Label 
+                    FontSize="96" />
+                <Label
                     HorizontalTextAlignment="Center" 
-                    TextColor="Accent" 
+                    TextColor="{StaticResource PrimaryBrandColor}" 
                     FontFamily="Helvetica LT Std Bold Condensed" 
                     Text="Actualizando Datos" 
-                    FontSize="Medium" />
+                    FontSize="Large" />
                 <ActivityIndicator 
                     HorizontalOptions="Center" VerticalOptions="Center"
                     WidthRequest="150"
@@ -37,9 +37,7 @@
                     IsRunning="{Binding Path=IsBusy}" />
                 <Label 
                     HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" 
-                    Text="{Binding Path=BusyProgressMessage}" 
-                    TextColor="Accent" 
-                    FontFamily="Helvetica LT Std Condensed" />
+                    Text="{Binding Path=BusyProgressMessage}" />
             </StackLayout>
         </Grid>
     </ContentPage.Content>

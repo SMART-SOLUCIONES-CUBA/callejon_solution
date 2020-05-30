@@ -41,12 +41,11 @@
   <ItemGroup>
     <PackageReference Include="CClarke.Plugin.Calendars" Version="1.0.14" />
     <PackageReference Include="DLToolkit.Forms.Controls.FlowListView" Version="2.0.11" />
-    <PackageReference Include="ImageCropper.Forms.Fix.v5" Version="0.2.1" />
     <PackageReference Include="LeoJHarris.XForms.Plugin.EnhancedEntry" Version="1.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.1" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.2" />
     <PackageReference Include="SkiaSharp.QrCode" Version="0.3.2" />
-    <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.2.1" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.3" />
     <PackageReference Include="SSCXFToolKit.Mvvm" Version="0.4.0-alpha" />
     <PackageReference Include="SSCXFToolKit.Presentation" Version="0.4.5-alpha" />
     <PackageReference Include="Xam.Plugin.Media" Version="4.0.1.5" />
@@ -55,6 +54,7 @@
     <PackageReference Include="Xamarin.FFImageLoading.Transformations" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.Forms" Version="4.6.0.772" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
+    <PackageReference Include="ZXing.Net.Mobile.Forms" Version="2.4.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -137,5 +137,15 @@
     <EmbeddedResource Update="Views\CommentView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Views\Rendered\ExtLabel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Effects\" />
+    <Folder Include="Delegates\" />
+    <Folder Include="Helpers\Facade\" />
+    <Folder Include="Models\Data\" />
+    <Folder Include="Net\" />
   </ItemGroup>
 </Project>

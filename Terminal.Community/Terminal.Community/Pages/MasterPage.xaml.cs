@@ -1,4 +1,6 @@
-﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
+﻿using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
+
+namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 {
     [Xamarin.Forms.Xaml.XamlCompilation(Xamarin.Forms.Xaml.XamlCompilationOptions.Compile)]
     public partial class MasterPage : Xamarin.Forms.ContentPage
@@ -10,8 +12,8 @@
 
         public MasterPage()
         {
-            InitializeComponent(); 
-            
+            InitializeComponent();
+
             homeSection = new Models.View.NavigationSectionViewModel
             {
                 Glyph = "\uF2DC",
@@ -90,6 +92,18 @@
             };
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (Xamarin.Forms.Device.RuntimePlatform == Xamarin.Forms.Device.iOS)
+            {
+                var safeInsets = On<Xamarin.Forms.PlatformConfiguration.iOS>().SafeAreaInsets();
+
+                NavigationListView.Margin = new Xamarin.Forms.Thickness(0, safeInsets.Top, 0, 0);
+            }
+        }
+
         public void PresentHomeSection(bool resetScroll = false)
         {
             NavigationListView.SelectedItem = homeSection;
@@ -128,7 +142,14 @@
 
             var outgoingPage = (Parent as Xamarin.Forms.MasterDetailPage).Detail;
 
-            (Parent as Xamarin.Forms.MasterDetailPage).Detail = new Xamarin.Forms.NavigationPage((e.SelectedItem as Models.View.NavigationSectionViewModel).SelectionFunc.Invoke());
+            var outgoingNavigationPage = (Parent as Xamarin.Forms.MasterDetailPage).Detail as Xamarin.Forms.NavigationPage;
+
+            var incomingNavigationPage = new Xamarin.Forms.NavigationPage((e.SelectedItem as Models.View.NavigationSectionViewModel).SelectionFunc.Invoke());
+
+            incomingNavigationPage.BarBackgroundColor = outgoingNavigationPage.BarBackgroundColor;
+            incomingNavigationPage.BarTextColor = outgoingNavigationPage.BarTextColor;
+
+            (Parent as Xamarin.Forms.MasterDetailPage).Detail = incomingNavigationPage;
 
             if (outgoingPage is System.IDisposable)
             {

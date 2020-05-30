@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<sscxftoolkitmvvmpages:ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:zxingmobileforms="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.QRCodeScanPage"
+    Title="Scanear Código QR">
+    <ContentPage.Content>
+        <Grid>
+            <zxingmobileforms:ZXingScannerView
+                x:Name="ScannerView"
+                AutomationId="zxingScannerView"
+                OnScanResult="ScannerView_OnScanResult"/>
+            <zxingmobileforms:ZXingDefaultOverlay
+                AutomationId="zxingDefaultOverlay"
+                ShowFlashButton="False" />
+        </Grid>
+    </ContentPage.Content>
+</sscxftoolkitmvvmpages:ContentPage>

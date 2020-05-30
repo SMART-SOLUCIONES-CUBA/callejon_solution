@@ -10,7 +10,7 @@
 
     <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Margin="20">
         <Frame>
-            <Grid ColumnSpacing="0">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
@@ -23,21 +23,36 @@
                 <Label 
                     x:Name="HeaderLabel" 
                     Grid.ColumnSpan="2" Grid.Row="0"
-                    FontFamily="Helvetica LT Std Condensed"
+                    FontFamily="Helvetica LT Std Bold Condensed"
                     FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}"
                     Text="Comentar Evento"
-                    TextColor="Accent" />
+                    TextColor="{StaticResource PrimaryBrandColor}" />
                 <renderedviews:ExtendedEditor
                     x:Name="CommentEditor"
                     Grid.ColumnSpan="2" Grid.Row="1"
                     FontFamily="Helvetica LT Std Condensed"
                     FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
                     Placeholder="Escribe aquí lo que deseas compartir ..."
-                    PlaceholderColor="Gray"
-                    BorderColor="Accent"
-                    BorderWidth="4"
-                    CornerRadius="16"
-                    TextColor="Accent" />
+                    PlaceholderColor="Gray">
+                    <renderedviews:ExtendedEditor.BorderColor>
+                        <OnPlatform x:TypeArguments="Color">
+                            <On Platform="iOS" Value="LightGray" />
+                            <On Platform="Android" Value="{StaticResource PrimaryBrandColor}" />
+                        </OnPlatform>
+                    </renderedviews:ExtendedEditor.BorderColor>
+                    <renderedviews:ExtendedEditor.BorderWidth>
+                        <OnPlatform x:TypeArguments="x:Double">
+                            <On Platform="iOS" Value="1" />
+                            <On Platform="Android" Value="4" />
+                        </OnPlatform>
+                    </renderedviews:ExtendedEditor.BorderWidth>
+                    <renderedviews:ExtendedEditor.CornerRadius>
+                        <OnPlatform x:TypeArguments="x:Int32">
+                            <On Platform="iOS" Value="6" />
+                            <On Platform="Android" Value="16" />
+                        </OnPlatform>
+                    </renderedviews:ExtendedEditor.CornerRadius>
+                </renderedviews:ExtendedEditor>
                 <Button 
                     Grid.Column="0" Grid.Row="2"
                     Text="Cancelar"

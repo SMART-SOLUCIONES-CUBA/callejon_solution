@@ -1,4 +1,6 @@
-﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community
+﻿using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
+
+namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community
 {
     public partial class App : Xamarin.Forms.Application
     {

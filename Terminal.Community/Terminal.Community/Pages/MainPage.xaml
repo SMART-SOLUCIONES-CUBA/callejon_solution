@@ -11,7 +11,9 @@
         <pages:MasterPage />
     </MasterDetailPage.Master>
     <MasterDetailPage.Detail>
-        <NavigationPage>
+        <NavigationPage
+            BarBackgroundColor="{StaticResource PrimaryBrandColor}"
+            BarTextColor="White">
             <x:Arguments>
                 <pages:HomePage />
             </x:Arguments>

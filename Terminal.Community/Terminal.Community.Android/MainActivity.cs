@@ -4,7 +4,6 @@ using Android.App;
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Droid
 {
     [Activity(Icon = "@mipmap/icon", Theme = "@style/MainTheme", ConfigurationChanges = Android.Content.PM.ConfigChanges.ScreenSize | Android.Content.PM.ConfigChanges.Orientation)]
-    //[Activity(Icon = "@mipmap/icon", Theme = "@style/MainTheme", ScreenOrientation = ScreenOrientation.SensorPortrait)]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Android.OS.Bundle savedInstanceState)
@@ -22,19 +21,19 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Droid
 
             ImageCircle.Forms.Plugin.Droid.ImageCircleRenderer.Init();
 
-            Stormlion.ImageCropper.Droid.Platform.Init();
-
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
 
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
 
+            ZXing.Net.Mobile.Forms.Android.Platform.Init();
+
             if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O)
             {
-                Xamarin.Forms.DependencyService.Register<Community.Managers.Facade.IWiFiHostPotManagerFacade, Managers.OreoPlusWiFiHostPotManager>();
+                Xamarin.Forms.DependencyService.Register<Community.Managers.Facade.IWiFiHostpotManagerFacade, Managers.OreoPlusWiFiHostpotManager>();
             }
             else
             {
-                Xamarin.Forms.DependencyService.Register<Community.Managers.Facade.IWiFiHostPotManagerFacade, Managers.LegancyByReflectionWiFiHostPotManager>();
+                Xamarin.Forms.DependencyService.Register<Community.Managers.Facade.IWiFiHostpotManagerFacade, Managers.LegancyByReflectionWiFiHostpotManager>();
             }
             
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
@@ -46,14 +45,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Droid
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
+            //ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-
-        protected override void OnActivityResult(int requestCode, Result resultCode, Android.Content.Intent data)
-        {
-            base.OnActivityResult(requestCode, resultCode, data);
-
-            Stormlion.ImageCropper.Droid.Platform.OnActivityResult(requestCode, resultCode, data);
         }
 
         public override void OnBackPressed()

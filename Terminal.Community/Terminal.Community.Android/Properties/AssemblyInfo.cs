@@ -43,6 +43,7 @@ using Android.App;
 [assembly: UsesPermission(Android.Manifest.Permission.WriteExternalStorage)]
 [assembly: UsesPermission(Android.Manifest.Permission.ChangeConfiguration)]
 [assembly: UsesPermission(Android.Manifest.Permission.WriteSettings)]
+[assembly: UsesPermission(Android.Manifest.Permission.Flashlight)]
 
 // Add some common required device features, these can be removed if not needed
 [assembly: UsesFeature("android.hardware.camera", Required = false)]
