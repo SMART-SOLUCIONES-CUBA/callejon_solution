@@ -10,12 +10,6 @@
 
 		public string VersionString { get; set; }
 
-		public System.Version Version { get; set; }
-
 		public Xamarin.Essentials.DevicePlatform Platform { get; set; }
-
-		public Xamarin.Essentials.DeviceIdiom Idiom { get; set; }
-
-		public Xamarin.Essentials.DeviceType DeviceType { get; set; }
 	}
 }
