@@ -23,17 +23,24 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Net
         {
             var broadcastEndPoint = new System.Net.IPEndPoint(System.Net.IPAddress.Broadcast, Providers.ConstantsProvider.SOCKET_BONJOUR_BROADCAST_SERVER_PORT);
 
-            var broadcaster = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Udp);
+            var broadcaster = new Socket(System.Net.IPAddress.Broadcast.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
 
             broadcaster.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, true);
 
-            while (cancellationToken.IsCancellationRequested)
+            try
             {
-                var responseMessageContent = System.Text.Encoding.UTF8.GetBytes(string.Format("{0}{1}", Newtonsoft.Json.JsonConvert.SerializeObject(hostFriendDataModel), Providers.ConstantsProvider.SOCKET_END_OF_MESSAGE_MARK));
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    var broadcastMessageContent = System.Text.Encoding.UTF8.GetBytes(string.Format("{0}{1}", Newtonsoft.Json.JsonConvert.SerializeObject(hostFriendDataModel), Providers.ConstantsProvider.SOCKET_END_OF_MESSAGE_MARK));
 
-                broadcaster.SendTo(responseMessageContent, broadcastEndPoint);
+                    broadcaster.SendTo(broadcastMessageContent, broadcastEndPoint);
 
-                await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(5));
+                    await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(5));
+                }
+            }
+            catch (System.Exception exception)
+            {
+
             }
 
             broadcaster.Close();

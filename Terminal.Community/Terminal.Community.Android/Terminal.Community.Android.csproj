@@ -116,6 +116,7 @@
     <Compile Include="Managers\LegancyByReflectionWiFiHostpotManager.cs" />
     <Compile Include="Managers\WiFiDataShareManager.cs" />
     <Compile Include="Providers\ConstantsProvider.cs" />
+    <Compile Include="Providers\NetworkInformationProvider.cs" />
     <Compile Include="Providers\SizeProvider.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

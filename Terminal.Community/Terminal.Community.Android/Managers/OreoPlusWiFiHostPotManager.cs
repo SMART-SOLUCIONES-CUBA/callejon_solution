@@ -1,4 +1,6 @@
-﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Droid.Managers
+﻿using System.Linq;
+
+namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Droid.Managers
 {
     [Android.Support.Annotation.RequiresApi(Api = (int)Android.OS.BuildVersionCodes.O)]
     public sealed class OreoPlusWiFiHostpotManager : Community.Managers.Facade.IWiFiHostpotManagerFacade

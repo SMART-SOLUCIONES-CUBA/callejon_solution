@@ -100,6 +100,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                     pageModel.IsBusy = false;
                 });
 
+                await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(3));
+
                 cancellationTokenSource = new System.Threading.CancellationTokenSource();
 
                 var userProfile = Managers.ProfileManager.Instance.GetCurrentProfile();
@@ -122,9 +124,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                     }
                 };
 
-                Net.PresenceSocketServer.Instance.Run(hostFriendDataModel, cancellationTokenSource.Token, OnPresenceDataReceiveCallback);
+                //Net.PresenceSocketServer.Instance.Run(hostFriendDataModel, cancellationTokenSource.Token, OnPresenceDataReceiveCallback);
 
-                await Net.BonjourBroadcastSocketServer.Instance.RunAsync(hostFriendDataModel, cancellationTokenSource.Token);
+                await BroadcastServerPresenceAsync(hostFriendDataModel, cancellationTokenSource.Token);
             });
         }
 
@@ -136,6 +138,28 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
         private void OnPresenceDataReceiveCallback(Models.Data.PresenceDataModel model)
         {
             (BindingContext as Models.Page.DatabaseShareSendPageModel).Presences.Add(model);
+        }
+
+        public async System.Threading.Tasks.Task BroadcastServerPresenceAsync(Models.Data.FriendDataModel hostFriendDataModel, System.Threading.CancellationToken cancellationToken)
+        {
+            var bradcastIPAddress = Xamarin.Forms.DependencyService.Get<Providers.Facade.INetworkInformationProviderFacade>().GetBreadcastIPAddress();
+
+            var broadcastEndPoint = new System.Net.IPEndPoint(bradcastIPAddress, Providers.ConstantsProvider.SOCKET_BONJOUR_BROADCAST_SERVER_PORT);
+
+            var broadcaster = new System.Net.Sockets.Socket(bradcastIPAddress.AddressFamily, System.Net.Sockets.SocketType.Dgram, System.Net.Sockets.ProtocolType.Udp);
+
+            broadcaster.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.Broadcast, true);
+
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                var broadcastMessageContent = System.Text.Encoding.UTF8.GetBytes(string.Format("{0}{1}", Newtonsoft.Json.JsonConvert.SerializeObject(hostFriendDataModel), Providers.ConstantsProvider.SOCKET_END_OF_MESSAGE_MARK));
+
+                broadcaster.SendTo(broadcastMessageContent, broadcastEndPoint);
+
+                await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(5));
+            }
+
+            broadcaster.Close();
         }
     }
 }
