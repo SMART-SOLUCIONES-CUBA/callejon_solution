@@ -114,12 +114,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                     Terminal = new Models.Data.TerminalDataModel
                     {
                         Manufacturer = Xamarin.Essentials.DeviceInfo.Manufacturer,
-                        DeviceType = Xamarin.Essentials.DeviceInfo.DeviceType,
-                        Idiom = Xamarin.Essentials.DeviceInfo.Idiom,
                         Model = Xamarin.Essentials.DeviceInfo.Model,
                         Name = Xamarin.Essentials.DeviceInfo.Name,
                         Platform = Xamarin.Essentials.DeviceInfo.Platform,
-                        Version = Xamarin.Essentials.DeviceInfo.Version,
                         VersionString = Xamarin.Essentials.DeviceInfo.VersionString
                     }
                 };
