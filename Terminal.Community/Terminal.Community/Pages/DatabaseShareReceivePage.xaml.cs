@@ -48,19 +48,21 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
         private async System.Threading.Tasks.Task ListenForSenderBroadcastAsync(System.Threading.CancellationToken cancellationToken)
         {
+            var broadcastingEndPoint = new System.Net.IPEndPoint(System.Net.IPAddress.Any, Providers.ConstantsProvider.SOCKET_BONJOUR_BROADCAST_SERVER_PORT);
+
+            var referenceableBroadcastingEndPoint = (System.Net.EndPoint)broadcastingEndPoint;
+
+            var broadcastingSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+
+            broadcastingSocket.Bind(broadcastingEndPoint);
+
             while (!cancellationToken.IsCancellationRequested)
             {
-                var broadcastingEndPoint = new System.Net.IPEndPoint(System.Net.IPAddress.Any, Providers.ConstantsProvider.SOCKET_BONJOUR_BROADCAST_SERVER_PORT);
-
-                var broadcastingSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Udp);
-
-                broadcastingSocket.Bind(broadcastingEndPoint);
-
                 string broadcastMessage = null;
 
                 var broadcastContent = new byte[1024];
 
-                int broadcastContentLength = broadcastingSocket.Receive(broadcastContent);
+                int broadcastContentLength = broadcastingSocket.ReceiveFrom(broadcastContent, ref referenceableBroadcastingEndPoint);
 
                 broadcastMessage += System.Text.Encoding.UTF8.GetString(broadcastContent, 0, broadcastContentLength);
 
@@ -68,15 +70,25 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                 if (endOfMessageMarkIndex > -1)
                 {
-                    var senderPresence = Newtonsoft.Json.JsonConvert.DeserializeObject<Models.Data.PresenceDataModel>(broadcastMessage);
+                    var jsonData = broadcastMessage.Substring(0, broadcastMessage.Length - Providers.ConstantsProvider.SOCKET_END_OF_MESSAGE_MARK.Length);
 
-                    (BindingContext as Models.Page.DatabaseShareRecivePageModel).Presences.Add(senderPresence);
+                    var senderFriend = Newtonsoft.Json.JsonConvert.DeserializeObject<Models.Data.FriendDataModel>(jsonData);
+
+                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                    {
+                        var pageContext = BindingContext as Models.Page.DatabaseShareRecivePageModel;
+
+                        if (pageContext.Friends.Any(item => item.Terminal.Name == senderFriend.Terminal.Name))
+                        {
+                            pageContext.Friends.Add(senderFriend);
+                        }
+                    });
+
+                    await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(5));
                 }
-
-                broadcastingSocket.Close();
-
-                await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(5));
             }
+
+            broadcastingSocket.Close();
         }
 
         private void OnQrCodeScanSuccess(string result)

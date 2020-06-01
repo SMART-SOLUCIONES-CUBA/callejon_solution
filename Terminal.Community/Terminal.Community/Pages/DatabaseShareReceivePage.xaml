@@ -4,11 +4,19 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ic="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+    xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
+    xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Converters"
     xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
     mc:Ignorable="d"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.DatabaseShareReceivePage"
     NavigationPage.BackButtonTitle="Atrás"
     Title="Recibir de un Amigo">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:FlextLayoutToResponsiveItemWidthConverter x:Key="FlextLayoutToResponsiveItemWidth" ItemMinWidth="280" ItemHorizontalMargin="0" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem
             Text="Código QR"
@@ -20,8 +28,43 @@
         </ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <Grid>
-
-        </Grid>
+        <StackLayout>
+            <Label Text="Amigos" FontAttributes="Bold" />
+            <ScrollView
+                Margin="0,0,0,8">
+                <FlexLayout
+                    x:Name="Wrapper"
+                    Wrap="Wrap"
+                    BindableLayout.ItemsSource="{Binding Path=Presences}">
+                    <BindableLayout.EmptyView>
+                        <Label Text="Sin elementos que mostrar" TextColor="DimGray" />
+                    </BindableLayout.EmptyView>
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout
+                                WidthRequest="{Binding Source={x:Reference Wrapper}, Path=Width, Converter={StaticResource FlextLayoutToResponsiveItemWidth}}">
+                                <ic:CircleImage
+                                    HorizontalOptions="Center"
+                                    BorderThickness="2"
+                                    BorderColor="{StaticResource SecoundaryBrandColor}"
+                                    WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventPersonalityOverviewImageSize}"
+                                    HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventPersonalityOverviewImageSize}"/>
+                                <Label HorizontalTextAlignment="Center">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <FormattedString.Spans>
+                                                <Span Text="{Binding Path=Name}" />
+                                                <Span Text=" " />
+                                                <Span Text="{Binding Path=LastName}" />
+                                            </FormattedString.Spans>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </StackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+            </ScrollView>
+        </StackLayout>
     </ContentPage.Content>
 </sscxftoolkitmvvmpages:ContentPage>

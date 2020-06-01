@@ -4,9 +4,9 @@
     {
         public DatabaseShareRecivePageModel()
         {
-            Presences = new System.Collections.ObjectModel.ObservableCollection<Data.PresenceDataModel>();
+            Friends = new System.Collections.ObjectModel.ObservableCollection<Data.FriendDataModel>();
         }
 
-        public System.Collections.ObjectModel.ObservableCollection<Data.PresenceDataModel> Presences { get; set; }
+        public System.Collections.ObjectModel.ObservableCollection<Data.FriendDataModel> Friends { get; set; }
     }
 }
