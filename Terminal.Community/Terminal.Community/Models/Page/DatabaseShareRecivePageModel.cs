@@ -2,11 +2,15 @@
 {
     public class DatabaseShareRecivePageModel : XFToolKit.Mvvm.Models.Page.BasePageModel
     {
+        private Data.FriendDataModel sender;
+
         public DatabaseShareRecivePageModel()
         {
-            Friends = new System.Collections.ObjectModel.ObservableCollection<Data.FriendDataModel>();
+            Candidates = new System.Collections.ObjectModel.ObservableCollection<View.DataShareSenderViewModel>();
         }
 
-        public System.Collections.ObjectModel.ObservableCollection<Data.FriendDataModel> Friends { get; set; }
+        public System.Collections.ObjectModel.ObservableCollection<View.DataShareSenderViewModel> Candidates { get; set; }
+
+        public Data.FriendDataModel Sender { get => sender; set => SetProperty(ref sender, value); }
     }
 }

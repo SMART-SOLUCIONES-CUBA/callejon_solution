@@ -108,6 +108,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                 var hostFriendDataModel = new Models.Data.FriendDataModel
                 {
+                    Id = userProfile.Id,
                     FirstName = userProfile.FirstName,
                     LastName = userProfile.LastName,
                     IsMale = userProfile.IsMale,
@@ -116,7 +117,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                         Manufacturer = Xamarin.Essentials.DeviceInfo.Manufacturer,
                         Model = Xamarin.Essentials.DeviceInfo.Model,
                         Name = Xamarin.Essentials.DeviceInfo.Name,
-                        Platform = Xamarin.Essentials.DeviceInfo.Platform,
+                        Platform = Xamarin.Essentials.DeviceInfo.Platform.ToString(),
                         VersionString = Xamarin.Essentials.DeviceInfo.VersionString
                     }
                 };

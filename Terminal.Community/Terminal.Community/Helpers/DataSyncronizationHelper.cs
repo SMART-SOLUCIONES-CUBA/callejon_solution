@@ -65,9 +65,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
         public void SyncronizeDataFromCloud(System.Action<int, bool, string> reportProgressAction, System.Action<System.Threading.Tasks.Task<bool>> continueAction, bool force = false)
         {
             var protocol = "http";
-            var host = "192.168.1.100";
+            //var host = "192.168.1.100";
             //var host = "cartelera.elcallejon.net";
-            //var host = "192.168.200.201";
+            var host = "192.168.200.201";
             var port = 80;
 
             var url = protocol + "://" + host;

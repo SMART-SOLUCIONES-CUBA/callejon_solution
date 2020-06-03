@@ -10,6 +10,6 @@
 
 		public string VersionString { get; set; }
 
-		public Xamarin.Essentials.DevicePlatform Platform { get; set; }
+		public string Platform { get; set; }
 	}
 }
