@@ -148,7 +148,18 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                 //Net.PresenceSocketServer.Instance.Run(hostFriendDataModel, cancellationTokenSource.Token, OnPresenceDataReceiveCallback);
 
-                await BroadcastServerPresenceAsync(hostFriendDataModel, cancellationTokenSource.Token);
+                System.Threading.Tasks.Parallel.Invoke(
+                    async () =>
+                    {
+                        await BroadcastSenderPresenceAsync(hostFriendDataModel, cancellationTokenSource.Token).ContinueWith(broadcastSenderPresenceTask =>
+                        {
+                            if (broadcastSenderPresenceTask.Exception != null) return;
+
+                            // TODO Handle throwed exception!!
+                            cancellationTokenSource.Cancel();
+                        });
+                    }
+                );                
             });
         }
 
@@ -162,13 +173,15 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             (BindingContext as Models.Page.DatabaseShareSendPageModel).Presences.Add(model);
         }
 
-        public async System.Threading.Tasks.Task BroadcastServerPresenceAsync(Models.Data.FriendDataModel hostFriendDataModel, System.Threading.CancellationToken cancellationToken)
+        #region Sender Presensing Tasks
+
+        private async System.Threading.Tasks.Task BroadcastSenderPresenceAsync(Models.Data.FriendDataModel hostFriendDataModel, System.Threading.CancellationToken cancellationToken)
         {
-            var bradcastIPAddress = Xamarin.Forms.DependencyService.Get<Providers.Facade.INetworkInformationProviderFacade>().GetBreadcastIPAddress();
+            var networkInformarmation = Providers.NetworkInformationProvider.GetNetworkInformation();
 
-            var broadcastEndPoint = new System.Net.IPEndPoint(bradcastIPAddress, Providers.ConstantsProvider.SOCKET_BONJOUR_BROADCAST_SERVER_PORT);
+            var broadcastEndPoint = new System.Net.IPEndPoint(networkInformarmation.BroadcastIPAddress, Providers.ConstantsProvider.SOCKET_BONJOUR_BROADCAST_SERVER_PORT);
 
-            var broadcaster = new System.Net.Sockets.Socket(bradcastIPAddress.AddressFamily, System.Net.Sockets.SocketType.Dgram, System.Net.Sockets.ProtocolType.Udp);
+            var broadcaster = new System.Net.Sockets.Socket(networkInformarmation.BroadcastIPAddress.AddressFamily, System.Net.Sockets.SocketType.Dgram, System.Net.Sockets.ProtocolType.Udp);
 
             broadcaster.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.Broadcast, true);
 
@@ -183,5 +196,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
             broadcaster.Close();
         }
+
+        #endregion
     }
 }

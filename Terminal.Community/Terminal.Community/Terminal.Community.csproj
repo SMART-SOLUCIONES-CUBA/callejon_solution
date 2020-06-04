@@ -55,6 +55,7 @@
     <PackageReference Include="Xamarin.Forms" Version="4.6.0.772" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
     <PackageReference Include="ZXing.Net.Mobile.Forms" Version="2.4.1" />
+    <PackageReference Include="IPNetwork2" Version="2.5.206" />
   </ItemGroup>
 
   <ItemGroup>
@@ -148,5 +149,6 @@
     <Folder Include="Helpers\Facade\" />
     <Folder Include="Models\Data\" />
     <Folder Include="Net\" />
+    <Folder Include="Models\Logic\" />
   </ItemGroup>
 </Project>
