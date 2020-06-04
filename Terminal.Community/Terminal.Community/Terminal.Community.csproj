@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Views\Rendered\ExtLabel.cs" />
+    <Compile Remove="Managers\Facade\IWiFiDataShareManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Effects\" />

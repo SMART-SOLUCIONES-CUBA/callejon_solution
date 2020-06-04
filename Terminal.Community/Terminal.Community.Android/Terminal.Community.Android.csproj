@@ -107,14 +107,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Callbacks\WifiManagerLocalOnlyHotspotCallback.cs" />
-    <Compile Include="Listeners\WiFiDataShareP2pManagerActionListener.cs" />
-    <Compile Include="Listeners\WiFiDataShareP2pManagerConnectionInfoListener.cs" />
-    <Compile Include="Listeners\WiFiDataShareP2pManagerPeerListListener.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Managers\ApplicationManager.cs" />
     <Compile Include="Managers\OreoPlusWiFiHostpotManager.cs" />
     <Compile Include="Managers\LegancyByReflectionWiFiHostpotManager.cs" />
-    <Compile Include="Managers\WiFiDataShareManager.cs" />
     <Compile Include="Providers\ConstantsProvider.cs" />
     <Compile Include="Providers\NetworkInformationProvider.cs" />
     <Compile Include="Providers\SizeProvider.cs" />
@@ -127,7 +123,6 @@
     <Compile Include="Views\Renderer\DatePickerRenderer.cs" />
     <Compile Include="Views\Renderer\ExtendedEditorRenderer.cs" />
     <Compile Include="Views\Renderer\PickerRenderer.cs" />
-    <Compile Include="Receivers\Broadcast\WiFiDirectBroadcastReceiver.cs" />
     <Compile Include="Views\Renderer\ResponsiveImageCellRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
