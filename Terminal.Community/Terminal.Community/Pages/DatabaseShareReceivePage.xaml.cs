@@ -160,15 +160,17 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
             broadcastingSocket.Bind(broadcastingEndPoint);
 
+            GridCoordinate targetGridCoordenate = null;
+
+            if (availableGridCoordenates.Count > 0)
+            {
+                targetGridCoordenate = availableGridCoordenates.Dequeue();
+            }
+
+            string broadcastMessage = null;
+
             while (!cancellationToken.IsCancellationRequested)
             {
-                GridCoordinate targetGridCoordenate = null;
-
-                if (availableGridCoordenates.Count > 0)
-                {
-                    targetGridCoordenate = availableGridCoordenates.Dequeue();
-                }
-
                 if (targetGridCoordenate == null)
                 {
                     await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(60));
@@ -176,9 +178,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                     continue;
                 }
 
-                string broadcastMessage = null;
-
-                var broadcastContent = new byte[1024];
+                var broadcastContent = new byte[10240];
 
                 int broadcastContentLength = broadcastingSocket.ReceiveFrom(broadcastContent, ref referenceableBroadcastingEndPoint);
 
@@ -205,7 +205,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                 GridRow = targetGridCoordenate.Row
                             });
                         }
-                    });                    
+                    });
+
+                    broadcastMessage = null;
 
                     await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(5));
                 }

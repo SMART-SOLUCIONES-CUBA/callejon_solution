@@ -122,6 +122,30 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                     }
                 };
 
+                var filePath = Helpers.LocalFileStorageHelper.GetImageFilePath(userProfile.Id);
+
+                if (System.IO.File.Exists(filePath))
+                {
+                    using (var imageStream = new System.IO.FileStream(filePath, System.IO.FileMode.Open))
+                    {
+                        using (var imageSkData = SkiaSharp.SKData.Create(imageStream))
+                        {
+                            using (var imageSkBitmap = SkiaSharp.SKBitmap.Decode(imageSkData))
+                            {
+                                using (var thumbnailSkBitmap = imageSkBitmap.Resize(new SkiaSharp.SKImageInfo(128, 128), SkiaSharp.SKFilterQuality.High))
+                                {
+                                    using (var thumbnailSkImage = SkiaSharp.SKImage.FromBitmap(thumbnailSkBitmap))
+                                    {
+                                        var thumbnailSkData = thumbnailSkImage.Encode(SkiaSharp.SKEncodedImageFormat.Jpeg, 75);
+
+                                        hostFriendDataModel.ImageData = thumbnailSkData.ToArray();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 //Net.PresenceSocketServer.Instance.Run(hostFriendDataModel, cancellationTokenSource.Token, OnPresenceDataReceiveCallback);
 
                 await BroadcastServerPresenceAsync(hostFriendDataModel, cancellationTokenSource.Token);
