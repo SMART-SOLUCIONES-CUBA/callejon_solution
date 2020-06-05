@@ -1,6 +1,6 @@
 ﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Factories
 {
-    public static class FirendDataModelFactory
+    public static class FriendDataModelFactory
     {
         public static Models.Data.FriendDataModel CreateSelf()
         {
