@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Net.Sockets;
 using SmartSolucionesCuba.XFToolKit.Mvvm.Extensions;
 using SkiaSharp.Views.Forms;
 
@@ -152,45 +151,56 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
         {
             await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(5));
 
-            var broadcastingEndPoint = new System.Net.IPEndPoint(System.Net.IPAddress.Any, Providers.ConstantsProvider.SOCKET_BONJOUR_BROADCAST_SERVER_PORT);
+            var broadcastingEndPoint = new System.Net.IPEndPoint(System.Net.IPAddress.Any, Providers.ConstantsProvider.DATASHARE_SENDER_PRESENCE_BROADCAST_SOCKET_PORT);
 
             var referenceableBroadcastingEndPoint = (System.Net.EndPoint)broadcastingEndPoint;
 
-            var broadcastingSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            var broadcastingSocket = new System.Net.Sockets.Socket(System.Net.Sockets.AddressFamily.InterNetwork, System.Net.Sockets.SocketType.Dgram, System.Net.Sockets.ProtocolType.Udp);
 
             broadcastingSocket.Bind(broadcastingEndPoint);
-
-            GridCoordinate targetGridCoordenate = null;
-
-            if (availableGridCoordenates.Count > 0)
-            {
-                targetGridCoordenate = availableGridCoordenates.Dequeue();
-            }
 
             string broadcastMessage = null;
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                if (targetGridCoordenate == null)
+                if (availableGridCoordenates.Count <= 0)
                 {
                     await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(60));
 
                     continue;
                 }
 
-                var broadcastContent = new byte[10240];
+                var broadcastContent = new byte[Providers.ConstantsProvider.SOCKET_BUFFER_LENGHT];
 
                 int broadcastContentLength = broadcastingSocket.ReceiveFrom(broadcastContent, ref referenceableBroadcastingEndPoint);
 
                 broadcastMessage += System.Text.Encoding.UTF8.GetString(broadcastContent, 0, broadcastContentLength);
 
-                int endOfMessageMarkIndex = broadcastMessage.IndexOf(Providers.ConstantsProvider.SOCKET_END_OF_MESSAGE_MARK);
-
-                if (endOfMessageMarkIndex > -1)
+                if (broadcastMessage.IndexOf(Providers.ConstantsProvider.SOCKET_END_OF_MESSAGE_MARK) > -1)
                 {
                     var jsonData = broadcastMessage.Substring(0, broadcastMessage.Length - Providers.ConstantsProvider.SOCKET_END_OF_MESSAGE_MARK.Length);
 
                     var senderFriend = Newtonsoft.Json.JsonConvert.DeserializeObject<Models.Data.FriendDataModel>(jsonData);
+
+                    var targetGridCoordenate = availableGridCoordenates.Dequeue();
+
+                    broadcastMessage = null;
+
+                    var hostFriendDataModel = Factories.FirendDataModelFactory.CreateSelf();
+
+                    var receiverPresenceMessageContent = System.Text.Encoding.UTF8.GetBytes(string.Format("{0}{1}", Newtonsoft.Json.JsonConvert.SerializeObject(hostFriendDataModel), Providers.ConstantsProvider.SOCKET_END_OF_MESSAGE_MARK));
+
+                    var senderIPAddress = (referenceableBroadcastingEndPoint as System.Net.IPEndPoint).Address;
+
+                    var receiverPresenceNotifyEndPoint = new System.Net.IPEndPoint(senderIPAddress, Providers.ConstantsProvider.DATASHARE_RECEIVER_PRESENCE_UNICAST_SOCKET_PORT);
+
+                    var receiverPresenceNotifySocket = new System.Net.Sockets.Socket(senderIPAddress.AddressFamily, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.Tcp);
+
+                    receiverPresenceNotifySocket.Connect(receiverPresenceNotifyEndPoint);
+
+                    receiverPresenceNotifySocket.Send(receiverPresenceMessageContent);
+
+                    receiverPresenceNotifySocket.Close();
 
                     Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                     {
@@ -206,8 +216,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                             });
                         }
                     });
-
-                    broadcastMessage = null;
 
                     await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(5));
                 }

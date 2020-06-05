@@ -73,7 +73,16 @@
                                 Wrap="Wrap"
                                 BindableLayout.ItemsSource="{Binding Path=Presences}">
                                 <BindableLayout.EmptyView>
-                                    <Label Text="Sin elementos que mostrar" TextColor="DimGray" />
+                                    <StackLayout>
+                                        <ActivityIndicator
+                                            HorizontalOptions="Center"
+                                            IsRunning="True"
+                                            Color="DimGray" />
+                                        <Label
+                                            HorizontalOptions="Center"
+                                            Text="Esperando amigos ..."
+                                            TextColor="DimGray" />
+                                    </StackLayout>                                   
                                 </BindableLayout.EmptyView>
                                 <BindableLayout.ItemTemplate>
                                     <DataTemplate>

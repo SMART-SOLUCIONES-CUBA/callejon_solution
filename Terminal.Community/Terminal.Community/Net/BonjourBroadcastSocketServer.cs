@@ -21,7 +21,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Net
 
         public async System.Threading.Tasks.Task RunAsync(Models.Data.FriendDataModel hostFriendDataModel, System.Threading.CancellationToken cancellationToken)
         {
-            var broadcastEndPoint = new System.Net.IPEndPoint(System.Net.IPAddress.Broadcast, Providers.ConstantsProvider.SOCKET_BONJOUR_BROADCAST_SERVER_PORT);
+            var broadcastEndPoint = new System.Net.IPEndPoint(System.Net.IPAddress.Broadcast, Providers.ConstantsProvider.DATASHARE_SENDER_PRESENCE_BROADCAST_SOCKET_PORT);
 
             var broadcaster = new Socket(System.Net.IPAddress.Broadcast.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
 

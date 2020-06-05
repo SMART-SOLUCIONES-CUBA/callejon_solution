@@ -1,4 +1,5 @@
-﻿using SmartSolucionesCuba.XFToolKit.Mvvm.Extensions;
+﻿using System.Linq;
+using SmartSolucionesCuba.XFToolKit.Mvvm.Extensions;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 {
@@ -104,62 +105,31 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                 cancellationTokenSource = new System.Threading.CancellationTokenSource();
 
-                var userProfile = Managers.ProfileManager.Instance.GetCurrentProfile();
+                var hostFriendDataModel = Factories.FirendDataModelFactory.CreateSelf();
 
-                var hostFriendDataModel = new Models.Data.FriendDataModel
+                var networkInformation = Providers.NetworkInformationProvider.GetNetworkInformation();
+
+                System.Threading.Tasks.Parallel.Invoke(() =>
                 {
-                    Id = userProfile.Id,
-                    FirstName = userProfile.FirstName,
-                    LastName = userProfile.LastName,
-                    IsMale = userProfile.IsMale,
-                    Terminal = new Models.Data.TerminalDataModel
+                    try
                     {
-                        Manufacturer = Xamarin.Essentials.DeviceInfo.Manufacturer,
-                        Model = Xamarin.Essentials.DeviceInfo.Model,
-                        Name = Xamarin.Essentials.DeviceInfo.Name,
-                        Platform = Xamarin.Essentials.DeviceInfo.Platform.ToString(),
-                        VersionString = Xamarin.Essentials.DeviceInfo.VersionString
+                        ListenForReceiverPresenceReport(networkInformation);
                     }
-                };
-
-                var filePath = Helpers.LocalFileStorageHelper.GetImageFilePath(userProfile.Id);
-
-                if (System.IO.File.Exists(filePath))
+                    catch
+                    {
+                        // TODO Handle throwed exception!!
+                        cancellationTokenSource.Cancel();
+                    }
+                }, async () =>
                 {
-                    using (var imageStream = new System.IO.FileStream(filePath, System.IO.FileMode.Open))
+                    await BroadcastSenderPresenceAsync(hostFriendDataModel, networkInformation, cancellationTokenSource.Token).ContinueWith(broadcastSenderPresenceTask =>
                     {
-                        using (var imageSkData = SkiaSharp.SKData.Create(imageStream))
-                        {
-                            using (var imageSkBitmap = SkiaSharp.SKBitmap.Decode(imageSkData))
-                            {
-                                using (var thumbnailSkBitmap = imageSkBitmap.Resize(new SkiaSharp.SKImageInfo(128, 128), SkiaSharp.SKFilterQuality.High))
-                                {
-                                    using (var thumbnailSkImage = SkiaSharp.SKImage.FromBitmap(thumbnailSkBitmap))
-                                    {
-                                        var thumbnailSkData = thumbnailSkImage.Encode(SkiaSharp.SKEncodedImageFormat.Jpeg, 75);
+                        if (broadcastSenderPresenceTask.Exception != null) return;
 
-                                        hostFriendDataModel.ImageData = thumbnailSkData.ToArray();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                //Net.PresenceSocketServer.Instance.Run(hostFriendDataModel, cancellationTokenSource.Token, OnPresenceDataReceiveCallback);
-
-                System.Threading.Tasks.Parallel.Invoke(
-                    async () =>
-                    {
-                        await BroadcastSenderPresenceAsync(hostFriendDataModel, cancellationTokenSource.Token).ContinueWith(broadcastSenderPresenceTask =>
-                        {
-                            if (broadcastSenderPresenceTask.Exception != null) return;
-
-                            // TODO Handle throwed exception!!
-                            cancellationTokenSource.Cancel();
-                        });
-                    }
-                );                
+                        // TODO Handle throwed exception!!
+                        cancellationTokenSource.Cancel();
+                    });
+                });
             });
         }
 
@@ -168,20 +138,78 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             if (!IsEnabled) return;
         }
 
-        private void OnPresenceDataReceiveCallback(Models.Data.PresenceDataModel model)
+        #region Presensing Handling
+
+        private void ListenForReceiverPresenceReport(Models.NetworkInformationModel networkInformation)
         {
-            (BindingContext as Models.Page.DatabaseShareSendPageModel).Presences.Add(model);
+            var listenEndPoint = new System.Net.IPEndPoint(networkInformation.UnicastIPAddress, Providers.ConstantsProvider.DATASHARE_RECEIVER_PRESENCE_UNICAST_SOCKET_PORT);
+
+            var listener = new System.Net.Sockets.Socket(networkInformation.UnicastIPAddress.AddressFamily, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.Tcp);
+
+            listener.Bind(listenEndPoint);
+            listener.Listen(100);
+
+            listener.BeginAccept(new System.AsyncCallback(OnReceiverPresenceReportListenerAcceptCallback), listener);
         }
 
-        #region Sender Presensing Tasks
-
-        private async System.Threading.Tasks.Task BroadcastSenderPresenceAsync(Models.Data.FriendDataModel hostFriendDataModel, System.Threading.CancellationToken cancellationToken)
+        private void OnReceiverPresenceReportListenerAcceptCallback(System.IAsyncResult result)
         {
-            var networkInformarmation = Providers.NetworkInformationProvider.GetNetworkInformation();
+            var listener = (System.Net.Sockets.Socket) result.AsyncState;
 
-            var broadcastEndPoint = new System.Net.IPEndPoint(networkInformarmation.BroadcastIPAddress, Providers.ConstantsProvider.SOCKET_BONJOUR_BROADCAST_SERVER_PORT);
+            if (!cancellationTokenSource.IsCancellationRequested)
+            {
+                listener.BeginAccept(new System.AsyncCallback(OnReceiverPresenceReportListenerAcceptCallback), listener);
+            };
 
-            var broadcaster = new System.Net.Sockets.Socket(networkInformarmation.BroadcastIPAddress.AddressFamily, System.Net.Sockets.SocketType.Dgram, System.Net.Sockets.ProtocolType.Udp);
+            var receiverPresenceReadingContext = new ReceiverPresenceReadingContext(listener.EndAccept(result));
+
+            receiverPresenceReadingContext.Socket.BeginReceive(receiverPresenceReadingContext.Buffer, 0, Providers.ConstantsProvider.SOCKET_BUFFER_LENGHT, System.Net.Sockets.SocketFlags.None, new System.AsyncCallback(OnReceiverPresenceReadCallback), receiverPresenceReadingContext);
+        }
+
+        private void OnReceiverPresenceReadCallback(System.IAsyncResult result)
+        {
+            var context = (ReceiverPresenceReadingContext) result.AsyncState;
+
+            var readLength = context.Socket.EndReceive(result);
+
+            if (readLength <= 0 || cancellationTokenSource.IsCancellationRequested) return;
+
+            context.Message += System.Text.Encoding.UTF8.GetString(context.Buffer, 0, readLength);
+
+            if (context.Message.IndexOf(Providers.ConstantsProvider.SOCKET_END_OF_MESSAGE_MARK) > -1)
+            {
+                var jsonData = context.Message.Substring(0, context.Message.Length - Providers.ConstantsProvider.SOCKET_END_OF_MESSAGE_MARK.Length);
+
+                var senderFriend = Newtonsoft.Json.JsonConvert.DeserializeObject<Models.Data.FriendDataModel>(jsonData);
+
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                {
+                    var pageContext = BindingContext as Models.Page.DatabaseShareSendPageModel;
+
+                    if (!pageContext.Presences.Any(item => item.Friend.Id == senderFriend.Id))
+                    {
+                        pageContext.Presences.Add(new Models.Data.PresenceDataModel
+                        {
+                            At = System.DateTime.Now,
+                            Friend = senderFriend
+                        });
+                    }
+                });
+            }
+            else
+            {
+                if (!cancellationTokenSource.IsCancellationRequested)
+                {
+                    context.Socket.BeginReceive(context.Buffer, 0, Providers.ConstantsProvider.SOCKET_BUFFER_LENGHT, System.Net.Sockets.SocketFlags.None, new System.AsyncCallback(OnReceiverPresenceReadCallback), context);
+                };
+            }
+        }
+
+        private async System.Threading.Tasks.Task BroadcastSenderPresenceAsync(Models.Data.FriendDataModel hostFriendDataModel, Models.NetworkInformationModel networkInformation, System.Threading.CancellationToken cancellationToken)
+        {
+            var broadcastEndPoint = new System.Net.IPEndPoint(networkInformation.BroadcastIPAddress, Providers.ConstantsProvider.DATASHARE_SENDER_PRESENCE_BROADCAST_SOCKET_PORT);
+
+            var broadcaster = new System.Net.Sockets.Socket(networkInformation.BroadcastIPAddress.AddressFamily, System.Net.Sockets.SocketType.Dgram, System.Net.Sockets.ProtocolType.Udp);
 
             broadcaster.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.Broadcast, true);
 
@@ -195,6 +223,22 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             }
 
             broadcaster.Close();
+        }
+
+        private class ReceiverPresenceReadingContext
+        {
+            internal ReceiverPresenceReadingContext(System.Net.Sockets.Socket socket)
+            {
+                Buffer = new byte[Providers.ConstantsProvider.SOCKET_BUFFER_LENGHT];
+
+                Socket = socket;
+            }
+
+            internal System.Net.Sockets.Socket Socket { get; private set; }
+
+            internal byte[] Buffer { get; private set; }
+
+            internal string Message { get; set; }
         }
 
         #endregion

@@ -150,5 +150,6 @@
     <Folder Include="Models\Data\" />
     <Folder Include="Net\" />
     <Folder Include="Models\Logic\" />
+    <Folder Include="Factories\" />
   </ItemGroup>
 </Project>

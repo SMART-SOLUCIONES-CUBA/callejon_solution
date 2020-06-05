@@ -24,7 +24,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Net
         {
             IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
             IPAddress ipAddr = ipHost.AddressList[0];
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddr, Providers.ConstantsProvider.SOCKET_PRESENCE_UNICAST_SERVER_PORT);
+            IPEndPoint localEndPoint = new IPEndPoint(ipAddr, Providers.ConstantsProvider.DATASHARE_RECEIVER_PRESENCE_UNICAST_SOCKET_PORT);
 
             var listener = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
