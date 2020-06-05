@@ -105,7 +105,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                 cancellationTokenSource = new System.Threading.CancellationTokenSource();
 
-                var hostFriendDataModel = Factories.FirendDataModelFactory.CreateSelf();
+                var hostFriendDataModel = Factories.FriendDataModelFactory.CreateSelf();
 
                 var networkInformation = Providers.NetworkInformationProvider.GetNetworkInformation();
 

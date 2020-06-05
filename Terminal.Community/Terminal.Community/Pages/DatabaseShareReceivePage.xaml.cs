@@ -186,7 +186,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                     broadcastMessage = null;
 
-                    var hostFriendDataModel = Factories.FirendDataModelFactory.CreateSelf();
+                    var hostFriendDataModel = Factories.FriendDataModelFactory.CreateSelf();
 
                     var receiverPresenceMessageContent = System.Text.Encoding.UTF8.GetBytes(string.Format("{0}{1}", Newtonsoft.Json.JsonConvert.SerializeObject(hostFriendDataModel), Providers.ConstantsProvider.SOCKET_END_OF_MESSAGE_MARK));
 
