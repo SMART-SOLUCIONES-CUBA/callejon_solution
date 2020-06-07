@@ -10,7 +10,11 @@
 
             this.approvedCallbackAction = approvedCallbackAction;
 
-            BindingContext = model;
+            BindingContext = new Models.Page.Popup.DataShareCandidateSenderDetailPopupPageModel
+            {
+                Sender = model,
+                IsDataUpdateNewer = model.Friend.DataUpdatedAt > Helpers.DataSyncronizationHelper.Instance.SyncronizationDate
+            };
         }
 
         private void ApproveButton_Clicked(object sender, System.EventArgs args)
@@ -31,15 +35,15 @@
 
                 try
                 {
-                    var model = BindingContext as Models.View.DataShareSenderViewModel;
+                    var pageBindingContext = BindingContext as Models.Page.Popup.DataShareCandidateSenderDetailPopupPageModel;
 
                     var hostFriendDataModel = Factories.FriendDataModelFactory.CreateSelf();
 
                     var receiverPresenceMessageContent = System.Text.Encoding.UTF8.GetBytes(string.Format("{0}{1}", Newtonsoft.Json.JsonConvert.SerializeObject(hostFriendDataModel), Providers.ConstantsProvider.SOCKET_END_OF_MESSAGE_MARK));
 
-                    var receiverPresenceNotifyEndPoint = new System.Net.IPEndPoint(model.IPAddress, Providers.ConstantsProvider.DATASHARE_RECEIVER_PRESENCE_UNICAST_SOCKET_PORT);
+                    var receiverPresenceNotifyEndPoint = new System.Net.IPEndPoint(pageBindingContext.Sender.IPAddress, Providers.ConstantsProvider.DATASHARE_RECEIVER_PRESENCE_UNICAST_SOCKET_PORT);
 
-                    var receiverPresenceNotifySocket = new System.Net.Sockets.Socket(model.IPAddress.AddressFamily, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.Tcp);
+                    var receiverPresenceNotifySocket = new System.Net.Sockets.Socket(pageBindingContext.Sender.IPAddress.AddressFamily, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.Tcp);
 
                     receiverPresenceNotifySocket.Connect(receiverPresenceNotifyEndPoint);
 
@@ -51,7 +55,7 @@
                     {
                         Rg.Plugins.Popup.Services.PopupNavigation.Instance.PopAsync();
 
-                        approvedCallbackAction.Invoke(model);
+                        approvedCallbackAction.Invoke(pageBindingContext.Sender);
 
                         approvedCallbackAction = null;
                     });

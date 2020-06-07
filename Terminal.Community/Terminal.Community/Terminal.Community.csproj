@@ -149,5 +149,6 @@
     <Folder Include="Helpers\Facade\" />
     <Folder Include="Models\Data\" />
     <Folder Include="Factories\" />
+    <Folder Include="Models\Page\Popup\" />
   </ItemGroup>
 </Project>

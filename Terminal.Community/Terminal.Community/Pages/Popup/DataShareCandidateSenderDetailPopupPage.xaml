@@ -2,13 +2,50 @@
 <popup:PopupPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:ic="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
     xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Converters"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.Popup.DataShareCandidateSenderDetailPopupPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:DateTimeToInvarianCultureRelativeDateTimeStringConverter x:Key="DateTimeToInvarianCultureRelativeDateTimeStringConverter" />
+            <converters:FriendDataModelToImageSourceConverter x:Key="FriendDataModelToImageSourceConverter" /> 
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Margin="20">
         <Frame>
             <StackLayout>
-                <Label Text="{Binding Path=Friend.Terminal.Name}" />
+                <ic:CircleImage
+                    Grid.Row="0"
+                    Source="{Binding Path=Sender.Friend, Converter={StaticResource FriendDataModelToImageSourceConverter}}"
+                    HorizontalOptions="Center"
+                    BorderThickness="2"
+                    BorderColor="{StaticResource SecoundaryBrandColor}" />
+                <Label
+                    Margin="0,8,0,4"
+                    HorizontalTextAlignment="Center"
+                    TextColor="Black">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding Path=Sender.Friend.FirstName}" />
+                            <Span Text=" " />
+                            <Span Text="{Binding Path=Sender.Friend.LastName}" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label
+                    Text="Dispositivo"
+                    FontSize="Caption"
+                    FontAttributes="Bold" />
+                <Label Text="{Binding Path=Sender.Friend.Terminal.Name}" />                
+                <Label
+                    Margin="0,4,0,0"
+                    Text="Actualización de Datos"
+                    FontSize="Caption"
+                    FontAttributes="Bold" />
+                <Label Text="{Binding Path=Sender.Friend.DataUpdatedAt, Converter={StaticResource DateTimeToInvarianCultureRelativeDateTimeStringConverter}}" />
                 <Button
+                    Margin="0,8,0,0"
                     HorizontalOptions="Center"
                     Text="Seleccionar"
                     Clicked="ApproveButton_Clicked" />
