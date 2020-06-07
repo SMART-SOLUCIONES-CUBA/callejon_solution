@@ -7,8 +7,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
     [Xamarin.Forms.Xaml.XamlCompilation(Xamarin.Forms.Xaml.XamlCompilationOptions.Compile)]
     public partial class DatabaseStatusPage : XFToolKit.Mvvm.Pages.ContentPage
     {
-        private const string SEND_SHARE_ACTION_CAPTION = "Enviar a los Amigos";
-        private const string RECEIVE_SHARE_ACTION_CAPTION = "Recibir de un Amigo";
+        private const string SEND_SHARE_ACTION_CAPTION = "Crear Grupo de Amigos";
+        private const string RECEIVE_SHARE_ACTION_CAPTION = "Unirse a Grupo de Amigos";
 
         public DatabaseStatusPage()
         {
