@@ -32,9 +32,13 @@
 
         public override void OnStopped()
         {
-            manager.ShutdownRequestCallbackAction.Invoke(true);
+            // TODO Restore lines if WifiManagerLocalOnlyHotspotCallback::OnStopped other android 9 diff versions
 
-            manager.Reservation = null;
+            //manager.ShutdownRequestCallbackAction?.Invoke(true);
+
+            //manager.Reservation?.Dispose();
+
+            //manager.Reservation = null;
         }
     }
 }

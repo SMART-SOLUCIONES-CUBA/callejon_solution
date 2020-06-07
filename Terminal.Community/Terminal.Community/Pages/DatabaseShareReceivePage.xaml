@@ -8,6 +8,7 @@
     xmlns:skiasharpformsviews="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
     xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
     xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Converters"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
     xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
     mc:Ignorable="d"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.DatabaseShareReceivePage"
@@ -18,6 +19,8 @@
         <ResourceDictionary>
             <converters:PageHeightToCuadrateSideSizeConverter x:Key="PageHeightToCuadrateSideSizeConverter" />
             <converters:FriendDataModelToImageSourceConverter x:Key="FriendDataModelToImageSourceConverter" />
+            <!--<sscxftoolkitpresentationconverters:NullToBooleanConverter x:Key="NullToBooleanConverter" />-->
+            <sscxftoolkitpresentationconverters:NotNullToBooleanConverter x:Key="NotNullToBooleanConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
@@ -62,6 +65,9 @@
                                 Grid.Column="{Binding Path=GridColumn}" Grid.Row="{Binding Path=GridRow}"
                                 Margin="1"
                                 RowSpacing="4">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="SenderCandidateTapGestureRecognizer_Tapped" />
+                                </Grid.GestureRecognizers>
                                 <Grid.RowDefinitions>
                                     <RowDefinition />
                                     <RowDefinition Height="Auto" />
@@ -82,6 +88,27 @@
                             </Grid>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
+                </Grid>
+                <Grid
+                    IsVisible="{Binding Path=Sender, Converter={StaticResource NotNullToBooleanConverter}}"
+                    HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <ic:CircleImage
+                        Grid.Row="0"
+                        Source="{Binding Path=Sender, Converter={StaticResource FriendDataModelToImageSourceConverter}}"
+                        HorizontalOptions="Center"
+                        BorderThickness="2"
+                        BorderColor="{StaticResource SecoundaryBrandColor}" />
+                    <Label
+                        Grid.Row="1"
+                        Margin="3,0"
+                        HorizontalTextAlignment="Center"
+                        LineBreakMode="TailTruncation"
+                        Text="{Binding Path=Sender.Terminal.Name}"
+                        FontSize="Micro" />
                 </Grid>
             </Grid>
         </Grid>

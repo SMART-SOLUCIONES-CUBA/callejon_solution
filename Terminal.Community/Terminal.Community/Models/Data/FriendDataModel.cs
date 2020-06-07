@@ -12,6 +12,8 @@
 
         public byte[] ImageData { get; set; }
 
+        public System.DateTime DataUpdatedAt { get; set; }
+
         public TerminalDataModel Terminal { get; set; }
     }
 }

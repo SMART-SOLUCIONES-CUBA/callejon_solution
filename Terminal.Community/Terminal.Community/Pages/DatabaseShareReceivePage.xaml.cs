@@ -9,7 +9,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
     {
         private const int CYCLE_TIME_MILLISECOUNDS = 1000;
 
-        private SkiaSharp.SKColor wavePropagationColor;
+        private readonly SkiaSharp.SKColor wavePropagationColor;
 
         private float wavePropagationReference;
 
@@ -88,6 +88,36 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             StopSenderSearch();
 
             this.NavigationPushPageAsync(new QRCodeScanPage(OnQrCodeScanSuccess));
+        }
+
+        private void SenderCandidateTapGestureRecognizer_Tapped(object sender, System.EventArgs e)
+        {
+            var model = (sender as Xamarin.Forms.BindableObject).BindingContext as Models.View.DataShareSenderViewModel;
+
+            Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new Popup.DataShareCandidateSenderDetailPopupPage(model, SenderCandidateApprovedCallback));
+        }
+
+        private void SenderCandidateApprovedCallback(Models.View.DataShareSenderViewModel target)
+        {
+            var pageContext = BindingContext as Models.Page.DatabaseShareRecivePageModel;
+
+            if (target == null)
+            {
+                DisplayAlert("Aviso", "Este Amigo ya no está disponible para compartir sus datos.", "Aceptar");
+
+                pageContext.Candidates.Remove(target);
+
+                return;
+            }
+
+            cancellationTokenSource?.Cancel();
+
+            cancellationTokenSource = null;
+
+            pageContext.Candidates.Clear();
+
+            pageContext.Sender = target.Friend;
+            pageContext.BusyProgressMessage = "Esperando envío del paquete de actualización ...";
         }
 
         private void OnQrCodeScanSuccess(string result)
@@ -186,22 +216,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                     broadcastMessage = null;
 
-                    var hostFriendDataModel = Factories.FriendDataModelFactory.CreateSelf();
-
-                    var receiverPresenceMessageContent = System.Text.Encoding.UTF8.GetBytes(string.Format("{0}{1}", Newtonsoft.Json.JsonConvert.SerializeObject(hostFriendDataModel), Providers.ConstantsProvider.SOCKET_END_OF_MESSAGE_MARK));
-
-                    var senderIPAddress = (referenceableBroadcastingEndPoint as System.Net.IPEndPoint).Address;
-
-                    var receiverPresenceNotifyEndPoint = new System.Net.IPEndPoint(senderIPAddress, Providers.ConstantsProvider.DATASHARE_RECEIVER_PRESENCE_UNICAST_SOCKET_PORT);
-
-                    var receiverPresenceNotifySocket = new System.Net.Sockets.Socket(senderIPAddress.AddressFamily, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.Tcp);
-
-                    receiverPresenceNotifySocket.Connect(receiverPresenceNotifyEndPoint);
-
-                    receiverPresenceNotifySocket.Send(receiverPresenceMessageContent);
-
-                    receiverPresenceNotifySocket.Close();
-
                     Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                     {
                         var pageContext = BindingContext as Models.Page.DatabaseShareRecivePageModel;
@@ -210,6 +224,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                         {
                             pageContext.Candidates.Add(new Models.View.DataShareSenderViewModel
                             {
+                                IPAddress = (referenceableBroadcastingEndPoint as System.Net.IPEndPoint).Address,
                                 Friend = senderFriend,
                                 GridColumn = targetGridCoordenate.Column,
                                 GridRow = targetGridCoordenate.Row
@@ -296,9 +311,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
             cancellationTokenSource = new System.Threading.CancellationTokenSource();
 
-            System.Threading.Tasks.Task.Run(() =>
+            System.Threading.Tasks.Task.Run(async () =>
             {
-                ListenForSenderBroadcastAsync(cancellationTokenSource.Token).ContinueWith(OnListenForSenderBroadcastCallback);
+                await ListenForSenderBroadcastAsync(cancellationTokenSource.Token).ContinueWith(OnListenForSenderBroadcastCallback);
             });
         }
 

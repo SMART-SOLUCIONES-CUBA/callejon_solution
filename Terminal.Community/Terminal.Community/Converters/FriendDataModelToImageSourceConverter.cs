@@ -4,6 +4,8 @@
     {
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
+            if (value == null) return null;
+
             var model = value as Models.Data.FriendDataModel;
 
             if (model.ImageData == null)

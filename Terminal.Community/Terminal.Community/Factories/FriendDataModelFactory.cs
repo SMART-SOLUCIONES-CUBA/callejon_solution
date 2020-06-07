@@ -12,6 +12,7 @@
                 FirstName = userProfile.FirstName,
                 LastName = userProfile.LastName,
                 IsMale = userProfile.IsMale,
+                DataUpdatedAt = Helpers.DataSyncronizationHelper.Instance.SyncronizationDate,
                 Terminal = new Models.Data.TerminalDataModel
                 {
                     Manufacturer = Xamarin.Essentials.DeviceInfo.Manufacturer,

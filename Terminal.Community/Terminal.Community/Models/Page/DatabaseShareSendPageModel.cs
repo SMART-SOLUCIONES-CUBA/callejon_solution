@@ -4,8 +4,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Models.Page
 {
     public class DatabaseShareSendPageModel : XFToolKit.Mvvm.Models.Page.BasePageModel
     {
-        private string busyProgressMessageDetail;
-        private int busyProgressDetailMessage;
+        private int bundleSendProgress;
         private WiFiHostpotDetailViewModel wiFiHostpotDetail;
 
         public DatabaseShareSendPageModel()
@@ -17,9 +16,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Models.Page
 
         public ProfileViewModel Profile { get; set; }
 
-        public string BusyProgressMessageDetail { get => busyProgressMessageDetail; set => SetProperty(ref busyProgressMessageDetail, value); }
-
-        public int BusyProgressDetailMessage { get => busyProgressDetailMessage; set => SetProperty(ref busyProgressDetailMessage, value); }
+        public int BundleSendProgress { get => bundleSendProgress; set => SetProperty(ref bundleSendProgress, value); }
         
         public WiFiHostpotDetailViewModel WiFiHostpotDetail { get => wiFiHostpotDetail; set => SetProperty(ref wiFiHostpotDetail, value); }
     }

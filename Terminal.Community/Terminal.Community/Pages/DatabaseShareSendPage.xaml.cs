@@ -12,130 +12,187 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
         {
             InitializeComponent();
 
-            IsEnabled = false;
-
-            BindingContext = new Models.Page.DatabaseShareSendPageModel
-            {
-                IsBusy = true,
-                BusyProgressMessage = "Configurando",
-                BusyProgressMessageDetail = "Preparando punto de acceso WiFi para tus amigos ..."
-            };
+            BindingContext = new Models.Page.DatabaseShareSendPageModel();
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
-            if (!IsEnabled)
-            {
-                IsEnabled = true;
+            StartSenderPostulationIfValidNetworkAccess(Xamarin.Essentials.Connectivity.NetworkAccess);
 
-                Xamarin.Forms.DependencyService.Get<Managers.Facade.IWiFiHostpotManagerFacade>().RegisterCallbackActions(OnCheckPermissionsCallback, OnStartupRequestCallback, OnShutdownRequestCallback);
+            if ((BindingContext as Models.Page.DatabaseShareSendPageModel).WiFiHostpotDetail != null) return;
 
-                Xamarin.Forms.DependencyService.Get<Managers.Facade.IWiFiHostpotManagerFacade>().CheckPermissions();
-            }
+            Xamarin.Essentials.Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
         }
 
         protected override bool OnBackButtonPressed()
         {
-            OnClosing();
+            HandleCloseRequest();
 
             return true;
         }
 
         private void CloseButton_Clicked(object sender, System.EventArgs eventArgs)
         {
-            OnClosing();
+            HandleCloseRequest();
         }
 
-        private void OnClosing()
+        private void CreateWiFiHostpotButton_Clicked(object sender, System.EventArgs args)
         {
+            Xamarin.Essentials.Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
+
+            this.NavigationPushModalPageAsync(new WiFiHostpotHandlingPage((BindingContext as Models.Page.DatabaseShareSendPageModel).WiFiHostpotDetail, OnWiFiHostpotHandlingCallback));
+        }
+
+        private void Connectivity_ConnectivityChanged(object sender, Xamarin.Essentials.ConnectivityChangedEventArgs args)
+        {
+            cancellationTokenSource?.Cancel();
+
+            cancellationTokenSource = null;
+
+            StartSenderPostulationIfValidNetworkAccess(args.NetworkAccess);
+        }
+
+        private void HandleCloseRequest()
+        {
+            var pageContext = BindingContext as Models.Page.DatabaseShareSendPageModel;
+
+            if (!pageContext.IsBusy)
+            {
+                this.NavigationPopModalPageAsync();
+
+                return;
+            }
+
             DisplayAlert("Confirmar", "Está seguro que desea terminar el proceso Compartir con Amigos?", "Terminar", "Cancelar").ContinueWith(task =>
             {
                 if (!task.Result) return;
 
-                Xamarin.Forms.Device.BeginInvokeOnMainThread(async () =>
-                {
-                    var pageModel = BindingContext as Models.Page.DatabaseShareSendPageModel;
+                cancellationTokenSource?.Cancel();
 
-                    pageModel.IsBusy = true;
-                    pageModel.BusyProgressMessage = "Terminado";
-                    pageModel.BusyProgressMessageDetail = "Apagando punto de acceso WiFi ...";
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                {
+                    Xamarin.Essentials.Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
+
+                    pageContext.IsBusy = false;
+                    pageContext.BusyProgressMessage = null;                    
+
+                    pageContext.Presences.Clear();
+
+                    if (pageContext.WiFiHostpotDetail == null)
+                    {
+                        this.NavigationPopModalPageAsync();
+
+                        return;
+                    }
 
                     IsEnabled = false;
 
-                    Xamarin.Forms.DependencyService.Get<Managers.Facade.IWiFiHostpotManagerFacade>().RequestShutdown();
+                    this.NavigationPushModalPageAsync(new WiFiHostpotHandlingPage(pageContext.WiFiHostpotDetail, OnWiFiHostpotHandlingCallback));
 
-                    cancellationTokenSource.Cancel();
-
-                    await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(2));
-
-                    await this.NavigationPopModalPageAsync();
+                    pageContext.WiFiHostpotDetail = null;
                 });                
             });
         }
 
-        private void OnCheckPermissionsCallback(bool success)
+        private void OnWiFiHostpotHandlingCallback(Models.View.WiFiHostpotDetailViewModel model)
         {
-            if (success)
-            {
-                Xamarin.Forms.DependencyService.Get<Managers.Facade.IWiFiHostpotManagerFacade>().RequestStartup();
-            }
-            else
-            {
-                DisplayAlert("Aviso", "Permisos requeridos", "Aceptar");
+            var pageContext = BindingContext as Models.Page.DatabaseShareSendPageModel;
 
-                this.NavigationPopModalPageAsync();
+            if (model == null)
+            {
+                if (pageContext.WiFiHostpotDetail != null)
+                {
+                    // TODO Show toastlike alert for succesfull WiFiHostpot terminste!
+                }
+                else
+                {
+                    if (IsEnabled)
+                    {
+                        DisplayAlert("", "No fue posible apagar adecuadamente el punto de acceso WiFi creado para tus amigos.", "Aceptar");
+                    }
+
+                    this.NavigationPopModalPageAsync();
+
+                    return;
+                }
             }
+
+            pageContext.WiFiHostpotDetail = model;
         }
 
-        private void OnStartupRequestCallback(Models.View.WiFiHostpotDetailViewModel model)
+        private void StartSenderPostulationIfValidNetworkAccess(Xamarin.Essentials.NetworkAccess networkAccess)
         {
-            System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(2)).ContinueWith(async task =>
+            var pageContext = BindingContext as Models.Page.DatabaseShareSendPageModel;
+
+            if (pageContext.WiFiHostpotDetail == null && networkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
-                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                cancellationTokenSource?.Cancel();
+
+                cancellationTokenSource = null;
+
+                pageContext.IsBusy = false;
+
+                pageContext.WiFiHostpotDetail = null;
+
+                pageContext.Presences.Clear();
+
+                return;
+            }
+
+            cancellationTokenSource = new System.Threading.CancellationTokenSource();
+
+            var hostFriendDataModel = Factories.FriendDataModelFactory.CreateSelf();
+
+            var networkInformation = Providers.NetworkInformationProvider.GetNetworkInformation();
+
+            EnableSendDataAnimation();
+
+            System.Threading.Tasks.Parallel.Invoke(() =>
+            {
+                try
                 {
-                    var pageModel = BindingContext as Models.Page.DatabaseShareSendPageModel;
-
-                    pageModel.WiFiHostpotDetail = model;
-                    pageModel.IsBusy = false;
-                });
-
-                await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(3));
-
-                cancellationTokenSource = new System.Threading.CancellationTokenSource();
-
-                var hostFriendDataModel = Factories.FriendDataModelFactory.CreateSelf();
-
-                var networkInformation = Providers.NetworkInformationProvider.GetNetworkInformation();
-
-                System.Threading.Tasks.Parallel.Invoke(() =>
+                    ListenForReceiverPresenceReport(networkInformation);
+                }
+                catch
                 {
-                    try
-                    {
-                        ListenForReceiverPresenceReport(networkInformation);
-                    }
-                    catch
-                    {
-                        // TODO Handle throwed exception!!
-                        cancellationTokenSource.Cancel();
-                    }
-                }, async () =>
+                    // TODO Handle throwed exception!!
+                    cancellationTokenSource?.Cancel();
+                }
+            }, async () =>
+            {
+                await BroadcastSenderPresenceAsync(hostFriendDataModel, networkInformation, cancellationTokenSource.Token).ContinueWith(broadcastSenderPresenceTask =>
                 {
-                    await BroadcastSenderPresenceAsync(hostFriendDataModel, networkInformation, cancellationTokenSource.Token).ContinueWith(broadcastSenderPresenceTask =>
-                    {
-                        if (broadcastSenderPresenceTask.Exception != null) return;
+                    if (broadcastSenderPresenceTask.Exception == null) return;
 
-                        // TODO Handle throwed exception!!
-                        cancellationTokenSource.Cancel();
-                    });
+                    // TODO Handle throwed exception!!
+                    cancellationTokenSource?.Cancel();
                 });
             });
         }
 
-        private void OnShutdownRequestCallback(bool success)
+        private void EnableSendDataAnimation()
         {
-            if (!IsEnabled) return;
+            //stopwatch.Start();
+
+            (BindingContext as Models.Page.DatabaseShareSendPageModel).IsBusy = true;
+
+            //Xamarin.Forms.Device.StartTimer(System.TimeSpan.FromMilliseconds(33), () =>
+            //{
+            //    wavePropagationReference = (float)(stopwatch.Elapsed.TotalMilliseconds % CYCLE_TIME_MILLISECOUNDS / CYCLE_TIME_MILLISECOUNDS);
+
+            //    CanvasView.InvalidateSurface();
+
+            //    var @continue = (BindingContext as Models.Page.DatabaseShareRecivePageModel).IsBusy;
+
+            //    if (!@continue)
+            //    {
+            //        stopwatch.Stop();
+            //    }
+
+            //    return @continue;
+            //});
         }
 
         #region Presensing Handling
@@ -161,9 +218,19 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                 listener.BeginAccept(new System.AsyncCallback(OnReceiverPresenceReportListenerAcceptCallback), listener);
             };
 
-            var receiverPresenceReadingContext = new ReceiverPresenceReadingContext(listener.EndAccept(result));
+            try
+            {
+                var receiverPresenceReadingContext = new ReceiverPresenceReadingContext(listener.EndAccept(result));
 
-            receiverPresenceReadingContext.Socket.BeginReceive(receiverPresenceReadingContext.Buffer, 0, Providers.ConstantsProvider.SOCKET_BUFFER_LENGHT, System.Net.Sockets.SocketFlags.None, new System.AsyncCallback(OnReceiverPresenceReadCallback), receiverPresenceReadingContext);
+                receiverPresenceReadingContext.Socket.BeginReceive(receiverPresenceReadingContext.Buffer, 0, Providers.ConstantsProvider.SOCKET_BUFFER_LENGHT, System.Net.Sockets.SocketFlags.None, new System.AsyncCallback(OnReceiverPresenceReadCallback), receiverPresenceReadingContext);
+            }
+            catch
+            {
+                if (!cancellationTokenSource.IsCancellationRequested)
+                {
+                    // TODO Handle workflow state!
+                }
+            }
         }
 
         private void OnReceiverPresenceReadCallback(System.IAsyncResult result)

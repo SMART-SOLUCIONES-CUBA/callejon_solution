@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<sscxftoolkitmvvmpages:ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
+    xmlns:renderedviews="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Rendered"
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.WiFiHostpotHandlingPage">
+    <ContentPage.Content>
+        <Grid>
+            <StackLayout Margin="20" VerticalOptions="Center">
+                <renderedviews:CircularProgressBar
+                    HorizontalOptions="Center"
+                    WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventPersonalityImageSize}"
+                    HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventPersonalityImageSize}"
+                    Indeterminate="True" />
+                <Label
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding BusyProgressMessage}" />
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</sscxftoolkitmvvmpages:ContentPage>

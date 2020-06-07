@@ -17,6 +17,14 @@
             this.shutdownRequestCallbackAction = shutdownRequestCallbackAction;
         }
 
+        public void ReleaseCallbackActions()
+        {
+            checkPermissionsCallbackAction = null;
+
+            startupRequestCallbackAction = null;
+            shutdownRequestCallbackAction = null;
+        }
+
         public void CheckPermissions()
         {
             checkPermissionsCallbackAction.Invoke(true);

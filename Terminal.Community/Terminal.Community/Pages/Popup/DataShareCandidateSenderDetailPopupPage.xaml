@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<popup:PopupPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.Popup.DataShareCandidateSenderDetailPopupPage">
+    <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Margin="20">
+        <Frame>
+            <StackLayout>
+                <Label Text="{Binding Path=Friend.Terminal.Name}" />
+                <Button
+                    HorizontalOptions="Center"
+                    Text="Seleccionar"
+                    Clicked="ApproveButton_Clicked" />
+            </StackLayout>
+        </Frame>
+    </StackLayout>
+</popup:PopupPage>

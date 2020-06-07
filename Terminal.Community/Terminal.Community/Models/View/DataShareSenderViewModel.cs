@@ -2,6 +2,8 @@
 {
     public class DataShareSenderViewModel
     {
+        public System.Net.IPAddress IPAddress { get; set; }
+
         public Data.FriendDataModel Friend { get; set; }
 
         public int GridColumn { get; set; }

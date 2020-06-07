@@ -20,6 +20,14 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Droid.Managers
             ShutdownRequestCallbackAction = shutdownRequestCallbackAction;
         }
 
+        public void ReleaseCallbackActions()
+        {
+            checkPermissionsCallbackAction = null;
+
+            StartupRequestCallbackAction = null;
+            ShutdownRequestCallbackAction = null;
+        }
+
         public void CheckPermissions()
         {
             if (Xamarin.Essentials.Platform.CurrentActivity.CheckSelfPermission(Android.Manifest.Permission.AccessFineLocation) == Android.Content.PM.Permission.Granted)
@@ -44,6 +52,16 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Droid.Managers
         public void RequestShutdown()
         {
             Reservation.Close();
+
+            // TODO Retire lines if WifiManagerLocalOnlyHotspotCallback::OnStopped other android 9 diff versions
+
+            Reservation.Dispose();
+
+            Reservation = null;
+
+            ShutdownRequestCallbackAction.Invoke(true);
+
+            ShutdownRequestCallbackAction = null;
         }
     }
 }
