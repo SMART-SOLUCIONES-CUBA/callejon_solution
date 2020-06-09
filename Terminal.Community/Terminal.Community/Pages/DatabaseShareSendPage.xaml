@@ -27,6 +27,14 @@
             <sscxftoolkitpresentationconverters:BoolToBoolNegationConverter x:Key="BoolToBoolNegationConverter" />
             <sscxftoolkitpresentationconverters:FactorConverter x:Key="FactorConverter" />
             <sscxftoolkitpresentationconverters:FractionConverter x:Key="FractionConverter" />
+            <sscxftoolkitpresentationconverters:BoolToStringConverter
+                x:Key="ConnectivityStatusBoolToGlyphStringConverter"
+                TrueString="&#xf003;"
+                FalseString="&#xfbbd;" />
+            <sscxftoolkitpresentationconverters:BoolToStringConverter
+                x:Key="ConnectivityStatusBoolToMessageStringConverter"
+                TrueString="Su dispositivo esta en una red soportada. Puede alternativamente crear un punto de acceso WiFi."
+                FalseString="Su dispositivo no esta conectado a una red. Debe unirse a una o crear un punto de acceso WiFi." />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
@@ -91,6 +99,16 @@
                     <StackLayout
                         VerticalOptions="Center"
                         IsVisible="{Binding Path=WiFiHostpotDetail, Converter={StaticResource NullToBooleanConverter}}">
+                        <Label
+                            HorizontalOptions="Center"
+                            Text="{Binding Path=IsBusy, Converter={StaticResource ConnectivityStatusBoolToGlyphStringConverter}}"
+                            FontFamily="Material Design Icons"
+                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileOverviewImageSize}" />
+                        <Label
+                            Margin="20"
+                            HorizontalTextAlignment="Center"
+                            Text="{Binding Path=IsBusy, Converter={StaticResource ConnectivityStatusBoolToMessageStringConverter}}"
+                            TextColor="Black" />
                         <Button
                             HorizontalOptions="Center"
                             Text="Crear Punto de Acceso WiFi"
