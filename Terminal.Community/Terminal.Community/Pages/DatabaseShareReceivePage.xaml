@@ -17,7 +17,7 @@
     Title="Recibir de un Amigo">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <converters:PageHeightToCuadrateSideSizeConverter x:Key="PageHeightToCuadrateSideSizeConverter" />
+            <converters:PageHeightToCuadrateSideSizeConverter x:Key="PageHeightToCuadrateSideSizeConverter" Page="{x:Reference Page}" />
             <converters:FriendDataModelToImageSourceConverter x:Key="FriendDataModelToImageSourceConverter" />
             <!--<sscxftoolkitpresentationconverters:NullToBooleanConverter x:Key="NullToBooleanConverter" />-->
             <sscxftoolkitpresentationconverters:NotNullToBooleanConverter x:Key="NotNullToBooleanConverter" />
@@ -37,8 +37,8 @@
         <Grid>
             <Grid
                 HorizontalOptions="Center" VerticalOptions="Center"
-                WidthRequest="{Binding Source={x:Reference Page}, Path=Height, Converter={StaticResource PageHeightToCuadrateSideSizeConverter}, ConverterParameter={x:Reference Page}}"
-                HeightRequest="{Binding Source={x:Reference Page}, Path=Height, Converter={StaticResource PageHeightToCuadrateSideSizeConverter}, ConverterParameter={x:Reference Page}}">
+                WidthRequest="{Binding Source={x:Reference Page}, Path=Height, Converter={StaticResource PageHeightToCuadrateSideSizeConverter}}"
+                HeightRequest="{Binding Source={x:Reference Page}, Path=Height, Converter={StaticResource PageHeightToCuadrateSideSizeConverter}}">
                 <skiasharpformsviews:SKCanvasView
                     x:Name="CanvasView"
                     IsVisible="{Binding Path=IsBusy}"

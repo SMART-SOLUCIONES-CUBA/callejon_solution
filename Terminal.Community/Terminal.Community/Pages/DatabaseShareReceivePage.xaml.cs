@@ -13,7 +13,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
         private float wavePropagationReference;
 
-        private System.Collections.Generic.Queue<GridCoordinate> availableGridCoordenates;
+        private System.Collections.Generic.Queue<Models.GridCoordinateModel> availableGridCoordenates;
 
         private System.Diagnostics.Stopwatch stopwatch;
 
@@ -23,7 +23,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
         {
             InitializeComponent();
 
-            availableGridCoordenates = new System.Collections.Generic.Queue<GridCoordinate>();
+            availableGridCoordenates = new System.Collections.Generic.Queue<Models.GridCoordinateModel>();
 
             var secoundaryBrandColor = (Xamarin.Forms.Color)Xamarin.Forms.Application.Current.Resources["SecoundaryBrandColor"];
 
@@ -276,7 +276,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                 return;
             }
 
-            var candiateGridCoordinates = new System.Collections.Generic.List<GridCoordinate>();
+            var candiateGridCoordinates = new System.Collections.Generic.List<Models.GridCoordinateModel>();
 
             for (int column = 0; column < 5; column++)
             {
@@ -288,7 +288,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                     if (column == 4 && row == 0) continue;
                     if (column == 4 && row == 4) continue;
 
-                    candiateGridCoordinates.Add(new GridCoordinate { Column = column, Row = row });
+                    candiateGridCoordinates.Add(new Models.GridCoordinateModel { Column = column, Row = row });
                 }
             }
 
@@ -355,12 +355,5 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
         //{
         //    (BindingContext as Models.Page.DatabaseShareRecivePageModel).IsBusy = false;
         //}
-
-        private class GridCoordinate
-        {
-            internal int Column { get; set; }
-
-            internal int Row { get; set; }
-        }
     }
 }

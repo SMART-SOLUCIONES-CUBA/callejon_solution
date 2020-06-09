@@ -9,10 +9,10 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Models.Page
 
         public DatabaseShareSendPageModel()
         {
-            Presences = new System.Collections.ObjectModel.ObservableCollection<Data.PresenceDataModel>();
+            Presences = new System.Collections.ObjectModel.ObservableCollection<DataShareReceiverPresenceViewModel>();
         }
 
-        public System.Collections.ObjectModel.ObservableCollection<Data.PresenceDataModel> Presences { get; set; }
+        public System.Collections.ObjectModel.ObservableCollection<DataShareReceiverPresenceViewModel> Presences { get; set; }
 
         public ProfileViewModel Profile { get; set; }
 

@@ -1,5 +1,6 @@
 ﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.Popup
 {
+    [Xamarin.Forms.Xaml.XamlCompilation(Xamarin.Forms.Xaml.XamlCompilationOptions.Compile)]
     public partial class DataShareCandidateSenderDetailPopupPage : Rg.Plugins.Popup.Pages.PopupPage
     {
         private System.Action<Models.View.DataShareSenderViewModel> approvedCallbackAction;

@@ -1,4 +1,6 @@
-﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Factories
+﻿using SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Extensions;
+
+namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Factories
 {
     public static class FriendDataModelFactory
     {
@@ -16,7 +18,7 @@
                 Terminal = new Models.Data.TerminalDataModel
                 {
                     Manufacturer = Xamarin.Essentials.DeviceInfo.Manufacturer,
-                    Model = Xamarin.Essentials.DeviceInfo.Model,
+                    Model = Xamarin.Essentials.DeviceInfo.Model.ToFriendlyDeviceModel(),
                     Name = Xamarin.Essentials.DeviceInfo.Name,
                     Platform = Xamarin.Essentials.DeviceInfo.Platform.ToString(),
                     VersionString = Xamarin.Essentials.DeviceInfo.VersionString

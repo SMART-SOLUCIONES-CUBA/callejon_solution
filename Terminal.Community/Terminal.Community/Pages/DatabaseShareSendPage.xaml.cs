@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using SkiaSharp.Views.Forms;
 using SmartSolucionesCuba.XFToolKit.Mvvm.Extensions;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
@@ -6,13 +7,34 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
     [Xamarin.Forms.Xaml.XamlCompilation(Xamarin.Forms.Xaml.XamlCompilationOptions.Compile)]
     public partial class DatabaseShareSendPage : XFToolKit.Mvvm.Pages.ContentPage
     {
+        private const int CYCLE_TIME_MILLISECOUNDS = 1000;
+
+        private readonly SkiaSharp.SKColor wavePropagationColor;
+
+        private float wavePropagationReference;
+
+        private System.Collections.Generic.Queue<Models.GridCoordinateModel> availableGridCoordenates;
+
+        private System.Diagnostics.Stopwatch stopwatch;
+
         private System.Threading.CancellationTokenSource cancellationTokenSource;
 
         public DatabaseShareSendPage()
         {
             InitializeComponent();
 
-            BindingContext = new Models.Page.DatabaseShareSendPageModel();
+            availableGridCoordenates = new System.Collections.Generic.Queue<Models.GridCoordinateModel>();
+
+            var secoundaryBrandColor = (Xamarin.Forms.Color)Xamarin.Forms.Application.Current.Resources["SecoundaryBrandColor"];
+
+            wavePropagationColor = secoundaryBrandColor.WithLuminosity(0.85).ToSKColor();
+
+            stopwatch = new System.Diagnostics.Stopwatch();
+
+            BindingContext = new Models.Page.DatabaseShareSendPageModel
+            {
+                Profile = Managers.ProfileManager.Instance.GetCurrentProfile()
+            };
         }
 
         protected override void OnAppearing()
@@ -31,6 +53,44 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             HandleCloseRequest();
 
             return true;
+        }
+
+        private void SKCanvasView_PaintSurface(object sender, SKPaintSurfaceEventArgs args)
+        {
+            args.Surface.Canvas.Clear();
+
+            var center = Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Orientation == Xamarin.Essentials.DisplayOrientation.Portrait ?
+                new SkiaSharp.SKPoint(args.Info.Width / 2, 0) :
+                new SkiaSharp.SKPoint(0, args.Info.Height / 2);
+
+            float baseRadius = System.Math.Min(args.Info.Width, args.Info.Height) / 12;
+
+            var colorRed = wavePropagationColor.Red;
+            var colorGreen = wavePropagationColor.Green;
+            var colorBlue = wavePropagationColor.Blue;
+
+            for (int circle = 0; circle < 5; circle++)
+            {
+                float radius = baseRadius * (circle + wavePropagationReference);
+
+                var paint = new SkiaSharp.SKPaint
+                {
+                    Style = SkiaSharp.SKPaintStyle.Stroke
+                };
+
+                paint.StrokeWidth = baseRadius / 2 * (circle == 0 ? wavePropagationReference : 1);
+
+                paint.Color = new SkiaSharp.SKColor(colorRed, colorGreen, colorBlue, (byte)(255 * (circle == 4 ? (1 - wavePropagationReference) : 1)));
+
+                args.Surface.Canvas.DrawCircle(center.X, center.Y, radius, paint);
+            }
+        }
+
+        private void PresenceTapGestureRecognizer_Tapped(object sender, System.EventArgs e)
+        {
+            var model = (sender as Xamarin.Forms.BindableObject).BindingContext as Models.View.DataShareReceiverPresenceViewModel;
+
+            Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new Popup.DataShareReceiverPresenceDetailPopupPage(model));
         }
 
         private void CloseButton_Clicked(object sender, System.EventArgs eventArgs)
@@ -147,6 +207,37 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
             var networkInformation = Providers.NetworkInformationProvider.GetNetworkInformation();
 
+            var candiateGridCoordinates = new System.Collections.Generic.List<Models.GridCoordinateModel>();
+
+            for (int column = 0; column < 5; column++)
+            {
+                for (int row = 0; row < 3; row++)
+                {
+                    if (column == 1 && row == 1) continue;
+                    if (column == 0 && row == 0) continue;
+                    if (column == 0 && row == 2) continue;
+                    if (column == 2 && row == 0) continue;
+                    if (column == 2 && row == 2) continue;
+
+                    candiateGridCoordinates.Add(new Models.GridCoordinateModel { Column = column, Row = row });
+                }
+            }
+
+            availableGridCoordenates.Clear();
+
+            while (candiateGridCoordinates.Count > 0)
+            {
+                var randomizer = new System.Random();
+
+                var targetIndex = randomizer.Next(0, candiateGridCoordinates.Count);
+
+                var target = candiateGridCoordinates.ElementAt(targetIndex);
+
+                availableGridCoordenates.Enqueue(target);
+
+                candiateGridCoordinates.RemoveAt(targetIndex);
+            }
+
             EnableSendDataAnimation();
 
             System.Threading.Tasks.Parallel.Invoke(() =>
@@ -174,25 +265,25 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
         private void EnableSendDataAnimation()
         {
-            //stopwatch.Start();
+            stopwatch.Start();
 
             (BindingContext as Models.Page.DatabaseShareSendPageModel).IsBusy = true;
 
-            //Xamarin.Forms.Device.StartTimer(System.TimeSpan.FromMilliseconds(33), () =>
-            //{
-            //    wavePropagationReference = (float)(stopwatch.Elapsed.TotalMilliseconds % CYCLE_TIME_MILLISECOUNDS / CYCLE_TIME_MILLISECOUNDS);
+            Xamarin.Forms.Device.StartTimer(System.TimeSpan.FromMilliseconds(33), () =>
+            {
+                wavePropagationReference = (float)(stopwatch.Elapsed.TotalMilliseconds % CYCLE_TIME_MILLISECOUNDS / CYCLE_TIME_MILLISECOUNDS);
 
-            //    CanvasView.InvalidateSurface();
+                CanvasView.InvalidateSurface();
 
-            //    var @continue = (BindingContext as Models.Page.DatabaseShareRecivePageModel).IsBusy;
+                var @continue = (BindingContext as Models.Page.DatabaseShareSendPageModel).IsBusy;
 
-            //    if (!@continue)
-            //    {
-            //        stopwatch.Stop();
-            //    }
+                if (!@continue)
+                {
+                    stopwatch.Stop();
+                }
 
-            //    return @continue;
-            //});
+                return @continue;
+            });
         }
 
         #region Presensing Handling
@@ -243,11 +334,13 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
             context.Message += System.Text.Encoding.UTF8.GetString(context.Buffer, 0, readLength);
 
-            if (context.Message.IndexOf(Providers.ConstantsProvider.SOCKET_END_OF_MESSAGE_MARK) > -1)
+            if (availableGridCoordenates.Count > 0 && context.Message.IndexOf(Providers.ConstantsProvider.SOCKET_END_OF_MESSAGE_MARK) > -1)
             {
                 var jsonData = context.Message.Substring(0, context.Message.Length - Providers.ConstantsProvider.SOCKET_END_OF_MESSAGE_MARK.Length);
 
                 var senderFriend = Newtonsoft.Json.JsonConvert.DeserializeObject<Models.Data.FriendDataModel>(jsonData);
+
+                var targetGridCoordenate = availableGridCoordenates.Dequeue();
 
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
@@ -255,10 +348,12 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                     if (!pageContext.Presences.Any(item => item.Friend.Id == senderFriend.Id))
                     {
-                        pageContext.Presences.Add(new Models.Data.PresenceDataModel
+                        pageContext.Presences.Add(new Models.View.DataShareReceiverPresenceViewModel
                         {
                             At = System.DateTime.Now,
-                            Friend = senderFriend
+                            Friend = senderFriend,
+                            GridColumn = targetGridCoordenate.Column,
+                            GridRow = targetGridCoordenate.Row
                         });
                     }
                 });

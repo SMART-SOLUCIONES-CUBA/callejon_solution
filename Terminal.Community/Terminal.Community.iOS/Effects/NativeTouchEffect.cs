@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 
 [assembly: Xamarin.Forms.ResolutionGroupName("XFToolKit")]
-[assembly: Xamarin.Forms.ExportEffect(typeof(SmartSolucionesCuba.CPCC.PCM.Terminal.Community.iOS.Effects.TouchEffect), "TouchEffect")]
+[assembly: Xamarin.Forms.ExportEffect(typeof(SmartSolucionesCuba.CPCC.PCM.Terminal.Community.iOS.Effects.NativeTouchEffect), "TouchEffect")]
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.iOS.Effects
 {
-    public class TouchEffect : Xamarin.Forms.Platform.iOS.PlatformEffect
+    public class NativeTouchEffect : Xamarin.Forms.Platform.iOS.PlatformEffect
     {
         UIKit.UIView view;
         Recognizers.TouchRecognizer touchRecognizer;

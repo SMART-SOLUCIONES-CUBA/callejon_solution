@@ -3,8 +3,9 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"    
     xmlns:ic="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+    xmlns:skiasharpformsviews="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
     xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Converters"
     xmlns:ffilviewforms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
@@ -12,44 +13,67 @@
     xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
     mc:Ignorable="d"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.DatabaseShareSendPage"
+    x:Name="Page"
     Title="Compartir con Amigos">
     <ContentPage.Resources>
         <ResourceDictionary>
+            <converters:PageHeightToCuadrateSideSizeConverter x:Key="PageHeightToCuadrateSideSizeConverter" Page="{x:Reference Page}" />
             <converters:FlextLayoutToResponsiveItemWidthConverter x:Key="FlextLayoutToResponsiveItemWidth" ItemMinWidth="280" ItemHorizontalMargin="0" />
             <converters:WiFiHostpotDetailToQRImageSourceConverter x:Key="WiFiHostpotDetailToQRImageSourceConverter" />
+            <converters:ProfileViewModelToImageSourceConverter x:Key="ProfileViewModelToImageSourceConverter" />
+            <converters:FriendDataModelToImageSourceConverter x:Key="FriendDataModelToImageSourceConverter" />
             <sscxftoolkitpresentationconverters:NotNullToBooleanConverter x:Key="NotNullToBooleanConverter" />
+            <sscxftoolkitpresentationconverters:NullToBooleanConverter x:Key="NullToBooleanConverter" />
             <sscxftoolkitpresentationconverters:BoolToBoolNegationConverter x:Key="BoolToBoolNegationConverter" />
             <sscxftoolkitpresentationconverters:FactorConverter x:Key="FactorConverter" />
+            <sscxftoolkitpresentationconverters:FractionConverter x:Key="FractionConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
-        <Grid>
-            <StackLayout>
-                <Button 
-                    HorizontalOptions="End"
-                    BackgroundColor="Transparent"
-                    Padding="0"
-                    WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize, Converter={StaticResource FactorConverter}, ConverterParameter=2}"
-                    HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize, Converter={StaticResource FactorConverter}, ConverterParameter=2}"
-                    Text="&#xf5ad;"
-                    TextColor="Accent"
-                    FontFamily="Material Design Icons"
-                    FontSize="Large"
-                    Clicked="CloseButton_Clicked" />
+        <Grid RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" RowSpacing="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
                 <Label 
-                    Grid.Row="0"
+                    Grid.Column="1" Grid.Row="0"
+                    Margin="20"
                     HorizontalTextAlignment="Center"
                     Text="Compartir Datos"
                     TextColor="Accent"
                     FontSize="Large" />
-                <StackLayout>
+                <Button 
+                    Grid.Column="2" Grid.Row="0"
+                    HorizontalOptions="End" VerticalOptions="Start"
+                    BackgroundColor="Transparent"
+                    Margin="10" Padding="0"
+                    WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize, Converter={StaticResource FactorConverter}, ConverterParameter=2}"
+                    HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize, Converter={StaticResource FactorConverter}, ConverterParameter=2}"
+                    Text="&#xf5ad;"
+                    TextColor="{StaticResource PrimaryBrandColor}"
+                    FontFamily="Material Design Icons"
+                    FontSize="Large"
+                    Clicked="CloseButton_Clicked" />
+                <Grid Grid.ColumnSpan="3" Grid.Row="1">
                     <StackLayout 
                         IsVisible="{Binding Path=WiFiHostpotDetail, Converter={StaticResource NotNullToBooleanConverter}}"
-                        HorizontalOptions="Center"
-                        HeightRequest="320"
+                        HorizontalOptions="Center" VerticalOptions="Center"
+                        HeightRequest="280"
                         Padding="20">                    
                         <ffilviewforms:CachedImage 
-                            Source="{Binding Path=WiFiHostpotDetail, Converter={StaticResource WiFiHostpotDetailToQRImageSourceConverter}, ConverterParameter=320}"
+                            Source="{Binding Path=WiFiHostpotDetail, Converter={StaticResource WiFiHostpotDetailToQRImageSourceConverter}, ConverterParameter=280}"
                             CacheType="None" />
                         <Label 
                             HorizontalTextAlignment="Center"
@@ -64,56 +88,110 @@
                             </Label.FormattedText>
                         </Label>
                     </StackLayout>
-                    <Button Text="Crear Grupo" Clicked="CreateWiFiHostpotButton_Clicked" />
-                    <StackLayout>
-                        <Label Text="Amigos" FontAttributes="Bold" />
-                        <ScrollView
-                            Margin="0,0,0,8">
-                            <FlexLayout
-                                x:Name="Wrapper"
-                                Wrap="Wrap"
-                                BindableLayout.ItemsSource="{Binding Path=Presences}">
-                                <BindableLayout.EmptyView>
-                                    <StackLayout IsVisible="{Binding IsBusy}">
-                                        <ActivityIndicator
-                                            HorizontalOptions="Center"
-                                            IsRunning="True"
-                                            Color="DimGray" />
-                                        <Label
-                                            HorizontalOptions="Center"
-                                            Text="Esperando amigos ..."
-                                            TextColor="DimGray" />
-                                    </StackLayout>                                   
-                                </BindableLayout.EmptyView>
-                                <BindableLayout.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackLayout
-                                            WidthRequest="{Binding Source={x:Reference Wrapper}, Path=Width, Converter={StaticResource FlextLayoutToResponsiveItemWidth}}">
-                                            <ic:CircleImage
-                                                HorizontalOptions="Center"
-                                                BorderThickness="2"
-                                                BorderColor="{StaticResource SecoundaryBrandColor}"
-                                                WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventPersonalityOverviewImageSize}"
-                                                HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventPersonalityOverviewImageSize}"/>
-                                            <Label HorizontalTextAlignment="Center">
-                                                <Label.FormattedText>
-                                                    <FormattedString>
-                                                        <FormattedString.Spans>
-                                                            <Span Text="{Binding Path=Friend.Name}" />
-                                                            <Span Text=" " />
-                                                            <Span Text="{Binding Path=Friend.LastName}" />
-                                                        </FormattedString.Spans>
-                                                    </FormattedString>
-                                                </Label.FormattedText>
-                                            </Label>
-                                        </StackLayout>
-                                    </DataTemplate>
-                                </BindableLayout.ItemTemplate>
-                            </FlexLayout>
-                        </ScrollView>
+                    <StackLayout
+                        VerticalOptions="Center"
+                        IsVisible="{Binding Path=WiFiHostpotDetail, Converter={StaticResource NullToBooleanConverter}}">
+                        <Button
+                            HorizontalOptions="Center"
+                            Text="Crear Punto de Acceso WiFi"
+                            Clicked="CreateWiFiHostpotButton_Clicked" />
                     </StackLayout>
-                </StackLayout>
-            </StackLayout>   
+                </Grid>
+            </Grid>
+            <BoxView
+                Grid.Row="1"
+                HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileOverviewImageSize, Converter={StaticResource FractionConverter}, ConverterParameter=2}" />
+            <BoxView
+                Grid.Row="2"
+                BackgroundColor="#EEEEEE"
+                HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileOverviewImageSize, Converter={StaticResource FractionConverter}, ConverterParameter=2}" />
+            <BoxView
+                BackgroundColor="#EEEEEE"
+                Grid.Row="3" />
+            <skiasharpformsviews:SKCanvasView
+                x:Name="CanvasView"
+                Grid.Row="2" Grid.RowSpan="2"
+                IsVisible="{Binding Path=IsBusy}"
+                PaintSurface="SKCanvasView_PaintSurface"/>
+            <BoxView
+                Grid.Row="2"
+                VerticalOptions="Start"
+                BackgroundColor="LightGray"
+                HeightRequest="1" />
+            <Grid
+                Grid.Row="1" Grid.RowSpan="2">
+                <ic:CircleImage
+                    HorizontalOptions="Center"
+                    Source="{Binding Path=Profile, Converter={StaticResource ProfileViewModelToImageSourceConverter}, Mode=OneWay}"
+                    BorderThickness="2"
+                    BorderColor="{StaticResource SecoundaryBrandColor}"
+                    HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileOverviewImageSize}"
+                    WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileOverviewImageSize}" />
+            </Grid>
+            <Grid Grid.Row="3">
+                <Grid
+                    HorizontalOptions="Center" VerticalOptions="Start"
+                    BindableLayout.ItemsSource="{Binding Path=Presences}"                    
+                    WidthRequest="{Binding Source={x:Reference Page}, Path=Height, Converter={StaticResource PageHeightToCuadrateSideSizeConverter}}"
+                    HeightRequest="{Binding Source={x:Reference Page}, Path=Height, Converter={StaticResource PageHeightToCuadrateSideSizeConverter}, ConverterParameter=0.6}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <BindableLayout.EmptyView>
+                        <StackLayout
+                            Grid.ColumnSpan="5" Grid.RowSpan="3"
+                            IsVisible="{Binding IsBusy}"
+                            VerticalOptions="Center">
+                            <ActivityIndicator
+                                HorizontalOptions="Center"
+                                IsRunning="True"
+                                Color="DimGray" />
+                            <Label
+                                HorizontalOptions="Center"
+                                Text="Esperando amigos ..."
+                                TextColor="DimGray" />
+                        </StackLayout>                                   
+                    </BindableLayout.EmptyView>
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Grid
+                                Grid.Column="{Binding Path=GridColumn}" Grid.Row="{Binding Path=GridRow}"
+                                Margin="1"
+                                RowSpacing="4">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="PresenceTapGestureRecognizer_Tapped" />
+                                </Grid.GestureRecognizers>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <ic:CircleImage
+                                    Grid.Row="0"
+                                    Source="{Binding Path=Friend, Converter={StaticResource FriendDataModelToImageSourceConverter}}"
+                                    HorizontalOptions="Center"
+                                    BorderThickness="2"
+                                    BorderColor="{StaticResource SecoundaryBrandColor}" />
+                                <Label
+                                    Grid.Row="1"
+                                    Margin="3,0"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="TailTruncation"
+                                    Text="{Binding Path=Friend.Terminal.Name}"
+                                    FontSize="Micro" />
+                            </Grid>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </Grid>
+            </Grid>          
         </Grid>
     </ContentPage.Content>
 </sscxftoolkitmvvmpages:ContentPage>

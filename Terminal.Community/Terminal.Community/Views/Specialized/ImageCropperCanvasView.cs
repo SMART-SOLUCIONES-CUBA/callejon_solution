@@ -9,6 +9,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
         const int CORNER = 50;      // pixel length of cropper corner
         const int RADIUS = 100;     // pixel radius of touch hit-test
 
+        private bool isTranslating;
+
         SKBitmap bitmap;
         CroppingRectangle croppingRect;
         SKMatrix inverseBitmapMatrix;
@@ -89,18 +91,22 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
 
             // Calculate rectangle for displaying bitmap 
             float scale = System.Math.Min((float)info.Width / bitmap.Width, (float)info.Height / bitmap.Height);
+
             float x = (info.Width - scale * bitmap.Width) / 2;
             float y = (info.Height - scale * bitmap.Height) / 2;
-            SKRect bitmapRect = new SKRect(x, y, x + scale * bitmap.Width, y + scale * bitmap.Height);
+
+            var bitmapRect = new SKRect(x, y, x + scale * bitmap.Width, y + scale * bitmap.Height);
+
             canvas.DrawBitmap(bitmap, bitmapRect);
 
             // Calculate a matrix transform for displaying the cropping rectangle
-            SKMatrix bitmapScaleMatrix = SKMatrix.MakeIdentity();
+            var bitmapScaleMatrix = SKMatrix.MakeIdentity();
 
             bitmapScaleMatrix.SetScaleTranslate(scale, scale, x, y);
 
             // Display rectangle
-            SKRect scaledCropRect = bitmapScaleMatrix.MapRect(croppingRect.Rect);
+            var scaledCropRect = bitmapScaleMatrix.MapRect(croppingRect.Rect);
+
             canvas.DrawRect(scaledCropRect, edgeStroke);
 
             // Display heavier corners
@@ -129,7 +135,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
             bitmapScaleMatrix.TryInvert(out inverseBitmapMatrix);
         }
 
-        void OnTouchEffectTouchAction(object sender, Delegates.TouchActionEventArgs args)
+        private void OnTouchEffectTouchAction(object sender, Delegates.TouchActionEventArgs args)
         {
             SKPoint pixelLocation = ConvertToPixel(args.Location);
             SKPoint bitmapLocation = inverseBitmapMatrix.MapPoint(pixelLocation);
@@ -145,7 +151,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
 
                     if (cornerIndex != -1 && !touchPoints.ContainsKey(args.Id))
                     {
-                        TouchPoint touchPoint = new TouchPoint
+                        var touchPoint = new TouchPoint
                         {
                             CornerIndex = cornerIndex,
                             Offset = bitmapLocation - croppingRect.Corners[cornerIndex]
@@ -153,16 +159,19 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
 
                         touchPoints.Add(args.Id, touchPoint);
                     }
+
                     break;
 
                 case Enumerations.TouchActionKind.Moved:
                     if (touchPoints.ContainsKey(args.Id))
                     {
-                        TouchPoint touchPoint = touchPoints[args.Id];
-                        croppingRect.MoveCorner(touchPoint.CornerIndex,
-                                                bitmapLocation - touchPoint.Offset);
+                        var touchPoint = touchPoints[args.Id];
+
+                        croppingRect.MoveCorner(touchPoint.CornerIndex, bitmapLocation - touchPoint.Offset);
+
                         InvalidateSurface();
                     }
+
                     break;
 
                 case Enumerations.TouchActionKind.Released:
@@ -171,14 +180,14 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
                     {
                         touchPoints.Remove(args.Id);
                     }
+
                     break;
             }
         }
 
-        SKPoint ConvertToPixel(Xamarin.Forms.Point pt)
+        private SKPoint ConvertToPixel(Xamarin.Forms.Point pt)
         {
-            return new SKPoint((float)(CanvasSize.Width * pt.X / Width),
-                                (float)(CanvasSize.Height * pt.Y / Height));
+            return new SKPoint((float)(CanvasSize.Width * pt.X / Width), (float)(CanvasSize.Height * pt.Y / Height));
         }
 
         private class CroppingRectangle
