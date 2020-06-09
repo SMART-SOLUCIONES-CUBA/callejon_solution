@@ -14,6 +14,8 @@
 
         public System.DateTime DataUpdatedAt { get; set; }
 
+        public long DataLength { get; set; }
+
         public TerminalDataModel Terminal { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using SmartSolucionesCuba.XFToolKit.Mvvm.Extensions;
+using SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Extensions;
 using SkiaSharp.Views.Forms;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
@@ -226,6 +227,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                             {
                                 IPAddress = (referenceableBroadcastingEndPoint as System.Net.IPEndPoint).Address,
                                 Friend = senderFriend,
+                                HumanizeDataBundleLength = senderFriend.DataLength.ToFileSizeString(),
                                 GridColumn = targetGridCoordenate.Column,
                                 GridRow = targetGridCoordenate.Row
                             });

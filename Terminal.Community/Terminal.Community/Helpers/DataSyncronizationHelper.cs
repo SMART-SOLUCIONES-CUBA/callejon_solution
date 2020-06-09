@@ -62,20 +62,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
             }
         }
 
-        public long GetDataBundleLenght()
+        public long GetDataBundleLength()
         {
-            var result = 0L;
-
-            var bundleFilePaths = GetBundleableDataFilePaths();
-
-            foreach (var path in bundleFilePaths)
-            {
-                var fileInfo = new System.IO.FileInfo(path);
-
-                result += fileInfo.Length;
-            }
-
-            return result;
+            return GetDataBundleContent().LongLength;
         }
 
         public byte[] GetDataBundleContent()

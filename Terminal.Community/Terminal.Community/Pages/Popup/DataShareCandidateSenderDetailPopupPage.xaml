@@ -41,11 +41,11 @@
                     <Label>
                         <Label.FormattedText>
                             <FormattedString>
-                                <Span Text="{Binding Path=Friend.Terminal.Name}" />
+                                <Span Text="{Binding Path=Sender.Friend.Terminal.Name}" />
                                 <Span Text=" (" />
-                                <Span Text="{Binding Path=Friend.Terminal.Manufacturer}" />
+                                <Span Text="{Binding Path=Sender.Friend.Terminal.Manufacturer}" />
                                 <Span Text=" " />
-                                <Span Text="{Binding Path=Friend.Terminal.Model}" />
+                                <Span Text="{Binding Path=Sender.Friend.Terminal.Model}" />
                                 <Span Text=")" />
                             </FormattedString>
                         </Label.FormattedText>
@@ -58,9 +58,9 @@
                     <Label>
                         <Label.FormattedText>
                             <FormattedString>
-                                <Span Text="{Binding Path=Friend.Terminal.Platform}" />
+                                <Span Text="{Binding Path=Sender.Friend.Terminal.Platform}" />
                                 <Span Text=" " />
-                                <Span Text="{Binding Path=Friend.Terminal.VersionString}" />
+                                <Span Text="{Binding Path=Sender.Friend.Terminal.VersionString}" />
                             </FormattedString>
                         </Label.FormattedText>
                     </Label>                
@@ -69,7 +69,16 @@
                         Text="Actualización de Datos"
                         FontSize="Caption"
                         FontAttributes="Bold" />
-                    <Label Text="{Binding Path=Sender.Friend.DataUpdatedAt, Converter={StaticResource DateTimeToInvarianCultureRelativeDateTimeStringConverter}}" />
+                    <Label>
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{Binding Path=Sender.Friend.DataUpdatedAt, Converter={StaticResource DateTimeToInvarianCultureRelativeDateTimeStringConverter}}" />
+                                <Span Text=" (" />
+                                <Span Text="{Binding Path=Sender.HumanizeDataBundleLength}" />
+                                <Span Text=")" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>                        
                     <Button
                         Margin="0,8,0,0"
                         HorizontalOptions="Center"

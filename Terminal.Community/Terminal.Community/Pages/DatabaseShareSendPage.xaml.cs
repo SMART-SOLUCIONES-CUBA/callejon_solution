@@ -205,6 +205,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
             var hostFriendDataModel = Factories.FriendDataModelFactory.CreateSelf();
 
+            hostFriendDataModel.DataLength = Helpers.DataSyncronizationHelper.Instance.GetDataBundleLength();
+
             var networkInformation = Providers.NetworkInformationProvider.GetNetworkInformation();
 
             var candiateGridCoordinates = new System.Collections.Generic.List<Models.GridCoordinateModel>();
