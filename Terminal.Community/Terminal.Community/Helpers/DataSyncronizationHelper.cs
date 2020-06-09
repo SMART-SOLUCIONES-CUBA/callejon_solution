@@ -62,6 +62,55 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
             }
         }
 
+        public long GetDataBundleLenght()
+        {
+            var result = 0L;
+
+            var bundleFilePaths = GetBundleableDataFilePaths();
+
+            foreach (var path in bundleFilePaths)
+            {
+                var fileInfo = new System.IO.FileInfo(path);
+
+                result += fileInfo.Length;
+            }
+
+            return result;
+        }
+
+        public byte[] GetDataBundleContent()
+        {
+            var bundleFilePaths = GetBundleableDataFilePaths();
+
+            if (bundleFilePaths.Count <= 0) throw new System.InvalidOperationException();
+
+            byte[] result;
+
+            using (var memoryStream = new System.IO.MemoryStream())
+            {
+                using (var zipArchive = new System.IO.Compression.ZipArchive(memoryStream, System.IO.Compression.ZipArchiveMode.Create, true))
+                {
+                    foreach (var path in bundleFilePaths)
+                    {
+                        byte[] fileToZipBytes = System.IO.File.ReadAllBytes(path);
+
+                        var zipFileEntry = zipArchive.CreateEntry(System.IO.Path.GetFileName(path));
+
+                        //add the file contents
+                        using (var zipEntryStream = zipFileEntry.Open())
+                        using (var zipFileBinary = new System.IO.BinaryWriter(zipEntryStream))
+                        {
+                            zipFileBinary.Write(fileToZipBytes);
+                        }
+                    }
+                }
+
+                result = memoryStream.ToArray();
+            }            
+
+            return result;
+        }
+
         public void SyncronizeDataFromCloud(System.Action<int, bool, string> reportProgressAction, System.Action<System.Threading.Tasks.Task<bool>> continueAction, bool force = false)
         {
             var protocol = "http";
@@ -623,6 +672,36 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
 
                 return true;
             }).ContinueWith(continueAction);
+        }
+
+        private System.Collections.Generic.List<string> GetBundleableDataFilePaths()
+        {
+            var result = new System.Collections.Generic.List<string>();
+
+            using (var dbContext = Providers.DdContextProvider.GetDbContext())
+            {
+                foreach (var image in dbContext.Images)
+                {
+                    var path = LocalFileStorageHelper.GetImageFilePath(image.Id);
+
+                    if (!System.IO.File.Exists(path)) continue;
+
+                    result.Add(LocalFileStorageHelper.GetImageFilePath(image.Id));
+                }
+            }
+
+            result.Add(LocalFileStorageHelper.GetDatabaseFilePath());
+
+            var userProfile = Managers.ProfileManager.Instance.GetCurrentProfile();
+
+            var userProfileImagePath = LocalFileStorageHelper.GetImageFilePath(userProfile.Id);
+
+            if (System.IO.File.Exists(userProfileImagePath))
+            {
+                result.Add(userProfileImagePath);
+            }
+
+            return result;
         }
     }
 }
