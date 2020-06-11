@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using SkiaSharp.Views.Forms;
+using SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Extensions;
 using SmartSolucionesCuba.XFToolKit.Mvvm.Extensions;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
@@ -105,6 +106,63 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             this.NavigationPushModalPageAsync(new WiFiHostpotHandlingPage((BindingContext as Models.Page.DatabaseShareSendPageModel).WiFiHostpotDetail, OnWiFiHostpotHandlingCallback));
         }
 
+        private void BroadcastDataBundleButton_Clicked(object sender, System.EventArgs args)
+        {
+            DisplayAlert("Confirmar", "Está seguro que desea comenzar en envío de su actualización de datos a los amigos unidos al grupo?", "Enviar", "Cancelar").ContinueWith(confirmationDialogTask =>
+            {
+                if (!confirmationDialogTask.Result) return;
+
+                cancellationTokenSource?.Cancel();
+
+                cancellationTokenSource = null;
+
+                var pageContext = BindingContext as Models.Page.DatabaseShareSendPageModel;
+
+                pageContext.BundleSendProgress = 0;
+                pageContext.BusyProgressMessage = "Enviando ...";
+                pageContext.IsSendingBundle = true;
+
+                System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(1)).ContinueWith(async delayTask =>
+                {
+                    var networkInformation = Providers.NetworkInformationProvider.GetNetworkInformation();
+
+                    cancellationTokenSource = new System.Threading.CancellationTokenSource();
+
+                    await BroadcastDataBundleAsync(networkInformation, cancellationTokenSource.Token).ContinueWith(broadcastDataBundleTask =>
+                    {
+                        Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                        {
+                            pageContext.IsSendingBundle = false;
+                            pageContext.BusyProgressMessage = null;
+
+                            if (broadcastDataBundleTask.Exception == null)
+                            {
+                                if (cancellationTokenSource.IsCancellationRequested)
+                                {
+                                    DisplayAlert("Aviso", "Envío de su actualización de datos a los amigos unidos al grupo cancelado con éxito.", "Aceptar");
+                                }
+                                else
+                                {
+                                    DisplayAlert("Aviso", "Envío de su actualización de datos a los amigos unidos al grupo completada con éxito.", "Aceptar");
+                                }
+                            }
+                            else
+                            {
+                                // TODO Handle throwed exception!!
+                                DisplayAlert("Aviso", string.Format("Error en el envío de su actualización de datos a los amigos unidos al grupo.{0}{0}Inténtelo nuevamente.", System.Environment.NewLine), "Aceptar");
+                            }
+
+                            cancellationTokenSource?.Cancel();
+
+                            cancellationTokenSource = null;
+
+                            HandleReceiverPresence();
+                        });
+                    });
+                });
+            });
+        }
+
         private void Connectivity_ConnectivityChanged(object sender, Xamarin.Essentials.ConnectivityChangedEventArgs args)
         {
             cancellationTokenSource?.Cancel();
@@ -201,14 +259,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                 return;
             }
 
-            cancellationTokenSource = new System.Threading.CancellationTokenSource();
-
-            var hostFriendDataModel = Factories.FriendDataModelFactory.CreateSelf();
-
-            hostFriendDataModel.DataLength = Helpers.DataSyncronizationHelper.Instance.GetDataBundleLength();
-
-            var networkInformation = Providers.NetworkInformationProvider.GetNetworkInformation();
-
             var candiateGridCoordinates = new System.Collections.Generic.List<Models.GridCoordinateModel>();
 
             for (int column = 0; column < 5; column++)
@@ -242,27 +292,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
             EnableSendDataAnimation();
 
-            System.Threading.Tasks.Parallel.Invoke(() =>
-            {
-                try
-                {
-                    ListenForReceiverPresenceReport(networkInformation);
-                }
-                catch
-                {
-                    // TODO Handle throwed exception!!
-                    cancellationTokenSource?.Cancel();
-                }
-            }, async () =>
-            {
-                await BroadcastSenderPresenceAsync(hostFriendDataModel, networkInformation, cancellationTokenSource.Token).ContinueWith(broadcastSenderPresenceTask =>
-                {
-                    if (broadcastSenderPresenceTask.Exception == null) return;
-
-                    // TODO Handle throwed exception!!
-                    cancellationTokenSource?.Cancel();
-                });
-            });
+            HandleReceiverPresence();
         }
 
         private void EnableSendDataAnimation()
@@ -287,6 +317,92 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                 return @continue;
             });
         }
+
+        private void HandleReceiverPresence()
+        {
+            cancellationTokenSource = new System.Threading.CancellationTokenSource();
+
+            var hostFriendDataModel = Factories.FriendDataModelFactory.CreateSelf();
+
+            hostFriendDataModel.DataLength = Helpers.DataSyncronizationHelper.Instance.GetDataBundleLength();
+
+            var networkInformation = Providers.NetworkInformationProvider.GetNetworkInformation();
+
+            System.Threading.Tasks.Parallel.Invoke(() =>
+            {
+                try
+                {
+                    ListenForReceiverPresenceReport(networkInformation);
+                }
+                catch
+                {
+                    // TODO Handle throwed exception!!
+                    cancellationTokenSource?.Cancel();
+                }
+            }, async () =>
+            {
+                await BroadcastSenderPresenceAsync(hostFriendDataModel, networkInformation, cancellationTokenSource.Token).ContinueWith(broadcastSenderPresenceTask =>
+                {
+                    if (broadcastSenderPresenceTask.Exception == null) return;
+
+                    // TODO Handle throwed exception!!
+                    cancellationTokenSource?.Cancel();
+                });
+            });
+        }
+
+        #region Data Bundle Share Handling
+
+        private async System.Threading.Tasks.Task BroadcastDataBundleAsync(Models.NetworkInformationModel networkInformation, System.Threading.CancellationToken cancellationToken)
+        {
+            var broadcastEndPoint = new System.Net.IPEndPoint(networkInformation.BroadcastIPAddress, Providers.ConstantsProvider.DATASHARE_BUNDLE_BROADCAST_SOCKET_PORT);
+
+            var broadcaster = new System.Net.Sockets.Socket(networkInformation.BroadcastIPAddress.AddressFamily, System.Net.Sockets.SocketType.Dgram, System.Net.Sockets.ProtocolType.Udp);
+
+            broadcaster.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.Broadcast, true);
+
+            var bundle = Helpers.DataSyncronizationHelper.Instance.GetDataBundleContent();
+
+            var byteToSendCount = bundle.LongLength;
+
+            var byteSentCount = 0L;
+
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                var broadcastMessageContentLength = byteToSendCount.ToSelfUnitarePercent();
+
+                var broadcastMessageContent = new byte[broadcastMessageContentLength];
+
+                var broadcastMessageContentIndex = 0;
+
+                for (long i = byteSentCount; i < broadcastMessageContentLength; i++)
+                {
+                    if(i >= byteToSendCount) break;
+
+                    broadcastMessageContent[broadcastMessageContentIndex++] = bundle[i];
+                }
+
+                broadcaster.SendTo(broadcastMessageContent, broadcastEndPoint);
+
+                byteSentCount += broadcastMessageContent.Length;
+
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                {
+                    var pageContext = BindingContext as Models.Page.DatabaseShareSendPageModel;
+
+                    pageContext.BundleSendProgress += 0.01;
+                    pageContext.BusyProgressMessage = string.Format("Enviando ({0}%) ...", System.Convert.ToInt32(pageContext.BundleSendProgress * 100));
+                });
+
+                await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromMilliseconds(250));
+
+                if (byteSentCount >= byteToSendCount) break;
+            }
+
+            broadcaster.Close();
+        }
+
+        #endregion
 
         #region Presensing Handling
 
@@ -357,6 +473,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                             GridColumn = targetGridCoordenate.Column,
                             GridRow = targetGridCoordenate.Row
                         });
+
+                        pageContext.HasFirendReceivers = true;
                     }
                 });
             }

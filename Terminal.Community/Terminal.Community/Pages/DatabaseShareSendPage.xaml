@@ -89,9 +89,11 @@
                             <Label.FormattedText>
                                 <FormattedString>
                                     <Span Text="Para que tus amigos se conecten deberán escanear este código QR o conectarse a la red WiFi " />
-                                    <Span Text="{Binding Path=WiFiHostpotDetail.SSID}" FontAttributes="Bold" TextColor="Accent" />
-                                    <Span Text=" con seguridad WPA Personal y la contraseña " />
-                                    <Span Text="{Binding Path=WiFiHostpotDetail.Password}" FontAttributes="Bold" TextColor="Accent" />
+                                    <Span Text="{Binding Path=WiFiHostpotDetail.SSID}" FontAttributes="Bold" TextColor="{StaticResource PrimaryBrandColor}" />
+                                    <Span Text=" con seguridad " />
+                                    <Span Text="WPA Personal " FontAttributes="Bold" TextColor="{StaticResource PrimaryBrandColor}" />
+                                    <Span Text=" y la contraseña " />
+                                    <Span Text="{Binding Path=WiFiHostpotDetail.Password}" FontAttributes="Bold" TextColor="{StaticResource PrimaryBrandColor}" />
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -146,70 +148,90 @@
                     HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileOverviewImageSize}"
                     WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileOverviewImageSize}" />
             </Grid>
-            <Grid Grid.Row="3">
-                <Grid
-                    HorizontalOptions="Center" VerticalOptions="Start"
-                    BindableLayout.ItemsSource="{Binding Path=Presences}"                    
-                    WidthRequest="{Binding Source={x:Reference Page}, Path=Height, Converter={StaticResource PageHeightToCuadrateSideSizeConverter}}"
-                    HeightRequest="{Binding Source={x:Reference Page}, Path=Height, Converter={StaticResource PageHeightToCuadrateSideSizeConverter}, ConverterParameter=0.6}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <BindableLayout.EmptyView>
-                        <StackLayout
-                            Grid.ColumnSpan="5" Grid.RowSpan="3"
-                            IsVisible="{Binding IsBusy}"
-                            VerticalOptions="Center">
-                            <ActivityIndicator
+            <Grid
+                Grid.Row="3"
+                HorizontalOptions="Center" VerticalOptions="Start"
+                BindableLayout.ItemsSource="{Binding Path=Presences}"                    
+                WidthRequest="{Binding Source={x:Reference Page}, Path=Height, Converter={StaticResource PageHeightToCuadrateSideSizeConverter}}"
+                HeightRequest="{Binding Source={x:Reference Page}, Path=Height, Converter={StaticResource PageHeightToCuadrateSideSizeConverter}, ConverterParameter=0.6}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <BindableLayout.EmptyView>
+                    <StackLayout
+                        Grid.ColumnSpan="5" Grid.RowSpan="3"
+                        IsVisible="{Binding IsBusy}"
+                        VerticalOptions="Center">
+                        <ActivityIndicator
+                            HorizontalOptions="Center"
+                            IsRunning="True"
+                            Color="DimGray" />
+                        <Label
+                            HorizontalOptions="Center"
+                            Text="Esperando amigos ..."
+                            TextColor="DimGray" />
+                    </StackLayout>                                   
+                </BindableLayout.EmptyView>
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Grid
+                            Grid.Column="{Binding Path=GridColumn}" Grid.Row="{Binding Path=GridRow}"
+                            Margin="1"
+                            RowSpacing="4">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="PresenceTapGestureRecognizer_Tapped" />
+                            </Grid.GestureRecognizers>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <ic:CircleImage
+                                Grid.Row="0"
+                                Source="{Binding Path=Friend, Converter={StaticResource FriendDataModelToImageSourceConverter}}"
                                 HorizontalOptions="Center"
-                                IsRunning="True"
-                                Color="DimGray" />
+                                BorderThickness="2"
+                                BorderColor="{StaticResource SecoundaryBrandColor}" />
                             <Label
-                                HorizontalOptions="Center"
-                                Text="Esperando amigos ..."
-                                TextColor="DimGray" />
-                        </StackLayout>                                   
-                    </BindableLayout.EmptyView>
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate>
-                            <Grid
-                                Grid.Column="{Binding Path=GridColumn}" Grid.Row="{Binding Path=GridRow}"
-                                Margin="1"
-                                RowSpacing="4">
-                                <Grid.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="PresenceTapGestureRecognizer_Tapped" />
-                                </Grid.GestureRecognizers>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <ic:CircleImage
-                                    Grid.Row="0"
-                                    Source="{Binding Path=Friend, Converter={StaticResource FriendDataModelToImageSourceConverter}}"
-                                    HorizontalOptions="Center"
-                                    BorderThickness="2"
-                                    BorderColor="{StaticResource SecoundaryBrandColor}" />
-                                <Label
-                                    Grid.Row="1"
-                                    Margin="3,0"
-                                    HorizontalTextAlignment="Center"
-                                    LineBreakMode="TailTruncation"
-                                    Text="{Binding Path=Friend.Terminal.Name}"
-                                    FontSize="Micro" />
-                            </Grid>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </Grid>
-            </Grid>          
+                                Grid.Row="1"
+                                Margin="3,0"
+                                HorizontalTextAlignment="Center"
+                                LineBreakMode="TailTruncation"
+                                Text="{Binding Path=Friend.Terminal.Name}"
+                                FontSize="Micro" />
+                        </Grid>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </Grid>
+            <Grid
+                Grid.Row="3"
+                Margin="20"
+                VerticalOptions="End">
+                <StackLayout>
+                    <ProgressBar
+                        IsVisible="{Binding Path=IsSendingBundle}"
+                        ProgressColor="{StaticResource PrimaryBrandColor}"
+                        Progress="{Binding Path=BundleSendProgress}" />
+                    <Label
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Path=BusyProgressMessage}" />
+                </StackLayout>
+                <StackLayout IsVisible="{Binding Path=IsSendingBundle, Converter={StaticResource BoolToBoolNegationConverter}}">                    
+                    <Button
+                        HorizontalOptions="Center"
+                        IsEnabled="{Binding Path=HasFirendReceivers}"
+                        Text="Enviar"
+                        Clicked="BroadcastDataBundleButton_Clicked" />
+                </StackLayout>
+            </Grid>
         </Grid>
     </ContentPage.Content>
 </sscxftoolkitmvvmpages:ContentPage>

@@ -2,9 +2,19 @@
 {
     internal static class LongExtensions
     {
-        internal static string ToFileSizeString(this long value)
+        internal static int ToSelfUnitarePercent(this long target)
         {
-            decimal pivote = value;
+            double percent = target * 0.01;
+
+            var intPercent = System.Convert.ToInt32(percent);
+
+            return percent > intPercent ? intPercent + 1 : intPercent;
+        }
+
+        internal static string ToFileSizeString(this long target)
+        {
+            decimal pivote = target;
+
             var iterationCount = 0;
 
             while (pivote > 1024)
