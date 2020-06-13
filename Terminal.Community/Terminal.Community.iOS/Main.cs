@@ -1,4 +1,6 @@
-﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.iOS
+﻿[assembly: Xamarin.Forms.ResolutionGroupName("XFToolKit")]
+
+namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.iOS
 {
     public class Application
     {

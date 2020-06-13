@@ -70,20 +70,41 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             var colorGreen = wavePropagationColor.Green;
             var colorBlue = wavePropagationColor.Blue;
 
-            for (int circle = 0; circle < 5; circle++)
+            if ((BindingContext as Models.Page.DatabaseShareSendPageModel).IsSendingBundle)
             {
-                float radius = baseRadius * (circle + wavePropagationReference);
-
-                var paint = new SkiaSharp.SKPaint
+                for (int circle = 0; circle < 5; circle++)
                 {
-                    Style = SkiaSharp.SKPaintStyle.Stroke
-                };
+                    float radius = baseRadius * (circle + wavePropagationReference);
 
-                paint.StrokeWidth = baseRadius / 2 * (circle == 0 ? wavePropagationReference : 1);
+                    var paint = new SkiaSharp.SKPaint
+                    {
+                        Style = SkiaSharp.SKPaintStyle.Stroke
+                    };
 
-                paint.Color = new SkiaSharp.SKColor(colorRed, colorGreen, colorBlue, (byte)(255 * (circle == 4 ? (1 - wavePropagationReference) : 1)));
+                    paint.StrokeWidth = baseRadius / 2 * (circle == 0 ? wavePropagationReference : 1);
 
-                args.Surface.Canvas.DrawCircle(center.X, center.Y, radius, paint);
+                    paint.Color = new SkiaSharp.SKColor(colorRed, colorGreen, colorBlue, (byte)(255 * (circle == 4 ? (1 - wavePropagationReference) : 1)));
+
+                    args.Surface.Canvas.DrawCircle(center.X, center.Y, radius, paint);
+                }
+            }
+            else
+            {
+                for (int circle = 5; circle >= 0; circle--)
+                {
+                    float radius = baseRadius * (circle - wavePropagationReference);
+
+                    var paint = new SkiaSharp.SKPaint
+                    {
+                        Style = SkiaSharp.SKPaintStyle.Stroke
+                    };
+
+                    paint.StrokeWidth = baseRadius / 2 * (circle == 0 ? wavePropagationReference : 1);
+
+                    paint.Color = new SkiaSharp.SKColor(colorRed, colorGreen, colorBlue, (byte)(255 * (circle == 5 ? wavePropagationReference : 1)));
+
+                    args.Surface.Canvas.DrawCircle(center.X, center.Y, radius, paint);
+                }
             }
         }
 

@@ -58,20 +58,43 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             var colorGreen = wavePropagationColor.Green;
             var colorBlue = wavePropagationColor.Blue;
 
-            for (int circle = 0; circle < 5; circle++)
+            var pageContext = BindingContext as Models.Page.DatabaseShareRecivePageModel;
+
+            if (pageContext.IsReceivingBundle)
             {
-                float radius = baseRadius * (circle + wavePropagationReference);
-
-                var paint = new SkiaSharp.SKPaint
+                for (int circle = 5; circle >= 0; circle--)
                 {
-                    Style = SkiaSharp.SKPaintStyle.Stroke
-                };
+                    float radius = baseRadius * (circle - wavePropagationReference);
 
-                paint.StrokeWidth = baseRadius / 2 * (circle == 0 ? wavePropagationReference : 1);
+                    var paint = new SkiaSharp.SKPaint
+                    {
+                        Style = SkiaSharp.SKPaintStyle.Stroke
+                    };
 
-                paint.Color = new SkiaSharp.SKColor(colorRed, colorGreen, colorBlue, (byte)(255 * (circle == 4 ? (1 - wavePropagationReference) : 1)));
+                    paint.StrokeWidth = baseRadius / 2 * (circle == 0 ? wavePropagationReference : 1);
 
-                args.Surface.Canvas.DrawCircle(center.X, center.Y, radius, paint);
+                    paint.Color = new SkiaSharp.SKColor(colorRed, colorGreen, colorBlue, (byte)(255 * (circle == 5 ? wavePropagationReference : 1)));
+
+                    args.Surface.Canvas.DrawCircle(center.X, center.Y, radius, paint);
+                }
+            }
+            else
+            {
+                for (int circle = 0; circle < 5; circle++)
+                {
+                    float radius = baseRadius * (circle + wavePropagationReference);
+
+                    var paint = new SkiaSharp.SKPaint
+                    {
+                        Style = SkiaSharp.SKPaintStyle.Stroke
+                    };
+
+                    paint.StrokeWidth = baseRadius / 2 * (circle == 0 ? wavePropagationReference : 1);
+
+                    paint.Color = new SkiaSharp.SKColor(colorRed, colorGreen, colorBlue, (byte)(255 * (circle == 4 ? (1 - wavePropagationReference) : 1)));
+
+                    args.Surface.Canvas.DrawCircle(center.X, center.Y, radius, paint);
+                }
             }
         }
 
@@ -84,11 +107,28 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             StartSenderSearchIfValidNetworkAccess(args.NetworkAccess);
         }
 
-        private void QrCodeScanToolbarItem_Clicked(object sender, System.EventArgs args)
+        private void QrCodeScanButton_Clicked(object sender, System.EventArgs args)
         {
             StopSenderSearch();
 
-            this.NavigationPushPageAsync(new QRCodeScanPage(OnQrCodeScanSuccess));
+            this.NavigationPushModalPageAsync(new QRCodeScanPage(OnQrCodeScanSuccess));
+        }
+
+        private void CloseButton_Clicked(object sender, System.EventArgs args)
+        {
+            DisplayAlert("Confirmar", "Está seguro que desea terminar el proceso Compartir con Amigos?", "Terminar", "Cancelar").ContinueWith(task =>
+            {
+                if (!task.Result) return;
+
+                Xamarin.Essentials.Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
+
+                cancellationTokenSource?.Cancel();
+
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                {
+                    this.NavigationPopModalPageAsync();
+                });
+            });
         }
 
         private void SenderCandidateTapGestureRecognizer_Tapped(object sender, System.EventArgs e)
@@ -115,10 +155,20 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
             cancellationTokenSource = null;
 
-            pageContext.Candidates.Clear();
+            IsEnabled = false;
 
-            pageContext.Sender = target.Friend;
-            pageContext.BusyProgressMessage = "Esperando envío del paquete de actualización ...";
+            System.Threading.Tasks.Task.Delay(System.TimeSpan.FromMilliseconds(500)).ContinueWith(_ =>
+            {
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                {
+                    pageContext.Sender = target.Friend;
+                    pageContext.BusyProgressMessage = "Esperando envío del paquete de actualización ...";
+
+                    pageContext.Candidates.Clear();
+
+                    IsEnabled = true;
+                });
+            });
         }
 
         private void OnQrCodeScanSuccess(string result)
@@ -136,14 +186,27 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                 {
                     if (wifiAccessManager.HasBuilinConfirmation)
                     {
+                        IsEnabled = false;
+
+                        (BindingContext as Models.Page.DatabaseShareRecivePageModel).BusyProgressMessage = string.Format("Conectando a la red WiFi '{0}' ...", ssid);
+
                         wifiAccessManager.RegisterCallbackActions(OnWiFiAccessCallback);
 
                         wifiAccessManager.Connect(ssid, password);
                     }
                     else
                     {
-                        DisplayAlert("Confirmar", string.Format("Está seguro que desea conectarse a la red WiFi '{0}'", ssid), "Aceptar", "Cancelar").ContinueWith(task =>
+                        DisplayAlert("Confirmar", string.Format("Está seguro que desea conectarse a la red WiFi '{0}'?", ssid), "Aceptar", "Cancelar").ContinueWith(task =>
                         {
+                            if (!task.Result) return;
+
+                            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                            {
+                                IsEnabled = false;
+
+                                (BindingContext as Models.Page.DatabaseShareRecivePageModel).BusyProgressMessage = string.Format("Conectando a la red WiFi '{0}' ...", ssid);
+                            });
+
                             wifiAccessManager.RegisterCallbackActions(OnWiFiAccessCallback);
 
                             wifiAccessManager.Connect(ssid, password);
@@ -171,10 +234,16 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                 DisplayAlert("Aviso", "Este dispositivo ya esta conectado a la red WiFi especificada.", "Aceptar");
 
                 StartSenderSearchIfValidNetworkAccess(Xamarin.Essentials.Connectivity.NetworkAccess);
+
+                IsEnabled = true;
             }
             else if (errorCode > 0)
             {
                 DisplayAlert("Aviso", "No fue posible conectarse a la red WiFi especificada.", "Aceptar");
+
+                IsEnabled = true;
+
+                (BindingContext as Models.Page.DatabaseShareRecivePageModel).BusyProgressMessage = null;
             }
         }
 
@@ -221,7 +290,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                     {
                         var pageContext = BindingContext as Models.Page.DatabaseShareRecivePageModel;
 
-                        if (!pageContext.Candidates.Any(item => item.Friend.Id == senderFriend.Id))
+                        if (pageContext!= null && pageContext.Sender == null && !pageContext.Candidates.Any(item => item.Friend.Id == senderFriend.Id))
                         {
                             pageContext.Candidates.Add(new Models.View.DataShareSenderViewModel
                             {
@@ -272,6 +341,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                 cancellationTokenSource = null;
 
                 pageContext.IsBusy = false;
+                pageContext.BusyProgressMessage = null;
                 pageContext.Sender = null;
                 pageContext.Candidates.Clear();
 
@@ -309,7 +379,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                 candiateGridCoordinates.RemoveAt(targetIndex);
             }
 
+            pageContext.BusyProgressMessage = "Buscando grupos de amigos ...";
+
             EnableReciveDataAnimation();
+
+            IsEnabled = true;
 
             cancellationTokenSource = new System.Threading.CancellationTokenSource();
 
@@ -342,7 +416,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                 CanvasView.InvalidateSurface();
 
-                var @continue = (BindingContext as Models.Page.DatabaseShareRecivePageModel).IsBusy;
+                var @continue = BindingContext != null && (BindingContext as Models.Page.DatabaseShareRecivePageModel).IsBusy;
 
                 if (!@continue)
                 {
@@ -352,10 +426,5 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                 return @continue;
             });
         }
-
-        //private void DisableReviveDataAnimation()
-        //{
-        //    (BindingContext as Models.Page.DatabaseShareRecivePageModel).IsBusy = false;
-        //}
     }
 }

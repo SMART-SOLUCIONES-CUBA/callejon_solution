@@ -81,6 +81,7 @@
     <Compile Include="Effects\NativeTouchEffect.cs" />
     <Compile Include="Recognizers\TouchRecognizer.cs" />
     <Compile Include="Managers\WiFiAccessManager.cs" />
+    <Compile Include="Effects\NativeLabelShadowEffect.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />

@@ -50,7 +50,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                 break;
 
                             case RECEIVE_SHARE_ACTION_CAPTION:
-                                this.NavigationPushPageAsync(new DatabaseShareReceivePage());
+                                this.NavigationPushModalPageAsync(new DatabaseShareReceivePage());
 
                                 break;
                         }
@@ -62,7 +62,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             }
             else
             {
-                this.NavigationPushPageAsync(new DatabaseShareReceivePage());
+                this.NavigationPushModalPageAsync(new DatabaseShareReceivePage());
             }
         }
 

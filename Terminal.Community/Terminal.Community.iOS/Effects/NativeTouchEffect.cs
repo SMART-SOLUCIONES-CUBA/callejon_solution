@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 
-[assembly: Xamarin.Forms.ResolutionGroupName("XFToolKit")]
 [assembly: Xamarin.Forms.ExportEffect(typeof(SmartSolucionesCuba.CPCC.PCM.Terminal.Community.iOS.Effects.NativeTouchEffect), "TouchEffect")]
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.iOS.Effects

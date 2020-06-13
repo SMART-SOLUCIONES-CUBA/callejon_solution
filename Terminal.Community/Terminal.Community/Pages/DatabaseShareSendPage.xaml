@@ -57,24 +57,32 @@
                 </Grid.RowDefinitions>
                 <Label 
                     Grid.Column="1" Grid.Row="0"
-                    Margin="20"
+                    Margin="20,20,20,10"
                     HorizontalTextAlignment="Center"
                     Text="Compartir Datos"
-                    TextColor="Accent"
+                    TextColor="{StaticResource PrimaryBrandColor}"
                     FontSize="Large" />
                 <Button 
                     Grid.Column="2" Grid.Row="0"
+                    Padding="0"
                     HorizontalOptions="End" VerticalOptions="Start"
                     BackgroundColor="Transparent"
-                    Margin="10" Padding="0"
                     WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize, Converter={StaticResource FactorConverter}, ConverterParameter=2}"
                     HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize, Converter={StaticResource FactorConverter}, ConverterParameter=2}"
                     Text="&#xf5ad;"
                     TextColor="{StaticResource PrimaryBrandColor}"
                     FontFamily="Material Design Icons"
                     FontSize="Large"
-                    Clicked="CloseButton_Clicked" />
-                <Grid Grid.ColumnSpan="3" Grid.Row="1">
+                    Clicked="CloseButton_Clicked">
+                    <Button.Margin>
+                        <OnPlatform x:TypeArguments="Thickness" Default="10">
+                            <On Platform="iOS" Value="10,0,10,10" />
+                        </OnPlatform>
+                    </Button.Margin>
+                </Button>
+                <Grid
+                    Grid.ColumnSpan="3" Grid.Row="1"
+                    Padding="0,0,0,10">
                     <StackLayout 
                         IsVisible="{Binding Path=WiFiHostpotDetail, Converter={StaticResource NotNullToBooleanConverter}}"
                         HorizontalOptions="Center" VerticalOptions="Center"

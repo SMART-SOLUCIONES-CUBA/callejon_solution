@@ -10,38 +10,72 @@
     xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Converters"
     xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
     xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
+    xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
     mc:Ignorable="d"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.DatabaseShareReceivePage"
     x:Name="Page"
-    NavigationPage.BackButtonTitle="Atrás"
-    Title="Recibir de un Amigo">
+    ios:Page.UseSafeArea="True"
+    NavigationPage.BackButtonTitle="Atrás">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:PageHeightToCuadrateSideSizeConverter x:Key="PageHeightToCuadrateSideSizeConverter" Page="{x:Reference Page}" />
             <converters:FriendDataModelToImageSourceConverter x:Key="FriendDataModelToImageSourceConverter" />
-            <!--<sscxftoolkitpresentationconverters:NullToBooleanConverter x:Key="NullToBooleanConverter" />-->
+            <sscxftoolkitpresentationconverters:BoolToBoolNegationConverter x:Key="BoolToBoolNegationConverter" />
             <sscxftoolkitpresentationconverters:NotNullToBooleanConverter x:Key="NotNullToBooleanConverter" />
+            <sscxftoolkitpresentationconverters:FactorConverter x:Key="FactorConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
-    <ContentPage.ToolbarItems>
-        <ToolbarItem
-            Text="Código QR"
-            Order="Primary"
-            Clicked="QrCodeScanToolbarItem_Clicked">
-            <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="Material Design Icons" Glyph="&#xf433;" />
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>
-    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Label 
+                Grid.Column="1" Grid.Row="0"
+                Margin="20,20,20,10"
+                HorizontalTextAlignment="Center"
+                Text="Recibir Datos"
+                TextColor="{StaticResource PrimaryBrandColor}"
+                FontSize="Large">
+                <Label.FontSize>
+                    <OnPlatform x:TypeArguments="x:Double">
+                        <On Platform="iOS" Value="30" />
+                    </OnPlatform>
+                </Label.FontSize>
+            </Label>
+            <Button 
+                Grid.Column="2" Grid.Row="0"
+                HorizontalOptions="End" VerticalOptions="Start"
+                BackgroundColor="Transparent"
+                Padding="0"
+                WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize, Converter={StaticResource FactorConverter}, ConverterParameter=2}"
+                HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize, Converter={StaticResource FactorConverter}, ConverterParameter=2}"
+                Text="&#xf5ad;"
+                TextColor="{StaticResource PrimaryBrandColor}"
+                FontFamily="Material Design Icons"
+                FontSize="Large"
+                Clicked="CloseButton_Clicked">
+                <Button.Margin>
+                    <OnPlatform x:TypeArguments="Thickness" Default="10">
+                        <On Platform="iOS" Value="10,5,10,10" />
+                    </OnPlatform>
+                </Button.Margin>
+            </Button>
             <Grid
+                Grid.ColumnSpan="3" Grid.Row="1"
+                Margin="0,0,0,30"
+                IsVisible="{Binding Path=IsBusy}"
                 HorizontalOptions="Center" VerticalOptions="Center"
                 WidthRequest="{Binding Source={x:Reference Page}, Path=Height, Converter={StaticResource PageHeightToCuadrateSideSizeConverter}}"
                 HeightRequest="{Binding Source={x:Reference Page}, Path=Height, Converter={StaticResource PageHeightToCuadrateSideSizeConverter}}">
                 <skiasharpformsviews:SKCanvasView
                     x:Name="CanvasView"
-                    IsVisible="{Binding Path=IsBusy}"
                     PaintSurface="SKCanvasView_PaintSurface"/>
                 <Grid
                     BindableLayout.ItemsSource="{Binding Path=Candidates}">
@@ -111,6 +145,50 @@
                         FontSize="Micro" />
                 </Grid>
             </Grid>
+            <StackLayout
+                Margin="0,0,0,30"
+                Grid.ColumnSpan="3" Grid.Row="1"
+                VerticalOptions="Center"
+                IsVisible="{Binding Path=IsBusy, Converter={StaticResource BoolToBoolNegationConverter}}">
+                <Label
+                    HorizontalOptions="Center"
+                    Text="&#xfbbd;"
+                    TextColor="Black"
+                    FontFamily="Material Design Icons"
+                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileOverviewImageSize}" />
+                <Label
+                    Margin="20"
+                    HorizontalTextAlignment="Center"
+                    TextColor="Black">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Su dispositivo no esta conectado a una red. Debe unirse a una manualmente o escanear un Código QR (" />
+                            <Span Text="&#xf433;" FontFamily="Material Design Icons" />
+                            <Span Text=") para unirse a un punto de acceso WiFi." />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <ImageButton
+                    HorizontalOptions="Center"
+                    IsEnabled="{Binding Source={x:Reference Page}, Path=IsEnabled}"
+                    Clicked="QrCodeScanButton_Clicked">
+                    <ImageButton.Source>
+                        <FontImageSource Color="{StaticResource SecoundaryBrandColor}" FontFamily="Material Design Icons" Glyph="&#xf433;" Size="48" />
+                    </ImageButton.Source>
+                </ImageButton>
+            </StackLayout>
+            <StackLayout                
+                Grid.ColumnSpan="3" Grid.Row="1"
+                Margin="20"
+                VerticalOptions="End">
+                <ProgressBar
+                    IsVisible="{Binding Path=IsReceivingBundle}"
+                    ProgressColor="{StaticResource PrimaryBrandColor}"
+                    Progress="{Binding Path=BundleReceivingProgress}" />
+                <Label
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding Path=BusyProgressMessage}" />
+            </StackLayout>
         </Grid>
     </ContentPage.Content>
 </sscxftoolkitmvvmpages:ContentPage>

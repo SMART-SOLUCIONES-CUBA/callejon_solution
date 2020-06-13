@@ -2,19 +2,42 @@
 <sscxftoolkitmvvmpages:ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:effects="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Effects"
     xmlns:zxingmobileforms="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
-    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
-    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.QRCodeScanPage"
-    Title="Scanear Código QR">
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"    
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.QRCodeScanPage">
     <ContentPage.Content>
         <Grid>
             <zxingmobileforms:ZXingScannerView
                 x:Name="ScannerView"
                 AutomationId="zxingScannerView"
                 OnScanResult="ScannerView_OnScanResult"/>
-            <zxingmobileforms:ZXingDefaultOverlay
-                AutomationId="zxingDefaultOverlay"
-                ShowFlashButton="False" />
+            <Button 
+                HorizontalOptions="End" VerticalOptions="Start"
+                BackgroundColor="#99A9A9A9"
+                Text="Cancelar"
+                TextColor="White"
+                Clicked="CloseButton_Clicked">
+                <Button.Margin>
+                    <OnPlatform x:TypeArguments="Thickness" Default="10">
+                        <On Platform="iOS" Value="10,30,10,10" />
+                    </OnPlatform>
+                </Button.Margin>
+            </Button>
+            <Label
+                VerticalOptions="End"
+                Margin="20"
+                HorizontalTextAlignment="Center"
+                Text="Enfoque con la cámara el código QR con los datos del punto de acceso WiFi"
+                TextColor="White">
+                <Label.Effects>
+                    <effects:LabelShadowEffect
+                        Color="{StaticResource PrimaryBrandColor}"
+                        Radius="5"
+                        DistanceX="1"
+                        DistanceY="1"/>
+                </Label.Effects>
+            </Label>
         </Grid>
     </ContentPage.Content>
 </sscxftoolkitmvvmpages:ContentPage>

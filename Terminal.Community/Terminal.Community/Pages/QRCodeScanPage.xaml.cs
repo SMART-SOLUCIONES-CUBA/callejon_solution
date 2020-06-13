@@ -28,6 +28,20 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             ScannerView.IsScanning = false;
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            qrCodeScanSuccessCallbackAction = null;
+
+            return base.OnBackButtonPressed();
+        }
+
+        private void CloseButton_Clicked(object sender, System.EventArgs args)
+        {
+            this.NavigationPopModalPageAsync();
+
+            qrCodeScanSuccessCallbackAction = null;
+        }
+
         protected void ScannerView_OnScanResult(ZXing.Result result)
         {
             Xamarin.Forms.Device.BeginInvokeOnMainThread(async () =>
@@ -37,7 +51,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                 // Stop analysis until we navigate away so we don't keep reading barcodes
                 ScannerView.IsScanning = false;
 
-                await this.NavigationPopPageAsync();
+                await this.NavigationPopModalPageAsync();
 
                 qrCodeScanSuccessCallbackAction?.Invoke(result.Text);
 
