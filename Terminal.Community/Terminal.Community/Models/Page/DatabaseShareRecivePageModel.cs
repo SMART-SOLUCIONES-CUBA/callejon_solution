@@ -4,7 +4,7 @@
     {
         private bool isReceivingBundle;
         private double bundleReceivingProgress;
-        private Data.FriendDataModel sender;
+        private View.DataShareSenderViewModel sender;
 
         public DatabaseShareRecivePageModel()
         {
@@ -13,7 +13,7 @@
 
         public System.Collections.ObjectModel.ObservableCollection<View.DataShareSenderViewModel> Candidates { get; set; }
 
-        public Data.FriendDataModel Sender { get => sender; set => SetProperty(ref sender, value); }
+        public View.DataShareSenderViewModel Sender { get => sender; set => SetProperty(ref sender, value); }
 
         public bool IsReceivingBundle { get => isReceivingBundle; set => SetProperty(ref isReceivingBundle, value); }
 

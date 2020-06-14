@@ -135,7 +135,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                 cancellationTokenSource?.Cancel();
 
-                cancellationTokenSource = null;
+                //cancellationTokenSource = null;
 
                 var pageContext = BindingContext as Models.Page.DatabaseShareSendPageModel;
 
@@ -143,42 +143,52 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                 pageContext.BusyProgressMessage = "Enviando ...";
                 pageContext.IsSendingBundle = true;
 
-                System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(1)).ContinueWith(async delayTask =>
+                System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(1)).ContinueWith(delayTask =>
                 {
-                    var networkInformation = Providers.NetworkInformationProvider.GetNetworkInformation();
-
                     cancellationTokenSource = new System.Threading.CancellationTokenSource();
 
-                    await BroadcastDataBundleAsync(networkInformation, cancellationTokenSource.Token).ContinueWith(broadcastDataBundleTask =>
+                    var bundleContent = Helpers.DataSyncronizationHelper.Instance.GetDataBundleContent();
+
+                    var sendDataBundleActions = new System.Collections.Generic.List<System.Action>();
+
+                    foreach (var target in pageContext.Presences)
                     {
-                        Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                        sendDataBundleActions.Add(() =>
                         {
-                            pageContext.IsSendingBundle = false;
-                            pageContext.BusyProgressMessage = null;
+                            SendDataBundle(target, bundleContent, cancellationTokenSource.Token);
 
-                            if (broadcastDataBundleTask.Exception == null)
+                            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                             {
-                                if (cancellationTokenSource.IsCancellationRequested)
-                                {
-                                    DisplayAlert("Aviso", "Envío de su actualización de datos a los amigos unidos al grupo cancelado con éxito.", "Aceptar");
-                                }
-                                else
-                                {
-                                    DisplayAlert("Aviso", "Envío de su actualización de datos a los amigos unidos al grupo completada con éxito.", "Aceptar");
-                                }
-                            }
-                            else
-                            {
-                                // TODO Handle throwed exception!!
-                                DisplayAlert("Aviso", string.Format("Error en el envío de su actualización de datos a los amigos unidos al grupo.{0}{0}Inténtelo nuevamente.", System.Environment.NewLine), "Aceptar");
-                            }
-
-                            cancellationTokenSource?.Cancel();
-
-                            cancellationTokenSource = null;
-
-                            HandleReceiverPresence();
+                                pageContext.Presences.Remove(target);
+                            });
                         });
+                    }
+
+                    System.Threading.Tasks.Parallel.Invoke(sendDataBundleActions.ToArray());
+
+                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                    {
+                        pageContext.IsSendingBundle = false;
+                        pageContext.BusyProgressMessage = null;
+
+                        if (cancellationTokenSource.IsCancellationRequested)
+                        {
+                            DisplayAlert("Aviso", "Envío de su actualización de datos a los amigos unidos al grupo cancelado con éxito.", "Aceptar");
+                        }
+                        else if (pageContext.Presences.Count > 0)
+                        {
+                            DisplayAlert("Aviso", "No fue posible completar el envío de su actualización de datos a todos los amigos unidos al grupo.", "Aceptar");
+                        }
+                        else
+                        {
+                            DisplayAlert("Aviso", "Envío de su actualización de datos a los amigos unidos al grupo completada con éxito.", "Aceptar");
+                        }
+
+                        cancellationTokenSource?.Cancel();
+
+                        //cancellationTokenSource = null;
+
+                        HandleReceiverPresence();
                     });
                 });
             });
@@ -374,53 +384,50 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
         #region Data Bundle Share Handling
 
-        private async System.Threading.Tasks.Task BroadcastDataBundleAsync(Models.NetworkInformationModel networkInformation, System.Threading.CancellationToken cancellationToken)
+        private void SendDataBundle(Models.View.DataShareReceiverPresenceViewModel target, byte[] bundleContent, System.Threading.CancellationToken cancellationToken)
         {
-            var broadcastEndPoint = new System.Net.IPEndPoint(networkInformation.BroadcastIPAddress, Providers.ConstantsProvider.DATASHARE_BUNDLE_BROADCAST_SOCKET_PORT);
+            var targetEndPoint = new System.Net.IPEndPoint(target.IPAddress, Providers.ConstantsProvider.DATASHARE_SENDER_BUNDLE_BROADCAST_SOCKET_PORT);
 
-            var broadcaster = new System.Net.Sockets.Socket(networkInformation.BroadcastIPAddress.AddressFamily, System.Net.Sockets.SocketType.Dgram, System.Net.Sockets.ProtocolType.Udp);
+            var sender = new System.Net.Sockets.Socket(target.IPAddress.AddressFamily, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.Tcp);
 
-            broadcaster.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.Broadcast, true);
+            sender.Connect(targetEndPoint);
 
-            var bundle = Helpers.DataSyncronizationHelper.Instance.GetDataBundleContent();
-
-            var byteToSendCount = bundle.LongLength;
+            var bundleContentLength = bundleContent.LongLength;
 
             var byteSentCount = 0L;
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                var broadcastMessageContentLength = byteToSendCount.ToSelfUnitarePercent();
+                var iterationBufferLength = System.Math.Min(Providers.ConstantsProvider.UNICAST_SOCKET_BUFFER_LENGHT, bundleContentLength - byteSentCount);
 
-                var broadcastMessageContent = new byte[broadcastMessageContentLength];
+                var messageContent = new byte[iterationBufferLength];
 
-                var broadcastMessageContentIndex = 0;
-
-                for (long i = byteSentCount; i < broadcastMessageContentLength; i++)
+                for (long i = 0; i < iterationBufferLength; i++)
                 {
-                    if(i >= byteToSendCount) break;
-
-                    broadcastMessageContent[broadcastMessageContentIndex++] = bundle[i];
+                    messageContent[i] = bundleContent[byteSentCount + i];
                 }
 
-                broadcaster.SendTo(broadcastMessageContent, broadcastEndPoint);
+                byteSentCount += sender.Send(messageContent);
 
-                byteSentCount += broadcastMessageContent.Length;
+                var progress = (double)byteSentCount / bundleContentLength;
 
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
                     var pageContext = BindingContext as Models.Page.DatabaseShareSendPageModel;
 
-                    pageContext.BundleSendProgress += 0.01;
-                    pageContext.BusyProgressMessage = string.Format("Enviando ({0}%) ...", System.Convert.ToInt32(pageContext.BundleSendProgress * 100));
+                    if (progress > pageContext.BundleSendProgress)
+                    {
+                        pageContext.BundleSendProgress = progress;
+                        pageContext.BusyProgressMessage = string.Format("Enviando ({0}%) ...", System.Convert.ToInt32(pageContext.BundleSendProgress * 100));
+                    }
                 });
 
-                await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromMilliseconds(250));
+                System.Threading.Tasks.Task.Delay(System.TimeSpan.FromMilliseconds(200)).Wait();
 
-                if (byteSentCount >= byteToSendCount) break;
+                if (byteSentCount >= bundleContentLength) break;
             }
 
-            broadcaster.Close();
+            sender.Close();
         }
 
         #endregion
@@ -452,7 +459,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             {
                 var receiverPresenceReadingContext = new ReceiverPresenceReadingContext(listener.EndAccept(result));
 
-                receiverPresenceReadingContext.Socket.BeginReceive(receiverPresenceReadingContext.Buffer, 0, Providers.ConstantsProvider.SOCKET_BUFFER_LENGHT, System.Net.Sockets.SocketFlags.None, new System.AsyncCallback(OnReceiverPresenceReadCallback), receiverPresenceReadingContext);
+                receiverPresenceReadingContext.Socket.BeginReceive(receiverPresenceReadingContext.Buffer, 0, Providers.ConstantsProvider.BROADCAST_SOCKET_BUFFER_LENGHT, System.Net.Sockets.SocketFlags.None, new System.AsyncCallback(OnReceiverPresenceReadCallback), receiverPresenceReadingContext);
             }
             catch
             {
@@ -490,6 +497,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                         pageContext.Presences.Add(new Models.View.DataShareReceiverPresenceViewModel
                         {
                             At = System.DateTime.Now,
+                            IPAddress = (context.Socket.RemoteEndPoint as System.Net.IPEndPoint).Address,
                             Friend = senderFriend,
                             GridColumn = targetGridCoordenate.Column,
                             GridRow = targetGridCoordenate.Row
@@ -503,7 +511,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             {
                 if (!cancellationTokenSource.IsCancellationRequested)
                 {
-                    context.Socket.BeginReceive(context.Buffer, 0, Providers.ConstantsProvider.SOCKET_BUFFER_LENGHT, System.Net.Sockets.SocketFlags.None, new System.AsyncCallback(OnReceiverPresenceReadCallback), context);
+                    context.Socket.BeginReceive(context.Buffer, 0, Providers.ConstantsProvider.BROADCAST_SOCKET_BUFFER_LENGHT, System.Net.Sockets.SocketFlags.None, new System.AsyncCallback(OnReceiverPresenceReadCallback), context);
                 };
             }
         }
@@ -532,7 +540,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
         {
             internal ReceiverPresenceReadingContext(System.Net.Sockets.Socket socket)
             {
-                Buffer = new byte[Providers.ConstantsProvider.SOCKET_BUFFER_LENGHT];
+                Buffer = new byte[Providers.ConstantsProvider.BROADCAST_SOCKET_BUFFER_LENGHT];
 
                 Socket = socket;
             }

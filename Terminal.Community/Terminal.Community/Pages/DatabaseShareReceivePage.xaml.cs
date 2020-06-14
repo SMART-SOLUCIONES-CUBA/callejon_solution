@@ -153,7 +153,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
             cancellationTokenSource?.Cancel();
 
-            cancellationTokenSource = null;
+            //cancellationTokenSource = null;
 
             IsEnabled = false;
 
@@ -161,7 +161,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             {
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
-                    pageContext.Sender = target.Friend;
+                    pageContext.Sender = target;
                     pageContext.BusyProgressMessage = "Esperando envío del paquete de actualización ...";
 
                     pageContext.Candidates.Clear();
@@ -247,7 +247,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             }
         }
 
-        private async System.Threading.Tasks.Task ListenForSenderBroadcastAsync(System.Threading.CancellationToken cancellationToken)
+        private async System.Threading.Tasks.Task ListenForSenderPresenceBroadcastAsync(System.Threading.CancellationToken cancellationToken)
         {
             await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(5));
 
@@ -270,7 +270,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                     continue;
                 }
 
-                var broadcastContent = new byte[Providers.ConstantsProvider.SOCKET_BUFFER_LENGHT];
+                var broadcastContent = new byte[Providers.ConstantsProvider.BROADCAST_SOCKET_BUFFER_LENGHT];
 
                 int broadcastContentLength = broadcastingSocket.ReceiveFrom(broadcastContent, ref referenceableBroadcastingEndPoint);
 
@@ -308,11 +308,117 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             }
 
             broadcastingSocket.Close();
+
+            broadcastingSocket.Dispose();
+        }
+
+        private void ListenForBundleSend(System.Threading.CancellationToken cancellationToken)
+        {
+            var networkInformation = Providers.NetworkInformationProvider.GetNetworkInformation();
+
+            var pageContext = BindingContext as Models.Page.DatabaseShareRecivePageModel;
+
+            var listenEndPoint = new System.Net.IPEndPoint(networkInformation.UnicastIPAddress, Providers.ConstantsProvider.DATASHARE_SENDER_BUNDLE_BROADCAST_SOCKET_PORT);
+
+            var listener = new System.Net.Sockets.Socket(networkInformation.UnicastIPAddress.AddressFamily, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.Tcp);
+
+            listener.Bind(listenEndPoint);
+            listener.Listen(100);
+
+            var bundleContent = new System.Collections.Generic.List<byte>();
+
+            var handler = listener.Accept();
+
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                var buffer = new byte[Providers.ConstantsProvider.UNICAST_SOCKET_BUFFER_LENGHT];
+
+                int receiveLength = handler.Receive(buffer);
+
+                bundleContent.AddRange(buffer.Take(receiveLength));
+
+                var bundleContentLength = bundleContent.LongCount();
+
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                {
+                    pageContext.IsReceivingBundle = true;
+                    pageContext.BundleReceivingProgress = (double)bundleContentLength / pageContext.Sender.Friend.DataLength;
+                    pageContext.BusyProgressMessage = string.Format("Reciviendo ({0}%) ...", System.Convert.ToInt32(pageContext.BundleReceivingProgress * 100));
+                });
+
+                if (receiveLength == 0 || bundleContentLength >= pageContext.Sender.Friend.DataLength) break;
+            }
+
+            handler.Shutdown(System.Net.Sockets.SocketShutdown.Both);
+            handler.Close();
+
+            listener.Close();
+
+            if (cancellationToken.IsCancellationRequested) return;
+
+            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+            {
+                if (bundleContent.LongCount() == pageContext.Sender.Friend.DataLength)
+                {
+                    Xamarin.Essentials.Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
+
+                    cancellationTokenSource?.Cancel();
+
+                    DisplayAlert("Aviso", "Paquete de actualización recibido con éxito.", "Aceptar");
+
+                    this.NavigationPopModalPageAsync();
+                }
+                else
+                {
+                    DisplayAlert("Aviso", "Error recibiendo el paquete de actualización.", "Aceptar");
+                }
+            });
         }
 
         private void OnListenForSenderBroadcastCallback(System.Threading.Tasks.Task task)
         {
-            if (task.Exception == null) return;
+            if (task.Exception == null)
+            {
+                var pageContext = BindingContext as Models.Page.DatabaseShareRecivePageModel;
+
+                if (pageContext.Sender == null) return;
+
+                cancellationTokenSource = new System.Threading.CancellationTokenSource();
+
+                System.Threading.Tasks.Task.Run(() =>
+                {
+                    try
+                    {
+                        ListenForBundleSend(cancellationTokenSource.Token);
+                    }
+                    catch
+                    {
+                        cancellationTokenSource?.Cancel();
+
+                        Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                        {
+                            // TODO Reempazar el mensaje de error!
+                            DisplayAlert("Aviso", "Error recibiendo paquete de actualización.", "Reintentar", "Cancelar").ContinueWith(alertTask =>
+                            {
+                                cancellationTokenSource = null;
+
+                                if (alertTask.Result)
+                                {
+                                    pageContext.Sender = null;
+
+                                    StartSenderSearchIfValidNetworkAccess(Xamarin.Essentials.Connectivity.NetworkAccess);
+                                }
+                                else
+                                {
+                                    this.NavigationPopPageAsync();
+                                }
+                            });
+                        });
+                    }
+                });
+
+                return;
+            }
 
             cancellationTokenSource = null;
 
@@ -389,7 +495,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
             System.Threading.Tasks.Task.Run(async () =>
             {
-                await ListenForSenderBroadcastAsync(cancellationTokenSource.Token).ContinueWith(OnListenForSenderBroadcastCallback);
+                await ListenForSenderPresenceBroadcastAsync(cancellationTokenSource.Token).ContinueWith(OnListenForSenderBroadcastCallback);
             });
         }
 

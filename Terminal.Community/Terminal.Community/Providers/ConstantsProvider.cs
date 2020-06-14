@@ -3,11 +3,11 @@
     public static class ConstantsProvider
     {
         internal const string SOCKET_END_OF_MESSAGE_MARK = "<EOM>";
-        internal const int SOCKET_BUFFER_LENGHT = 10240;
+        internal const int BROADCAST_SOCKET_BUFFER_LENGHT = 10240;
+        internal const int UNICAST_SOCKET_BUFFER_LENGHT = 102400;
         internal const int DATASHARE_RECEIVER_PRESENCE_UNICAST_SOCKET_PORT = 9650;
         internal const int DATASHARE_SENDER_BUNDLE_BROADCAST_SOCKET_PORT = 9450;
         internal const int DATASHARE_SENDER_PRESENCE_BROADCAST_SOCKET_PORT = 9800;
-        internal const int DATASHARE_BUNDLE_BROADCAST_SOCKET_PORT = 9900;
 
         internal const string ACTIONSHEET_PICKIMAGE_OPTION_CAMARA = "Captura con la Cámara";
         internal const string ACTIONSHEET_PICKIMAGE_OPTION_GALLERY = "Galería de Imágenes";

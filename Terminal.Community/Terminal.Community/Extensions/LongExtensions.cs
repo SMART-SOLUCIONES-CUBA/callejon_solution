@@ -2,13 +2,13 @@
 {
     internal static class LongExtensions
     {
-        internal static int ToSelfUnitarePercent(this long target)
+        internal static int ToSelfPercent(this long target, double percent)
         {
-            double percent = target * 0.01;
+            double selfPercent = target * percent;
 
-            var intPercent = System.Convert.ToInt32(percent);
+            var intPercent = System.Convert.ToInt32(selfPercent);
 
-            return percent > intPercent ? intPercent + 1 : intPercent;
+            return selfPercent > intPercent ? intPercent + 1 : intPercent;
         }
 
         internal static string ToFileSizeString(this long target)

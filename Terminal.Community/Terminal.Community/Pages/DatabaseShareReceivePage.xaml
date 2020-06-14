@@ -68,8 +68,7 @@
                 </Button.Margin>
             </Button>
             <Grid
-                Grid.ColumnSpan="3" Grid.Row="1"
-                Margin="0,0,0,30"
+                Grid.ColumnSpan="3" Grid.RowSpan="2"
                 IsVisible="{Binding Path=IsBusy}"
                 HorizontalOptions="Center" VerticalOptions="Center"
                 WidthRequest="{Binding Source={x:Reference Page}, Path=Height, Converter={StaticResource PageHeightToCuadrateSideSizeConverter}}"
@@ -132,7 +131,7 @@
                     </Grid.RowDefinitions>
                     <ic:CircleImage
                         Grid.Row="0"
-                        Source="{Binding Path=Sender, Converter={StaticResource FriendDataModelToImageSourceConverter}}"
+                        Source="{Binding Path=Sender.Friend, Converter={StaticResource FriendDataModelToImageSourceConverter}}"
                         HorizontalOptions="Center"
                         BorderThickness="2"
                         BorderColor="{StaticResource SecoundaryBrandColor}" />
@@ -141,13 +140,12 @@
                         Margin="3,0"
                         HorizontalTextAlignment="Center"
                         LineBreakMode="TailTruncation"
-                        Text="{Binding Path=Sender.Terminal.Name}"
+                        Text="{Binding Path=Sender.Friend.Terminal.Name}"
                         FontSize="Micro" />
                 </Grid>
             </Grid>
             <StackLayout
-                Margin="0,0,0,30"
-                Grid.ColumnSpan="3" Grid.Row="1"
+                Grid.ColumnSpan="3" Grid.RowSpan="2"
                 VerticalOptions="Center"
                 IsVisible="{Binding Path=IsBusy, Converter={StaticResource BoolToBoolNegationConverter}}">
                 <Label
@@ -184,7 +182,13 @@
                 <ProgressBar
                     IsVisible="{Binding Path=IsReceivingBundle}"
                     ProgressColor="{StaticResource PrimaryBrandColor}"
-                    Progress="{Binding Path=BundleReceivingProgress}" />
+                    Progress="{Binding Path=BundleReceivingProgress}">
+                    <ProgressBar.Margin>
+                        <OnPlatform x:TypeArguments="Thickness">
+                            <On Platform="iOS" Value="0,10" />
+                        </OnPlatform>
+                    </ProgressBar.Margin>
+                </ProgressBar>
                 <Label
                     HorizontalTextAlignment="Center"
                     Text="{Binding Path=BusyProgressMessage}" />

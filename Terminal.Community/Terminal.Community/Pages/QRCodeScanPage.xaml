@@ -5,7 +5,8 @@
     xmlns:effects="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Effects"
     xmlns:zxingmobileforms="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
     xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"    
-    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.QRCodeScanPage">
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.QRCodeScanPage"
+    BackgroundColor="LightGray">
     <ContentPage.Content>
         <Grid>
             <zxingmobileforms:ZXingScannerView
