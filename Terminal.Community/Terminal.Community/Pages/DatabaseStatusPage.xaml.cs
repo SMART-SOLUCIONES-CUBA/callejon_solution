@@ -14,6 +14,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
         {
             InitializeComponent();
 
+            IsEnabled = false;
+
             BindingContext = new Models.Page.DatabaseStatusPageModel();
         }
 
@@ -21,7 +23,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
         {
             base.OnAppearing();
 
+            if (IsEnabled) return;
+
             ReloadDatabaseSummary();
+
+            IsEnabled = true;
         }
 
         private void UpdateDatabaseButton_Clicked(object sender, System.EventArgs e)
@@ -50,7 +56,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                 break;
 
                             case RECEIVE_SHARE_ACTION_CAPTION:
-                                this.NavigationPushModalPageAsync(new DatabaseShareReceivePage());
+                                this.NavigationPushModalPageAsync(new DatabaseShareReceivePage(ShareDatabaseReceived__Callback));
 
                                 break;
                         }
@@ -62,7 +68,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             }
             else
             {
-                this.NavigationPushModalPageAsync(new DatabaseShareReceivePage());
+                this.NavigationPushModalPageAsync(new DatabaseShareReceivePage(ShareDatabaseReceived__Callback));
             }
         }
 
@@ -94,11 +100,53 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             });
         }
 
+        private void ShareDatabaseReceived__Callback(byte[] bundleContent)
+        {
+            if (bundleContent == null) return;
+
+            DisplayAlert("Confirmar", string.Format("Paquete de actualización recibido con éxito.{0}{0}Está seguro que desea que la aplicación use los datos recibidos?", System.Environment.NewLine), "Usar Datos", "Cancelar").ContinueWith(async dialogTask =>
+            {
+                if (!dialogTask.Result) return;
+
+                var pageContext = BindingContext as Models.Page.DatabaseStatusPageModel;
+
+                pageContext.IsBusy = true;
+                pageContext.BusyProgressMessage = "Aplicando paquede de actualización compartido ...";
+
+                Helpers.LocalFileStorageHelper.DeleteLocalFiles();
+
+                await Helpers.DataSyncronizationHelper.Instance.ResetAsync();
+
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                {
+                    Helpers.DataSyncronizationHelper.Instance.StartDataBundleAppling(bundleContent, applingTask =>
+                    {
+                        Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                        {
+                            pageContext.IsBusy = false;
+                            pageContext.BusyProgressMessage = null;
+
+                            if (applingTask.Exception == null)
+                            {
+                                DisplayAlert("Aviso", "Paquete de actualización aplicado con éxito.", "Aceptar");
+
+                                ReloadDatabaseSummary();
+                            }
+                            else
+                            {
+                                DisplayAlert("Aviso", string.Format("No fue posible aplicar el paquete de actualización.{0}{0}El contenido del archivo recibido no está completo.", System.Environment.NewLine), "Aceptar");
+                            }
+                        });
+                    });
+                });
+            });
+        }
+
         private void ReloadDatabaseSummary()
         {
-            var model = BindingContext as Models.Page.DatabaseStatusPageModel;
+            var pgeContext = BindingContext as Models.Page.DatabaseStatusPageModel;
 
-            model.IsBusy = true;
+            pgeContext.IsBusy = true;
 
             System.Threading.Tasks.Task.Run(() =>
             {
@@ -114,38 +162,36 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                     var personalityCount = dbContext.Personalities.Count();
                     var commentCount = dbContext.EventComments.Count() + dbContext.PersonalityComments.Count() + dbContext.ProductionComments.Count();
 
-                    var databaseFileInfo = new System.IO.FileInfo(Helpers.LocalFileStorageHelper.GetDatabaseFilePath());
-
                     Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                     {
-                        model.Updated = true;
-                        model.CinemaCount = cinemaCount;
-                        model.RoomCount = roomCount;
-                        model.PresentationCount = presentationCount;
-                        model.ImageCount = imageCount;
-                        model.EventCount = eventCount;
-                        model.PersonalityCount = personalityCount;
-                        model.CommentCount = commentCount;
-                        model.Status = string.Format("{0}, {1} ({2})", syncronizationDate.ToString("dddd, MMMM dd"), syncronizationDate.ToString("h:mm tt", System.Globalization.CultureInfo.InvariantCulture), databaseFileInfo.Length.ToFileSizeString());
+                        pgeContext.Updated = true;
+                        pgeContext.CinemaCount = cinemaCount;
+                        pgeContext.RoomCount = roomCount;
+                        pgeContext.PresentationCount = presentationCount;
+                        pgeContext.ImageCount = imageCount;
+                        pgeContext.EventCount = eventCount;
+                        pgeContext.PersonalityCount = personalityCount;
+                        pgeContext.CommentCount = commentCount;
+                        pgeContext.Status = string.Format("{0}, {1} ({2})", syncronizationDate.ToString("dddd, MMMM dd"), syncronizationDate.ToString("h:mm tt", System.Globalization.CultureInfo.InvariantCulture), Helpers.LocalFileStorageHelper.GetLocalFileDataSize().ToFileSizeString());
                     });
                 }
             }).ContinueWith((System.Threading.Tasks.Task task) =>
             {
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
-                    model.IsBusy = false;
+                    pgeContext.IsBusy = false;
 
                     if (task.Exception != null)
                     {
-                        model.Status = null;
-                        model.Updated = false;
-                        model.CinemaCount = 0;
-                        model.RoomCount = 0;
-                        model.PresentationCount = 0;
-                        model.ImageCount = 0;
-                        model.EventCount = 0;
-                        model.PersonalityCount = 0;
-                        model.CommentCount = 0;
+                        pgeContext.Status = null;
+                        pgeContext.Updated = false;
+                        pgeContext.CinemaCount = 0;
+                        pgeContext.RoomCount = 0;
+                        pgeContext.PresentationCount = 0;
+                        pgeContext.ImageCount = 0;
+                        pgeContext.EventCount = 0;
+                        pgeContext.PersonalityCount = 0;
+                        pgeContext.CommentCount = 0;
                     }
                 });
             });

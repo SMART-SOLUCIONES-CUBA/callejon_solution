@@ -8,6 +8,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
     [Xamarin.Forms.Xaml.XamlCompilation(Xamarin.Forms.Xaml.XamlCompilationOptions.Compile)]
     public partial class DatabaseShareReceivePage : XFToolKit.Mvvm.Pages.ContentPage
     {
+        private System.Action<byte[]> shareDataReceivedCallbackAction;
+
         private const int CYCLE_TIME_MILLISECOUNDS = 1000;
 
         private readonly SkiaSharp.SKColor wavePropagationColor;
@@ -20,9 +22,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
         private System.Threading.CancellationTokenSource cancellationTokenSource;
 
-        public DatabaseShareReceivePage()
+        public DatabaseShareReceivePage(System.Action<byte[]> shareDataReceivedCallbackAction)
         {
             InitializeComponent();
+
+            this.shareDataReceivedCallbackAction = shareDataReceivedCallbackAction;
 
             availableGridCoordenates = new System.Collections.Generic.Queue<Models.GridCoordinateModel>();
 
@@ -364,9 +368,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                     cancellationTokenSource?.Cancel();
 
-                    DisplayAlert("Aviso", "Paquete de actualización recibido con éxito.", "Aceptar");
-
                     this.NavigationPopModalPageAsync();
+
+                    shareDataReceivedCallbackAction?.Invoke(bundleContent.ToArray());
+
+                    shareDataReceivedCallbackAction = null;
                 }
                 else
                 {

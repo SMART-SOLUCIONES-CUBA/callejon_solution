@@ -24,7 +24,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
         {
             base.OnAppearing();
 
-            Helpers.DataSyncronizationHelper.Instance.SyncronizeDataFromCloud(UpdateDatabaseProgressCallback, UpdateDatabaseTaskCompleteCallback, forceUpgrade);
+            Helpers.DataSyncronizationHelper.Instance.StartSyncronizeDataFromCloud(UpdateDatabaseProgressCallback, UpdateDatabaseTaskCompleteCallback, forceUpgrade);
         }
 
         private void UpdateDatabaseProgressCallback(int progress, bool isBusy, string step)

@@ -177,7 +177,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                         }
                         else if (pageContext.Presences.Count > 0)
                         {
-                            DisplayAlert("Aviso", "No fue posible completar el envío de su actualización de datos a todos los amigos unidos al grupo.", "Aceptar");
+                            DisplayAlert("Aviso", string.Format("No fue posible completar el envío de su actualización de datos a todos los amigos unidos al grupo.{0}{0}Se ha perdido la conexión con sus dispositivos y deberán intentarlo nuevamente.", System.Environment.NewLine), "Aceptar");
+
+                            pageContext.Presences.Clear();
                         }
                         else
                         {
@@ -187,8 +189,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                         cancellationTokenSource?.Cancel();
 
                         //cancellationTokenSource = null;
-
-                        HandleReceiverPresence();
+                        ConcreteSaveClose();
+                        //HandleCloseRequest();
                     });
                 });
             });
@@ -205,9 +207,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
         private void HandleCloseRequest()
         {
-            var pageContext = BindingContext as Models.Page.DatabaseShareSendPageModel;
-
-            if (!pageContext.IsBusy)
+            if (!(BindingContext as Models.Page.DatabaseShareSendPageModel).IsBusy)
             {
                 this.NavigationPopModalPageAsync();
 
@@ -222,27 +222,34 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
-                    Xamarin.Essentials.Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
-
-                    pageContext.IsBusy = false;
-                    pageContext.BusyProgressMessage = null;                    
-
-                    pageContext.Presences.Clear();
-
-                    if (pageContext.WiFiHostpotDetail == null)
-                    {
-                        this.NavigationPopModalPageAsync();
-
-                        return;
-                    }
-
-                    IsEnabled = false;
-
-                    this.NavigationPushModalPageAsync(new WiFiHostpotHandlingPage(pageContext.WiFiHostpotDetail, OnWiFiHostpotHandlingCallback));
-
-                    pageContext.WiFiHostpotDetail = null;
+                    ConcreteSaveClose();
                 });                
             });
+        }
+
+        private void ConcreteSaveClose()
+        {
+            var pageContext = BindingContext as Models.Page.DatabaseShareSendPageModel;
+
+            Xamarin.Essentials.Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
+
+            pageContext.IsBusy = false;
+            pageContext.BusyProgressMessage = null;
+
+            pageContext.Presences.Clear();
+
+            if (pageContext.WiFiHostpotDetail == null)
+            {
+                this.NavigationPopModalPageAsync();
+
+                return;
+            }
+
+            IsEnabled = false;
+
+            this.NavigationPushModalPageAsync(new WiFiHostpotHandlingPage(pageContext.WiFiHostpotDetail, OnWiFiHostpotHandlingCallback));
+
+            pageContext.WiFiHostpotDetail = null;
         }
 
         private void OnWiFiHostpotHandlingCallback(Models.View.WiFiHostpotDetailViewModel model)

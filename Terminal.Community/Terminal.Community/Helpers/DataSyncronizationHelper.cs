@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.IO.Compression;
 using System.Linq;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
@@ -77,7 +78,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
 
             using (var memoryStream = new System.IO.MemoryStream())
             {
-                using (var zipArchive = new System.IO.Compression.ZipArchive(memoryStream, System.IO.Compression.ZipArchiveMode.Create, true))
+                using (var zipArchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
                 {
                     foreach (var path in bundleFilePaths)
                     {
@@ -100,7 +101,57 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
             return result;
         }
 
-        public void SyncronizeDataFromCloud(System.Action<int, bool, string> reportProgressAction, System.Action<System.Threading.Tasks.Task<bool>> continueAction, bool force = false)
+        public void StartDataBundleAppling(byte[] dataBundleContent, System.Action<System.Threading.Tasks.Task> asyncContinueAction)
+        {
+            var deviceScreenMinSize = System.Convert.ToInt32(System.Math.Min(Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Width, Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Height));
+
+            System.Threading.Tasks.Task.Run(() =>
+            {
+                using (var dataBundleStream = new System.IO.MemoryStream(dataBundleContent))
+                {
+                    using (var dataBundle = new ZipArchive(dataBundleStream))
+                    {
+                        foreach (var entry in dataBundle.Entries)
+                        {
+                            var filePath = LocalFileStorageHelper.GetFilePath(entry.Name);
+
+                            entry.ExtractToFile(filePath);
+
+                            if (!System.Guid.TryParse(entry.Name, out System.Guid imageId)) continue;
+
+                            using (var imageFileStream = System.IO.File.OpenRead(filePath))
+                            {
+                                using (var skStream = new SkiaSharp.SKManagedStream(imageFileStream))
+                                {
+                                    using (var skBitmap = SkiaSharp.SKBitmap.Decode(skStream))
+                                    {
+                                        if (skBitmap.Width > deviceScreenMinSize)
+                                        {
+                                            double dif = System.Convert.ToDouble(skBitmap.Height) / System.Convert.ToDouble(skBitmap.Width);
+
+                                            var requiredHeight = System.Convert.ToInt32(System.Math.Round(dif * deviceScreenMinSize));
+
+                                            using (var resizedSkBitmap = skBitmap.Resize(new SkiaSharp.SKImageInfo(deviceScreenMinSize, requiredHeight), SkiaSharp.SKFilterQuality.High))
+                                            {
+                                                using (var skImage = SkiaSharp.SKImage.FromBitmap(resizedSkBitmap))
+                                                {
+                                                    using (var output = System.IO.File.OpenWrite(LocalFileStorageHelper.GetResponsiveImageFilePath(imageId, deviceScreenMinSize)))
+                                                    {
+                                                        skImage.Encode(SkiaSharp.SKEncodedImageFormat.Jpeg, 75).SaveTo(output);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }).ContinueWith(asyncContinueAction);
+        }
+
+        public void StartSyncronizeDataFromCloud(System.Action<int, bool, string> reportProgressAction, System.Action<System.Threading.Tasks.Task<bool>> continueAction, bool force = false)
         {
             var protocol = "http";
             //var host = "192.168.1.100";

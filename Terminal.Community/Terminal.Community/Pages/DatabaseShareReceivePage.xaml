@@ -22,6 +22,8 @@
             <converters:FriendDataModelToImageSourceConverter x:Key="FriendDataModelToImageSourceConverter" />
             <sscxftoolkitpresentationconverters:BoolToBoolNegationConverter x:Key="BoolToBoolNegationConverter" />
             <sscxftoolkitpresentationconverters:NotNullToBooleanConverter x:Key="NotNullToBooleanConverter" />
+            <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="PageIsEnabledToTextColorConverter" FalseString="LightGray" TrueString="Black" />
+            <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="PageIsEnabledToImageButtonForegroundColorConverter" FalseString="LightGray" TrueString="{StaticResource SecoundaryBrandColor}" />
             <sscxftoolkitpresentationconverters:FactorConverter x:Key="FactorConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -151,13 +153,13 @@
                 <Label
                     HorizontalOptions="Center"
                     Text="&#xfbbd;"
-                    TextColor="Black"
+                    TextColor="{Binding Source={x:Reference Page}, Path=IsEnabled, Converter={StaticResource PageIsEnabledToTextColorConverter}}"
                     FontFamily="Material Design Icons"
                     FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileOverviewImageSize}" />
                 <Label
                     Margin="20"
                     HorizontalTextAlignment="Center"
-                    TextColor="Black">
+                    TextColor="{Binding Source={x:Reference Page}, Path=IsEnabled, Converter={StaticResource PageIsEnabledToTextColorConverter}}">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Su dispositivo no esta conectado a una red. Debe unirse a una manualmente o escanear un Código QR (" />
@@ -171,7 +173,11 @@
                     IsEnabled="{Binding Source={x:Reference Page}, Path=IsEnabled}"
                     Clicked="QrCodeScanButton_Clicked">
                     <ImageButton.Source>
-                        <FontImageSource Color="{StaticResource SecoundaryBrandColor}" FontFamily="Material Design Icons" Glyph="&#xf433;" Size="48" />
+                        <FontImageSource
+                            Color="{Binding Source={x:Reference Page}, Path=IsEnabled, Converter={StaticResource  PageIsEnabledToImageButtonForegroundColorConverter}}"
+                            FontFamily="Material Design Icons"
+                            Glyph="&#xf433;"
+                            Size="48" />
                     </ImageButton.Source>
                 </ImageButton>
             </StackLayout>
