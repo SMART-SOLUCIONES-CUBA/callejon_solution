@@ -305,21 +305,16 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                 return;
             }
 
-            var candiateGridCoordinates = new System.Collections.Generic.List<Models.GridCoordinateModel>();
-
-            for (int column = 0; column < 5; column++)
+            var candiateGridCoordinates = new System.Collections.Generic.List<Models.GridCoordinateModel>
             {
-                for (int row = 0; row < 3; row++)
-                {
-                    if (column == 1 && row == 1) continue;
-                    if (column == 0 && row == 0) continue;
-                    if (column == 0 && row == 2) continue;
-                    if (column == 2 && row == 0) continue;
-                    if (column == 2 && row == 2) continue;
-
-                    candiateGridCoordinates.Add(new Models.GridCoordinateModel { Column = column, Row = row });
-                }
-            }
+                new Models.GridCoordinateModel { Column = 1, Row = 0 },
+                new Models.GridCoordinateModel { Column = 3, Row = 0 },
+                new Models.GridCoordinateModel { Column = 0, Row = 1 },
+                new Models.GridCoordinateModel { Column = 2, Row = 1 },
+                new Models.GridCoordinateModel { Column = 4, Row = 1 },
+                new Models.GridCoordinateModel { Column = 1, Row = 2 },
+                new Models.GridCoordinateModel { Column = 3, Row = 2 }
+            };
 
             availableGridCoordenates.Clear();
 
@@ -475,6 +470,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
             var byteSentCount = 0L;
 
+            var pageContext = BindingContext as Models.Page.DatabaseShareSendPageModel;
+
             while (!cancellationToken.IsCancellationRequested)
             {
                 var iterationBufferLength = System.Math.Min(Providers.ConstantsProvider.UNICAST_SOCKET_BUFFER_LENGHT, bundleContentLength - byteSentCount);
@@ -492,8 +489,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
-                    var pageContext = BindingContext as Models.Page.DatabaseShareSendPageModel;
-
                     if (progress > pageContext.BundleSendProgress)
                     {
                         pageContext.BundleSendProgress = progress;
@@ -501,10 +496,12 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                     }
                 });
 
-                System.Threading.Tasks.Task.Delay(System.TimeSpan.FromMilliseconds(200)).Wait();
+                System.Threading.Thread.Sleep(200);
 
                 if (byteSentCount >= bundleContentLength) break;
             }
+
+            System.Threading.Thread.Sleep(1000 * pageContext.Presences.Count);
 
             sender.Close();
         }
