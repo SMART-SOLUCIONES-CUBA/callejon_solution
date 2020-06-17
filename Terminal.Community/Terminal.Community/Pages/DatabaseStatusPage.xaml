@@ -254,7 +254,7 @@
                     Text="Eliminar"
                     Clicked="ClearDatabaseButton_Clicked" />
             </Grid>
-            <sscxftoolkitpresentationviews:BusyView />
+            <sscxftoolkitpresentationviews:BusyView Grid.RowSpan="2" />
         </Grid>
     </ContentPage.Content>
 </sscxftoolkitmvvmpages:ContentPage>

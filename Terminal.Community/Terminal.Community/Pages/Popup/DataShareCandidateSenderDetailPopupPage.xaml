@@ -4,23 +4,45 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:ic="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
     xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
     xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Converters"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.Popup.DataShareCandidateSenderDetailPopupPage">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:DateTimeToInvarianCultureRelativeDateTimeStringConverter x:Key="DateTimeToInvarianCultureRelativeDateTimeStringConverter" />
-            <converters:FriendDataModelToImageSourceConverter x:Key="FriendDataModelToImageSourceConverter" /> 
+            <converters:FriendDataModelToImageSourceConverter x:Key="FriendDataModelToImageSourceConverter" />
+            <sscxftoolkitpresentationconverters:FactorConverter x:Key="FactorConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Margin="20">
             <Frame>
                 <StackLayout>
-                    <ic:CircleImage
-                        Source="{Binding Path=Sender.Friend, Converter={StaticResource FriendDataModelToImageSourceConverter}}"
-                        HorizontalOptions="Center"
-                        BorderThickness="2"
-                        BorderColor="{StaticResource SecoundaryBrandColor}" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <ic:CircleImage
+                            Grid.Column="1"
+                            Source="{Binding Path=Sender.Friend, Converter={StaticResource FriendDataModelToImageSourceConverter}}"
+                            BorderThickness="2"
+                            BorderColor="{StaticResource SecoundaryBrandColor}" />
+                        <Button 
+                            Grid.Column="2"
+                            HorizontalOptions="End" VerticalOptions="Start"
+                            BackgroundColor="Transparent"
+                            Padding="0"
+                            WidthRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize, Converter={StaticResource FactorConverter}, ConverterParameter=2}"
+                            HeightRequest="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize, Converter={StaticResource FactorConverter}, ConverterParameter=2}"
+                            Text="&#xf5ad;"
+                            TextColor="{StaticResource PrimaryBrandColor}"
+                            FontFamily="Material Design Icons"
+                            FontSize="Large"
+                            Clicked="CloseButton_Clicked" />
+                    </Grid>
                     <Label
                         Margin="0,8,0,4"
                         HorizontalTextAlignment="Center"

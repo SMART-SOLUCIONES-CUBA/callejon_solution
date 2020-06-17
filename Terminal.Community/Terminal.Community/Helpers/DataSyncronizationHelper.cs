@@ -101,7 +101,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
             return result;
         }
 
-        public void StartDataBundleAppling(byte[] dataBundleContent, System.Action<System.Threading.Tasks.Task> asyncContinueAction)
+        public void StartDataBundleAppling(byte[] dataBundleContent, System.DateTime at, System.Action<System.Threading.Tasks.Task> asyncContinueAction)
         {
             var deviceScreenMinSize = System.Convert.ToInt32(System.Math.Min(Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Width, Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Height));
 
@@ -148,6 +148,12 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
                         }
                     }
                 }
+
+                syncronizationDate = at;
+
+                Xamarin.Forms.Application.Current.Properties[DATABASE_UPDATE_DATETIME_KEY] = syncronizationDate.ToString();
+
+                Xamarin.Forms.Application.Current.SavePropertiesAsync();
             }).ContinueWith(asyncContinueAction);
         }
 

@@ -43,11 +43,11 @@
                 Margin="20,20,20,10"
                 HorizontalTextAlignment="Center"
                 Text="Recibir Datos"
-                TextColor="{StaticResource PrimaryBrandColor}"
-                FontSize="Large">
+                TextColor="{StaticResource PrimaryBrandColor}">
                 <Label.FontSize>
                     <OnPlatform x:TypeArguments="x:Double">
                         <On Platform="iOS" Value="30" />
+                        <On Platform="Android" Value="28" />
                     </OnPlatform>
                 </Label.FontSize>
             </Label>
@@ -170,6 +170,7 @@
                 </Label>
                 <ImageButton
                     HorizontalOptions="Center"
+                    BackgroundColor="Transparent"
                     IsEnabled="{Binding Source={x:Reference Page}, Path=IsEnabled}"
                     Clicked="QrCodeScanButton_Clicked">
                     <ImageButton.Source>

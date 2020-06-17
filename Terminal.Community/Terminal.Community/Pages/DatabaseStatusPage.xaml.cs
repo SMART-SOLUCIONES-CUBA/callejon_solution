@@ -100,7 +100,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             });
         }
 
-        private void ShareDatabaseReceived__Callback(byte[] bundleContent)
+        private void ShareDatabaseReceived__Callback(byte[] bundleContent, System.DateTime at)
         {
             if (bundleContent == null) return;
 
@@ -119,7 +119,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
-                    Helpers.DataSyncronizationHelper.Instance.StartDataBundleAppling(bundleContent, applingTask =>
+                    Helpers.DataSyncronizationHelper.Instance.StartDataBundleAppling(bundleContent, at, applingTask =>
                     {
                         Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                         {

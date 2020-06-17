@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using SkiaSharp.Views.Forms;
-using SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Extensions;
 using SmartSolucionesCuba.XFToolKit.Mvvm.Extensions;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
@@ -10,25 +9,33 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
     {
         private const int CYCLE_TIME_MILLISECOUNDS = 1000;
 
-        private readonly SkiaSharp.SKColor wavePropagationColor;
+        private static System.TimeSpan TIMER_TIME = System.TimeSpan.FromMilliseconds(33);
+        private static System.TimeSpan RECEIVER_EXPIRE_TIME = System.TimeSpan.FromSeconds(10);
 
-        private float wavePropagationReference;
+        private readonly SkiaSharp.SKColor animationWavePropagationColor;
+
+        private float animationWavePropagationRefPoint;
+
+        private System.TimeSpan receiverPrecenceExpirationRefPoint;
 
         private System.Collections.Generic.Queue<Models.GridCoordinateModel> availableGridCoordenates;
 
         private System.Diagnostics.Stopwatch stopwatch;
 
-        private System.Threading.CancellationTokenSource cancellationTokenSource;
+        private System.Threading.CancellationTokenSource defaultCancellationTokenSource;
+        private System.Threading.CancellationTokenSource receiverPresenceCancellationTokenSource;
 
         public DatabaseShareSendPage()
         {
             InitializeComponent();
 
+            receiverPrecenceExpirationRefPoint = System.TimeSpan.Zero;
+
             availableGridCoordenates = new System.Collections.Generic.Queue<Models.GridCoordinateModel>();
 
             var secoundaryBrandColor = (Xamarin.Forms.Color)Xamarin.Forms.Application.Current.Resources["SecoundaryBrandColor"];
 
-            wavePropagationColor = secoundaryBrandColor.WithLuminosity(0.85).ToSKColor();
+            animationWavePropagationColor = secoundaryBrandColor.WithLuminosity(0.85).ToSKColor();
 
             stopwatch = new System.Diagnostics.Stopwatch();
 
@@ -66,24 +73,24 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
             float baseRadius = System.Math.Min(args.Info.Width, args.Info.Height) / 12;
 
-            var colorRed = wavePropagationColor.Red;
-            var colorGreen = wavePropagationColor.Green;
-            var colorBlue = wavePropagationColor.Blue;
+            var colorRed = animationWavePropagationColor.Red;
+            var colorGreen = animationWavePropagationColor.Green;
+            var colorBlue = animationWavePropagationColor.Blue;
 
             if ((BindingContext as Models.Page.DatabaseShareSendPageModel).IsSendingBundle)
             {
                 for (int circle = 0; circle < 5; circle++)
                 {
-                    float radius = baseRadius * (circle + wavePropagationReference);
+                    float radius = baseRadius * (circle + animationWavePropagationRefPoint);
 
                     var paint = new SkiaSharp.SKPaint
                     {
                         Style = SkiaSharp.SKPaintStyle.Stroke
                     };
 
-                    paint.StrokeWidth = baseRadius / 2 * (circle == 0 ? wavePropagationReference : 1);
+                    paint.StrokeWidth = baseRadius / 2 * (circle == 0 ? animationWavePropagationRefPoint : 1);
 
-                    paint.Color = new SkiaSharp.SKColor(colorRed, colorGreen, colorBlue, (byte)(255 * (circle == 4 ? (1 - wavePropagationReference) : 1)));
+                    paint.Color = new SkiaSharp.SKColor(colorRed, colorGreen, colorBlue, (byte)(255 * (circle == 4 ? (1 - animationWavePropagationRefPoint) : 1)));
 
                     args.Surface.Canvas.DrawCircle(center.X, center.Y, radius, paint);
                 }
@@ -92,16 +99,16 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             {
                 for (int circle = 5; circle >= 0; circle--)
                 {
-                    float radius = baseRadius * (circle - wavePropagationReference);
+                    float radius = baseRadius * (circle - animationWavePropagationRefPoint);
 
                     var paint = new SkiaSharp.SKPaint
                     {
                         Style = SkiaSharp.SKPaintStyle.Stroke
                     };
 
-                    paint.StrokeWidth = baseRadius / 2 * (circle == 0 ? wavePropagationReference : 1);
+                    paint.StrokeWidth = baseRadius / 2 * (circle == 0 ? animationWavePropagationRefPoint : 1);
 
-                    paint.Color = new SkiaSharp.SKColor(colorRed, colorGreen, colorBlue, (byte)(255 * (circle == 5 ? wavePropagationReference : 1)));
+                    paint.Color = new SkiaSharp.SKColor(colorRed, colorGreen, colorBlue, (byte)(255 * (circle == 5 ? animationWavePropagationRefPoint : 1)));
 
                     args.Surface.Canvas.DrawCircle(center.X, center.Y, radius, paint);
                 }
@@ -133,9 +140,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             {
                 if (!confirmationDialogTask.Result) return;
 
-                cancellationTokenSource?.Cancel();
-
-                //cancellationTokenSource = null;
+                defaultCancellationTokenSource?.Cancel();
+                receiverPresenceCancellationTokenSource?.Cancel();
 
                 var pageContext = BindingContext as Models.Page.DatabaseShareSendPageModel;
 
@@ -145,7 +151,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                 System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(1)).ContinueWith(delayTask =>
                 {
-                    cancellationTokenSource = new System.Threading.CancellationTokenSource();
+                    defaultCancellationTokenSource = new System.Threading.CancellationTokenSource();
 
                     var bundleContent = Helpers.DataSyncronizationHelper.Instance.GetDataBundleContent();
 
@@ -155,12 +161,16 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                     {
                         sendDataBundleActions.Add(() =>
                         {
-                            SendDataBundle(target, bundleContent, cancellationTokenSource.Token);
-
-                            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                            try
                             {
-                                pageContext.Presences.Remove(target);
-                            });
+                                SendDataBundle(target, bundleContent, defaultCancellationTokenSource.Token);
+
+                                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                                {
+                                    pageContext.Presences.Remove(target);
+                                });
+                            }
+                            catch { }
                         });
                     }
 
@@ -171,7 +181,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                         pageContext.IsSendingBundle = false;
                         pageContext.BusyProgressMessage = null;
 
-                        if (cancellationTokenSource.IsCancellationRequested)
+                        if (defaultCancellationTokenSource.IsCancellationRequested)
                         {
                             DisplayAlert("Aviso", "Envío de su actualización de datos a los amigos unidos al grupo cancelado con éxito.", "Aceptar");
                         }
@@ -186,11 +196,10 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                             DisplayAlert("Aviso", "Envío de su actualización de datos a los amigos unidos al grupo completada con éxito.", "Aceptar");
                         }
 
-                        cancellationTokenSource?.Cancel();
+                        defaultCancellationTokenSource?.Cancel();
+                        receiverPresenceCancellationTokenSource?.Cancel();
 
-                        //cancellationTokenSource = null;
                         ConcreteSaveClose();
-                        //HandleCloseRequest();
                     });
                 });
             });
@@ -198,9 +207,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
         private void Connectivity_ConnectivityChanged(object sender, Xamarin.Essentials.ConnectivityChangedEventArgs args)
         {
-            cancellationTokenSource?.Cancel();
-
-            cancellationTokenSource = null;
+            defaultCancellationTokenSource?.Cancel();
+            receiverPresenceCancellationTokenSource?.Cancel();
 
             StartSenderPostulationIfValidNetworkAccess(args.NetworkAccess);
         }
@@ -218,7 +226,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             {
                 if (!task.Result) return;
 
-                cancellationTokenSource?.Cancel();
+                defaultCancellationTokenSource?.Cancel();
+                receiverPresenceCancellationTokenSource?.Cancel();
 
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
@@ -284,9 +293,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
             if (pageContext.WiFiHostpotDetail == null && networkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
-                cancellationTokenSource?.Cancel();
-
-                cancellationTokenSource = null;
+                defaultCancellationTokenSource?.Cancel();
+                receiverPresenceCancellationTokenSource?.Cancel();
 
                 pageContext.IsBusy = false;
 
@@ -337,19 +345,61 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
         {
             stopwatch.Start();
 
-            (BindingContext as Models.Page.DatabaseShareSendPageModel).IsBusy = true;
+            var pageContext = BindingContext as Models.Page.DatabaseShareSendPageModel;
 
-            Xamarin.Forms.Device.StartTimer(System.TimeSpan.FromMilliseconds(33), () =>
+            pageContext.IsBusy = true;
+
+            Xamarin.Forms.Device.StartTimer(TIMER_TIME, () =>
             {
-                wavePropagationReference = (float)(stopwatch.Elapsed.TotalMilliseconds % CYCLE_TIME_MILLISECOUNDS / CYCLE_TIME_MILLISECOUNDS);
+                animationWavePropagationRefPoint = (float)(stopwatch.Elapsed.TotalMilliseconds % CYCLE_TIME_MILLISECOUNDS / CYCLE_TIME_MILLISECOUNDS);
 
                 CanvasView.InvalidateSurface();
 
-                var @continue = (BindingContext as Models.Page.DatabaseShareSendPageModel).IsBusy;
+                var @continue = pageContext.IsBusy;
 
                 if (!@continue)
                 {
                     stopwatch.Stop();
+                }
+
+                if (receiverPresenceCancellationTokenSource != null && !receiverPresenceCancellationTokenSource.IsCancellationRequested)
+                {
+                    if (receiverPrecenceExpirationRefPoint > RECEIVER_EXPIRE_TIME)
+                    {
+                        System.Threading.Tasks.Task.Run(() =>
+                        {
+                            var now = System.DateTime.Now;                            
+
+                            var expiredPresences = pageContext.Presences.Where(item => now - item.At - RECEIVER_EXPIRE_TIME > System.TimeSpan.Zero).ToArray();
+
+                            if (expiredPresences.Count() > 0)
+                            {
+                                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                                {
+                                    foreach (var item in expiredPresences)
+                                    {
+                                        pageContext.Presences.Remove(item);
+
+                                        availableGridCoordenates.Enqueue(new Models.GridCoordinateModel
+                                        {
+                                            Column = item.GridColumn,
+                                            Row = item.GridRow
+                                        });
+                                    }
+                                });
+                            }
+                        });
+
+                        receiverPrecenceExpirationRefPoint = System.TimeSpan.Zero;
+                    }
+                    else
+                    {
+                        receiverPrecenceExpirationRefPoint += TIMER_TIME;
+                    }
+                }
+                else
+                {
+                    receiverPrecenceExpirationRefPoint = System.TimeSpan.Zero;
                 }
 
                 return @continue;
@@ -358,7 +408,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
         private void HandleReceiverPresence()
         {
-            cancellationTokenSource = new System.Threading.CancellationTokenSource();
+            defaultCancellationTokenSource = new System.Threading.CancellationTokenSource();
+            receiverPresenceCancellationTokenSource = new System.Threading.CancellationTokenSource();
 
             var hostFriendDataModel = Factories.FriendDataModelFactory.CreateSelf();
 
@@ -374,17 +425,38 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                 }
                 catch
                 {
-                    // TODO Handle throwed exception!!
-                    cancellationTokenSource?.Cancel();
+                    defaultCancellationTokenSource?.Cancel();
+                    receiverPresenceCancellationTokenSource?.Cancel();
+
+                    if (BindingContext != null)
+                    {
+                        Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                        {
+                            DisplayAlert("Aviso", "Ha ocurrido un error y no es posible continuar el proceso. Por favor, inténtelo nuevamente.", "Aceptar");
+
+                            ConcreteSaveClose();
+                        });
+                    }
                 }
             }, async () =>
             {
-                await BroadcastSenderPresenceAsync(hostFriendDataModel, networkInformation, cancellationTokenSource.Token).ContinueWith(broadcastSenderPresenceTask =>
+                await BroadcastSenderPresenceAsync(hostFriendDataModel, networkInformation, defaultCancellationTokenSource.Token).ContinueWith(broadcastSenderPresenceTask =>
                 {
-                    if (broadcastSenderPresenceTask.Exception == null) return;
+                    if (broadcastSenderPresenceTask.Exception != null)
+                    {
+                        defaultCancellationTokenSource?.Cancel();
+                        receiverPresenceCancellationTokenSource?.Cancel();
 
-                    // TODO Handle throwed exception!!
-                    cancellationTokenSource?.Cancel();
+                        if (BindingContext != null)
+                        {
+                            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                            {
+                                DisplayAlert("Aviso", "Ha ocurrido un error y no es posible continuar el proceso. Por favor, inténtelo nuevamente.", "Aceptar");
+
+                                ConcreteSaveClose();
+                            });
+                        }
+                    }
                 });
             });
         }
@@ -457,7 +529,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
         {
             var listener = (System.Net.Sockets.Socket) result.AsyncState;
 
-            if (!cancellationTokenSource.IsCancellationRequested)
+            if (!receiverPresenceCancellationTokenSource.IsCancellationRequested)
             {
                 listener.BeginAccept(new System.AsyncCallback(OnReceiverPresenceReportListenerAcceptCallback), listener);
             };
@@ -470,7 +542,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             }
             catch
             {
-                if (!cancellationTokenSource.IsCancellationRequested)
+                if (!receiverPresenceCancellationTokenSource.IsCancellationRequested)
                 {
                     // TODO Handle workflow state!
                 }
@@ -483,7 +555,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
             var readLength = context.Socket.EndReceive(result);
 
-            if (readLength <= 0 || cancellationTokenSource.IsCancellationRequested) return;
+            if (readLength <= 0 || receiverPresenceCancellationTokenSource.IsCancellationRequested) return;
 
             context.Message += System.Text.Encoding.UTF8.GetString(context.Buffer, 0, readLength);
 
@@ -493,30 +565,38 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                 var senderFriend = Newtonsoft.Json.JsonConvert.DeserializeObject<Models.Data.FriendDataModel>(jsonData);
 
-                var targetGridCoordenate = availableGridCoordenates.Dequeue();
-
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
                     var pageContext = BindingContext as Models.Page.DatabaseShareSendPageModel;
 
-                    if (!pageContext.Presences.Any(item => item.Friend.Id == senderFriend.Id))
+                    var target = pageContext.Presences.FirstOrDefault(item => item.Friend.Id == senderFriend.Id);
+
+                    if (target == null)
                     {
-                        pageContext.Presences.Add(new Models.View.DataShareReceiverPresenceViewModel
+                        var targetGridCoordenate = availableGridCoordenates.Dequeue();
+
+                        target = new Models.View.DataShareReceiverPresenceViewModel
                         {
                             At = System.DateTime.Now,
                             IPAddress = (context.Socket.RemoteEndPoint as System.Net.IPEndPoint).Address,
                             Friend = senderFriend,
                             GridColumn = targetGridCoordenate.Column,
                             GridRow = targetGridCoordenate.Row
-                        });
+                        };
+
+                        pageContext.Presences.Add(target);
 
                         pageContext.HasFirendReceivers = true;
+                    }
+                    else
+                    {
+                        target.At = System.DateTime.Now;
                     }
                 });
             }
             else
             {
-                if (!cancellationTokenSource.IsCancellationRequested)
+                if (!receiverPresenceCancellationTokenSource.IsCancellationRequested)
                 {
                     context.Socket.BeginReceive(context.Buffer, 0, Providers.ConstantsProvider.BROADCAST_SOCKET_BUFFER_LENGHT, System.Net.Sockets.SocketFlags.None, new System.AsyncCallback(OnReceiverPresenceReadCallback), context);
                 };

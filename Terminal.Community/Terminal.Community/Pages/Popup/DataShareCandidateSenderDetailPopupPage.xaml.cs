@@ -18,6 +18,13 @@
             };
         }
 
+        private void CloseButton_Clicked(object sender, System.EventArgs args)
+        {
+            Rg.Plugins.Popup.Services.PopupNavigation.Instance.PopAsync();
+
+            approvedCallbackAction = null;
+        }
+
         private void ApproveButton_Clicked(object sender, System.EventArgs args)
         {
             DisplayAlert("Confirmar", "Esta seguro que desea seleccionar a este amigo para recibir su actualización?", "Aceptar", "Cancelar").ContinueWith(alertTask =>
