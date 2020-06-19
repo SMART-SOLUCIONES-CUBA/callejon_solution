@@ -85,7 +85,8 @@
                     <FlexLayout
                         x:Name="ResponsiveWrapper"
                         Wrap="Wrap"
-                        AlignItems="Start">
+                        AlignItems="Start"
+                        AlignContent="Start">
                         <StackLayout
                             WidthRequest="{Binding Source={x:Reference ResponsiveWrapper}, Path=Width, Converter={StaticResource FlextLayoutToResponsiveItemWidth}}">
                             <StackLayout Orientation="Horizontal" Padding="0,10,0,0">

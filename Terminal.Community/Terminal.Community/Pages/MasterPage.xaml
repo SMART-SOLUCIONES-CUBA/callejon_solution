@@ -101,7 +101,7 @@
             </ListView.HeaderTemplate>
             <ListView.GroupHeaderTemplate>
                 <DataTemplate>
-                    <ViewCell ios:Cell.DefaultBackgroundColor="Transparent">
+                    <ViewCell ios:Cell.DefaultBackgroundColor="GhostWhite">
                         <Label
                             Margin="10"
                             Text="{Binding Path=Title}"

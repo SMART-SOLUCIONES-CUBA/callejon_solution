@@ -14,11 +14,6 @@
     <ContentPage.Resources>
         <ResourceDictionary>            
             <converters:PersonalityViewModelToImageSourceConverter x:Key="PersonalityViewModelToImageSource" />
-
-            <Style TargetType="Label">
-                <Setter Property="TextColor" Value="Accent" />
-                <Setter Property="FontFamily" Value="Helvetica LT Std Condensed" />
-            </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
@@ -35,7 +30,8 @@
         <ScrollView Orientation="Vertical">
             <StackLayout Spacing="0">
                 <StackLayout Spacing="10">
-                    <ic:CircleImage 
+                    <ic:CircleImage
+                        HorizontalOptions="Center"
                         Source="{Binding ., Converter={StaticResource PersonalityViewModelToImageSource}}"
                         BorderThickness="2"
                         BorderColor="{StaticResource SecoundaryBrandColor}"
@@ -49,30 +45,26 @@
                         Text="{Binding FullName}" />
                 </StackLayout>
                 <StackLayout Margin="10">
-                    <StackLayout HeightRequest="24" Orientation="Horizontal" Padding="0,10,0,0">
-                        <BoxView WidthRequest="4" BackgroundColor="Accent" />
-                        <Label 
-                            Text="Acerca de"
-                            Margin="0"
-                            HorizontalTextAlignment="Start"
-                            VerticalTextAlignment="End"
-                            TextColor="Accent"
-                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
-                            FontFamily="Helvetica LT Std Bold Condensed" />
+                    <StackLayout Orientation="Horizontal" Padding="0,10,0,8">
+                        <BoxView Style="{StaticResource BlockquoteBoxViewStyle}" />
+                        <Label
+                            Padding="0,4,0,0"
+                            VerticalOptions="Fill"
+                            VerticalTextAlignment="Center"
+                            Style="{StaticResource BlockquoteHeaderLabelStyle}"
+                            Text="Acerca de" />
                     </StackLayout>
                     <Label 
                         Text="{Binding About}" 
                         FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventLittleEmphasisStyleFontSize}" />
-                    <StackLayout HeightRequest="24" Orientation="Horizontal" Padding="0,10,0,0">
-                        <BoxView WidthRequest="4" BackgroundColor="Accent" />
-                        <Label 
-                            Text="Comentarios"
-                            Margin="0"
-                            HorizontalTextAlignment="Start"
-                            VerticalTextAlignment="End"
-                            TextColor="Accent"
-                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}"
-                            FontFamily="Helvetica LT Std Bold Condensed" />
+                    <StackLayout Orientation="Horizontal" Padding="0,10,0,0">
+                        <BoxView Style="{StaticResource BlockquoteBoxViewStyle}" />
+                        <Label
+                            Padding="0,4,0,0"
+                            VerticalOptions="Fill"
+                            VerticalTextAlignment="Center"
+                            Style="{StaticResource BlockquoteHeaderLabelStyle}"
+                            Text="Comentarios" />
                     </StackLayout>
                     <StackLayout 
                         x:Name="CommentsContainer" 

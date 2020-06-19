@@ -2,6 +2,8 @@
 <sscxftoolkitmvvmpages:ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
+    xmlns:specializedviews="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized"
     xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.ProfileImageCroppingPage">
     <ContentPage.Title>
@@ -29,4 +31,39 @@
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <Grid
+            ColumnSpacing="0" RowSpacing="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid
+                x:Name="CropCanvasWrapper"
+                Grid.ColumnSpan="3" Grid.RowSpan="2" />
+            <Button 
+                Grid.Column="1" Grid.Row="0"
+                Margin="10,10,0,10"
+                BackgroundColor="#99A9A9A9"
+                Text="&#xf465;"
+                TextColor="White"
+                FontFamily="Material Design Icons"
+                FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}"
+                Clicked="RotateToLeftButton_Clicked" />
+            <Button 
+                Grid.Column="2" Grid.Row="0"
+                Margin="10"
+                BackgroundColor="#99A9A9A9"
+                Text="&#xf467;"
+                TextColor="White"
+                FontFamily="Material Design Icons"
+                FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}"
+                Clicked="RotateToRightButton_Clicked" />
+        </Grid>
+    </ContentPage.Content>
 </sscxftoolkitmvvmpages:ContentPage>

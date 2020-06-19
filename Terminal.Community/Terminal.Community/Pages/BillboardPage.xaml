@@ -11,8 +11,7 @@
     xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
     mc:Ignorable="d"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.BillboardPage"
-    NavigationPage.BackButtonTitle="Atrás"
-    Title="Cartelera de Cine">
+    Title="Cines en Cartelera">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:ImageIdToImageSourceConverter x:Key="ImageIdToImageSource" />

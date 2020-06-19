@@ -10,42 +10,49 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
         const int RADIUS = 100;     // pixel radius of touch hit-test
 
         private bool isTranslating;
-
-        SKBitmap bitmap;
-        CroppingRectangle croppingRect;
-        SKMatrix inverseBitmapMatrix;
+        private double rotationAngle;
+        private float? aspectRatio;
+        private SKBitmap originBitmap;
+        private SKBitmap workBitmap;
+        private CroppingRectangle croppingRect;
+        private SKMatrix inverseBitmapMatrix;
 
         // Touch tracking 
-        Effects.TouchEffect touchEffect = new Effects.TouchEffect();
+        private Effects.TouchEffect touchEffect;
 
-        struct TouchPoint
-        {
-            public int CornerIndex { set; get; }
-            public SKPoint Offset { set; get; }
-        }
-
-        Dictionary<long, TouchPoint> touchPoints = new Dictionary<long, TouchPoint>();
+        private Dictionary<long, TouchPoint> touchPoints;
 
         // Drawing objects
-        SKPaint cornerStroke = new SKPaint
-        {
-            Style = SKPaintStyle.Stroke,
-            Color = SKColors.White,
-            StrokeWidth = 10
-        };
+        private SKPaint cornerStroke;
+        private SKPaint edgeStroke;
 
-        SKPaint edgeStroke = new SKPaint
+        public ImageCropperCanvasView(SKBitmap originBitmap, float? aspectRatio = null)
         {
-            Style = SKPaintStyle.Stroke,
-            Color = SKColors.White,
-            StrokeWidth = 2
-        };
+            touchEffect = new Effects.TouchEffect();
 
-        public ImageCropperCanvasView(SKBitmap bitmap, float? aspectRatio = null)
-        {
-            this.bitmap = bitmap;
+            touchPoints = new Dictionary<long, TouchPoint>();
 
-            SKRect bitmapRect = new SKRect(0, 0, bitmap.Width, bitmap.Height);
+            cornerStroke = new SKPaint
+            {
+                Style = SKPaintStyle.Stroke,
+                Color = SKColors.White,
+                StrokeWidth = 10
+            };
+
+            edgeStroke = new SKPaint
+            {
+                Style = SKPaintStyle.Stroke,
+                Color = SKColors.White,
+                StrokeWidth = 2
+            };
+
+            this.originBitmap = originBitmap;
+            this.aspectRatio = aspectRatio;
+
+            workBitmap = originBitmap;
+
+            SKRect bitmapRect = new SKRect(0, 0, workBitmap.Width, workBitmap.Height);
+
             croppingRect = new CroppingRectangle(bitmapRect, aspectRatio);
 
             touchEffect.TouchAction += OnTouchEffectTouchAction;
@@ -64,11 +71,35 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
 
                 using (SKCanvas canvas = new SKCanvas(croppedBitmap))
                 {
-                    canvas.DrawBitmap(bitmap, source, dest);
+                    canvas.DrawBitmap(workBitmap, source, dest);
                 }
 
                 return croppedBitmap;
             }
+        }
+
+        public void RotateToRight()
+        {
+            rotationAngle += 90;
+
+            if (rotationAngle >= 360)
+            {
+                rotationAngle = 0;
+            }
+
+            PerformRotation();
+        }
+
+        public void RotateToLeft()
+        {
+            rotationAngle -= 90;
+
+            if (rotationAngle < 0)
+            {
+                rotationAngle = 360 - System.Math.Abs(rotationAngle);
+            }
+
+            PerformRotation();
         }
 
         protected override void OnParentSet()
@@ -90,14 +121,14 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
             canvas.Clear(SKColors.Gray);
 
             // Calculate rectangle for displaying bitmap 
-            float scale = System.Math.Min((float)info.Width / bitmap.Width, (float)info.Height / bitmap.Height);
+            float scale = System.Math.Min((float)info.Width / workBitmap.Width, (float)info.Height / workBitmap.Height);
 
-            float x = (info.Width - scale * bitmap.Width) / 2;
-            float y = (info.Height - scale * bitmap.Height) / 2;
+            float x = (info.Width - scale * workBitmap.Width) / 2;
+            float y = (info.Height - scale * workBitmap.Height) / 2;
 
-            var bitmapRect = new SKRect(x, y, x + scale * bitmap.Width, y + scale * bitmap.Height);
+            var bitmapRect = new SKRect(x, y, x + scale * workBitmap.Width, y + scale * workBitmap.Height);
 
-            canvas.DrawBitmap(bitmap, bitmapRect);
+            canvas.DrawBitmap(workBitmap, bitmapRect);
 
             // Calculate a matrix transform for displaying the cropping rectangle
             var bitmapScaleMatrix = SKMatrix.MakeIdentity();
@@ -133,6 +164,38 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
 
             // Invert the transform for touch tracking
             bitmapScaleMatrix.TryInvert(out inverseBitmapMatrix);
+        }
+
+        private void PerformRotation()
+        {
+            double radians = System.Math.PI * rotationAngle / 180;
+
+            float sine = (float)System.Math.Abs(System.Math.Sin(radians));
+            float cosine = (float)System.Math.Abs(System.Math.Cos(radians));
+
+            int rotatedWidth = (int)(cosine * originBitmap.Width + sine * originBitmap.Height);
+            int rotatedHeight = (int)(cosine * originBitmap.Height + sine * originBitmap.Width);
+
+            workBitmap = new SKBitmap(rotatedWidth, rotatedHeight);
+
+            using (SKCanvas canvas = new SKCanvas(workBitmap))
+            {
+                canvas.Clear(SKColors.Gray);
+
+                canvas.Translate(rotatedWidth / 2, rotatedHeight / 2);
+
+                canvas.RotateDegrees((float)rotationAngle);
+
+                canvas.Translate(-originBitmap.Width / 2, -originBitmap.Height / 2);
+
+                canvas.DrawBitmap(originBitmap, new SKPoint());
+            }
+
+            SKRect bitmapRect = new SKRect(0, 0, workBitmap.Width, workBitmap.Height);
+
+            croppingRect = new CroppingRectangle(bitmapRect, aspectRatio);
+
+            InvalidateSurface();
         }
 
         private void OnTouchEffectTouchAction(object sender, Delegates.TouchActionEventArgs args)
@@ -188,6 +251,12 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
         private SKPoint ConvertToPixel(Xamarin.Forms.Point pt)
         {
             return new SKPoint((float)(CanvasSize.Width * pt.X / Width), (float)(CanvasSize.Height * pt.Y / Height));
+        }
+
+        private struct TouchPoint
+        {
+            public int CornerIndex { set; get; }
+            public SKPoint Offset { set; get; }
         }
 
         private class CroppingRectangle

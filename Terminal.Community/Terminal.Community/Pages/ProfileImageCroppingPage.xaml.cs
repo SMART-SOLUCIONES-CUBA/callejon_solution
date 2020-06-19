@@ -14,9 +14,7 @@
 
             imageCropperCanvasView = new Views.Specialized.ImageCropperCanvasView(target, 1f);
 
-            Content = new Xamarin.Forms.Grid();
-
-            (Content as Xamarin.Forms.Grid).Children.Add(imageCropperCanvasView);
+            CropCanvasWrapper.Children.Add(imageCropperCanvasView);
         }
 
         private void ApplyToolbarItem_Activated(object sender, System.EventArgs args)
@@ -31,6 +29,23 @@
             callbackAction.Invoke(null);
 
             callbackAction = null;
+        }
+
+        private void RotateToLeftButton_Clicked(object sender, System.EventArgs args)
+        {
+            imageCropperCanvasView.RotateToLeft();
+        }
+
+        private void RotateToRightButton_Clicked(object sender, System.EventArgs args)
+        {
+            imageCropperCanvasView.RotateToRight();
+        }
+
+        protected override void DisposeUnmanagementResources()
+        {
+            base.DisposeUnmanagementResources();
+
+            imageCropperCanvasView = null;
         }
     }
 }
