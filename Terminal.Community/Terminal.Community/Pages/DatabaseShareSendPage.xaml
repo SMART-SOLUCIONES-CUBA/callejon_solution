@@ -193,6 +193,7 @@
                     <DataTemplate>
                         <Grid
                             Grid.Column="{Binding Path=GridColumn}" Grid.Row="{Binding Path=GridRow}"
+                            HorizontalOptions="Center" VerticalOptions="Center"
                             Margin="1"
                             RowSpacing="4">
                             <Grid.GestureRecognizers>

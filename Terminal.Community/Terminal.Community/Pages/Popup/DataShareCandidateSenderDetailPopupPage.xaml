@@ -16,7 +16,10 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
-        <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Margin="20">
+        <StackLayout
+            VerticalOptions="Center" HorizontalOptions="Center"
+            WidthRequest="320"
+            Margin="20">
             <Frame>
                 <StackLayout>
                     <Grid>

@@ -13,19 +13,20 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
             IsEnabled = false;
 
-            BindingContext = new Models.Page.BillboardPageModel();
+            BindingContext = new Models.Page.BillboardPageModel
+            {
+                IsBusy = true
+            };
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
-            var model = BindingContext as Models.Page.BillboardPageModel;
+            var pageBindingContext = BindingContext as Models.Page.BillboardPageModel;
 
             if (!IsEnabled)
             {
-                model.IsBusy = true;
-
                 var stopwatch = new System.Diagnostics.Stopwatch();
 
                 System.Threading.Tasks.Task.Run(() =>
@@ -56,13 +57,13 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                 Rooms = cinema.Rooms.Select(entity => new Models.View.RoomViewModel { Id = entity.Id, Name = entity.Name, CinemaName = cinema.Name }).ToArray(),
                                 EmailContacts = cinema.OrganizationEmailContactItemBridges.Select(bridge => new Models.View.EmailContactViewModel { EmailAddress = bridge.ContactItem.EmailAddress, Label = bridge.ContactItem.Label }).ToArray(),
                                 PhoneContacts = cinema.OrganizationPhoneContactItemBridges.Select(bridge => new Models.View.PhoneContactViewModel { PhoneNumber = bridge.ContactItem.PhoneNumber, Label = bridge.ContactItem.Label }).ToArray(),
-                                ImageSource = Providers.ImageSourceProvider.Instance.Cached(cinema.Image.Id)
+                                ImageId = cinema.Image.Id
                             });
                         }
                     }
 
                     return list;
-                }).ContinueWith(async task =>
+                }).ContinueWith(task =>
                 {
                     stopwatch.Stop();
 
@@ -70,18 +71,14 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                     if (stopwatch.Elapsed < reasonableElapseTime)
                     {
-                        await System.Threading.Tasks.Task.Delay(reasonableElapseTime - stopwatch.Elapsed);
+                        System.Threading.Thread.Sleep(reasonableElapseTime - stopwatch.Elapsed);
                     }
 
                     Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                     {
-                        model.IsBusy = false;
-
-                        IsEnabled = true;
-
                         if (task.Exception == null)
                         {
-                            model.Cinemas = new DLToolkit.Forms.Controls.FlowObservableCollection<Models.View.CinemaViewModel>(task.Result);
+                            pageBindingContext.Cinemas = new System.Collections.ObjectModel.ObservableCollection<Models.View.CinemaViewModel>(task.Result);
                         }
                         else
                         {
@@ -113,6 +110,10 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                 });
                             }
                         }
+
+                        pageBindingContext.IsBusy = false;
+
+                        IsEnabled = true;
                     });
                 });
             }
@@ -123,9 +124,16 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             ((Xamarin.Forms.Application.Current.MainPage as MainPage).Master as MasterPage).PresentDatabaseStatusSection();
         }
 
-        private void FlowListView_FlowItemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
+        private void CinemaOverview_Tapped(object sender, System.EventArgs args)
         {
-            this.NavigationPushPageAsync(new CinemaDetailPage(e.Item as Models.View.CinemaViewModel));
+            this.NavigationPushPageAsync(new CinemaDetailPage((sender as Xamarin.Forms.BindableObject).BindingContext as Models.View.CinemaViewModel));
+        }
+
+        private void RefreshView_Refreshing(object sender, System.EventArgs args)
+        {
+            if (!IsEnabled) return;
+
+            (sender as Xamarin.Forms.RefreshView).IsRefreshing = false;
         }
     }
 }

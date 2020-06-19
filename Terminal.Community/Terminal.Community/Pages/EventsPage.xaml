@@ -11,6 +11,7 @@
     xmlns:templateselectors="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Template.Selector"
     xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
     xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
+    xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
     mc:Ignorable="d"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.EventsPage"
     x:Name="Page"
@@ -156,7 +157,7 @@
             </DataTemplate>
 
             <DataTemplate x:Key="EventOverviewTemplate">
-                <ViewCell>
+                <ViewCell ios:Cell.DefaultBackgroundColor="White">
                     <Frame 
                         Margin="6" Padding="0" 
                         CornerRadius="3" 
@@ -250,6 +251,7 @@
     <ContentPage.Content>
         <Grid>
             <ListView
+                BackgroundColor="White"
                 SelectionMode="None"
                 HasUnevenRows="True"
                 SeparatorVisibility="None"
@@ -264,7 +266,7 @@
                 </ListView.BackgroundColor>
                 <ListView.GroupHeaderTemplate>
                     <DataTemplate>
-                        <ViewCell>
+                        <ViewCell ios:Cell.DefaultBackgroundColor="White">
                             <StackLayout Orientation="Horizontal" Padding="6,20,6,6">
                                 <BoxView Style="{StaticResource BlockquoteBoxViewStyle}" />
                                 <Label

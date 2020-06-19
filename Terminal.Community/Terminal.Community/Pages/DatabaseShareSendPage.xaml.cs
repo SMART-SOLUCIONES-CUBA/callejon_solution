@@ -39,6 +39,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
             stopwatch = new System.Diagnostics.Stopwatch();
 
+            IsEnabled = false;
+
             BindingContext = new Models.Page.DatabaseShareSendPageModel
             {
                 Profile = Managers.ProfileManager.Instance.GetCurrentProfile()
@@ -48,6 +50,15 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
+
+            if (!IsEnabled)
+            {
+                Xamarin.Forms.DependencyService.Get<Managers.Facade.IDisplayOrientationManagerFacade>()?.Lock(Xamarin.Essentials.DisplayOrientation.Portrait);
+
+                IsEnabled = true;
+            }
+
+            Xamarin.Essentials.DeviceDisplay.KeepScreenOn = true;
 
             StartSenderPostulationIfValidNetworkAccess(Xamarin.Essentials.Connectivity.NetworkAccess);
 

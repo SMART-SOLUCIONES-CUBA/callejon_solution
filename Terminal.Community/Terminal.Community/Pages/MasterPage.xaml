@@ -10,6 +10,7 @@
     xmlns:renderedviews="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Rendered"
     xmlns:specializedviews="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized"
     xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
     mc:Ignorable="d"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.MasterPage"
     x:Name="Page"
@@ -98,6 +99,17 @@
                     </Grid>
                 </DataTemplate>
             </ListView.HeaderTemplate>
+            <ListView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <ViewCell ios:Cell.DefaultBackgroundColor="Transparent">
+                        <Label
+                            Margin="10"
+                            Text="{Binding Path=Title}"
+                            TextColor="DimGray"
+                            FontFamily="Default" />
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.GroupHeaderTemplate>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <renderedviews:ResponsiveImageCell 

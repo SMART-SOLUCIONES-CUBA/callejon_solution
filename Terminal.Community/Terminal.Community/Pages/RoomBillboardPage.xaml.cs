@@ -93,7 +93,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                     Genres = presentation.Production.GetGenres().Select(entity => new GenreViewModel { Id = entity.Id, Name = entity.Name }).ToArray(),
                                     AwardWinnings = presentation.Production.AwardWinnings.Select(entity => string.Format("{0} Premios {1} {2}, {3}", entity.Type == SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations.AwardWinType.Winner ? "Ganador" : "Nominado", entity.Award.Name, entity.Edition, entity.Category)).ToArray(),
                                     ProducerHouses = presentation.Production.GetProducerHouses().Select(entity => new ProducerHouseViewModel { Id = entity.Id, Name = entity.Name }).ToArray(),
-                                    PosterImageSource = Providers.ImageSourceProvider.Instance.Cached(presentation.Production.PosterImage.Id),
+                                    PosterImageId = presentation.Production.PosterImage.Id,
                                     Directors = presentation.Production.Participations.Where(p => p.Role == SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations.ProductionRole.Direction).Select(p => new PersonalityViewModel
                                     {
                                         Id = p.Personality.Id,
@@ -102,7 +102,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                         LastName = p.Personality.LastName,
                                         IsMale = p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male,
                                         About = p.Personality.About,
-                                        ImageId = p.Personality.Image.Id
+                                        ImageId = p.Personality.Image?.Id ?? System.Guid.Empty
                                     }).ToArray(),
                                     Interpreters = presentation.Production.Participations.Where(p => p.Role == SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations.ProductionRole.Interpretation).Select(p => new PersonalityViewModel
                                     {
@@ -112,7 +112,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                         LastName = p.Personality.LastName,
                                         IsMale = p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male,
                                         About = p.Personality.About,
-                                        ImageId = p.Personality.Image.Id
+                                        ImageId = p.Personality.Image?.Id ?? System.Guid.Empty
                                     }).ToArray(),
                                     Productors = presentation.Production.Participations.Where(p => p.Role == SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations.ProductionRole.Production).Select(p => new PersonalityViewModel
                                     {
@@ -122,7 +122,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                         LastName = p.Personality.LastName,
                                         IsMale = p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male,
                                         About = p.Personality.About,
-                                        ImageId = p.Personality.Image.Id
+                                        ImageId = p.Personality.Image?.Id ?? System.Guid.Empty
                                     }).ToArray(),
                                     Editors = presentation.Production.Participations.Where(p => p.Role == SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations.ProductionRole.Edition).Select(p => new PersonalityViewModel
                                     {
@@ -132,7 +132,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                         LastName = p.Personality.LastName,
                                         IsMale = p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male,
                                         About = p.Personality.About,
-                                        ImageId = p.Personality.Image.Id
+                                        ImageId = p.Personality.Image?.Id ?? System.Guid.Empty
                                     }).ToArray(),
                                     Photographers = presentation.Production.Participations.Where(p => p.Role == SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations.ProductionRole.Photography).Select(p => new PersonalityViewModel
                                     {
@@ -142,7 +142,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                         LastName = p.Personality.LastName,
                                         IsMale = p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male,
                                         About = p.Personality.About,
-                                        ImageId = p.Personality.Image.Id
+                                        ImageId = p.Personality.Image?.Id ?? System.Guid.Empty
                                     }).ToArray(),
                                     ArtisticManagers = presentation.Production.Participations.Where(p => p.Role == SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations.ProductionRole.ArtisticManagement).Select(p => new PersonalityViewModel
                                     {
@@ -152,7 +152,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                         LastName = p.Personality.LastName,
                                         IsMale = p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male,
                                         About = p.Personality.About,
-                                        ImageId = p.Personality.Image.Id
+                                        ImageId = p.Personality.Image?.Id ?? System.Guid.Empty
                                     }).ToArray(),
                                     Screenplayers = presentation.Production.Participations.Where(p => p.Role == SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations.ProductionRole.Screenplay).Select(p => new PersonalityViewModel
                                     {
@@ -162,7 +162,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                         LastName = p.Personality.LastName,
                                         IsMale = p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male,
                                         About = p.Personality.About,
-                                        ImageId = p.Personality.Image.Id
+                                        ImageId = p.Personality.Image?.Id ?? System.Guid.Empty
                                     }).ToArray(),
                                     Sounders = presentation.Production.Participations.Where(p => p.Role == SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations.ProductionRole.Sound).Select(p => new PersonalityViewModel
                                     {
@@ -172,7 +172,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                         LastName = p.Personality.LastName,
                                         IsMale = p.Personality.Sex == SAPRESSC.Middleware.Identity.Persistence.Enumerations.Sex.Male,
                                         About = p.Personality.About,
-                                        ImageId = p.Personality.Image.Id
+                                        ImageId = p.Personality.Image?.Id ?? System.Guid.Empty
                                     }).ToArray()
                                 }
                             });

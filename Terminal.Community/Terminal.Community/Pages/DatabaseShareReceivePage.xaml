@@ -14,8 +14,7 @@
     mc:Ignorable="d"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.DatabaseShareReceivePage"
     x:Name="Page"
-    ios:Page.UseSafeArea="True"
-    NavigationPage.BackButtonTitle="Atrás">
+    ios:Page.UseSafeArea="True">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:PageHeightToCuadrateSideSizeConverter x:Key="PageHeightToCuadrateSideSizeConverter" Page="{x:Reference Page}" />
@@ -98,6 +97,7 @@
                         <DataTemplate>
                             <Grid
                                 Grid.Column="{Binding Path=GridColumn}" Grid.Row="{Binding Path=GridRow}"
+                                HorizontalOptions="Center" VerticalOptions="Center"
                                 Margin="1"
                                 RowSpacing="4">
                                 <Grid.GestureRecognizers>

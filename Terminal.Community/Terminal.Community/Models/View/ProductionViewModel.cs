@@ -14,7 +14,7 @@
 
         public string Argument { get; set; }
 
-        public Xamarin.Forms.ImageSource PosterImageSource { get; set; }
+        public System.Guid PosterImageId { get; set; }
 
         public GenreViewModel[] Genres { get; set; }
 

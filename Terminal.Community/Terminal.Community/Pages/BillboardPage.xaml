@@ -1,19 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <sscxftoolkitmvvmpages:ContentPage 
     xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
-    xmlns:ffilviewforms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-    xmlns:dltkcontrols="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
-    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
-    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Converters"
+    xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
+    xmlns:ffilviewforms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
     mc:Ignorable="d"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.BillboardPage"
+    NavigationPage.BackButtonTitle="Atrás"
     Title="Cartelera de Cine">
     <ContentPage.Resources>
         <ResourceDictionary>
+            <converters:ImageIdToImageSourceConverter x:Key="ImageIdToImageSource" />
+            <converters:FlextLayoutToResponsiveItemWidthConverter x:Key="FlextLayoutToResponsiveItemWidth" ItemMinWidth="320" ItemHorizontalMargin="8" />
+            <converters:FlextLayoutToResponsiveItemWidthFractionHeigthConverter x:Key="FlextLayoutToResponsiveItemWidthFractionHeigth" WidthCalculator="{StaticResource FlextLayoutToResponsiveItemWidth}" Fraction="1.777777777777778" />
             <sscxftoolkitpresentationconverters:BoolToBoolNegationConverter x:Key="BoolToBoolNegation" />
             <sscxftoolkitpresentationconverters:NullToBooleanConverter x:Key="NullToBoolean" />
             <sscxftoolkitpresentationconverters:FractionConverter x:Key="Fraction" />
@@ -21,64 +25,75 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <Grid>
-            <dltkcontrols:FlowListView
+            <RefreshView
                 IsRefreshing="{Binding Path=IsBusy}"
-                HasUnevenRows="True"
-                SeparatorVisibility="None"
-                FlowItemsSource="{Binding Path=Cinemas}"
-                FlowColumnMinWidth="320"
-                FlowItemTapped="FlowListView_FlowItemTapped">
-                <dltkcontrols:FlowListView.FlowEmptyTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout>
+                Refreshing="RefreshView_Refreshing">
+                <ScrollView Orientation="Vertical">
+                    <FlexLayout
+                        x:Name="ResponsiveWrapper"
+                        Margin="4"
+                        Wrap="Wrap"
+                        AlignContent="Start"
+                        AlignItems="Start"
+                        BindableLayout.ItemsSource="{Binding Path=Cinemas}">
+                        <BindableLayout.EmptyView>
+                            <StackLayout
+                                IsVisible="{Binding Path=IsBusy, Converter={StaticResource BoolToBoolNegation}}">
                                 <Label 
                                     Margin="10"
                                     Text="Sin elementos que mostrar"
                                     TextColor="DimGray"
                                     HorizontalTextAlignment="Center" />
                             </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </dltkcontrols:FlowListView.FlowEmptyTemplate>
-                <dltkcontrols:FlowListView.FlowColumnTemplate>
-                    <DataTemplate>
-                        <Frame
-                            Margin="4" Padding="0" 
-                            CornerRadius="3" 
-                            BackgroundColor="#F3F3F3">
-                            <StackLayout IsClippedToBounds="True">
-                                <ffilviewforms:CachedImage
-                                    x:Name="CardTumbnailImage"
-                                    BackgroundColor="Gray"
-                                    HeightRequest="{Binding Source={x:Reference CardTumbnailImage}, Path=Width, Converter={StaticResource Fraction}, ConverterParameter=1.777777777777778}"
-                                    Aspect="AspectFill"
-                                    Source="{Binding ImageSource}"
-                                    DownsampleToViewSize="True" />
-                                <StackLayout Padding="10,6,10,10">
-                                    <Label 
-                                        Text="{Binding Name}" 
-                                        FontSize="18"
-                                        TextColor="Accent"
-                                        FontFamily="Helvetica LT Std Bold Condensed" />
-                                    <StackLayout Orientation="Horizontal">
-                                        <Label 
-                                            VerticalOptions="CenterAndExpand"
-                                            Text="&#xf352;"
-                                            TextColor="Accent"
-                                            FontFamily="Material Design Icons"
-                                            FontSize="Medium" />
-                                        <Label 
-                                            Text="{Binding Address}" 
-                                            FontFamily="Helvetica LT Std Condensed"
-                                            TextColor="Accent" />
+                        </BindableLayout.EmptyView>
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Frame
+                                    x:Name="CinemaOverviewWrapper"
+                                    Margin="4" Padding="0" 
+                                    CornerRadius="3"
+                                    WidthRequest="{Binding Source={x:Reference ResponsiveWrapper}, Path=Width, Converter={StaticResource FlextLayoutToResponsiveItemWidth}}"
+                                    BackgroundColor="#F3F3F3">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="CinemaOverview_Tapped" />
+                                    </Frame.GestureRecognizers>
+                                    <StackLayout IsClippedToBounds="True">
+                                        <ffilviewforms:CachedImage
+                                            BackgroundColor="Gray"
+                                            HeightRequest="{Binding Source={x:Reference ResponsiveWrapper}, Path=Width, Converter={StaticResource FlextLayoutToResponsiveItemWidthFractionHeigth}}"
+                                            Aspect="AspectFill"
+                                            Source="{Binding Path=ImageId, Converter={StaticResource ImageIdToImageSource}}" />
+                                        <StackLayout Padding="10,6,10,10">
+                                            <Label 
+                                                Text="{Binding Name}" 
+                                                FontSize="18"
+                                                TextColor="{StaticResource PrimaryBrandColor}"
+                                                FontFamily="Helvetica LT Std Bold Condensed" />
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label 
+                                                    VerticalOptions="Center"
+                                                    Text="&#xf352;"
+                                                    FontFamily="Material Design Icons"
+                                                    FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventMiddleEmphasisStyleFontSize}">
+                                                    <Label.Padding>
+                                                        <OnPlatform x:TypeArguments="Thickness">
+                                                            <On Platform="iOS" Value="0,0,0,4" />
+                                                        </OnPlatform>
+                                                    </Label.Padding>
+                                                </Label>
+                                                <Label 
+                                                    VerticalOptions="Center"
+                                                    Text="{Binding Address}" 
+                                                    FontFamily="Helvetica LT Std Condensed" />
+                                            </StackLayout>
+                                        </StackLayout>
                                     </StackLayout>
-                                </StackLayout>
-                            </StackLayout>
-                        </Frame>
-                    </DataTemplate>
-                </dltkcontrols:FlowListView.FlowColumnTemplate>
-            </dltkcontrols:FlowListView>
+                                </Frame>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                </ScrollView>
+            </RefreshView>
             <StackLayout 
                 VerticalOptions="Start"
                 IsVisible="{Binding Path=IsBusy, Converter={StaticResource BoolToBoolNegation}}">

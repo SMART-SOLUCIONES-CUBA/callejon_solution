@@ -35,7 +35,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Droid
             {
                 Xamarin.Forms.DependencyService.Register<Community.Managers.Facade.IWiFiHostpotManagerFacade, Managers.LegancyByReflectionWiFiHostpotManager>();
             }
-            
+
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             
             LoadApplication(new App());

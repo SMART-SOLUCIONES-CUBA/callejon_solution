@@ -1,4 +1,6 @@
-﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
+﻿using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
+
+namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 {
     // Learn more about making custom code visible in the Xamarin.Forms previewer
     // by visiting https://aka.ms/xamarinforms-previewer
@@ -15,8 +17,8 @@
 
         protected override void OnAppearing()
         {
-            base.OnAppearing(); 
-            
+            base.OnAppearing();
+
             if (IsEnabled) return;
 
             var profile = Managers.ProfileManager.Instance.GetCurrentProfile();

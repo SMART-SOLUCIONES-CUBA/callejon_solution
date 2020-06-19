@@ -23,6 +23,10 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
         {
             base.OnAppearing();
 
+            Xamarin.Forms.DependencyService.Get<Managers.Facade.IDisplayOrientationManagerFacade>()?.Unlock();
+
+            Xamarin.Essentials.DeviceDisplay.KeepScreenOn = false;
+
             if (IsEnabled) return;
 
             ReloadDatabaseSummary();

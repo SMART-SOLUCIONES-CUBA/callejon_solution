@@ -124,6 +124,7 @@
     <Compile Include="Views\Renderer\PickerRenderer.cs" />
     <Compile Include="Views\Renderer\ResponsiveImageCellRenderer.cs" />
     <Compile Include="Effects\NativeTouchEffect.cs" />
+    <Compile Include="Managers\DisplayOrientationManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

@@ -50,6 +50,10 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
         {
             base.OnAppearing();
 
+            Xamarin.Essentials.DeviceDisplay.KeepScreenOn = true;
+
+            Xamarin.Forms.DependencyService.Get<Managers.Facade.IStatusBarApparenceManagerFacade>()?.RequireDarkTextApparence();
+
             StartSenderSearchIfValidNetworkAccess(Xamarin.Essentials.Connectivity.NetworkAccess);
 
             Xamarin.Essentials.Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
