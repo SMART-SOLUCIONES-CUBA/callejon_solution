@@ -9,7 +9,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
         const int CORNER = 50;      // pixel length of cropper corner
         const int RADIUS = 100;     // pixel radius of touch hit-test
 
-        private bool isTranslating;
         private double rotationAngle;
         private float? aspectRatio;
         private SKBitmap originBitmap;
@@ -123,6 +122,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
             // Calculate rectangle for displaying bitmap 
             float scale = System.Math.Min((float)info.Width / workBitmap.Width, (float)info.Height / workBitmap.Height);
 
+            var inverseScaleMatrix = SKMatrix.MakeIdentity();
+
+            inverseScaleMatrix.ScaleX = scale;
+            inverseScaleMatrix.ScaleY = scale;
+
             float x = (info.Width - scale * workBitmap.Width) / 2;
             float y = (info.Height - scale * workBitmap.Height) / 2;
 
@@ -131,12 +135,17 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
             canvas.DrawBitmap(workBitmap, bitmapRect);
 
             // Calculate a matrix transform for displaying the cropping rectangle
-            var bitmapScaleMatrix = SKMatrix.MakeIdentity();
+            var cropRectMatrix = SKMatrix.MakeIdentity();
 
-            bitmapScaleMatrix.SetScaleTranslate(scale, scale, x, y);
+            cropRectMatrix.ScaleX = scale;
+            cropRectMatrix.ScaleY = scale;
+            cropRectMatrix.TransX = x;
+            cropRectMatrix.TransY = y;
+
+            //matrix.SetScaleTranslate(scale, scale, x, y);
 
             // Display rectangle
-            var scaledCropRect = bitmapScaleMatrix.MapRect(croppingRect.Rect);
+            var scaledCropRect = cropRectMatrix.MapRect(croppingRect.Rect);
 
             canvas.DrawRect(scaledCropRect, edgeStroke);
 
@@ -163,7 +172,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
             }
 
             // Invert the transform for touch tracking
-            bitmapScaleMatrix.TryInvert(out inverseBitmapMatrix);
+            cropRectMatrix.TryInvert(out inverseBitmapMatrix);
         }
 
         private void PerformRotation()
@@ -200,8 +209,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
 
         private void OnTouchEffectTouchAction(object sender, Delegates.TouchActionEventArgs args)
         {
-            SKPoint pixelLocation = ConvertToPixel(args.Location);
-            SKPoint bitmapLocation = inverseBitmapMatrix.MapPoint(pixelLocation);
+            SKPoint pixelLocationPoint = ConvertToPixel(args.Location);
+            SKPoint bitmapLocationPoint = inverseBitmapMatrix.MapPoint(pixelLocationPoint);
 
             switch (args.Kind)
             {
@@ -209,15 +218,15 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
                     // Convert radius to bitmap/cropping scale
                     float radius = inverseBitmapMatrix.ScaleX * RADIUS;
 
-                    // Find corner that the finger is touching
-                    int cornerIndex = croppingRect.HitTest(bitmapLocation, radius);
-
-                    if (cornerIndex != -1 && !touchPoints.ContainsKey(args.Id))
+                    if (!touchPoints.ContainsKey(args.Id) && croppingRect.IsHitTouchPoint(bitmapLocationPoint))
                     {
+                        // Find corner that the finger is touching
+                        int cornerIndex = croppingRect.GetHitTouchPointCornerIndex(bitmapLocationPoint, radius);
+
                         var touchPoint = new TouchPoint
                         {
                             CornerIndex = cornerIndex,
-                            Offset = bitmapLocation - croppingRect.Corners[cornerIndex]
+                            Offset = cornerIndex != -1 ? bitmapLocationPoint - croppingRect.Corners[cornerIndex] : bitmapLocationPoint
                         };
 
                         touchPoints.Add(args.Id, touchPoint);
@@ -230,7 +239,14 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
                     {
                         var touchPoint = touchPoints[args.Id];
 
-                        croppingRect.MoveCorner(touchPoint.CornerIndex, bitmapLocation - touchPoint.Offset);
+                        if (touchPoint.CornerIndex != -1)
+                        {
+                            croppingRect.MoveCorner(touchPoint.CornerIndex, bitmapLocationPoint - touchPoint.Offset);
+                        }
+                        else
+                        {
+                            croppingRect.Move(bitmapLocationPoint - touchPoint.Offset);
+                        }
 
                         InvalidateSurface();
                     }
@@ -242,6 +258,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
                     if (touchPoints.ContainsKey(args.Id))
                     {
                         touchPoints.Remove(args.Id);
+
+                        croppingRect.ResetTranslation();
                     }
 
                     break;
@@ -253,6 +271,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
             return new SKPoint((float)(CanvasSize.Width * pt.X / Width), (float)(CanvasSize.Height * pt.Y / Height));
         }
 
+        #region Private Type
+
         private struct TouchPoint
         {
             public int CornerIndex { set; get; }
@@ -263,8 +283,10 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
         {
             const float MINIMUM = 10;   // pixels width or height
 
-            SKRect maxRect;             // generally the size of the bitmap
-            float? aspectRatio;
+
+            private SKPoint translation;
+            private SKRect maxRect;             // generally the size of the bitmap
+            private float? aspectRatio;
 
             public CroppingRectangle(SKRect maxRect, float? aspectRatio = null)
             {
@@ -308,15 +330,15 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
                 {
                     return new SKPoint[]
                     {
-                    new SKPoint(Rect.Left, Rect.Top),
-                    new SKPoint(Rect.Right, Rect.Top),
-                    new SKPoint(Rect.Right, Rect.Bottom),
-                    new SKPoint(Rect.Left, Rect.Bottom)
+                        new SKPoint(Rect.Left, Rect.Top),
+                        new SKPoint(Rect.Right, Rect.Top),
+                        new SKPoint(Rect.Right, Rect.Bottom),
+                        new SKPoint(Rect.Left, Rect.Bottom)
                     };
                 }
             }
 
-            public int HitTest(SKPoint point, float radius)
+            public int GetHitTouchPointCornerIndex(SKPoint point, float radius)
             {
                 SKPoint[] corners = Corners;
 
@@ -331,6 +353,39 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
                 }
 
                 return -1;
+            }
+
+            public bool IsHitTouchPoint(SKPoint point)
+            {
+                return Rect.Contains(point);
+            }
+
+            public void Move(SKPoint point)
+            {
+                SKRect rect = Rect;
+
+                var beforeTranslation = translation;
+
+                var variation = point - beforeTranslation;
+
+                translation += variation;
+
+                rect.Offset(variation);
+
+                var verticalOverflow = rect.Top < 0 ? System.Math.Abs(rect.Top) : 0;
+                var horizontalOverflow = rect.Left < 0 ? System.Math.Abs(rect.Left) : 0;
+
+                if (verticalOverflow != 0 || horizontalOverflow != 0)
+                {
+                    rect.Offset(horizontalOverflow, verticalOverflow);
+                }
+
+                Rect = rect;
+            }
+
+            public void ResetTranslation()
+            {
+                translation = SKPoint.Empty;
             }
 
             public void MoveCorner(int index, SKPoint point)
@@ -394,5 +449,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
                 Rect = rect;
             }
         }
+
+        #endregion
     }
 }
