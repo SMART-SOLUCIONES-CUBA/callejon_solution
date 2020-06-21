@@ -281,15 +281,15 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
 
         private class CroppingRectangle
         {
-            const float MINIMUM = 10;   // pixels width or height
-
-
+            private float minSize;
             private SKPoint translation;
             private SKRect maxRect;             // generally the size of the bitmap
             private float? aspectRatio;
 
             public CroppingRectangle(SKRect maxRect, float? aspectRatio = null)
             {
+                minSize = (float)(System.Math.Min(maxRect.Width, maxRect.Height) * 0.2);
+
                 this.maxRect = maxRect;
                 this.aspectRatio = aspectRatio;
 
@@ -408,23 +408,23 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
                 switch (index)
                 {
                     case 0: // upper-left
-                        rect.Left = System.Math.Min(System.Math.Max(point.X, maxRect.Left), rect.Right - MINIMUM);
-                        rect.Top = System.Math.Min(System.Math.Max(point.Y, maxRect.Top), rect.Bottom - MINIMUM);
+                        rect.Left = System.Math.Min(System.Math.Max(point.X, maxRect.Left), rect.Right - minSize);
+                        rect.Top = System.Math.Min(System.Math.Max(point.Y, maxRect.Top), rect.Bottom - minSize);
                         break;
 
                     case 1: // upper-right
-                        rect.Right = System.Math.Max(System.Math.Min(point.X, maxRect.Right), rect.Left + MINIMUM);
-                        rect.Top = System.Math.Min(System.Math.Max(point.Y, maxRect.Top), rect.Bottom - MINIMUM);
+                        rect.Right = System.Math.Max(System.Math.Min(point.X, maxRect.Right), rect.Left + minSize);
+                        rect.Top = System.Math.Min(System.Math.Max(point.Y, maxRect.Top), rect.Bottom - minSize);
                         break;
 
                     case 2: // lower-right
-                        rect.Right = System.Math.Max(System.Math.Min(point.X, maxRect.Right), rect.Left + MINIMUM);
-                        rect.Bottom = System.Math.Max(System.Math.Min(point.Y, maxRect.Bottom), rect.Top + MINIMUM);
+                        rect.Right = System.Math.Max(System.Math.Min(point.X, maxRect.Right), rect.Left + minSize);
+                        rect.Bottom = System.Math.Max(System.Math.Min(point.Y, maxRect.Bottom), rect.Top + minSize);
                         break;
 
                     case 3: // lower-left
-                        rect.Left = System.Math.Min(System.Math.Max(point.X, maxRect.Left), rect.Right - MINIMUM);
-                        rect.Bottom = System.Math.Max(System.Math.Min(point.Y, maxRect.Bottom), rect.Top + MINIMUM);
+                        rect.Left = System.Math.Min(System.Math.Max(point.X, maxRect.Left), rect.Right - minSize);
+                        rect.Bottom = System.Math.Max(System.Math.Min(point.Y, maxRect.Bottom), rect.Top + minSize);
                         break;
                 }
 
