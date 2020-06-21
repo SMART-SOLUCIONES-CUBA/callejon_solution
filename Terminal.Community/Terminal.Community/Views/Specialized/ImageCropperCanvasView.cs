@@ -24,6 +24,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
         // Drawing objects
         private SKPaint cornerStroke;
         private SKPaint edgeStroke;
+        private SKPaint maskFillPaint;
 
         public ImageCropperCanvasView(SKBitmap originBitmap, float? aspectRatio = null)
         {
@@ -43,6 +44,12 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
                 Style = SKPaintStyle.Stroke,
                 Color = SKColors.White,
                 StrokeWidth = 2
+            };
+
+            maskFillPaint = new SKPaint
+            {
+                Style = SKPaintStyle.Fill,
+                Color = SKColors.Black.WithAlpha(84)
             };
 
             this.originBitmap = originBitmap;
@@ -142,10 +149,28 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
             cropRectMatrix.TransX = x;
             cropRectMatrix.TransY = y;
 
-            //matrix.SetScaleTranslate(scale, scale, x, y);
-
             // Display rectangle
             var scaledCropRect = cropRectMatrix.MapRect(croppingRect.Rect);
+
+            canvas.Save();
+
+            using (var maskPath = new SKPath())
+            {
+                maskPath.AddRect(bitmapRect);
+
+                canvas.ClipPath(maskPath);
+
+                using (var inverseMaskPath = new SKPath())
+                {
+                    inverseMaskPath.AddRect(scaledCropRect);
+
+                    canvas.ClipPath(inverseMaskPath, SKClipOperation.Difference);
+
+                    canvas.DrawPaint(maskFillPaint);
+                }
+            }
+
+            canvas.Restore();
 
             canvas.DrawRect(scaledCropRect, edgeStroke);
 
