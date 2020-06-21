@@ -372,12 +372,25 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Views.Specialized
 
                 rect.Offset(variation);
 
-                var verticalOverflow = rect.Top < 0 ? System.Math.Abs(rect.Top) : 0;
-                var horizontalOverflow = rect.Left < 0 ? System.Math.Abs(rect.Left) : 0;
+                var verticalOverflow = rect.Top < 0 ? rect.Top : 0;
+
+                if (verticalOverflow == 0)
+                {
+                    verticalOverflow = rect.Bottom > maxRect.Bottom ? rect.Bottom - maxRect.Bottom  : 0;
+                }
+
+                var horizontalOverflow = rect.Left < 0 ? rect.Left : 0;
+
+                if (horizontalOverflow == 0)
+                {
+                    horizontalOverflow = rect.Right > maxRect.Right ? rect.Right - maxRect.Right : 0;
+                }
 
                 if (verticalOverflow != 0 || horizontalOverflow != 0)
                 {
-                    rect.Offset(horizontalOverflow, verticalOverflow);
+                    var relocationPoint = new SKPoint(horizontalOverflow * -1, verticalOverflow * -1);
+
+                    rect.Offset(relocationPoint);
                 }
 
                 Rect = rect;
