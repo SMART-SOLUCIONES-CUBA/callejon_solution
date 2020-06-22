@@ -65,5 +65,7 @@
 	<false/>
 	<key>NSCalendarsUsageDescription</key>
 	<string>This app needs access to calendars.</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>es</string>
 </dict>
 </plist>
