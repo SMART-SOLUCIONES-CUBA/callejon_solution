@@ -33,8 +33,8 @@
                 FalseString="&#xfbbd;" />
             <sscxftoolkitpresentationconverters:BoolToStringConverter
                 x:Key="ConnectivityStatusBoolToMessageStringConverter"
-                TrueString="Su dispositivo esta en una red soportada. Puede alternativamente crear un punto de acceso WiFi."
-                FalseString="Su dispositivo no esta conectado a una red. Debe unirse a una o crear un punto de acceso WiFi." />
+                TrueString="Su dispositivo está en una red soportada. Puede alternativamente crear un punto de acceso WiFi."
+                FalseString="Su dispositivo no está conectado a una red. Debe unirse a una o crear un punto de acceso WiFi." />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
@@ -108,17 +108,29 @@
                     </StackLayout>
                     <StackLayout
                         VerticalOptions="Center"
-                        IsVisible="{Binding Path=WiFiHostpotDetail, Converter={StaticResource NullToBooleanConverter}}">
-                        <Label
+                        IsVisible="{Binding Path=WiFiHostpotDetail, Converter={StaticResource NullToBooleanConverter}}"
+                        Margin="8">
+                        <Grid
                             HorizontalOptions="Center"
-                            Text="{Binding Path=IsBusy, Converter={StaticResource ConnectivityStatusBoolToGlyphStringConverter}}"
-                            FontFamily="Material Design Icons"
-                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileOverviewImageSize}" />
-                        <Label
-                            Margin="20"
-                            HorizontalTextAlignment="Center"
-                            Text="{Binding Path=IsBusy, Converter={StaticResource ConnectivityStatusBoolToMessageStringConverter}}"
-                            TextColor="Black" />
+                            WidthRequest="280"
+                            ColumnSpacing="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Label
+                                VerticalOptions="Center"
+                                Grid.Column="0"
+                                Text="{Binding Path=IsBusy, Converter={StaticResource ConnectivityStatusBoolToGlyphStringConverter}}"
+                                FontFamily="Material Design Icons"
+                                FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileOverviewImageSize}" />
+                            <Label
+                                Grid.Column="1"
+                                VerticalTextAlignment="Center"
+                                Text="{Binding Path=IsBusy, Converter={StaticResource ConnectivityStatusBoolToMessageStringConverter}}"
+                                TextColor="Black"
+                                LineBreakMode="WordWrap" />
+                        </Grid>
                         <Button
                             HorizontalOptions="Center"
                             Text="Crear Punto de Acceso WiFi"

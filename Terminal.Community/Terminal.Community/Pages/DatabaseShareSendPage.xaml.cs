@@ -140,9 +140,19 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
         private void CreateWiFiHostpotButton_Clicked(object sender, System.EventArgs args)
         {
-            Xamarin.Essentials.Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
+            if ((BindingContext as Models.Page.DatabaseShareSendPageModel).IsBusy)
+            {
+                DisplayAlert("Confirmar", string.Format("Su dispositivo está en una red soportada. Todos sus amigos en la misma red podrán unirse al grupo.{0}{0}Está seguro que desea crear un punto de acceso WiFi para compartir sus datos fuera de esta red?", System.Environment.NewLine), "Crear", "Cancelar").ContinueWith(task =>
+                {
+                    if (!task.Result) return;
 
-            this.NavigationPushModalPageAsync(new WiFiHostpotHandlingPage((BindingContext as Models.Page.DatabaseShareSendPageModel).WiFiHostpotDetail, OnWiFiHostpotHandlingCallback));
+                    Xamarin.Forms.Device.BeginInvokeOnMainThread(HandleCreateWiFiHostpotRequest);
+                });
+            }
+            else
+            {
+                HandleCreateWiFiHostpotRequest();
+            }
         }
 
         private void BroadcastDataBundleButton_Clicked(object sender, System.EventArgs args)
@@ -222,6 +232,13 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             receiverPresenceCancellationTokenSource?.Cancel();
 
             StartSenderPostulationIfValidNetworkAccess(args.NetworkAccess);
+        }
+
+        private void HandleCreateWiFiHostpotRequest()
+        {
+            Xamarin.Essentials.Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
+
+            this.NavigationPushModalPageAsync(new WiFiHostpotHandlingPage((BindingContext as Models.Page.DatabaseShareSendPageModel).WiFiHostpotDetail, OnWiFiHostpotHandlingCallback));
         }
 
         private void HandleCloseRequest()

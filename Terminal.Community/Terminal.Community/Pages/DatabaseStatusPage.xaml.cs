@@ -43,32 +43,34 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
         private void ShareDatabaseButton_Clicked(object sender, System.EventArgs eventArgs)
         {
-            // TODO Restore to default behavior!!
-            //if (!updateForceModeRequired)
-
-            if (Xamarin.Forms.DependencyService.Get<Managers.Facade.IWiFiHostpotManagerFacade>() != null)
+            if (default != Helpers.DataSyncronizationHelper.Instance.SyncronizationDate)
             {
-                DisplayActionSheet("Compartir Datos", "Cancelar", null, SEND_SHARE_ACTION_CAPTION, RECEIVE_SHARE_ACTION_CAPTION).ContinueWith(task =>
+                if (Xamarin.Forms.DependencyService.Get<Managers.Facade.IWiFiHostpotManagerFacade>() != null)
                 {
-                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                    DisplayActionSheet("Compartir Datos", "Cancelar", null, SEND_SHARE_ACTION_CAPTION, RECEIVE_SHARE_ACTION_CAPTION).ContinueWith(task =>
                     {
-                        switch (task.Result)
+                        Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                         {
-                            case SEND_SHARE_ACTION_CAPTION:
-                                this.NavigationPushModalPageAsync(new DatabaseShareSendPage());
+                            switch (task.Result)
+                            {
+                                case SEND_SHARE_ACTION_CAPTION:
+                                    this.NavigationPushModalPageAsync(new DatabaseShareSendPage());
 
-                                break;
+                                    break;
 
-                            case RECEIVE_SHARE_ACTION_CAPTION:
-                                this.NavigationPushModalPageAsync(new DatabaseShareReceivePage(ShareDatabaseReceived__Callback));
+                                case RECEIVE_SHARE_ACTION_CAPTION:
+                                    this.NavigationPushModalPageAsync(new DatabaseShareReceivePage(ShareDatabaseReceived__Callback));
 
-                                break;
-                        }
+                                    break;
+                            }
+                        });
+
                     });
-
-                });
-
-                return;
+                }
+                else
+                {
+                    this.NavigationPushModalPageAsync(new DatabaseShareReceivePage(ShareDatabaseReceived__Callback));
+                }
             }
             else
             {
@@ -78,6 +80,13 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
         private void ClearDatabaseButton_Clicked(object sender, System.EventArgs e)
         {
+            if (default == Helpers.DataSyncronizationHelper.Instance.SyncronizationDate)
+            {
+                DisplayAlert("Aviso", "No existen datos almacenados de actualizaciones.", "Aceptar");
+
+                return;
+            }
+
             DisplayAlert("Confirmar", "Está seguro que desea elimnar la actualización de datos actual?", "Elimnar", "Cancelar").ContinueWith(displayAlertTask =>
             {
                 if (!displayAlertTask.Result) return;
