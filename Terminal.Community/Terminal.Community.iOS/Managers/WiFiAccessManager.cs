@@ -12,7 +12,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.iOS.Managers
         {
         }
 
-        public bool HasBuilinConfirmation => true;
+        public bool HasBuildinConfirmation => true;
 
         public bool IsPlatformSupported => UIKit.UIDevice.CurrentDevice.CheckSystemVersion(11, 0);
 

@@ -18,5 +18,10 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.iOS.Managers
         {
             throw new System.NotImplementedException();
         }
+
+        public void LaunchSystemWiFiSetting()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

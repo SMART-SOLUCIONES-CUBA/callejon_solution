@@ -6,7 +6,7 @@
 
         void ReleaseCallbackActions();
 
-        bool HasBuilinConfirmation { get; }
+        bool HasBuildinConfirmation { get; }
 
         bool IsPlatformSupported { get; }
 

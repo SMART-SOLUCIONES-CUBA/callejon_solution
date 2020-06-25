@@ -197,30 +197,52 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                     System.Threading.Tasks.Parallel.Invoke(sendDataBundleActions.ToArray());
 
+                    System.Threading.Thread.Sleep(1000 * pageContext.Presences.Count);
+
                     Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                     {
-                        pageContext.IsSendingBundle = false;
-                        pageContext.BusyProgressMessage = null;
-
                         if (defaultCancellationTokenSource.IsCancellationRequested)
                         {
+                            pageContext.IsSendingBundle = false;
+                            pageContext.BusyProgressMessage = null;
+
                             DisplayAlert("Aviso", "Envío de su actualización de datos a los amigos unidos al grupo cancelado con éxito.", "Aceptar");
+
+                            defaultCancellationTokenSource?.Cancel();
+                            receiverPresenceCancellationTokenSource?.Cancel();
+
+                            ConcreteSaveClose();
                         }
                         else if (pageContext.Presences.Count > 0)
                         {
+                            pageContext.IsSendingBundle = false;
+                            pageContext.BusyProgressMessage = null;
+
                             DisplayAlert("Aviso", string.Format("No fue posible completar el envío de su actualización de datos a todos los amigos unidos al grupo.{0}{0}Se ha perdido la conexión con sus dispositivos y deberán intentarlo nuevamente.", System.Environment.NewLine), "Aceptar");
 
                             pageContext.Presences.Clear();
+
+                            defaultCancellationTokenSource?.Cancel();
+                            receiverPresenceCancellationTokenSource?.Cancel();
+
+                            ConcreteSaveClose();
                         }
                         else
                         {
-                            DisplayAlert("Aviso", "Envío de su actualización de datos a los amigos unidos al grupo completada con éxito.", "Aceptar");
+                            pageContext.IsSendingBundle = false;
+                            pageContext.BusyProgressMessage = null;
+
+                            DisplayAlert("Aviso", string.Format("Envío de su actualización de datos a los amigos unidos al grupo completada con éxito.{0}{0}Es pesible que algunos estén recibiendo aún los datos.{0}{0}Seleccione 'Terminar' cuando todos completen la recepción para evitar interrupciones.", System.Environment.NewLine), "Terminar").ContinueWith(_ =>
+                            {
+                                defaultCancellationTokenSource?.Cancel();
+                                receiverPresenceCancellationTokenSource?.Cancel();
+
+                                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                                {
+                                    ConcreteSaveClose();
+                                });
+                            });
                         }
-
-                        defaultCancellationTokenSource?.Cancel();
-                        receiverPresenceCancellationTokenSource?.Cancel();
-
-                        ConcreteSaveClose();
                     });
                 });
             });
@@ -528,8 +550,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                 if (byteSentCount >= bundleContentLength) break;
             }
-
-            System.Threading.Thread.Sleep(1000 * pageContext.Presences.Count);
 
             sender.Close();
         }

@@ -128,6 +128,10 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon20.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ProjectLogo.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\ContractorIdentityLogo.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\ContractorSignature.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\ProjectPortalThumbnail.imageset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -186,5 +190,9 @@
     <Folder Include="Views\Renderer\" />
     <Folder Include="Effects\" />
     <Folder Include="Recognizers\" />
+    <Folder Include="Assets.xcassets\ProjectLogo.imageset\" />
+    <Folder Include="Assets.xcassets\ContractorIdentityLogo.imageset\" />
+    <Folder Include="Assets.xcassets\ContractorSignature.imageset\" />
+    <Folder Include="Assets.xcassets\ProjectPortalThumbnail.imageset\" />
   </ItemGroup>
 </Project>

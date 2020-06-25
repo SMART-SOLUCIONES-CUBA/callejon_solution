@@ -7,8 +7,7 @@
     xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
     xmlns:jmci="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
     xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
-    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
-    xmlns:sscxftoolkitpresentationviews="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Views;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"    
     xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
     mc:Ignorable="d"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.SessionConfigurationPage">
@@ -17,6 +16,7 @@
             <sscxftoolkitpresentationconverters:FractionConverter x:Key="Fraction" />
             <sscxftoolkitpresentationconverters:FactorConverter x:Key="Factor" />
             <sscxftoolkitpresentationconverters:BoolToBinaryConverter x:Key="BoolToBinary" />
+            <sscxftoolkitpresentationconverters:NotNullOrEmptyStringToBooleanConverter x:Key="NotNullOrEmptyStringToBoolean" />
         </ResourceDictionary>
     </CarouselPage.Resources>
     <sscxftoolkitmvvmpages:ContentPage
@@ -129,8 +129,21 @@
                         Text="Continuar"
                         Clicked="NextPageButton_Clicked" />
                 </StackLayout>
-
-                <sscxftoolkitpresentationviews:BusyView />
+                <ContentView
+                    IsVisible="{Binding IsBusy}"
+                    BackgroundColor="#EEFFFFFF">
+                    <StackLayout VerticalOptions="Center">
+                        <ActivityIndicator 
+                            IsRunning="{Binding IsBusy}"
+                            HeightRequest="{Binding Source={x:Static Application.Current}, Path=MainPage.Height, Converter={StaticResource Fraction}, ConverterParameter=10}" />
+                        <Label
+                            Text="{Binding BusyProgressMessage}"
+                            Margin="20,0"
+                            HorizontalTextAlignment="Center"
+                            TextColor="{StaticResource PrimaryBrandColor}"
+                            IsVisible="{Binding BusyProgressMessage, Converter={StaticResource NotNullOrEmptyStringToBoolean}}" />
+                    </StackLayout>
+                </ContentView>
             </Grid>
         </ContentPage.Content>
     </sscxftoolkitmvvmpages:ContentPage>

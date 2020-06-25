@@ -38,5 +38,10 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Droid.Managers
 
             return result;
         }
+
+        public void LaunchSystemWiFiSetting()
+        {
+            Xamarin.Essentials.Platform.CurrentActivity.StartActivity(new Android.Content.Intent(Android.Net.Wifi.WifiManager.ActionPickWifiNetwork));
+        }
     }
 }

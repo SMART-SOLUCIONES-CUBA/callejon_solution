@@ -6,10 +6,16 @@
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
     xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
-    xmlns:sscxftoolkitpresentationviews="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Views;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
     mc:Ignorable="d"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.SignOutPage"
     Title="Cerrar Sesión">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <sscxftoolkitpresentationconverters:FractionConverter x:Key="Fraction" />
+            <sscxftoolkitpresentationconverters:NotNullOrEmptyStringToBooleanConverter x:Key="NotNullOrEmptyStringToBoolean" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <Grid>
             <ScrollView>
@@ -17,8 +23,8 @@
                     <Label 
                         Margin="0,20"
                         HorizontalOptions="Center"
-                        Text="&#xf1f8;"
-                        FontFamily="Material Design Icons"
+                        Text="&#xE05A;"
+                        FontFamily="Iconmonstr Iconic"
                         FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventPersonalityImageSize}" />
                     <Label
                         Text="En esta sección podrá cerrar su sesión y con ella eliminar permanente de los datos especificados en su perfil, configuraciones realizadas a la aplicación, la actualización de la cartelera de cine y eventos, así como los comentarios y denuncias de comentarios no sincronizados."
@@ -29,7 +35,21 @@
                         Clicked="SignOutButton_Clicked"/>
                 </StackLayout>
             </ScrollView>
-            <sscxftoolkitpresentationviews:BusyView />
+            <ContentView
+                IsVisible="{Binding IsBusy}"
+                BackgroundColor="#EEFFFFFF">
+                <StackLayout VerticalOptions="Center">
+                    <ActivityIndicator 
+                        IsRunning="{Binding IsBusy}"
+                        HeightRequest="{Binding Source={x:Static Application.Current}, Path=MainPage.Height, Converter={StaticResource Fraction}, ConverterParameter=10}" />
+                    <Label
+                        Text="{Binding BusyProgressMessage}"
+                        Margin="20,0"
+                        HorizontalTextAlignment="Center"
+                        TextColor="{StaticResource PrimaryBrandColor}"
+                        IsVisible="{Binding BusyProgressMessage, Converter={StaticResource NotNullOrEmptyStringToBoolean}}" />
+                </StackLayout>
+            </ContentView>
         </Grid>
     </ContentPage.Content>
 </sscxftoolkitmvvmpages:ContentPage>

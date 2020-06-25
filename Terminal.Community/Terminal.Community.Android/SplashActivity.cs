@@ -1,10 +1,9 @@
 ﻿using Android.App;
-using Android.Content.PM;
 using System.Linq;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Droid
 {
-    [Activity(Theme = "@style/SplashTheme", ScreenOrientation = ScreenOrientation.SensorPortrait, MainLauncher = true, NoHistory = true)]
+    [Activity(Theme = "@style/SplashTheme", ConfigurationChanges = Android.Content.PM.ConfigChanges.ScreenSize | Android.Content.PM.ConfigChanges.Orientation, MainLauncher = true, NoHistory = true)]
     public class SplashActivity : Activity
     {
         protected override void OnCreate(Android.OS.Bundle savedInstanceState)
@@ -35,7 +34,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Droid
 
         private async void StartupActionAsync()
         {
-            await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(5));
+            await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(2));
 
             StartActivity(new Android.Content.Intent(Application.Context, typeof(MainActivity)));
         }

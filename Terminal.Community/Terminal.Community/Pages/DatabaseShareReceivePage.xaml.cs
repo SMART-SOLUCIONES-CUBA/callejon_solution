@@ -148,7 +148,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
         {
             var model = (sender as Xamarin.Forms.BindableObject).BindingContext as Models.View.DataShareSenderViewModel;
 
-            Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new Popup.DataShareCandidateSenderDetailPopupPage(model, SenderCandidateApprovedCallback));
+            Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new Popup.DataShareCandidateSenderDetailPopupPage(model, SenderCandidateApproved__Callback));
         }
 
         private void PerformSaveClose(System.Action afteAction)
@@ -172,7 +172,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
             afteAction?.Invoke();
         }
 
-        private void SenderCandidateApprovedCallback(Models.View.DataShareSenderViewModel target)
+        private void SenderCandidateApproved__Callback(Models.View.DataShareSenderViewModel target)
         {
             var pageContext = BindingContext as Models.Page.DatabaseShareRecivePageModel;
 
@@ -216,7 +216,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
 
                 if (wifiAccessManager.IsPlatformSupported)
                 {
-                    if (wifiAccessManager.HasBuilinConfirmation)
+                    if (wifiAccessManager.HasBuildinConfirmation)
                     {
                         IsEnabled = false;
 
@@ -247,7 +247,27 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                 }
                 else
                 {
-                    DisplayAlert("Aviso", "La versión del sistema operativo no permite establecer conexiones WiFi automáticamente. Debe conectarse manualmente.", "Aceptar");
+                    DisplayAlert("Aviso", string.Format("La versión del sistema operativo no permite establecer conexiones WiFi automáticamente. Debe conectarse manualmente.{0}{0}Desea copiar la contraseña para que pueda usarla al conectarse la red WiFi manualmente?", System.Environment.NewLine), "Copiar e Ir a Ajustes", "Cancelar").ContinueWith(task =>
+                    {
+                        if (!task.Result) return;                        
+
+                        Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                        {
+                            Xamarin.Essentials.Clipboard.SetTextAsync(password).ContinueWith(nestedTask =>
+                            {
+                                if (nestedTask.Exception == null)
+                                {
+                                    // TODO Mostrar Toast confirmando copia al porta papeles!
+                                }
+                                else
+                                {
+                                    // TODO Mostrar Toast notificando fallo en la copia al porta papeles!
+                                }
+                            });
+
+                            Xamarin.Forms.DependencyService.Get<Managers.Facade.IApplicationManagerFacade>().LaunchSystemWiFiSetting();
+                        });
+                    });
                 }
                 
             }
