@@ -14,6 +14,7 @@
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
     <AndroidCodegenTarget>XamarinAndroid</AndroidCodegenTarget>
+    <ReleaseVersion>0.2</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

@@ -44,7 +44,7 @@
                                 Text="{Binding Date, StringFormat='{0:MMMM dd, dddd}' }"
                                 TextColor="{StaticResource PrimaryBrandColor}"
                                 FontFamily="Helvetica LT Std Bold Condensed"
-                                FontSize="{Binding helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
+                                FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=EventDefaultStyleFontSize}" />
                         </StackLayout>
                         <ScrollView Orientation="Horizontal">
                             <FlexLayout

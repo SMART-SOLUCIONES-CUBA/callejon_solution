@@ -6,12 +6,42 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
     mc:Ignorable="d"
-    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.ProjectWebPortalPage">
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.ProjectWebPortalPage"
+    Title="Portal del Proyecto">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <Grid RowSpacing="0" ColumnSpacing="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="5*" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5*" />
+                <RowDefinition />
+            </Grid.RowDefinitions>            
+            <BoxView
+                Grid.ColumnSpan="3" Grid.Row="0"
+                BackgroundColor="{StaticResource PrimaryBrandColor}" />
+            <Image
+                Grid.Column="1" Grid.Row="0"
+                VerticalOptions="End">
+                <Image.Source>
+                    <FileImageSource>
+                        <FileImageSource.File>
+                            <OnPlatform x:TypeArguments="x:String">
+                                <On Platform="iOS" Value="ProjectPortalThumbnail" />
+                                <On Platform="Android" Value="project_portal_thumbnail" />
+                            </OnPlatform>
+                        </FileImageSource.File>
+                    </FileImageSource>
+                </Image.Source>
+            </Image>
+            <Grid Grid.ColumnSpan="3" Grid.Row="1">                
+                <Button
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    Text="Visitar"
+                    Clicked="GoButton_Clicked" />
+            </Grid>
+        </Grid>
     </ContentPage.Content>
 </sscxftoolkitmvvmpages:ContentPage>

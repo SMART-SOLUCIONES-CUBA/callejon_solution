@@ -3,18 +3,71 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:helpers="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers"
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
     mc:Ignorable="d"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.HomePage"
     Title="Inicio">
     <ContentPage.Content>
-        <StackLayout>
-            <Label 
-                Text="Welcome to Xamarin.Forms!"
-                FontFamily="Myriad Pro Bold Condensed Italic"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <ScrollView>
+            <StackLayout Padding="20" Spacing="20">
+                <Image Margin="0,20">
+                    <Image.Source>
+                        <FileImageSource>
+                            <FileImageSource.File>
+                                <OnPlatform x:TypeArguments="x:String">
+                                    <On Platform="iOS" Value="ProjectLogo" />
+                                    <On Platform="Android" Value="project_logo" />
+                                </OnPlatform>
+                            </FileImageSource.File>
+                        </FileImageSource>
+                    </Image.Source>
+                </Image>
+                <Label Text="Proyecto comunitario con el propósito de impulsar el uso creativo de las nuevas tecnologías, vinculándolas a lo mejor del legado de la historia del cine, y al desarrollo incesante de los dispositivos pantallas que permiten su producción, exhibición, distribución y consumo." />
+                <Label
+                    Margin="0,20,0,10"
+                    HorizontalOptions="Center"
+                    Text="Secciones recomendadas"
+                    TextColor="{StaticResource SecoundaryBrandColor}"
+                    FontAttributes="Italic" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <StackLayout Grid.Column="0">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="CinemaBillboardRecomendation_Tapped" />
+                        </StackLayout.GestureRecognizers>
+                        <Label
+                            HorizontalOptions="Center"
+                            Text="&#xF381;"
+                            TextColor="{StaticResource PrimaryBrandColor}"
+                            FontFamily="Material Design Icons"
+                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=PersonalityCommentImageSize}" />
+                        <Label
+                            HorizontalOptions="Center"
+                            Text="Cartelera de Cine"
+                            TextColor="{StaticResource PrimaryBrandColor}" />
+                    </StackLayout>
+                    <StackLayout Grid.Column="1">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="EventsRecommendation_Tapped" />
+                        </StackLayout.GestureRecognizers>
+                        <Label
+                            HorizontalOptions="Center"
+                            Text="&#xFA31;"
+                            TextColor="{StaticResource PrimaryBrandColor}"
+                            FontFamily="Material Design Icons"
+                            FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=PersonalityCommentImageSize}" />
+                        <Label
+                            HorizontalOptions="Center"
+                            Text="Próximos Eventos"
+                            TextColor="{StaticResource PrimaryBrandColor}" />
+                    </StackLayout>
+                </Grid>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </sscxftoolkitmvvmpages:ContentPage>

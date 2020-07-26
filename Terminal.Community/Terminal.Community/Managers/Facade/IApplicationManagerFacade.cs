@@ -4,10 +4,6 @@
     {
         void Close();
 
-        void ClearDatabase();
-
-        long GetDatabaseSize();
-
         void LaunchSystemWiFiSetting();
     }
 }

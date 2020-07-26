@@ -13,6 +13,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <ReleaseVersion>0.2</ReleaseVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="SAPRESSC.Core.Web.SecurityLocal" Version="0.9.1-beta" />

@@ -13,6 +13,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <ReleaseVersion>0.2</ReleaseVersion>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\SAPRESSC.Business.Billboard.Cinema.Persistence\SAPRESSC.Business.Billboard.Cinema.Persistence.csproj" />

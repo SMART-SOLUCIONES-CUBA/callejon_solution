@@ -13,6 +13,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <ReleaseVersion>0.2</ReleaseVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="SAPRESSC.Middleware.Identity.Web.Common" Version="0.4.0-alpha" />

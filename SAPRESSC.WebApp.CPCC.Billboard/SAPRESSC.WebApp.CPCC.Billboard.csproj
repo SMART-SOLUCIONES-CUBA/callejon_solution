@@ -8,6 +8,7 @@
     <Authors>SSC DevTeam</Authors>
     <Company>SMART SOLUCIONES CUBA (SSC)</Company>
     <Copyright>SMART SOLUCIONES CUBA 2018 - Todos los derechos reservados.</Copyright>
+    <ReleaseVersion>0.2</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Console (Development)' ">
     <StartAction>Project</StartAction>

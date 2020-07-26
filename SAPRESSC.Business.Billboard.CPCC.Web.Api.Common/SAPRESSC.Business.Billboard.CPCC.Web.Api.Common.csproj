@@ -13,6 +13,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <ReleaseVersion>0.2</ReleaseVersion>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.2' or '$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />

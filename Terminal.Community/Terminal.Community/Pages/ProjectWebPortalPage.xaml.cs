@@ -7,5 +7,10 @@
         {
             InitializeComponent();
         }
+
+        private void GoButton_Clicked(object sender, System.EventArgs e)
+        {
+            Xamarin.Essentials.Launcher.OpenAsync(new System.Uri("http://www.callejon.cmg.cu"));
+        }
     }
 }

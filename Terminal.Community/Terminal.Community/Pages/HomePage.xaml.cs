@@ -7,5 +7,15 @@
         {
             InitializeComponent();
         }
+
+        private void CinemaBillboardRecomendation_Tapped(object sender, System.EventArgs e)
+        {
+            ((Xamarin.Forms.Application.Current.MainPage as MainPage).Master as MasterPage).PresentCinemaBillboardSection();
+        }
+
+        private void EventsRecommendation_Tapped(object sender, System.EventArgs e)
+        {
+            ((Xamarin.Forms.Application.Current.MainPage as MainPage).Master as MasterPage).PresentEventsSection();
+        }
     }
 }

@@ -3,15 +3,15 @@
   <item>
     <color android:color="#FFFFFF" />
   </item>
-  <item android:bottom="60dp">
+  <item android:bottom="48dp">
     <bitmap
-        android:src="@drawable/logo"
+        android:src="@drawable/project_logo"
         android:tileMode="disabled"
         android:gravity="center" />
   </item>
-  <item android:bottom="60dp">
+  <item android:bottom="48dp">
     <bitmap
-        android:src="@drawable/ssc_signature"
+        android:src="@drawable/contractor_signature"
         android:tileMode="disabled"
         android:gravity="center_horizontal|bottom"/>
   </item>

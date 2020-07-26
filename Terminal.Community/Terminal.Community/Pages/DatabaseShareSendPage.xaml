@@ -107,11 +107,10 @@
                         </Label>
                     </StackLayout>
                     <StackLayout
-                        VerticalOptions="Center"
                         IsVisible="{Binding Path=WiFiHostpotDetail, Converter={StaticResource NullToBooleanConverter}}"
                         Margin="8">
                         <Grid
-                            HorizontalOptions="Center"
+                            HorizontalOptions="Center" VerticalOptions="CenterAndExpand"
                             WidthRequest="280"
                             ColumnSpacing="10">
                             <Grid.ColumnDefinitions>
@@ -126,13 +125,14 @@
                                 FontSize="{Binding Source={x:Static helpers:SizeProvisioningHelper.Instance}, Path=ProfileOverviewImageSize}" />
                             <Label
                                 Grid.Column="1"
+                                Margin="0,20,0,0"
                                 VerticalTextAlignment="Center"
                                 Text="{Binding Path=IsBusy, Converter={StaticResource ConnectivityStatusBoolToMessageStringConverter}}"
                                 TextColor="Black"
                                 LineBreakMode="WordWrap" />
                         </Grid>
                         <Button
-                            HorizontalOptions="Center"
+                            HorizontalOptions="Center" VerticalOptions="CenterAndExpand"
                             Text="Crear Punto de Acceso WiFi"
                             Clicked="CreateWiFiHostpotButton_Clicked" />
                     </StackLayout>

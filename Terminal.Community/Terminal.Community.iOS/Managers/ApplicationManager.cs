@@ -4,24 +4,19 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.iOS.Managers
 {
     public sealed class ApplicationManager : Community.Managers.Facade.IApplicationManagerFacade
     {
-        public void ClearDatabase()
-        {
-            throw new System.NotImplementedException();
-        }
-
         public void Close()
         {
             System.Threading.Thread.CurrentThread.Abort();
         }
 
-        public long GetDatabaseSize()
-        {
-            throw new System.NotImplementedException();
-        }
-
         public void LaunchSystemWiFiSetting()
         {
-            throw new System.NotImplementedException();
+            var url = new Foundation.NSUrl("App-Prefs:root=WIFI");
+
+            if (UIKit.UIApplication.SharedApplication.CanOpenUrl(url))
+            {
+                UIKit.UIApplication.SharedApplication.OpenUrl(url);
+            }
         }
     }
 }

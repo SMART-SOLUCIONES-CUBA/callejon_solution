@@ -5,6 +5,7 @@
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <AssemblyName>SmartSolucionesCuba.CPCC.PCM.Terminal.Community</AssemblyName>
     <RootNamespace>SmartSolucionesCuba.CPCC.PCM.Terminal.Community</RootNamespace>
+    <ReleaseVersion>0.2</ReleaseVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

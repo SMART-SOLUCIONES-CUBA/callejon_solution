@@ -6,12 +6,54 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
     mc:Ignorable="d"
-    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.SupportPage">
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.SupportPage"
+    Title="Información y Ayuda">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <ScrollView>
+            <StackLayout Padding="30">
+                <Image>
+                    <Image.Source>
+                        <FileImageSource>
+                            <FileImageSource.File>
+                                <OnPlatform x:TypeArguments="x:String">
+                                    <On Platform="iOS" Value="ProjectLogo" />
+                                    <On Platform="Android" Value="project_logo" />
+                                </OnPlatform>
+                            </FileImageSource.File>
+                        </FileImageSource>
+                    </Image.Source>
+                </Image>
+                <Label FontFamily="Helvetica LT Std Bold Condensed" Margin="0,20,0,0" TextColor="Black" HorizontalTextAlignment="Center" Text="Versión:" />
+                <Label HorizontalTextAlignment="Center" Text="2.0.0" />
+                <Label FontFamily="Helvetica LT Std Bold Condensed" Margin="0,20,0,0" TextColor="Black" HorizontalTextAlignment="Center" Text="Acerca de:" />
+                <Label TextColor="Black" Text="Esta aplicación permite al proyecto Callejón de los Milagros divulgar la información relacionada con la cartelera de películas que se muestran en sus cines, así como el calendario de eventos organizados por el proyecto o en colaboración con el mismo." />
+                <Label FontFamily="Helvetica LT Std Bold Condensed" Margin="0,20,0,0" TextColor="Black" HorizontalTextAlignment="Center" Text="Creada por:" />
+                <Image>
+                    <Image.Source>
+                        <FileImageSource>
+                            <FileImageSource.File>
+                                <OnPlatform x:TypeArguments="x:String">
+                                    <On Platform="iOS" Value="ContractorIdentityLogo" />
+                                    <On Platform="Android" Value="contractor_identity_logo" />
+                                </OnPlatform>
+                            </FileImageSource.File>
+                        </FileImageSource>
+                    </Image.Source>
+                </Image>
+                <Label TextColor="Black" HorizontalTextAlignment="Center" Text="SMART SOLUCIONES CUBA (SSC), © 2019." />
+                <Label TextColor="Black" HorizontalTextAlignment="Center" Text="www.smartsolucionescuba.com" />
+                <Label FontFamily="Helvetica LT Std Bold Condensed" Margin="0,20,0,0" TextColor="Black" HorizontalTextAlignment="Center" Text="Sobre esta versión de prueba:" />
+                <Label TextColor="Black" Text="Esta versión ha sido creada con el objetivo de realizar pruebas iniciales de funcionamiento por múltiples usuarios del sistema. Es una versión en estado de desarrollo, por lo que puede ser inestable en algún momento, contener pequeños errores, elementos incompletos, además de no contar con un diseño completamente refinado." />
+                <Label TextColor="Black" Text="Recomendamos a los usuarios que prueban esta versión, que continúen atentos a nuevas actualizaciones de la aplicación mediante los distintos medios informativos que tienen a su alcance, tanto del proyecto Callejón de los Milagros como de los desarrolladores de la aplicación." />
+                <Label FontFamily="Helvetica LT Std Bold Condensed" Margin="0,20,0,0" TextColor="Black" HorizontalTextAlignment="Center" Text="Contacto:" />
+                <Label TextColor="Black" Text="Si tienes cualquier pregunta, comentario o sugerencia que quieras realizarnos, ideas que desees compartir con nosotros, ¡estaremos siempre complacidos de escucharte!" />
+                <Label TextColor="Black" Text="Puedes contactarnos por las siguientes vías:" />
+                <Label TextColor="Black" Text="• Correo electrónico: contacto@smartsolucionescuba.com" />
+                <Label TextColor="Black" Text="• Teléfono: (+53) 58641304" />
+                <Label TextColor="Black" Text="También puedes seguirnos en internet:" />
+                <Label TextColor="Black" Text="• Web Oficial: www.smartsolucionescuba.com" />
+                <Label TextColor="Black" Text="• Facebook: www.facebook.com/smartsolucionescuba" />
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </sscxftoolkitmvvmpages:ContentPage>

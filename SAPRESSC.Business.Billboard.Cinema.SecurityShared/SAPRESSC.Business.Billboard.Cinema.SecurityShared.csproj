@@ -13,5 +13,6 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <ReleaseVersion>0.2</ReleaseVersion>
   </PropertyGroup>
 </Project>
