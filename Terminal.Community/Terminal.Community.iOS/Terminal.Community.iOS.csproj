@@ -129,22 +129,54 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon20.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\ProjectLogo.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\ContractorIdentityLogo.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\ContractorSignature.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\ProjectPortalThumbnail.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\ContractorIdentityLogo.imageset\IdentityInfography_1x.png" />
-    <ImageAsset Include="Assets.xcassets\ContractorIdentityLogo.imageset\IdentityInfography_2x.png" />
-    <ImageAsset Include="Assets.xcassets\ContractorIdentityLogo.imageset\IdentityInfography_3x.png" />
-    <ImageAsset Include="Assets.xcassets\ContractorSignature.imageset\SplashSignature_HC-Black_1x.png" />
-    <ImageAsset Include="Assets.xcassets\ContractorSignature.imageset\SplashSignature_HC-Black_2x.png" />
-    <ImageAsset Include="Assets.xcassets\ContractorSignature.imageset\SplashSignature_HC-Black_3x.png" />
-    <ImageAsset Include="Assets.xcassets\ProjectPortalThumbnail.imageset\ProjectPortal_1x.png" />
-    <ImageAsset Include="Assets.xcassets\ProjectPortalThumbnail.imageset\ProjectPortal_2x.png" />
-    <ImageAsset Include="Assets.xcassets\ProjectPortalThumbnail.imageset\ProjectPortal_3x.png" />
-    <ImageAsset Include="Assets.xcassets\ProjectLogo.imageset\Logo_1x.png" />
-    <ImageAsset Include="Assets.xcassets\ProjectLogo.imageset\Logo_2x.png" />
-    <ImageAsset Include="Assets.xcassets\ProjectLogo.imageset\Logo_3x.png" />
+    <ImageAsset Include="Assets.xcassets\ProjectLogo.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ContractorIdentityLogo.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ContractorSignature.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ProjectPortalThumbnail.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ContractorIdentityLogo.imageset\IdentityInfography_1x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ContractorIdentityLogo.imageset\IdentityInfography_2x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ContractorIdentityLogo.imageset\IdentityInfography_3x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ContractorSignature.imageset\SplashSignature_HC-Black_1x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ContractorSignature.imageset\SplashSignature_HC-Black_2x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ContractorSignature.imageset\SplashSignature_HC-Black_3x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ProjectPortalThumbnail.imageset\ProjectPortal_1x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ProjectPortalThumbnail.imageset\ProjectPortal_2x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ProjectPortalThumbnail.imageset\ProjectPortal_3x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ProjectLogo.imageset\Logo_1x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ProjectLogo.imageset\Logo_2x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ProjectLogo.imageset\Logo_3x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
