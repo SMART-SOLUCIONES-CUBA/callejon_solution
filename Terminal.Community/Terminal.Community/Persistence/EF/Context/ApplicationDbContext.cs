@@ -17,7 +17,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Persistence.EF.Context
         {
         }
 
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<Clasification> Clasifications { get; set; }
         public DbSet<Personality> Personalities { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Award> Awards { get; set; }
@@ -111,7 +111,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Persistence.EF.Context
                 new WebSiteContactItemEntityTypeConfigurator(),
                 new AwardEntityTypeConfigurator(),
                 new AwardWinningEntityTypeConfigurator(),
-                new CategoryEntityTypeConfigurator(),
+                new ClasificationEntityTypeConfigurator(),
                 new GenreEntityTypeConfigurator(),
                 new LanguageEntityTypeConfigurator(),
                 new ParticipationEntityTypeConfigurator(),

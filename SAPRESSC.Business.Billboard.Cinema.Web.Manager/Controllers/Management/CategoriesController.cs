@@ -1,17 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.SecurityShared;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View;
 using SmartSolucionesCuba.SAPRESSC.Core.Persistence.Repositories;
 using SmartSolucionesCuba.SAPRESSC.Core.Web.Security.Filters;
+using System.Linq;
 
 namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Controllers.Management
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
     [Area("cinemabillboard")]
-    public class CategoriesController : Core.Web.Management.Controllers.AbstractEntityManagementController<Category, int, CategoryInputViewModel, CategoryDisplayViewModel>
+    public class CategoriesController : Core.Web.Management.Controllers.AbstractEntityManagementController<Category, System.Guid, CategoryInputViewModel, CategoryDisplayViewModel>
     {
-        public CategoriesController(IEntityRepository<Category, int> repository, Microsoft.Extensions.Localization.IStringLocalizer<CategoriesController> localizer, Microsoft.Extensions.Logging.ILogger<CategoriesController> logger) : base(repository, localizer, logger)
+        public CategoriesController(IEntityRepository<Category, System.Guid> repository, Microsoft.Extensions.Localization.IStringLocalizer<CategoriesController> localizer, ILogger<CategoriesController> logger) : base(repository, localizer, logger)
         {
         }
 
@@ -34,7 +36,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
         }
 
         [RequiresRoleBasePermission(CinemaBillboardBusinessManagementRoleCodes.CategoryManagerEditor)]
-        public override IActionResult Edit(int key)
+        public override IActionResult Edit(System.Guid key)
         {
             return base.Edit(key);
         }
@@ -46,7 +48,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
         }
 
         [RequiresRoleBasePermission(CinemaBillboardBusinessManagementRoleCodes.CategoryManagerRemover)]
-        public override IActionResult Delete(int key)
+        public override IActionResult Delete(System.Guid key)
         {
             return base.Delete(key);
         }
@@ -55,6 +57,58 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
         public override IActionResult Delete(CategoryDisplayViewModel displayModel)
         {
             return base.Delete(displayModel);
+        }
+
+        protected override CategoryInputViewModel ConfigureCreate(CategoryInputViewModel modelInput)
+        {
+            var result = base.ConfigureCreate(modelInput);
+
+            PopulateModelInputForAvailableParents(modelInput);
+
+            return result;
+        }
+
+        protected override CategoryInputViewModel ConfigureEdit(Category entity, CategoryInputViewModel modelInput)
+        {
+            var result = base.ConfigureEdit(entity, modelInput);
+
+            PopulateModelInputForAvailableParents(modelInput);
+
+            return result;
+        }
+
+        protected override CategoryInputViewModel ConfigurePostFailCreateValidation(CategoryInputViewModel modelInput)
+        {
+            var result = base.ConfigurePostFailCreateValidation(modelInput);
+
+            PopulateModelInputForAvailableParents(modelInput);
+
+            return result;
+        }
+
+        protected override CategoryInputViewModel ConfigurePostFailEditValidation(CategoryInputViewModel modelInput)
+        {
+            var result = base.ConfigurePostFailEditValidation(modelInput);
+
+            PopulateModelInputForAvailableParents(modelInput);
+
+            return result;
+        }
+
+        private void PopulateModelInputForAvailableParents(CategoryInputViewModel inputModel)
+        {
+            inputModel.AvailableCategorySelectListItems.Add(new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            {
+                Value = System.Guid.Empty.ToString(),
+                Text = "Ninguna"
+            });
+
+            var entities = Repository.GetAll().ToList().Where(e => !e.GetTreeId().Contains(inputModel.Id.ToString())).OrderBy(e => e.GetTreeId()).ToArray();
+
+            foreach (var entity in entities)
+            {
+                inputModel.AvailableCategorySelectListItems.Add(new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = entity.Id.ToString(), Text = entity.GetTreeName() });
+            }
         }
     }
 }

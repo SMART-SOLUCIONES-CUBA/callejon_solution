@@ -3,7 +3,7 @@
 @model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.ProductionInputViewModel
 
 @{
-    ViewData["Title"] = "Agregar Película";
+    ViewData["Title"] = "Agregar Audio Visual";
 
     ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
     {
@@ -19,7 +19,7 @@
         },
         new BreadcrumbViewModel
         {
-            Caption = "Películas",
+            Caption = "Audio Visuales",
             Url = Url.Action("index")
         },
         new BreadcrumbViewModel
@@ -53,9 +53,9 @@
 
             <div class="row">
                 <div class="col-md-6" style="margin-bottom: 20px;">
-                    @Html.LabelFor(model => model.CategoryId, new { @class = "control-label" })
-                    @Html.DropDownListFor(model => model.CategoryId, Model.Categories, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.CategoryId, null, new { @class = "text-danger" })
+                    @Html.LabelFor(model => model.ClasificationId, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.ClasificationId, Model.Clasifications, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ClasificationId, null, new { @class = "text-danger" })
                 </div>
                 <div class="col-md-6" style="margin-bottom: 20px;">
                     @Html.LabelFor(model => model.Rate, new { @class = "control-label" })
@@ -90,6 +90,19 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.CategoryId, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.CategoryId, Model.AvailableCategorySelectListItems, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CategoryId, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.CollectionId, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.CollectionId, Model.AvailableCollectionSelectListItems, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CollectionId, null, new { @class = "text-danger" })
+                </div>
+            </div>
+
             <div style="margin-bottom: 20px;">
                 @Html.LabelFor(model => model.About, new { @class = "control-label" })
                 @Html.TextAreaFor(model => model.About, 3, 0, new { @class = "form-control" })
@@ -102,10 +115,18 @@
                 @Html.ValidationMessageFor(model => model.Argument, null, new { @class = "text-danger" })
             </div>
 
-            <div style="margin-bottom: 20px;">
-                @Html.LabelFor(model => model.PosterImageFile, new { @class = "control-label" })
-                @Html.EditorFor(model => model.PosterImageFile, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.PosterImageFile, null, new { @class = "text-danger" })
+            <div class="row">
+                <div class="col-lg-3 col-md-12" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.PosterImageFile, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.PosterImageFile, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PosterImageFile, null, new { @class = "text-danger" })
+                </div>
+
+                <div class="col-lg-9 col-md-12" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.PlacardImageFile, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.PlacardImageFile, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PlacardImageFile, null, new { @class = "text-danger" })
+                </div>
             </div>
 
             <div style="margin-bottom: 20px;">

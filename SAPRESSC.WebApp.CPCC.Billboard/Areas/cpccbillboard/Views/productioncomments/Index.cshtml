@@ -3,7 +3,7 @@
 @model PaginationViewModel<SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Models.View.ProductionCommentDisplayViewModel>
 
 @{
-    ViewData["Title"] = "Gestión de Comentarios de Películas";
+    ViewData["Title"] = "Gestión de Comentarios de Audio Visuales";
 
     ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
     {
@@ -19,7 +19,7 @@
         },
         new BreadcrumbViewModel
         {
-            Caption = "Comentarios de Películas"
+            Caption = "Comentarios de Audio Visuales"
         }
     };
 
@@ -28,7 +28,7 @@
 
 <div style="margin-bottom: 20px; text-align: center;">
     <div class="btn-group">
-        <button class="btn btn-primary" style="cursor:default;"><span class="glyphicon glyphicon-film"></span> Películas</button>
+        <button class="btn btn-primary" style="cursor:default;"><span class="glyphicon glyphicon-film"></span> Audio Visuales</button>
         <a class="btn btn-default" href="@Url.Action("index", "eventcomments")"><span class="glyphicon glyphicon-file"></span> Eventos</a>
         <a class="btn btn-default" href="@Url.Action("index", "personalitycomments")"><span class="glyphicon glyphicon-education"></span> Personalidades</a>
     </div>
@@ -178,7 +178,7 @@
                     <td style="vertical-align: middle;" title="Creado">@item.Created</td>
                     <td style="vertical-align: middle;">
                         <div class="btn-group btn-group-sm">
-                            <a role="button" title="Detalles de la Película" href="#" class="btn btn-default" data-toggle="modal" data-target="#detail-view-production-@item.Production.Id"><span class="glyphicon glyphicon-list-alt"></span> Película</a>
+                            <a role="button" title="Detalles del Audio Visual" href="#" class="btn btn-default" data-toggle="modal" data-target="#detail-view-production-@item.Production.Id"><span class="glyphicon glyphicon-list-alt"></span> Audio Visual</a>
                             <a role="button" title="Detalles del Cliente" href="#" class="btn btn-default" data-toggle="modal" data-target="#detail-view-production-@item.Client.Id"><span class="glyphicon glyphicon-list-alt"></span> Cliente</a>
                             <a role="button" href="@Url.Action("delete", new {key = item.Id})" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
                         </div>
@@ -188,7 +188,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title" id="detail-view-production-@item.Production.Id-lable">Detalles de la Película</h4>
+                                        <h4 class="modal-title" id="detail-view-production-@item.Production.Id-lable">Detalles del Audio Visual</h4>
                                     </div>
                                     <div class="modal-body">
                                         @await Html.PartialAsync("_DetailProductionPartial", item.Production)

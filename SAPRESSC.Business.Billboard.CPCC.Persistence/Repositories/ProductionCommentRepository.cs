@@ -17,7 +17,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Persistence.Repos
                 .Include(e => e.Production).ThenInclude(entity => entity.Language)
                 .Include(e => e.Production).ThenInclude(entity => entity.Country)
                 .Include(e => e.Production).ThenInclude(entity => entity.PosterImage)
-                .Include(e => e.Production).ThenInclude(entity => entity.Category);
+                .Include(e => e.Production).ThenInclude(entity => entity.Clasification);
         }
 
         public override System.Func<Entities.ProductionComment, object> GetPagingOrderSelector()

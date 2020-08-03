@@ -3,7 +3,7 @@
 @model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.ProductionDisplayViewModel
 
 @{
-    ViewData["Title"] = "Eliminar Película";
+    ViewData["Title"] = "Eliminar Audio Visual";
 
     ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
     {
@@ -19,7 +19,7 @@
         },
         new BreadcrumbViewModel
         {
-            Caption = "Películas",
+            Caption = "Audio Visuales",
             Url = Url.Action("index")
         },
         new BreadcrumbViewModel
@@ -31,7 +31,7 @@
     Layout = "_BackendLayout";
 }
 
-<h3>Esta seguro que desea eliminar la película detallada a continuación?</h3>
+<h3>Esta seguro que desea eliminar el audio visual detallado a continuación?</h3>
 
 @using (Html.BeginForm("delete", "productions", new { Area = "cinemabillboard", key = string.Empty }, FormMethod.Post, true, null))
 {
@@ -54,8 +54,8 @@
                     <dt>Título en Español</dt>
                     <dd>@Html.DisplayFor(model => model.LocalizedTitle)</dd>
                 }
-                <dt>Categoría</dt>
-                <dd>@Model.Category.Name</dd>
+                <dt>Clasificación</dt>
+                <dd>@Model.Clasification.Name</dd>
                 <dt>Valoración</dt>
                 <dd>
                     @for (int i = 1; i <= 5; i++)

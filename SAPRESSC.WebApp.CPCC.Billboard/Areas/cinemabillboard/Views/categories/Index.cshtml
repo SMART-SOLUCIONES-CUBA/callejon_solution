@@ -132,7 +132,7 @@
         <table class="table" style="margin: 0;">
             <thead>
                 <tr>
-                    <th>Nombre</th>
+                    <th>Nombre Jerárquico</th>
                     <th style="width: 184px;">Opciones</th>
                 </tr>        
             </thead>
@@ -140,7 +140,7 @@
             @foreach (var item in Model.List)
             {
                 <tr>
-                    <td style="vertical-align: middle;" title="Nombre">@item.Name</td>
+                    <td style="vertical-align: middle;" title="Nombre">@item.TreeName</td>
                     <td style="vertical-align: middle;">
                         <div class="btn-group btn-group-sm">
                             <a role="button" href="@Url.Action("edit", new { key = item.Id })" class="btn btn-default" title="Editar"><span class="glyphicon glyphicon-edit"></span><span class="hidden-xs"> Modificar</span></a>

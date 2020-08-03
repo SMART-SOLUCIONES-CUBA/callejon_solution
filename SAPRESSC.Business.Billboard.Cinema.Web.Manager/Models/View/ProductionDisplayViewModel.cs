@@ -7,6 +7,12 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Mod
 {
     public class ProductionDisplayViewModel : Core.Web.Management.Models.View.IEntityDisplayViewModel<Production, long>
     {
+        public ProductionDisplayViewModel()
+        {
+            Category = "-";
+            Collection = "-";
+        }
+
         public long Id { get; set; }
 
         public string Title { get; set; }
@@ -49,15 +55,21 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Mod
 
         public ICollection<Personality> ArtisticManagers { get; set; }
 
-        public Category Category { get; set; }
+        public Clasification Clasification { get; set; }
 
         public int Rate { get; set; }
 
         public System.Guid PosterImageId { get; set; }
 
+        public System.Guid PlacardImageId { get; set; }
+
         public System.Guid TrailerVideoId { get; set; }
 
         public string TrailerVideoExtension { get; set; }
+
+        public string Category { get; set; }
+
+        public string Collection { get; set; }
 
         public void Import(Production entity)
         {
@@ -81,9 +93,10 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Mod
             Sounders = entity.Participations.Where(p => p.Role == ProductionRole.Sound).Select(p => p.Personality).ToArray();
             Editors = entity.Participations.Where(p => p.Role == ProductionRole.Edition).Select(p => p.Personality).ToArray();
             ArtisticManagers = entity.Participations.Where(p => p.Role == ProductionRole.ArtisticManagement).Select(p => p.Personality).ToArray();
-            Category = entity.Category;
+            Clasification = entity.Clasification;
             Rate = entity.Rate;
             PosterImageId = entity.PosterImage != null ? entity.PosterImage.Id : System.Guid.Empty;
+            PlacardImageId = entity.PlacardImage?.Id ?? System.Guid.Empty;
             TrailerVideoId = entity.TrailerVideo != null ? entity.TrailerVideo.Id : System.Guid.Empty;
             TrailerVideoExtension = entity.TrailerVideo != null ? entity.TrailerVideo.Extension : string.Empty;
         }

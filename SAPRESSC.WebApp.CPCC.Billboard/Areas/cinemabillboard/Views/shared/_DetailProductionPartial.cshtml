@@ -28,8 +28,8 @@
             }
             <dt>Discriminador</dt>
             <dd>@Model.Slug</dd>
-            <dt>Categoría</dt>
-            <dd>@Model.Category.Name</dd>
+            <dt>Clasificación</dt>
+            <dd>@Model.Clasification.Name</dd>
             <dt>Valoración</dt>
             <dd>
                 @for (int i = 1; i <= 5; i++)
@@ -52,12 +52,16 @@
             <dd>@Html.DisplayFor(model => model.Year)</dd>
             <dt>Duración</dt>
             <dd>@duration</dd>
-            <dt>Sinopsis</dt>
-            <dd>@Html.DisplayFor(model => model.About)</dd>
+            <dt>Categoría</dt>
+            <dd>@Model.Category</dd>
+            <dt>Colleción</dt>
+            <dd>@Model.Collection</dd>
         </dl>
     </div>
     <div class="col-md-12">
         <dl style="margin-bottom: 0;">
+            <dt>Sinopsis</dt>
+            <dd>@Html.DisplayFor(model => model.About)</dd>
             <dt>Géneros</dt>
             <dd>
                 @if (Model.Genres.Count() > 0)

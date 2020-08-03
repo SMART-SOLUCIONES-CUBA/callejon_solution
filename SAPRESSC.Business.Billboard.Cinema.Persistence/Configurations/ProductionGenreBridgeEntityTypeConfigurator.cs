@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities;
 
 namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Configurations
 {
@@ -10,7 +9,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Con
             return "productiongenrebridges";
         }
 
-        protected override void ApplayRules(EntityTypeBuilder<ProductionGenreBridge> entityTypeBuilder)
+        protected override void ApplayRules(EntityTypeBuilder<Entities.ProductionGenreBridge> entityTypeBuilder)
         {
             base.ApplayRules(entityTypeBuilder);
 

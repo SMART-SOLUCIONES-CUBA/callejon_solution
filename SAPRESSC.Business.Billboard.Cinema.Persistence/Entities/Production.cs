@@ -27,6 +27,8 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Ent
         [Required]
         public Middleware.Media.Persistence.Entities.Image PosterImage { get; set; }
 
+        public Middleware.Media.Persistence.Entities.Image PlacardImage { get; set; }
+
         public Middleware.Media.Persistence.Entities.Video TrailerVideo { get; set; }
 
         public ICollection<ProductionGenreBridge> ProductionGenreBridges { get; set; }
@@ -42,7 +44,19 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Ent
         public Middleware.Region.Persistence.Entities.Country Country { get; set; }
 
         [Required]
+        public Clasification Clasification { get; set; }
+
+        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("CategoryId")]
         public Category Category { get; set; }
+
+        public System.Guid CategoryId { get; set; }
+
+        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("CollectionId")]
+        public Collection Collection { get; set; }
+
+        public System.Guid CollectionId { get; set; }
+
+        public ICollection<ProductionTagBridge> TagBridges { get; set; }
 
         public ICollection<AwardWinning> AwardWinnings { get; set; }
 

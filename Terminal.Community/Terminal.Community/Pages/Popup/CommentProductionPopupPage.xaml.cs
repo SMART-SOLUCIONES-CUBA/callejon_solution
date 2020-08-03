@@ -23,7 +23,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages.Popup
 
             if (commentViewModel != null)
             {
-                HeaderLabel.Text = "Responder Comentario de Película";
+                HeaderLabel.Text = "Responder Comentario de Audio Visual";
             }
         }
 

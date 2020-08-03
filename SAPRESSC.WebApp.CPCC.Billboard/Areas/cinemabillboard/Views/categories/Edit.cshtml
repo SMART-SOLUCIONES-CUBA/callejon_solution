@@ -41,10 +41,17 @@
         <div class="panel-heading"><h4>@ViewData["Title"]</h4></div>
 
         <div class="panel-body">
-            <div style="margin-bottom: 20px;">
-                @Html.LabelFor(model => model.Name, new { @class = "control-label" })
-                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" })
+            <div class="row">
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.ParentId, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.ParentId, Model.AvailableCategorySelectListItems, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ParentId, null, new { @class = "text-danger" })
+                </div>
             </div>
 
             <div>

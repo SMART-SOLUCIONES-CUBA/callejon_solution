@@ -25,6 +25,14 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager
                 {
                     Action = "index",
                     Area = "cinemabillboard",
+                    Controller = "clasifications",
+                    Role = CinemaBillboardBusinessManagementRoleCodes.ClasificationManagerViewer,
+                    Title = "Clasifications"
+                },
+                new DashboardManageItemViewModel
+                {
+                    Action = "index",
+                    Area = "cinemabillboard",
                     Controller = "personalities",
                     Role = CinemaBillboardBusinessManagementRoleCodes.PersonalityManagerViewer,
                     Title = "Personalities"
@@ -84,6 +92,22 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager
                     Controller = "presentations",
                     Area = "cinemabillboard",
                     Role = CinemaBillboardBusinessManagementRoleCodes.PresentationManagerViewer
+                },
+                new DashboardManageItemViewModel
+                {
+                    Action = "index",
+                    Area = "cinemabillboard",
+                    Controller = "collections",
+                    Role = CinemaBillboardBusinessManagementRoleCodes.CollectionManagerViewer,
+                    Title = "Collections"
+                },
+                new DashboardManageItemViewModel
+                {
+                    Action = "index",
+                    Area = "cinemabillboard",
+                    Controller = "tags",
+                    Role = CinemaBillboardBusinessManagementRoleCodes.TagManagerViewer,
+                    Title = "Tags"
                 }
             };
         }

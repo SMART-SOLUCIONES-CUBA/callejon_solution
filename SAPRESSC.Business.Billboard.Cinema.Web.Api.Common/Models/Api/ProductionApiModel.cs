@@ -24,7 +24,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.
 
         public LanguageApiModel Language { get; set; }
 
-        public CategoryApiModel Category { get; set; }
+        public ClasificationApiModel Clasification { get; set; }
 
         public IEnumerable<GenreApiModel> Genres { get; set; }
 

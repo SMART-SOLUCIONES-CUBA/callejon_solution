@@ -40,6 +40,10 @@
 
             if (model.Controller.EndsWith("delations")) return "<span class=\"glyphicon glyphicon-thumbs-down\"></span>";
 
+            if (model.Controller.EndsWith("collections")) return "<span class=\"glyphicon glyphicon-list\"></span>";
+
+            if (model.Controller.EndsWith("tags")) return "<span class=\"glyphicon glyphicon-tags\"></span>";
+
             return "<span class=\"glyphicon glyphicon-file\"></span>";
         }
     }

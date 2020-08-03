@@ -18,7 +18,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common
             return new System.Collections.Generic.List<Core.Persistence.Configurations.IEntityTypeConfigurator>
             {
                 new AwardEntityTypeConfigurator(),
-                new CategoryEntityTypeConfigurator(),
+                new ClasificationEntityTypeConfigurator(),
                 new AwardWinningEntityTypeConfigurator(),
                 new GenreEntityTypeConfigurator(),
                 new LanguageEntityTypeConfigurator(),
@@ -28,7 +28,11 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common
                 new ProductionGenreBridgeEntityTypeConfigurator(),
                 new PresentationEntityTypeConfigurator(),
                 new RoomEntityTypeConfigurator(),
-                new CountryCoProductionBridgeEntityTypeConfigurator()
+                new CountryCoProductionBridgeEntityTypeConfigurator(),
+                new CategoryEntityTypeConfigurator(),
+                new CollectionEntityTypeConfigurator(),
+                new TagEntityTypeConfigurator(),
+                new ProductionTagBridgeEntityTypeConfigurator()
             };
         }
 
@@ -36,7 +40,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common
         {
             services.AddScoped<IEntityRepository<Award, int>, AwardRepository>();
             services.AddScoped<IEntityRepository<AwardWinning, int>, AwardWinningRepository>();
-            services.AddScoped<IEntityRepository<Category, int>, CategoryRepository>();
+            services.AddScoped<IEntityRepository<Clasification, int>, ClasificationRepository>();
             services.AddScoped<IEntityRepository<Personality, long>, PersonalityRepository>();
             services.AddScoped<IEntityRepository<Language, int>, LanguageRepository>();
             services.AddScoped<IEntityRepository<Production, long>, ProductionRepository>();
@@ -47,6 +51,9 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common
             services.AddScoped<IEntityRepository<Room, System.Guid>, RoomRepository>();
             services.AddScoped<IEntityRepository<Persistence.Entities.Cinema, long>, CinemaRepository>();
             services.AddScoped<IEntityRepository<Presentation, long>, PresentationRepository>();
+            services.AddScoped<IEntityRepository<Category, System.Guid>, CategoryRepository>();
+            services.AddScoped<IEntityRepository<Tag, int>, TagRepository>();
+            services.AddScoped<IEntityRepository<Collection, System.Guid>, CollectionRepository>();
         }
     }
 }

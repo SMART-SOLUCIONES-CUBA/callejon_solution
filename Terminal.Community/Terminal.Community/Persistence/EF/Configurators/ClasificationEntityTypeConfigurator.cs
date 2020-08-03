@@ -1,6 +1,6 @@
 ﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Persistence.EF.Configurators
 {
-    public class CategoryEntityTypeConfigurator : SAPRESSC.Business.Billboard.Cinema.Persistence.Configurations.CategoryEntityTypeConfigurator
+    public class ClasificationEntityTypeConfigurator : SAPRESSC.Business.Billboard.Cinema.Persistence.Configurations.ClasificationEntityTypeConfigurator
     {
         protected override string GetSchema()
         {

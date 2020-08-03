@@ -70,7 +70,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Controllers
                         .Include(p => p.Room).ThenInclude(r => r.Cinema).ThenInclude(c => c.OrganizationPostalContactItemBridges).ThenInclude(bridge => bridge.ContactItem)
                         .Include(p => p.Room).ThenInclude(r => r.Cinema).ThenInclude(c => c.OrganizationEmailContactItemBridges).ThenInclude(bridge => bridge.ContactItem)
                         .Include(p => p.Room).ThenInclude(r => r.Cinema).ThenInclude(c => c.OrganizationPhoneContactItemBridges).ThenInclude(bridge => bridge.ContactItem)
-                        .Include(p => p.Production).ThenInclude(p => p.Category)
+                        .Include(p => p.Production).ThenInclude(p => p.Clasification)
                         .Include(p => p.Production).ThenInclude(p => p.Country)
                         .Include(p => p.Production).ThenInclude(p => p.Language)
                         .Include(p => p.Production).ThenInclude(p => p.PosterImage)

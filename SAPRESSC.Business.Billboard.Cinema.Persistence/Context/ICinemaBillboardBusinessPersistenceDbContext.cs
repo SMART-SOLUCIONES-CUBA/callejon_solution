@@ -5,7 +5,13 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Con
 {
     public interface ICinemaBillboardBusinessPersistenceDbContext : Middleware.Identity.Persistence.Context.IIdentityMiddlewarePersistenceDbContext
     {
+        DbSet<Clasification> Clasifications { get; set; }
+
         DbSet<Category> Categories { get; set; }
+
+        DbSet<Tag> Tags { get; set; }
+
+        DbSet<Collection> Collections { get; set; }
 
         DbSet<Personality> Personalities { get; set; }
 
@@ -30,6 +36,8 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Con
         DbSet<ProductionGenreBridge> ProductionGenreBridges { get; set; }
 
         DbSet<ProducerHouseProductionBridge> ProducerHouseProductionBridges { get; set; }
+
+        DbSet<ProductionTagBridge> ProductionTagBridges { get; set; }
 
         DbSet<Presentation> Presentations { get; set; }
 

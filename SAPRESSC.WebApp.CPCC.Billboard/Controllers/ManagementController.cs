@@ -147,7 +147,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Controllers
             model.PersistenceBillboardPersonalityCommentCount = applicationDbContext.PersonalityComments.LongCount();
 
             model.PersistenceSupportCountryCount = applicationDbContext.Countries.LongCount();
-            model.PersistenceSupportCategoryCount = applicationDbContext.Categories.LongCount();
+            model.PersistenceSupportCategoryCount = applicationDbContext.Clasifications.LongCount();
             model.PersistenceSupportPersonalityCount = applicationDbContext.Personalities.LongCount();
             model.PersistenceSupportGenreCount = applicationDbContext.Genres.LongCount();
             model.PersistenceSupportAwardCount = applicationDbContext.Awards.LongCount();

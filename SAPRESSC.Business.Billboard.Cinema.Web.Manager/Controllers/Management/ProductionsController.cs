@@ -24,6 +24,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
     public class ProductionsController : Core.Web.Management.Controllers.AbstractEntityManagementFilteredController<Production, long, ProductionInputViewModel, ProductionDisplayViewModel, ProductionFilterModel>
     {
         private const string POSTER_IMAGE_FILE_FIELD_NAME = "PosterImageFile";
+        private const string PLACARD_IMAGE_FILE_FIELD_NAME = "PlacardImageFile";
         private const string TRAILER_VIDEO_FILE_FIELD_NAME = "TrailerVideoFile";
 
         private readonly Microsoft.Extensions.Options.IOptions<FfmpegOptions> ffmpegOptions;
@@ -40,9 +41,11 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
         private readonly IEntityRepository<AwardWinning, int> awardWinningRepository;
         private readonly IEntityRepository<Personality, long> personalityRepository;
         private readonly IEntityRepository<Participation, long> participationRepository;
-        private readonly IEntityRepository<Category, int> categoryRepository;
+        private readonly IEntityRepository<Clasification, int> clasificationRepository;
+        private readonly IEntityRepository<Category, System.Guid> categoryRepository;
+        private readonly IEntityRepository<Collection, System.Guid> collectionRepository;
 
-        public ProductionsController(Microsoft.Extensions.Options.IOptions<FfmpegOptions> ffmpegOptions, IEntityRepository<Thumbnail, System.Guid> thumbnailRepository, IEntityRepository<Video, System.Guid> videoRepository, IEntityRepository<Category, int> categoryRepository, IEntityRepository<Participation, long> participationRepository, IEntityRepository<Personality, long> personalityRepository, IEntityRepository<AwardWinning, int> awardWinningRepository, IEntityRepository<Award, int> awardRepository, IEntityRepository<Country, int> countryRepository, IEntityRepository<ProducerHouse, long> producerHouseRepository, IEntityRepository<Genre, int> genreRepository, IEntityRepository<Language, int> languageRepository, IMediaFileManagerFacade mediaFileManagerFacade, IEntityRepository<Image, System.Guid> imageRepository, IEntityRepository<Production, long> repository, Microsoft.Extensions.Localization.IStringLocalizer<ProductionsController> localizer, ILogger<ProductionsController> logger) : base(repository, localizer, logger)
+        public ProductionsController(IEntityRepository<Collection, System.Guid> collectionRepository, IEntityRepository<Category, System.Guid> categoryRepository, Microsoft.Extensions.Options.IOptions<FfmpegOptions> ffmpegOptions, IEntityRepository<Thumbnail, System.Guid> thumbnailRepository, IEntityRepository<Video, System.Guid> videoRepository, IEntityRepository<Clasification, int> clasificationRepository, IEntityRepository<Participation, long> participationRepository, IEntityRepository<Personality, long> personalityRepository, IEntityRepository<AwardWinning, int> awardWinningRepository, IEntityRepository<Award, int> awardRepository, IEntityRepository<Country, int> countryRepository, IEntityRepository<ProducerHouse, long> producerHouseRepository, IEntityRepository<Genre, int> genreRepository, IEntityRepository<Language, int> languageRepository, IMediaFileManagerFacade mediaFileManagerFacade, IEntityRepository<Image, System.Guid> imageRepository, IEntityRepository<Production, long> repository, Microsoft.Extensions.Localization.IStringLocalizer<ProductionsController> localizer, ILogger<ProductionsController> logger) : base(repository, localizer, logger)
         {
             this.ffmpegOptions = ffmpegOptions;
 
@@ -58,7 +61,9 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
             this.awardWinningRepository = awardWinningRepository;
             this.personalityRepository = personalityRepository;
             this.participationRepository = participationRepository;
+            this.clasificationRepository = clasificationRepository;
             this.categoryRepository = categoryRepository;
+            this.collectionRepository = collectionRepository;
         }
 
         protected override string GetFilterSessionID()
@@ -128,9 +133,9 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
         {
             var languageCount = languageRepository.Count();
             var countryCount = countryRepository.Count();
-            var categoryCount = categoryRepository.Count();
+            var ClasificationCount = clasificationRepository.Count();
 
-            if (languageCount <= 0 || countryCount <= 0 || categoryCount <= 0)
+            if (languageCount <= 0 || countryCount <= 0 || ClasificationCount <= 0)
             {
                 var notification = new NotificationViewModel
                 {
@@ -150,9 +155,9 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
                     notification.Messages.Add("AtLastOneCountryRequiredMessage");
                 }
 
-                if (categoryCount <= 0)
+                if (ClasificationCount <= 0)
                 {
-                    notification.Messages.Add("AtLastOneCategoryRequiredMessage");
+                    notification.Messages.Add("AtLastOneClasificationRequiredMessage");
                 }
 
                 TempData[NotificationViewModel.NOTIFICATION_MAP_KEY] = JsonConvert.SerializeObject(notification);
@@ -177,6 +182,15 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
                     ModelState.ClearValidationState(POSTER_IMAGE_FILE_FIELD_NAME);
 
                     modelInput.PosterImageFile = formPosterImageFile;
+
+                    validationRequired = true;
+                }
+
+                var formPlacardImageFile = Request.Form.Files.FirstOrDefault(f => f.Name == PLACARD_IMAGE_FILE_FIELD_NAME);
+
+                if (formPlacardImageFile != null && formPlacardImageFile.Length > 0)
+                {
+                    modelInput.PlacardImageFile = formPlacardImageFile;
 
                     validationRequired = true;
                 }
@@ -291,11 +305,25 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
                         }
                     }
 
+                    if (modelInput.PlacardImageFile != null)
+                    {
+                        using (var memoryStream = new System.IO.MemoryStream())
+                        {
+                            modelInput.PlacardImageFile.CopyTo(memoryStream);
+
+                            var image = new Image { ContentType = modelInput.PlacardImageFile.ContentType, Length = modelInput.PlacardImageFile.Length, About = "Placard for Production " + entity.Id };
+
+                            mediaFileManagerFacade.SaveImageFileContent(image.Id, memoryStream.ToArray());
+
+                            entity.PlacardImage = image;
+                        }
+                    }
+
                     using (var memoryStream = new System.IO.MemoryStream())
                     {
                         modelInput.PosterImageFile.CopyTo(memoryStream);
 
-                        var image = new Image { ContentType = modelInput.PosterImageFile.ContentType, Length = modelInput.PosterImageFile.Length, About = "Production " + entity.Id };
+                        var image = new Image { ContentType = modelInput.PosterImageFile.ContentType, Length = modelInput.PosterImageFile.Length, About = "Poster for Production " + entity.Id };
 
                         mediaFileManagerFacade.SaveImageFileContent(image.Id, memoryStream.ToArray());
 
@@ -338,13 +366,22 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
 
             if (Request.Form.Files.Count > 0)
             {
-                var formPosterImageFile = Request.Form.Files.First(f => f.Name == POSTER_IMAGE_FILE_FIELD_NAME);
+                var formPosterImageFile = Request.Form.Files.FirstOrDefault(f => f.Name == POSTER_IMAGE_FILE_FIELD_NAME);
 
                 var validationRequired = false;
 
                 if (formPosterImageFile != null && formPosterImageFile.Length > 0)
                 {
                     modelInput.PosterImageFile = formPosterImageFile;
+
+                    validationRequired = true;
+                }
+
+                var formPlacardImageFile = Request.Form.Files.FirstOrDefault(f => f.Name == PLACARD_IMAGE_FILE_FIELD_NAME);
+
+                if (formPlacardImageFile != null && formPlacardImageFile.Length > 0)
+                {
+                    modelInput.PlacardImageFile = formPlacardImageFile;
 
                     validationRequired = true;
                 }
@@ -493,13 +530,49 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
                         }
                     }
 
+                    if (modelInput.PlacardImageFile == null)
+                    {
+                        if (modelInput.ResetPlacardImage && entity.PlacardImage != null)
+                        {
+                            var oldPlacard = entity.PlacardImage;
+
+                            entity.PlacardImage = null;
+
+                            mediaFileManagerFacade.DeleteImageFile(oldPlacard.Id);
+
+                            imageRepository.Delete(oldPlacard, User.Identity.Name);
+                        }
+                    }
+                    else
+                    {
+                        var oldPlacard = entity.PlacardImage;
+
+                        using (var memoryStream = new System.IO.MemoryStream())
+                        {
+                            modelInput.PlacardImageFile.CopyTo(memoryStream);
+
+                            memoryStream.Position = 0;
+
+                            entity.PlacardImage = new Image { ContentType = modelInput.PlacardImageFile.ContentType, Length = modelInput.PlacardImageFile.Length, About = "Placard for Production " + entity.Id };
+
+                            mediaFileManagerFacade.SaveImageFileContent(entity.PlacardImage.Id, memoryStream.ToArray());
+                        }
+
+                        if (oldPlacard != null)
+                        {
+                            mediaFileManagerFacade.DeleteImageFile(oldPlacard.Id);
+
+                            imageRepository.Delete(oldPlacard, User.Identity.Name);
+                        }
+                    }
+
                     if (modelInput.PosterImageFile != null)
                     {
                         using (var memoryStream = new System.IO.MemoryStream())
                         {
                             modelInput.PosterImageFile.CopyTo(memoryStream);
 
-                            var image = new Image { ContentType = modelInput.PosterImageFile.ContentType, Length = modelInput.PosterImageFile.Length, About = "Production " + entity.Id };
+                            var image = new Image { ContentType = modelInput.PosterImageFile.ContentType, Length = modelInput.PosterImageFile.Length, About = "Poster for Production " + entity.Id };
 
                             mediaFileManagerFacade.SaveImageFileContent(image.Id, memoryStream.ToArray());
 
@@ -555,13 +628,32 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
             return base.Delete(displayModel);
         }
 
+        protected override void PopulateViewModelDisplayExtras(ProductionDisplayViewModel modelDisplay, Production entity)
+        {
+            base.PopulateViewModelDisplayExtras(modelDisplay, entity);
+
+            if (entity.CategoryId != System.Guid.Empty)
+            {
+                var category = categoryRepository.Get(entity.CategoryId);
+
+                modelDisplay.Category = category.GetTreeName();
+            }
+
+            if (entity.CollectionId != System.Guid.Empty)
+            {
+                var collection = collectionRepository.Get(entity.CollectionId);
+
+                modelDisplay.Collection = collection.GetTreeName();
+            }
+        }
+
         protected override void PreCreate(Production entity, ProductionInputViewModel modelInput)
         {
             base.PreCreate(entity, modelInput);
 
             entity.Country = countryRepository.Get(modelInput.CountryId);
             entity.Language = languageRepository.Get(modelInput.LanguageId);
-            entity.Category = categoryRepository.Get(modelInput.CategoryId);
+            entity.Clasification = clasificationRepository.Get(modelInput.ClasificationId);
         }
 
         protected override void PreEdit(Production entity, ProductionInputViewModel modelInput)
@@ -570,7 +662,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
 
             entity.Country = countryRepository.Get(modelInput.CountryId);
             entity.Language = languageRepository.Get(modelInput.LanguageId);
-            entity.Category = categoryRepository.Get(modelInput.CategoryId);
+            entity.Clasification = clasificationRepository.Get(modelInput.ClasificationId);
         }
 
         protected override void PostDelete(Production entity)
@@ -580,6 +672,13 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
             mediaFileManagerFacade.DeleteImageFile(entity.PosterImage.Id);
 
             imageRepository.Delete(entity.PosterImage, User.Identity.Name);
+
+            if (entity.PlacardImage != null)
+            {
+                imageRepository.Delete(entity.PlacardImage, User.Identity.Name);
+
+                mediaFileManagerFacade.DeleteImageFile(entity.PlacardImage.Id);
+            }
 
             if (entity.TrailerVideo != null)
             {
@@ -699,9 +798,9 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
                 ModelState.AddModelError("CountryId", localizer["CountrySelectionRequiredMessage"]);
             }
 
-            if (modelInput.CategoryId <= 0)
+            if (modelInput.ClasificationId <= 0)
             {
-                ModelState.AddModelError("CategoryId", localizer["CategorySelectionRequiredMessage"]);
+                ModelState.AddModelError("ClasificationId", localizer["ClasificationSelectionRequiredMessage"]);
             }
 
             base.ValidateCreate(modelInput);
@@ -719,9 +818,9 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
                 ModelState.AddModelError("CountryId", localizer["CountrySelectionRequiredMessage"]);
             }
 
-            if (modelInput.CategoryId <= 0)
+            if (modelInput.ClasificationId <= 0)
             {
-                ModelState.AddModelError("CategoryId", localizer["CategorySelectionRequiredMessage"]);
+                ModelState.AddModelError("ClasificationId", localizer["ClasificationSelectionRequiredMessage"]);
             }
 
             base.ValidateEdit(modelInput);
@@ -741,9 +840,9 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
             inputModel.Countries = selectListItems;
         }
 
-        private void PopulateModelInputForAvailableCategories(ProductionInputViewModel inputModel)
+        private void PopulateModelInputForAvailableClasifications(ProductionInputViewModel inputModel)
         {
-            var entities = categoryRepository.GetAll();
+            var entities = clasificationRepository.GetAll();
 
             var selectListItems = new List<SelectListItem>();
 
@@ -752,7 +851,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
                 selectListItems.Add(new SelectListItem { Value = entity.Id.ToString(), Text = entity.Name });
             }
 
-            inputModel.Categories = selectListItems;
+            inputModel.Clasifications = selectListItems;
         }
 
         private void PopulateModelInputForAvailableLanguages(ProductionInputViewModel inputModel)
@@ -781,7 +880,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
             }).ToList();
         }
 
-        private void PopulateModelInputForAvailableProducerHousess(ProductionInputViewModel modelInput)
+        private void PopulateModelInputForAvailableProducerHouses(ProductionInputViewModel modelInput)
         {
             var entities = producerHouseRepository.GetAll().ToList();
 
@@ -792,36 +891,74 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
                 Label = org.Name
             }).ToList();
         }
+               
+        private void PopulateModelInputForAvailableCollections(ProductionInputViewModel inputModel)
+        {
+            inputModel.AvailableCollectionSelectListItems.Add(new SelectListItem
+            {
+                Value = System.Guid.Empty.ToString(),
+                Text = "Ninguna"
+            });
+
+            var entities = collectionRepository.GetAll().ToList().OrderBy(e => e.GetTreeId()).ToArray();
+
+            foreach (var entity in entities)
+            {
+                inputModel.AvailableCollectionSelectListItems.Add(new SelectListItem { Value = entity.Id.ToString(), Text = entity.GetTreeName() });
+            }
+        }
+
+        private void PopulateModelInputForAvailableCategories(ProductionInputViewModel inputModel)
+        {
+            inputModel.AvailableCategorySelectListItems.Add(new SelectListItem
+            {
+                Value = System.Guid.Empty.ToString(),
+                Text = "Ninguna"
+            });
+
+            var entities = categoryRepository.GetAll().ToList().OrderBy(e => e.GetTreeId()).ToArray();
+
+            foreach (var entity in entities)
+            {
+                inputModel.AvailableCategorySelectListItems.Add(new SelectListItem { Value = entity.Id.ToString(), Text = entity.GetTreeName() });
+            }
+        }
 
         protected override ProductionInputViewModel ConfigureCreate(ProductionInputViewModel modelInput)
         {
-            PopulateModelInputForAvailableCategories(modelInput);
+            PopulateModelInputForAvailableClasifications(modelInput);
             PopulateModelInputForAvailableCountries(modelInput);
             PopulateModelInputForAvailableGenres(modelInput);
             PopulateModelInputForAvailableLanguages(modelInput);
-            PopulateModelInputForAvailableProducerHousess(modelInput);
+            PopulateModelInputForAvailableProducerHouses(modelInput);
+            PopulateModelInputForAvailableCollections(modelInput);
+            PopulateModelInputForAvailableCategories(modelInput);
 
             return base.ConfigureCreate(modelInput);
         }
 
         protected override ProductionInputViewModel ConfigurePostFailCreateValidation(ProductionInputViewModel modelInput)
         {
-            PopulateModelInputForAvailableCategories(modelInput);
+            PopulateModelInputForAvailableClasifications(modelInput);
             PopulateModelInputForAvailableCountries(modelInput);
             PopulateModelInputForAvailableGenres(modelInput);
             PopulateModelInputForAvailableLanguages(modelInput);
-            PopulateModelInputForAvailableProducerHousess(modelInput);
+            PopulateModelInputForAvailableProducerHouses(modelInput);
+            PopulateModelInputForAvailableCollections(modelInput);
+            PopulateModelInputForAvailableCategories(modelInput);
 
             return base.ConfigurePostFailCreateValidation(modelInput);
         }
 
         protected override ProductionInputViewModel ConfigureEdit(Production entity, ProductionInputViewModel modelInput)
         {
-            PopulateModelInputForAvailableCategories(modelInput);
+            PopulateModelInputForAvailableClasifications(modelInput);
             PopulateModelInputForAvailableCountries(modelInput);
             PopulateModelInputForAvailableGenres(modelInput);
             PopulateModelInputForAvailableLanguages(modelInput);
-            PopulateModelInputForAvailableProducerHousess(modelInput);
+            PopulateModelInputForAvailableProducerHouses(modelInput);
+            PopulateModelInputForAvailableCollections(modelInput);
+            PopulateModelInputForAvailableCategories(modelInput);
 
             var genres = entity.GetGenres();
 
@@ -842,11 +979,13 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
 
         protected override ProductionInputViewModel ConfigurePostFailEditValidation(ProductionInputViewModel modelInput)
         {
-            PopulateModelInputForAvailableCategories(modelInput);
+            PopulateModelInputForAvailableClasifications(modelInput);
             PopulateModelInputForAvailableCountries(modelInput);
             PopulateModelInputForAvailableGenres(modelInput);
             PopulateModelInputForAvailableLanguages(modelInput);
-            PopulateModelInputForAvailableProducerHousess(modelInput);
+            PopulateModelInputForAvailableProducerHouses(modelInput);
+            PopulateModelInputForAvailableCollections(modelInput);
+            PopulateModelInputForAvailableCategories(modelInput);
 
             return base.ConfigurePostFailEditValidation(modelInput);
         }

@@ -1,6 +1,6 @@
 ﻿namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.Api
 {
-    public class CategoryApiModel
+    public class ClasificationApiModel
     {
         public int Id { get; set; }
 

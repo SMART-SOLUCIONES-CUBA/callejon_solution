@@ -20,8 +20,9 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Rep
                 .Include(entity => entity.AwardWinnings).ThenInclude(relation => relation.Award)
                 .Include(entity => entity.Participations).ThenInclude(relation => relation.Personality)
                 .Include(entity => entity.PosterImage)
+                .Include(entity => entity.PlacardImage)
                 .Include(entity => entity.TrailerVideo).ThenInclude(entity => entity.Thumbnail)
-                .Include(entity => entity.Category);
+                .Include(entity => entity.Clasification);
         }
     }
 }

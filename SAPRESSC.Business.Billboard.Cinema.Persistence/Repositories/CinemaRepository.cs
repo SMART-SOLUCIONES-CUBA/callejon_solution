@@ -24,7 +24,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Rep
                 .Include(entity => entity.Rooms).ThenInclude(r => r.Presentations).ThenInclude(pre => pre.Production).ThenInclude(entity => entity.Participations).ThenInclude(relation => relation.Personality).ThenInclude(entity => entity.Image)
                 .Include(entity => entity.Rooms).ThenInclude(r => r.Presentations).ThenInclude(pre => pre.Production).ThenInclude(entity => entity.PosterImage)
                 .Include(entity => entity.Rooms).ThenInclude(r => r.Presentations).ThenInclude(pre => pre.Production).ThenInclude(entity => entity.TrailerVideo)
-                .Include(entity => entity.Rooms).ThenInclude(r => r.Presentations).ThenInclude(pre => pre.Production).ThenInclude(entity => entity.Category);
+                .Include(entity => entity.Rooms).ThenInclude(r => r.Presentations).ThenInclude(pre => pre.Production).ThenInclude(entity => entity.Clasification);
         }
     }
 }

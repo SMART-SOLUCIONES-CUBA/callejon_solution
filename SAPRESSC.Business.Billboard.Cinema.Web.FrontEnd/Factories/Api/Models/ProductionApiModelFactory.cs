@@ -16,7 +16,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.FrontEnd.Fa
                 Title = production.Title,
                 LocalizedTitle = production.LocalizedTitle,
                 Language = new LanguageApiModel { Id = production.Language.Id, Name = production.Language.Name },
-                Category = new CategoryApiModel { Id = production.Category.Id, Name = production.Category.Name },
+                Clasification = new ClasificationApiModel { Id = production.Clasification.Id, Name = production.Clasification.Name },
                 Country = new CountryApiModel { Id = production.Country.Id, Name = production.Country.Name, IsoCode = production.Country.IsoCode },
                 CoCountries = production.CountryCoProductionBridges.Select(bridge => new CountryApiModel { Id = bridge.Country.Id, Name = bridge.Country.Name, IsoCode = bridge.Country.IsoCode }).ToArray(),
                 Rate = production.Rate,

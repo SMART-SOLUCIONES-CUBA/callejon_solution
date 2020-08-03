@@ -2,6 +2,21 @@
 {
     public static class CinemaBillboardBusinessManagementRoleCodes
     {
+        public const string TagManagerViewer = "CINEMABILLBOARD_TAG_MANAGER_VIEWER";
+        public const string TagManagerCreator = "CINEMABILLBOARD_TAG_MANAGER_CREATOR";
+        public const string TagManagerEditor = "CINEMABILLBOARD_TAG_MANAGER_EDITOR";
+        public const string TagManagerRemover = "CINEMABILLBOARD_TAG_MANAGER_REMOVER";
+
+        public const string CollectionManagerViewer = "CINEMABILLBOARD_COLLECTION_MANAGER_VIEWER";
+        public const string CollectionManagerCreator = "CINEMABILLBOARD_COLLECTION_MANAGER_CREATOR";
+        public const string CollectionManagerEditor = "CINEMABILLBOARD_COLLECTION_MANAGER_EDITOR";
+        public const string CollectionManagerRemover = "CINEMABILLBOARD_COLLECTION_MANAGER_REMOVER";
+
+        public const string ClasificationManagerViewer = "CINEMABILLBOARD_CLASIFICATION_MANAGER_VIEWER";
+        public const string ClasificationManagerCreator = "CINEMABILLBOARD_CLASIFICATION_MANAGER_CREATOR";
+        public const string ClasificationManagerEditor = "CINEMABILLBOARD_CLASIFICATION_MANAGER_EDITOR";
+        public const string ClasificationManagerRemover = "CINEMABILLBOARD_CLASIFICATION_MANAGER_REMOVER";
+
         public const string CategoryManagerViewer = "CINEMABILLBOARD_CATEGORY_MANAGER_VIEWER";
         public const string CategoryManagerCreator = "CINEMABILLBOARD_CATEGORY_MANAGER_CREATOR";
         public const string CategoryManagerEditor = "CINEMABILLBOARD_CATEGORY_MANAGER_EDITOR";

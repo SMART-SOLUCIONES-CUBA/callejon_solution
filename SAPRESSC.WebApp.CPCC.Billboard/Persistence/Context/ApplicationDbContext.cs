@@ -38,7 +38,6 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Persistence.Context
         public DbSet<StateRegion> StateRegions { get; set; }
         public DbSet<MunicipalityRegion> MunicipalityRegions { get; set; }
         public DbSet<LocalityRegion> LocalityRegions { get; set; }
-        public DbSet<Category> Categories { get; set; }
         public DbSet<Person> Persons { get; set; }
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<Membership> Memberships { get; set; }
@@ -61,6 +60,11 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Persistence.Context
         public DbSet<OrganizationPostalContactItemBridge> OrganizationPostalContactItemBridges { get; set; }
         public DbSet<OrganizationSocialContactItemBridge> OrganizationSocialContactItemBridges { get; set; }
         public DbSet<OrganizationWebSiteContactItemBridge> OrganizationWebSiteContactItemBridges { get; set; }
+
+        public DbSet<Clasification> Clasifications { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Collection> Collections { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Award> Awards { get; set; }
         public DbSet<Language> Languages { get; set; }
@@ -69,6 +73,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Persistence.Context
         public DbSet<Participation> Participations { get; set; }
         public DbSet<Production> Productions { get; set; }
         public DbSet<ProductionGenreBridge> ProductionGenreBridges { get; set; }
+        public DbSet<ProductionTagBridge> ProductionTagBridges { get; set; }
         public DbSet<ProducerHouseProductionBridge> ProducerHouseProductionBridges { get; set; }
         public DbSet<Cinema> Cinemas { get; set; }
         public DbSet<Room> Rooms { get; set; }

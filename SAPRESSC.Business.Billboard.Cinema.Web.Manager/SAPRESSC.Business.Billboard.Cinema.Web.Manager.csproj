@@ -20,6 +20,7 @@
     <PackageReference Include="SAPRESSC.Core.Web.Management" Version="0.9.0-beta" />
     <PackageReference Include="SAPRESSC.Core.Web.Security" Version="0.8.0-beta" />
     <PackageReference Include="SAPRESSC.Middleware.Media.Web.FrontEnd" Version="0.6.0-alpha" />
+    <PackageReference Include="SkiaSharp" Version="1.68.3" />
     <PackageReference Include="Slugify.Core" Version="2.3.0" />
   </ItemGroup>
   <ItemGroup>

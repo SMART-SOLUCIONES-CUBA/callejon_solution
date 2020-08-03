@@ -48,7 +48,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                             .Include(entity => entity.Production).ThenInclude(entity => entity.AwardWinnings).ThenInclude(relation => relation.Award)
                             .Include(entity => entity.Production).ThenInclude(entity => entity.Participations).ThenInclude(relation => relation.Personality).ThenInclude(entity => entity.Image)
                             .Include(entity => entity.Production).ThenInclude(entity => entity.PosterImage)
-                            .Include(entity => entity.Production).ThenInclude(entity => entity.Category)
+                            .Include(entity => entity.Production).ThenInclude(entity => entity.Clasification)
                             .Include(entity => entity.Production).ThenInclude(entity => entity.CountryCoProductionBridges).ThenInclude(bridge => bridge.Country)
                             .Where(entity => entity.Room.Id == model.Room.Id)
                             .OrderBy(entity => entity.Date);
@@ -83,7 +83,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Pages
                                     Title = presentation.Production.LocalizedTitle ?? presentation.Production.Title,
                                     Duration = System.TimeSpan.FromMinutes(presentation.Production.Duration),
                                     Year = presentation.Production.Year,
-                                    Category = presentation.Production.Category.Name,
+                                    Clasification = presentation.Production.Clasification.Name,
                                     MainCountry = presentation.Production.Country.Name,
                                     CountriesJoin = string.Join(", ", countryNames.ToArray()),
                                     Language = presentation.Production.Language.Name,

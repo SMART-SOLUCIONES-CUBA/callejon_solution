@@ -172,7 +172,7 @@
     <value>Casas Productoras</value>
   </data>
   <data name="Productions" xml:space="preserve">
-    <value>Películas</value>
+    <value>Audio Visuales</value>
   </data>
   <data name="About" xml:space="preserve">
     <value>Acerca de</value>
@@ -186,8 +186,8 @@
   <data name="AtLastOneAwardRequiredMessage" xml:space="preserve">
     <value>Se require al menos un Premio registrado en el sistema. Debe agregarlo para continuar.</value>
   </data>
-  <data name="AtLastOneCategoryRequiredMessage" xml:space="preserve">
-    <value>Se require al menos una Categoría registrada en el sistema. Debe agregarla para continuar.</value>
+  <data name="AtLastOneClasificationRequiredMessage" xml:space="preserve">
+    <value>Se require al menos una Clasificación registrada en el sistema. Debe agregarla para continuar.</value>
   </data>
   <data name="AtLastOneCountryRequiredMessage" xml:space="preserve">
     <value>Se require al menos un País registrado en el sistema. Debe agregarlo para continuar.</value>
@@ -210,8 +210,8 @@
   <data name="Category" xml:space="preserve">
     <value>Categoría</value>
   </data>
-  <data name="CategorySelectionRequiredMessage" xml:space="preserve">
-    <value>La selección de una Categoría es obligatoria.</value>
+  <data name="ClasificationSelectionRequiredMessage" xml:space="preserve">
+    <value>La selección de una Clasificación es obligatoria.</value>
   </data>
   <data name="Country" xml:space="preserve">
     <value>País</value>
@@ -307,10 +307,10 @@
     <value>Ya existe una Presentación planificada para la Fecha y Hora especificada.</value>
   </data>
   <data name="Production" xml:space="preserve">
-    <value>Producción</value>
+    <value>Audio Visual</value>
   </data>
   <data name="ProductionPickUpRequiredMessage" xml:space="preserve">
-    <value>Se requiere la seleccion previa de la Película a presentar.</value>
+    <value>Se requiere la seleccion previa del Audio Visual a presentar.</value>
   </data>
   <data name="Rate" xml:space="preserve">
     <value>Valoración</value>
@@ -425,5 +425,29 @@
   </data>
   <data name="Phrase" xml:space="preserve">
     <value>Frase</value>
+  </data>
+  <data name="Clasification" xml:space="preserve">
+    <value>Clasificación</value>
+  </data>
+  <data name="Clasifications" xml:space="preserve">
+    <value>Clasificaciones</value>
+  </data>
+  <data name="Collection" xml:space="preserve">
+    <value>Colección</value>
+  </data>
+  <data name="Collections" xml:space="preserve">
+    <value>Colecciones</value>
+  </data>
+  <data name="Tag" xml:space="preserve">
+    <value>Etiqueta</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Etiquetas</value>
+  </data>
+  <data name="Parent" xml:space="preserve">
+    <value>Superior</value>
+  </data>
+  <data name="PlacardImage" xml:space="preserve">
+    <value>Imagen de Pancarta</value>
   </data>
 </root>

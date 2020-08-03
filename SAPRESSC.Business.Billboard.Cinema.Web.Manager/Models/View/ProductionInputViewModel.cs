@@ -12,6 +12,8 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Mod
         public ProductionInputViewModel()
         {
             Year = System.DateTime.Now.Year;
+            AvailableCategorySelectListItems = new List<SelectListItem>();
+            AvailableCollectionSelectListItems = new List<SelectListItem>();
         }
 
         public long Id { get; set; }
@@ -54,6 +56,14 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Mod
 
         public System.Guid PosterImageId { get; set; }
 
+        [Core.Web.Common.ComponentModel.DataAnnotations.FormFileContentTypes(ContentTypes = new string[] { "image/png", "image/jpeg" }, ErrorMessage = "PNG_JPEG_FileAllowedOnlyMessage.")]
+        [Display(Name = "PlacardImage")]
+        public Microsoft.AspNetCore.Http.IFormFile PlacardImageFile { get; set; }
+
+        public System.Guid PlacardImageId { get; set; }
+
+        public bool ResetPlacardImage { get; set; }
+
         [Core.Web.Common.ComponentModel.DataAnnotations.FormFileContentTypes(ContentTypes = new string[] { "video/mp4", "video/flv" }, ErrorMessage = "RTMP_VIDEO_FileAllowedOnlyMessage.")]
         [Display(Name = "TrailerVideo")]
         public Microsoft.AspNetCore.Http.IFormFile TrailerVideoFile { get; set; }
@@ -63,6 +73,16 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Mod
         public string TrailerVideoExtension { get; set; }
 
         public bool ResetTrailerVideo { get; set; }
+
+        [System.ComponentModel.DataAnnotations.Display(Name = "Collection")]
+        public System.Guid CollectionId { get; set; }
+
+        public List<SelectListItem> AvailableCollectionSelectListItems { get; set; }
+
+        [System.ComponentModel.DataAnnotations.Display(Name = "Category")]
+        public System.Guid CategoryId { get; set; }
+
+        public List<SelectListItem> AvailableCategorySelectListItems { get; set; }
 
         [Display(Name = "Genres")]
         public List<SelectionItemInputViewModel<int>> SelectableGenres { get; set; }
@@ -75,10 +95,10 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Mod
         [Range(1, 5)]
         public int Rate { get; set; }
 
-        [Display(Name = "Category")]
-        public int CategoryId { get; set; }
+        [Display(Name = "Clasification")]
+        public int ClasificationId { get; set; }
 
-        public IEnumerable<SelectListItem> Categories { get; set; }
+        public IEnumerable<SelectListItem> Clasifications { get; set; }
 
         public Production Export()
         {
@@ -101,10 +121,13 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Mod
             LanguageId = entity.Language.Id;
             CountryId = entity.Country.Id;
             Rate = entity.Rate;
-            CategoryId = entity.Category.Id;
+            ClasificationId = entity.Clasification.Id;
             PosterImageId = entity.PosterImage != null ? entity.PosterImage.Id : System.Guid.Empty;
+            PlacardImageId = entity.PlacardImage?.Id ?? System.Guid.Empty;
             TrailerVideoId = entity.TrailerVideo != null ? entity.TrailerVideo.Id : System.Guid.Empty;
             TrailerVideoExtension = entity.TrailerVideo != null ? entity.TrailerVideo.Extension : string.Empty;
+            CollectionId = entity.CollectionId;
+            CategoryId = entity.CategoryId;
         }
 
         public void Mergue(Production entity)
@@ -116,6 +139,16 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Mod
             entity.About = About;
             entity.Argument = Argument;
             entity.Rate = Rate;
+
+            if (entity.CollectionId != CollectionId)
+            {
+                entity.CollectionId = CollectionId;
+            }
+
+            if (entity.CategoryId != CategoryId)
+            {
+                entity.CategoryId = CategoryId;
+            }
         }
     }
 }

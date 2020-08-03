@@ -35,7 +35,9 @@
 
 <dl>
     <dt>Nombre</dt>
-    <dd>@Html.DisplayFor(model => model.Name)</dd>
+    <dd>@Model.Name</dd>
+    <dt>Superior</dt>
+    <dd>@if (Model.Parent != null) { @Model.Parent.Name } else { <span>-</span> }</dd>
 </dl>
 @using (Html.BeginForm("delete", "categories", new { Area = "cinemabillboard", key = string.Empty }, FormMethod.Post, true, null))
 {

@@ -26,7 +26,7 @@
 
         public string CountriesJoin { get; set; }
 
-        public string Category { get; set; }
+        public string Clasification { get; set; }
 
         public string[] AwardWinnings { get; set; }
 

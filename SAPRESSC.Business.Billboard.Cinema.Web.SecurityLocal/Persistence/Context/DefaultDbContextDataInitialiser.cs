@@ -10,6 +10,129 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.SecurityLoc
         {
             var roleDbSet = context.Set<Role>();
 
+            // Tag Roles definition!!
+            if (!roleDbSet.AnyAsync(role => role.Code.Equals(CinemaBillboardBusinessManagementRoleCodes.TagManagerViewer)).Result)
+            {
+                roleDbSet.Add(new Role
+                {
+                    Name = "TagManagementRoleViewerTitle",
+                    Code = CinemaBillboardBusinessManagementRoleCodes.TagManagerViewer,
+                    Description = "TagManagementRoleViewerDescription"
+                });
+            }
+
+            if (!roleDbSet.AnyAsync(role => role.Code.Equals(CinemaBillboardBusinessManagementRoleCodes.TagManagerCreator)).Result)
+            {
+                roleDbSet.Add(new Role
+                {
+                    Name = "TagManagementRoleCreatorTitle",
+                    Code = CinemaBillboardBusinessManagementRoleCodes.TagManagerCreator,
+                    Description = "TagManagementRoleCreatorDescription"
+                });
+            }
+
+            if (!roleDbSet.AnyAsync(role => role.Code.Equals(CinemaBillboardBusinessManagementRoleCodes.TagManagerEditor)).Result)
+            {
+                roleDbSet.Add(new Role
+                {
+                    Name = "TagManagementRoleEditorTitle",
+                    Code = CinemaBillboardBusinessManagementRoleCodes.TagManagerEditor,
+                    Description = "TagManagementRoleEditorDescription"
+                });
+            }
+
+            if (!roleDbSet.AnyAsync(role => role.Code.Equals(CinemaBillboardBusinessManagementRoleCodes.TagManagerRemover)).Result)
+            {
+                roleDbSet.Add(new Role
+                {
+                    Name = "TagManagementRoleRemoverTitle",
+                    Code = CinemaBillboardBusinessManagementRoleCodes.TagManagerRemover,
+                    Description = "TagManagementRoleRemoverDescription"
+                });
+            }
+
+            // Collection Roles definition!!
+            if (!roleDbSet.AnyAsync(role => role.Code.Equals(CinemaBillboardBusinessManagementRoleCodes.CollectionManagerViewer)).Result)
+            {
+                roleDbSet.Add(new Role
+                {
+                    Name = "CollectionManagementRoleViewerTitle",
+                    Code = CinemaBillboardBusinessManagementRoleCodes.CollectionManagerViewer,
+                    Description = "CollectionManagementRoleViewerDescription"
+                });
+            }
+
+            if (!roleDbSet.AnyAsync(role => role.Code.Equals(CinemaBillboardBusinessManagementRoleCodes.CollectionManagerCreator)).Result)
+            {
+                roleDbSet.Add(new Role
+                {
+                    Name = "CollectionManagementRoleCreatorTitle",
+                    Code = CinemaBillboardBusinessManagementRoleCodes.CollectionManagerCreator,
+                    Description = "CollectionManagementRoleCreatorDescription"
+                });
+            }
+
+            if (!roleDbSet.AnyAsync(role => role.Code.Equals(CinemaBillboardBusinessManagementRoleCodes.CollectionManagerEditor)).Result)
+            {
+                roleDbSet.Add(new Role
+                {
+                    Name = "CollectionManagementRoleEditorTitle",
+                    Code = CinemaBillboardBusinessManagementRoleCodes.CollectionManagerEditor,
+                    Description = "CollectionManagementRoleEditorDescription"
+                });
+            }
+
+            if (!roleDbSet.AnyAsync(role => role.Code.Equals(CinemaBillboardBusinessManagementRoleCodes.CollectionManagerRemover)).Result)
+            {
+                roleDbSet.Add(new Role
+                {
+                    Name = "CollectionManagementRoleRemoverTitle",
+                    Code = CinemaBillboardBusinessManagementRoleCodes.CollectionManagerRemover,
+                    Description = "CollectionManagementRoleRemoverDescription"
+                });
+            }
+
+            // Clasification Roles definition!!
+            if (!roleDbSet.AnyAsync(role => role.Code.Equals(CinemaBillboardBusinessManagementRoleCodes.ClasificationManagerViewer)).Result)
+            {
+                roleDbSet.Add(new Role
+                {
+                    Name = "ClasificationManagementRoleViewerTitle",
+                    Code = CinemaBillboardBusinessManagementRoleCodes.ClasificationManagerViewer,
+                    Description = "ClasificationManagementRoleViewerDescription"
+                });
+            }
+
+            if (!roleDbSet.AnyAsync(role => role.Code.Equals(CinemaBillboardBusinessManagementRoleCodes.ClasificationManagerCreator)).Result)
+            {
+                roleDbSet.Add(new Role
+                {
+                    Name = "ClasificationManagementRoleCreatorTitle",
+                    Code = CinemaBillboardBusinessManagementRoleCodes.ClasificationManagerCreator,
+                    Description = "ClasificationManagementRoleCreatorDescription"
+                });
+            }
+
+            if (!roleDbSet.AnyAsync(role => role.Code.Equals(CinemaBillboardBusinessManagementRoleCodes.ClasificationManagerEditor)).Result)
+            {
+                roleDbSet.Add(new Role
+                {
+                    Name = "ClasificationManagementRoleEditorTitle",
+                    Code = CinemaBillboardBusinessManagementRoleCodes.ClasificationManagerEditor,
+                    Description = "ClasificationManagementRoleEditorDescription"
+                });
+            }
+
+            if (!roleDbSet.AnyAsync(role => role.Code.Equals(CinemaBillboardBusinessManagementRoleCodes.ClasificationManagerRemover)).Result)
+            {
+                roleDbSet.Add(new Role
+                {
+                    Name = "ClasificationManagementRoleRemoverTitle",
+                    Code = CinemaBillboardBusinessManagementRoleCodes.ClasificationManagerRemover,
+                    Description = "ClasificationManagementRoleRemoverDescription"
+                });
+            }
+
             // Category Roles definition!!
             if (!roleDbSet.AnyAsync(role => role.Code.Equals(CinemaBillboardBusinessManagementRoleCodes.CategoryManagerViewer)).Result)
             {

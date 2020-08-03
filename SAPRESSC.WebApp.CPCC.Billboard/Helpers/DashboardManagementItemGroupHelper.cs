@@ -12,6 +12,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Helpers
 
             var securityItems = new List<Core.Web.Management.Models.View.DashboardManageItemViewModel>();
             var billboardItems = new List<Core.Web.Management.Models.View.DashboardManageItemViewModel>();
+            var mediaLibraryItems = new List<Core.Web.Management.Models.View.DashboardManageItemViewModel>();
             var supportItems = new List<Core.Web.Management.Models.View.DashboardManageItemViewModel>();
 
             foreach (var module in modules)
@@ -27,11 +28,13 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Helpers
                     {
                         var rawItems = (module as IManagementApplicationModule).GetDashboardManagementItems();
 
-                        var publicsControlls = new string[] { "advises", "events", "productions", "presentations", "fixscreenclientconfigurations" };
-                        var supportControlls = new string[] { "genres", "awards", "languages", "cinemas", "producerhouses", "personalities", "categories" };
+                        var publicsControllers = new string[] { "advises", "events", "presentations", "fixscreenclientconfigurations" };
+                        var mediaLibraryControllers = new string[] { "productions", "collections", "categories" };
+                        var supportControllers = new string[] { "genres", "awards", "languages", "cinemas", "producerhouses", "personalities", "clasifications", "tags" };
 
-                        billboardItems.AddRange(rawItems.Where(item => publicsControlls.Contains(item.Controller)).ToArray());
-                        supportItems.AddRange(rawItems.Where(item => supportControlls.Contains(item.Controller)).ToArray());
+                        billboardItems.AddRange(rawItems.Where(item => publicsControllers.Contains(item.Controller)).ToArray());
+                        mediaLibraryItems.AddRange(rawItems.Where(item => mediaLibraryControllers.Contains(item.Controller)).ToArray());
+                        supportItems.AddRange(rawItems.Where(item => supportControllers.Contains(item.Controller)).ToArray());
                     }
                     else if (module is Middleware.Region.Web.Manager.RegionMiddlewareManagementApplicationModule)
                     {
@@ -52,6 +55,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Helpers
             result.Add("Seguridad", securityItems);
             result.Add("Cartelera", billboardItems);
             result.Add("Complementarios", supportItems);
+            result.Add("Mediateca", mediaLibraryItems);
 
             return result;
         }

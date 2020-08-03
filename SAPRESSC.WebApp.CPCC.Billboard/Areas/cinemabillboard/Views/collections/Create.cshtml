@@ -1,0 +1,87 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+
+@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.CollectionInputViewModel
+
+@{
+    ViewData["Title"] = "Agregar Colleción";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Colecciones",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Agregar"
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+@using (Html.BeginForm("create", "collections", new { Area = "cinemabillboard" }, FormMethod.Post, true, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4>@ViewData["Title"]</h4></div>
+
+        <div class="panel-body">
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" })
+            </div>
+
+            <div class="row">
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.ParentId, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.ParentId, Model.AvailableCollectionSelectListItems, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ParentId, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.CategoryId, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.CategoryId, Model.AvailableCategorySelectListItems, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CategoryId, null, new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3 col-md-12" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.PosterImageFile, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.PosterImageFile, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PosterImageFile, null, new { @class = "text-danger" })
+                </div>
+
+                <div class="col-lg-9 col-md-12" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.PlacardImageFile, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.PlacardImageFile, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PlacardImageFile, null, new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.About, new { @class = "control-label" })
+                @Html.TextAreaFor(model => model.About, 4, 0, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.About, null, new { @class = "text-danger" })
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-primary">Crear</button>
+                <a class="btn btn-default" href="@Url.Action("index")">Cancelar</a>
+            </div>
+        </div>
+    </div>
+}

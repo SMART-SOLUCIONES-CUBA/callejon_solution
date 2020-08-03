@@ -1,17 +1,32 @@
-﻿using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities;
-
-namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View
+﻿namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View
 {
-    public class CategoryDisplayViewModel : Core.Web.Management.Models.View.IEntityDisplayViewModel<Category, int>
+    public class CategoryDisplayViewModel : Core.Web.Management.Models.View.IEntityDisplayViewModel<Persistence.Entities.Category, System.Guid>
     {
-        public int Id { get; set; }
+        public System.Guid Id { get; set; }
 
         public string Name { get; set; }
 
-        public void Import(Category entity)
+        public CategoryDisplayViewModel Parent { get; set; }
+
+        public virtual string TreeName
+        {
+            get
+            {
+                return Parent != null ? string.Format("{0} | {1}", Parent.TreeName, Name) : Name;
+            }
+        }
+
+        public void Import(Persistence.Entities.Category entity)
         {
             Id = entity.Id;
             Name = entity.Name;
+
+            if (entity.Parent != null)
+            {
+                Parent = new CategoryDisplayViewModel();
+
+                Parent.Import(entity.Parent);
+            }
         }
     }
 }

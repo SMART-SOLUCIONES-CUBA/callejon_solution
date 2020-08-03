@@ -3,7 +3,7 @@
 @using (Html.BeginForm("filter", "productioncomments", new { Area = "cpccbillboard" }, FormMethod.Post, true, null))
 {
     <fieldset>
-        <legend>Filtro de Comentarios de Películas</legend>
+        <legend>Filtro de Comentarios de Audio Visuales</legend>
         <div style="margin-bottom: 20px;">
             @Html.LabelFor(model => model.Message, "Mensaje", new { @class = "control-label" })
             @Html.TextBoxFor(model => model.Message, new { @class = "form-control" })
