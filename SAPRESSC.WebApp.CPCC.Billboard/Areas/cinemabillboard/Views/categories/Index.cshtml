@@ -133,6 +133,7 @@
             <thead>
                 <tr>
                     <th>Nombre Jerárquico</th>
+                    <th>Discriminador</th>
                     <th style="width: 184px;">Opciones</th>
                 </tr>        
             </thead>
@@ -141,6 +142,7 @@
             {
                 <tr>
                     <td style="vertical-align: middle;" title="Nombre">@item.TreeName</td>
+                    <td style="vertical-align: middle;" title="Discriminador">@item.Slug</td>
                     <td style="vertical-align: middle;">
                         <div class="btn-group btn-group-sm">
                             <a role="button" href="@Url.Action("edit", new { key = item.Id })" class="btn btn-default" title="Editar"><span class="glyphicon glyphicon-edit"></span><span class="hidden-xs"> Modificar</span></a>
@@ -254,12 +256,13 @@ else
             <thead>
                 <tr>
                     <th>Nombre</th>
+                    <th>Discriminador</th>
                     <th style="width: 184px;">Opciones</th>
                 </tr>        
             </thead>
             <tbody>
                 <tr>
-                    <td colspan="2"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
+                    <td colspan="3"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
                 </tr>
             </tbody>
         </table>

@@ -19,12 +19,16 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
         private readonly IEntityRepository<Category, System.Guid> categoryRepository;
         private readonly IEntityRepository<Middleware.Media.Persistence.Entities.Image, System.Guid> imageRepository;
         private readonly Middleware.Media.Web.Common.Facades.Manager.IMediaFileManagerFacade mediaFileManagerFacade;
+        private readonly IEntityRepository<Genre, int> genreRepository;
+        private readonly IEntityRepository<ProducerHouse, long> producerHouseRepository;
 
-        public CollectionsController(Middleware.Media.Web.Common.Facades.Manager.IMediaFileManagerFacade mediaFileManagerFacade, IEntityRepository<Middleware.Media.Persistence.Entities.Image, System.Guid> imageRepository, IEntityRepository<Category, System.Guid> categoryRepository, IEntityRepository<Collection, System.Guid> repository, Microsoft.Extensions.Localization.IStringLocalizer<CollectionsController> localizer, ILogger<CollectionsController> logger) : base(repository, localizer, logger)
+        public CollectionsController(IEntityRepository<ProducerHouse, long> producerHouseRepository, IEntityRepository<Genre, int> genreRepository, Middleware.Media.Web.Common.Facades.Manager.IMediaFileManagerFacade mediaFileManagerFacade, IEntityRepository<Middleware.Media.Persistence.Entities.Image, System.Guid> imageRepository, IEntityRepository<Category, System.Guid> categoryRepository, IEntityRepository<Collection, System.Guid> repository, Microsoft.Extensions.Localization.IStringLocalizer<CollectionsController> localizer, ILogger<CollectionsController> logger) : base(repository, localizer, logger)
         {
             this.categoryRepository = categoryRepository;
             this.imageRepository = imageRepository;
             this.mediaFileManagerFacade = mediaFileManagerFacade;
+            this.genreRepository = genreRepository;
+            this.producerHouseRepository = producerHouseRepository;
         }
 
         [RequiresRoleBasePermission(CinemaBillboardBusinessManagementRoleCodes.CollectionManagerViewer)]
@@ -157,6 +161,30 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
         public override IActionResult Delete(CollectionDisplayViewModel displayModel)
         {
             return base.Delete(displayModel);
+        }
+
+        private void PopulateModelInputForAvailableGenres(CollectionInputViewModel modelInput)
+        {
+            var entities = genreRepository.GetAll().ToList();
+
+            modelInput.SelectableGenres = entities.Select(genre => new Core.Common.Models.View.SelectionItemInputViewModel<int>
+            {
+                Id = genre.Id,
+                Selected = false,
+                Label = genre.Name
+            }).ToList();
+        }
+
+        private void PopulateModelInputForAvailableProducerHouses(CollectionInputViewModel modelInput)
+        {
+            var entities = producerHouseRepository.GetAll().ToList();
+
+            modelInput.SelectableProducerHouses = entities.Select(org => new Core.Common.Models.View.SelectionItemInputViewModel<long>
+            {
+                Id = org.Id,
+                Selected = false,
+                Label = org.Name
+            }).ToList();
         }
 
         protected override void PopulateViewModelDisplayExtras(CollectionDisplayViewModel modelDisplay, Collection entity)
@@ -386,6 +414,68 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
             }
         }
 
+        protected override void PostCreate(Collection entity, CollectionInputViewModel modelInput)
+        {
+            base.PostCreate(entity, modelInput);
+
+            var genres = new System.Collections.Generic.List<Genre>();
+
+            if (modelInput.SelectableGenres != null)
+            {
+                foreach (var item in modelInput.SelectableGenres.Where(item => item.Selected))
+                {
+                    genres.Add(genreRepository.Get(item.Id));
+                }
+            }
+
+            entity.GenreBridges = genres.Select(item => new CollectionGenreBridge { GenreId = item.Id, CollectionId = entity.Id }).ToList();
+
+            var producerHouses = new System.Collections.Generic.List<ProducerHouse>();
+
+            if (modelInput.SelectableProducerHouses != null)
+            {
+                foreach (var item in modelInput.SelectableProducerHouses.Where(item => item.Selected))
+                {
+                    producerHouses.Add(producerHouseRepository.Get(item.Id));
+                }
+            }
+
+            entity.ProducerHouseBridges = producerHouses.Select(item => new CollectionProducerHouseBridge { ProducerHouseId = item.Id, CollectionId = entity.Id }).ToList();
+
+            Repository.Update(entity, User.Identity.Name);
+        }
+
+        protected override void PostEdit(Collection entity, CollectionInputViewModel modelInput)
+        {
+            base.PostEdit(entity, modelInput);
+
+            var genres = new System.Collections.Generic.List<Genre>();
+
+            if (modelInput.SelectableGenres != null)
+            {
+                foreach (var item in modelInput.SelectableGenres.Where(item => item.Selected))
+                {
+                    genres.Add(genreRepository.Get(item.Id));
+                }
+            }
+
+            entity.GenreBridges = genres.Select(item => new CollectionGenreBridge { GenreId = item.Id, CollectionId = entity.Id }).ToList();
+
+            var producerHouses = new System.Collections.Generic.List<ProducerHouse>();
+
+            if (modelInput.SelectableProducerHouses != null)
+            {
+                foreach (var item in modelInput.SelectableProducerHouses.Where(item => item.Selected))
+                {
+                    producerHouses.Add(producerHouseRepository.Get(item.Id));
+                }
+            }
+
+            entity.ProducerHouseBridges = producerHouses.Select(item => new CollectionProducerHouseBridge { ProducerHouseId = item.Id, CollectionId = entity.Id }).ToList();
+
+            Repository.Update(entity, User.Identity.Name);
+        }
+
         protected override void PostDelete(Collection entity)
         {
             base.PostDelete(entity);
@@ -411,6 +501,8 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
 
             PopulateModelInputForAvailableParents(modelInput);
             PopulateModelInputForAvailableCategories(modelInput);
+            PopulateModelInputForAvailableGenres(modelInput);
+            PopulateModelInputForAvailableProducerHouses(modelInput);
 
             return result;
         }
@@ -421,6 +513,18 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
 
             PopulateModelInputForAvailableParents(modelInput);
             PopulateModelInputForAvailableCategories(modelInput);
+            PopulateModelInputForAvailableGenres(modelInput);
+            PopulateModelInputForAvailableProducerHouses(modelInput);
+
+            foreach (var item in modelInput.SelectableGenres)
+            {
+                item.Selected = entity.GenreBridges.Any(bridge => bridge.GenreId == item.Id);
+            }
+
+            foreach (var item in modelInput.SelectableProducerHouses)
+            {
+                item.Selected = entity.ProducerHouseBridges.Any(bridge => bridge.ProducerHouseId == item.Id);
+            }
 
             return result;
         }
@@ -431,6 +535,8 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
 
             PopulateModelInputForAvailableParents(modelInput);
             PopulateModelInputForAvailableCategories(modelInput);
+            PopulateModelInputForAvailableGenres(modelInput);
+            PopulateModelInputForAvailableProducerHouses(modelInput);
 
             return result;
         }
@@ -441,6 +547,8 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
 
             PopulateModelInputForAvailableParents(modelInput);
             PopulateModelInputForAvailableCategories(modelInput);
+            PopulateModelInputForAvailableGenres(modelInput);
+            PopulateModelInputForAvailableProducerHouses(modelInput);
 
             return result;
         }

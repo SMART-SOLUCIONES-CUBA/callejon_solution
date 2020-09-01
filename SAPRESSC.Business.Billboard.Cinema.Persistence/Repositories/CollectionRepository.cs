@@ -12,7 +12,10 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Rep
         {
             return base.GetQueryableDbSet()
                 .Include(entity => entity.PosterImage)
-                .Include(entity => entity.PlacardImage);
+                .Include(entity => entity.PlacardImage)
+                .Include(entity => entity.Productions)
+                .Include(entity => entity.GenreBridges)
+                .Include(entity => entity.ProducerHouseBridges);
         }
 
         public override System.Func<Entities.Collection, object> GetPagingOrderSelector()

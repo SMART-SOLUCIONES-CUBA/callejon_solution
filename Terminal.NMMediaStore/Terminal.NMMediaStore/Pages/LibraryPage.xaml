@@ -1,0 +1,458 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mg="clr-namespace:MagicGradients;assembly=MagicGradients"
+    xmlns:ffil="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:ic="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Converters"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages.LibraryPage"
+    NavigationPage.HasNavigationBar="False"
+    Style="{StaticResource BasePageStyle}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <x:Double x:Key="PersonalityOverviewWidth">100</x:Double>
+            
+            <sscxftoolkitpresentationconverters:NotNullToBooleanConverter x:Key="NotNullToBooleanConverter" />
+
+            <converters:ImageModelToImageSourceConverter x:Key="ImageModelToImageSourceConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid
+            RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ScrollView
+                Grid.RowSpan="3"
+                HorizontalScrollBarVisibility="Never">
+                <StackLayout Padding="0,56,0,48">
+                    <StackLayout 
+                        Padding="0,18,0,0"
+                        IsVisible="{Binding Path=Categories, Converter={StaticResource NotNullToBooleanConverter}}">
+                        <StackLayout.Background>
+                            <LinearGradientBrush
+                                StartPoint="0,0"
+                                EndPoint="0,1">
+                                <GradientStop Color="{StaticResource DefaultBackgroundColor}" Offset="0.0" />
+                                <GradientStop Color="{StaticResource DarkBackgroundColor}" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </StackLayout.Background>
+                        <Label
+                            Margin="10,0"
+                            Text="Categorías"
+                            TextColor="{StaticResource SecoundaryTextColor}"
+                            FontSize="{StaticResource Header5FontSize}" />
+                        <ScrollView Orientation="Horizontal">
+                            <FlexLayout
+                                Padding="5,0"
+                                BindableLayout.ItemsSource="{Binding Path=Categories}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid 
+                                            WidthRequest="180" HeightRequest="102"
+                                            Margin="5,0,5,10">
+                                            <Grid.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="CategoryItem_Tapped" />
+                                            </Grid.GestureRecognizers>
+                                            <mg:GradientView VerticalOptions="FillAndExpand" >
+                                                <mg:GradientView.GradientSource>
+                                                    <mg:CssGradientSource>
+                                                        <x:String>
+                                                            <![CDATA[
+                                                                linear-gradient(177deg, rgba(122, 122, 122, 0.05) 0%, rgba(122, 122, 122, 0.05) 40%, rgba(64, 64, 64, 0.05) 40%, rgba(64, 64, 64, 0.05) 100%), linear-gradient(300deg, rgba(200, 200, 200, 0.1) 0%, rgba(200, 200, 200, 0.1) 62%, rgba(39, 39, 39, 0.1) 62%, rgba(39, 39, 39, 0.1) 100%), linear-gradient(28deg, rgba(243, 243, 243, 0.01) 0%, rgba(243, 243, 243, 0.01) 58%, rgba(154, 154, 154, 0.01) 58%, rgba(154, 154, 154, 0.01) 100%), linear-gradient(318deg, rgba(136, 136, 136, 0.04) 0%, rgba(136, 136, 136, 0.04) 58%, rgba(205, 205, 205, 0.04) 58%, rgba(205, 205, 205, 0.04) 100%), linear-gradient(297deg, rgba(240, 240, 240, 0.09) 0%, rgba(240, 240, 240, 0.09) 53%, rgba(146, 146, 146, 0.09) 53%, rgba(146, 146, 146, 0.09) 100%), linear-gradient(10deg, rgba(19, 19, 19, 0.1) 0%, rgba(19, 19, 19, 0.1) 18%, rgba(125, 125, 125, 0.1) 18%, rgba(125, 125, 125, 0.1) 100%), linear-gradient(84deg, rgba(146, 146, 146, 0.08) 0%, rgba(146, 146, 146, 0.08) 10%, rgba(123, 123, 123, 0.08) 10%, rgba(123, 123, 123, 0.08) 100%), linear-gradient(90deg, rgb(71, 65, 230), rgb(121, 231, 221))
+                                                            ]]>
+                                                        </x:String>
+                                                    </mg:CssGradientSource>
+                                                </mg:GradientView.GradientSource>
+                                            </mg:GradientView>
+                                            <Label
+                                                Margin="10,6"
+                                                Text="{Binding Path=Name}"
+                                                LineBreakMode="TailTruncation"
+                                                MaxLines="3"
+                                                FontSize="{StaticResource Header3FontSize}">
+                                                <Label.FontFamily>
+                                                    <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed Italic">
+                                                        <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-CONDIT.OTF#Myriad Pro" />
+                                                    </OnPlatform>
+                                                </Label.FontFamily>
+                                            </Label>
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </FlexLayout>
+                        </ScrollView>
+                    </StackLayout>
+                    <StackLayout 
+                        Padding="0,10,0,0"
+                        IsVisible="{Binding Path=RelevantGenres, Converter={StaticResource NotNullToBooleanConverter}}">
+                        <StackLayout.Background>
+                            <LinearGradientBrush
+                                StartPoint="0,0"
+                                EndPoint="0,1">
+                                <GradientStop Color="{StaticResource DefaultBackgroundColor}" Offset="0.0" />
+                                <GradientStop Color="{StaticResource DarkBackgroundColor}" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </StackLayout.Background>
+                        <Label
+                            Margin="10,0"
+                            Text="Géneros"
+                            TextColor="{StaticResource SecoundaryTextColor}"
+                            FontSize="{StaticResource Header5FontSize}" />
+                        <ScrollView Orientation="Horizontal">
+                            <FlexLayout
+                                Padding="5,0"
+                                BindableLayout.ItemsSource="{Binding Path=RelevantGenres}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid 
+                                            WidthRequest="180" HeightRequest="102"
+                                            Margin="5,0,5,10">
+                                            <Grid.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="GenreItem_Tapped" />
+                                            </Grid.GestureRecognizers>
+                                            <mg:GradientView VerticalOptions="FillAndExpand" >
+                                                <mg:GradientView.GradientSource>
+                                                    <mg:CssGradientSource>
+                                                        <x:String>
+                                                            <![CDATA[
+                                                                linear-gradient(45deg, #3b6baf 0%,#3b6baf 31%,#375f97 31%,#375f97 46%,#33537f 46%,#33537f 56%,#304664 56%,#304664 93%,#282e34 93%,#282e34 100%)
+                                                            ]]>
+                                                        </x:String>
+                                                    </mg:CssGradientSource>
+                                                </mg:GradientView.GradientSource>
+                                            </mg:GradientView>
+                                            <Label
+                                                Margin="10,6"
+                                                Text="{Binding Path=Name}"
+                                                TextColor="White"
+                                                LineBreakMode="TailTruncation"
+                                                MaxLines="3"
+                                                FontSize="{StaticResource Header3FontSize}">
+                                                <Label.FontFamily>
+                                                    <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed Italic">
+                                                        <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-CONDIT.OTF#Myriad Pro" />
+                                                    </OnPlatform>
+                                                </Label.FontFamily>
+                                            </Label>
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </FlexLayout>
+                        </ScrollView>
+                    </StackLayout>
+                    <StackLayout 
+                        Padding="0,10,0,0"
+                        IsVisible="{Binding Path=RelevantProducerHouses, Converter={StaticResource NotNullToBooleanConverter}}">
+                        <StackLayout.Background>
+                            <LinearGradientBrush
+                                StartPoint="0,0"
+                                EndPoint="0,1">
+                                <GradientStop Color="{StaticResource DefaultBackgroundColor}" Offset="0.0" />
+                                <GradientStop Color="{StaticResource DarkBackgroundColor}" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </StackLayout.Background>
+                        <Label
+                            Margin="10,0"
+                            Text="Casas Productoras"
+                            TextColor="{StaticResource SecoundaryTextColor}"
+                            FontSize="{StaticResource Header5FontSize}" />
+                        <ScrollView Orientation="Horizontal">
+                            <FlexLayout
+                                Padding="5,0"
+                                BindableLayout.ItemsSource="{Binding Path=RelevantProducerHouses}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid 
+                                            WidthRequest="320" HeightRequest="180"
+                                            Margin="5,0,5,10">
+                                            <Grid.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="ProducerHouseItem_Tapped" />
+                                            </Grid.GestureRecognizers>
+                                            <ffil:CachedImage
+                                                Source="{Binding Path=Image, Converter={StaticResource ImageModelToImageSourceConverter}}"
+                                                Aspect="AspectFill" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </FlexLayout>
+                        </ScrollView>
+                    </StackLayout>
+                    <StackLayout 
+                        Padding="0,10,0,0"
+                        IsVisible="{Binding Path=RelevantYears, Converter={StaticResource NotNullToBooleanConverter}}">
+                        <StackLayout.Background>
+                            <LinearGradientBrush
+                                StartPoint="0,0"
+                                EndPoint="0,1">
+                                <GradientStop Color="{StaticResource DefaultBackgroundColor}" Offset="0.0" />
+                                <GradientStop Color="{StaticResource DarkBackgroundColor}" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </StackLayout.Background>
+                        <Label
+                            Margin="10,0"
+                            Text="Años"
+                            TextColor="{StaticResource SecoundaryTextColor}"
+                            FontSize="{StaticResource Header5FontSize}" />
+                        <ScrollView Orientation="Horizontal">
+                            <FlexLayout
+                                Padding="5,0"
+                                BindableLayout.ItemsSource="{Binding Path=RelevantYears}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid 
+                                            WidthRequest="120" HeightRequest="67"
+                                            Margin="5,0,5,10">
+                                            <Grid.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="YearItem_Tapped" />
+                                            </Grid.GestureRecognizers>
+                                            <mg:GradientView VerticalOptions="FillAndExpand" >
+                                                <mg:GradientView.GradientSource>
+                                                    <mg:CssGradientSource>
+                                                        <x:String>
+                                                            <![CDATA[
+                                                                linear-gradient(0, rgb(255,255,255) 0%, transparent 100%), linear-gradient(0, rgb(255, 255, 255) 0%, transparent 100%), linear-gradient(135deg, rgba(96, 96, 96, 0.21) 0%, rgba(96, 96, 96, 0.21) 50%, rgba(45, 45, 45, 0.21) 50%, rgba(45, 45, 45, 0.21) 100%), linear-gradient(0, rgba(220, 220, 220, 0.2) 0%, rgba(220, 220, 220, 0.2) 31%, rgba(200, 200, 200, 0.2) 31%, rgba(200, 200, 200, 0.2) 100%), linear-gradient(0, rgba(124, 124, 124, 0.26) 0%, rgba(124, 124, 124, 0.26) 15%, rgba(218, 218, 218, 0.26) 15%, rgba(218, 218, 218, 0.26) 100%), linear-gradient(45deg, rgba(157, 157, 157, 0.14) 0%, rgba(157, 157, 157, 0.14) 46%, rgba(26, 26, 26, 0.14) 46%, rgba(26, 26, 26, 0.14) 100%), linear-gradient(45deg, rgba(180, 180, 180, 0.1) 0%, rgba(180, 180, 180, 0.1) 45%, rgba(62, 62, 62, 0.1) 46%, rgba(62, 62, 62, 0.1) 100%), linear-gradient(135deg, rgba(33, 33, 33, 0.22) 0%, rgba(33, 33, 33, 0.22) 59%, rgba(164, 164, 164, 0.22) 59%, rgba(164, 164, 164, 0.22) 100%), linear-gradient(135deg, rgba(24, 24, 24, 0.11) 0%, rgba(24, 24, 24, 0.11) 71%, rgba(245, 245, 245, 0.11) 71%, rgba(245, 245, 245, 0.11) 100%), linear-gradient(0, rgba(5, 5, 5, 0.15) 0%, rgba(5, 5, 5, 0.15) 91%, rgba(50, 50, 50, 0.15) 91%, rgba(50, 50, 50, 0.15) 100%), linear-gradient(90deg, rgb(198, 198, 198), rgb(158, 158, 158))
+                                                            ]]>
+                                                        </x:String>
+                                                    </mg:CssGradientSource>
+                                                </mg:GradientView.GradientSource>
+                                            </mg:GradientView>
+                                            <Label
+                                                Margin="10,6"
+                                                Text="{Binding .}"
+                                                TextColor="{StaticResource DefaultBackgroundColor}"
+                                                FontSize="{StaticResource Header1FontSize}">
+                                                <Label.FontFamily>
+                                                    <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed Italic">
+                                                        <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-CONDIT.OTF#Myriad Pro" />
+                                                    </OnPlatform>
+                                                </Label.FontFamily>
+                                            </Label>
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </FlexLayout>
+                        </ScrollView>
+                    </StackLayout>
+                    <StackLayout 
+                        Padding="0,10,0,0"
+                        IsVisible="{Binding Path=RelevantPerformancePersonalities, Converter={StaticResource NotNullToBooleanConverter}}">
+                        <StackLayout.Background>
+                            <LinearGradientBrush
+                                StartPoint="0,0"
+                                EndPoint="0,1">
+                                <GradientStop Color="{StaticResource DefaultBackgroundColor}" Offset="0.0" />
+                                <GradientStop Color="{StaticResource DarkBackgroundColor}" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </StackLayout.Background>
+                        <Label
+                            Margin="10,0"
+                            Text="Actores"
+                            TextColor="{StaticResource SecoundaryTextColor}"
+                            FontSize="{StaticResource Header5FontSize}" />
+                        <ScrollView Orientation="Horizontal">
+                            <FlexLayout
+                                Padding="5,0"
+                                BindableLayout.ItemsSource="{Binding Path=RelevantPerformancePersonalities}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout 
+                                            WidthRequest="{StaticResource PersonalityOverviewWidth}"
+                                            Margin="5,0,5,10">
+                                            <StackLayout.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="PersonalityItem_Tapped" />
+                                            </StackLayout.GestureRecognizers>
+                                            <ic:CircleImage
+                                                Margin="0,5,0,0"
+                                                HorizontalOptions="Center" VerticalOptions="Center"
+                                                Source="{Binding Path=Image, Converter={StaticResource ImageModelToImageSourceConverter}}"
+                                                BorderThickness="2"
+                                                BorderColor="Snow"
+                                                WidthRequest="{StaticResource DefaultAvatarSize}"
+                                                HeightRequest="{StaticResource DefaultAvatarSize}" />
+                                            <Label HorizontalTextAlignment="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <FormattedString.Spans>
+                                                            <Span Text="{Binding Path=Name}" />
+                                                            <Span Text=" " />
+                                                            <Span Text="{Binding Path=LastName}" />
+                                                        </FormattedString.Spans>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </FlexLayout>
+                        </ScrollView>
+                    </StackLayout>
+                    <StackLayout 
+                        Padding="0,10,0,0"
+                        IsVisible="{Binding Path=RelevantDirectionPersonalities, Converter={StaticResource NotNullToBooleanConverter}}">
+                        <StackLayout.Background>
+                            <LinearGradientBrush
+                                StartPoint="0,0"
+                                EndPoint="0,1">
+                                <GradientStop Color="{StaticResource DefaultBackgroundColor}" Offset="0.0" />
+                                <GradientStop Color="{StaticResource DarkBackgroundColor}" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </StackLayout.Background>
+                        <Label
+                            Margin="10,0"
+                            Text="Directores"
+                            TextColor="{StaticResource SecoundaryTextColor}"
+                            FontSize="{StaticResource Header5FontSize}" />
+                        <ScrollView Orientation="Horizontal">
+                            <FlexLayout
+                                Padding="5,0"
+                                BindableLayout.ItemsSource="{Binding Path=RelevantDirectionPersonalities}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout 
+                                            WidthRequest="{StaticResource PersonalityOverviewWidth}"
+                                            Margin="5,0,5,10">
+                                            <StackLayout.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="PersonalityItem_Tapped" />
+                                            </StackLayout.GestureRecognizers>
+                                            <ic:CircleImage
+                                                Margin="0,5,0,0"
+                                                HorizontalOptions="Center" VerticalOptions="Center"
+                                                Source="{Binding Path=Image, Converter={StaticResource ImageModelToImageSourceConverter}}"
+                                                BorderThickness="2"
+                                                BorderColor="Snow"
+                                                WidthRequest="{StaticResource DefaultAvatarSize}"
+                                                HeightRequest="{StaticResource DefaultAvatarSize}" />
+                                            <Label HorizontalTextAlignment="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <FormattedString.Spans>
+                                                            <Span Text="{Binding Path=Name}" />
+                                                            <Span Text=" " />
+                                                            <Span Text="{Binding Path=LastName}" />
+                                                        </FormattedString.Spans>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </FlexLayout>
+                        </ScrollView>
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+            <Grid
+                Grid.Row="0"
+                BackgroundColor="#CC000000"
+                HeightRequest="56">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Column="1"
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    LineBreakMode="TailTruncation">
+                    <Label.FontFamily>
+                        <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Regular">
+                            <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-REGULAR.OTF#Myriad Pro" />
+                        </OnPlatform>
+                    </Label.FontFamily>
+                    <Label.FontSize>
+                        <OnPlatform x:TypeArguments="x:Double" Default="36"></OnPlatform>
+                    </Label.FontSize>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <FormattedString.Spans>
+                                <Span Text="Mediateca " TextColor="{StaticResource PrimaryTextColor}" />
+                                <Span Text="Nuevo Mundo" TextColor="{StaticResource SecoundaryTextColor}" />
+                            </FormattedString.Spans>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </Grid>
+            <Grid 
+                Grid.Row="2"
+                BackgroundColor="#CC000000"
+                ColumnSpacing="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button
+                    Grid.Column="0"
+                    Text="Inicio"
+                    TextColor="White"
+                    Style="{StaticResource PivotButtonStyle}"
+                    Clicked="HomePivotButton_Clicked">
+                    <Button.ImageSource>
+                        <FontImageSource
+                        Glyph="&#xf4dc;"
+                        Color="White">
+                            <FontImageSource.FontFamily>
+                                <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                    <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                </OnPlatform>
+                            </FontImageSource.FontFamily>
+                        </FontImageSource>
+                    </Button.ImageSource>
+                </Button>
+                <Button
+                    Grid.Column="1"
+                    Text="Catálogo"
+                    TextColor="{StaticResource PrimaryAccentColor}"
+                    Style="{StaticResource PivotButtonStyle}">
+                    <Button.ImageSource>
+                        <FontImageSource
+                        Glyph="&#xf638;"
+                        Color="{StaticResource PrimaryAccentColor}">
+                            <FontImageSource.FontFamily>
+                                <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                    <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                </OnPlatform>
+                            </FontImageSource.FontFamily>
+                        </FontImageSource>
+                    </Button.ImageSource>
+                </Button>
+                <Button
+                    Grid.Column="2"
+                    Text="Buscar"
+                    TextColor="White"
+                    Style="{StaticResource PivotButtonStyle}"
+                    Clicked="SearchPivotButton_Clicked">
+                    <Button.ImageSource>
+                        <FontImageSource
+                        Glyph="&#xf349;"
+                        Color="White">
+                            <FontImageSource.FontFamily>
+                                <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                    <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                </OnPlatform>
+                            </FontImageSource.FontFamily>
+                        </FontImageSource>
+                    </Button.ImageSource>
+                </Button>
+            </Grid>
+            <Grid
+                Grid.Row="1" Grid.RowSpan="2"
+                IsVisible="{Binding Path=IsBusy}"
+                BackgroundColor="#CC000000">
+                <ActivityIndicator 
+                    VerticalOptions="Center" HorizontalOptions="Center"
+                    HeightRequest="48" WidthRequest="48"
+                    IsRunning="True" />
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

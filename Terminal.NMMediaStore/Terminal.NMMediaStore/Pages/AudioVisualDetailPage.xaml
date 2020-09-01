@@ -1,0 +1,406 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<basepages:FetchOrderAudioVisualPresentBaseContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ffil="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Converters"
+    xmlns:basepages="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages.Base"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages.AudioVisualDetailPage"    
+    NavigationPage.HasNavigationBar="False"
+    Style="{StaticResource BasePageStyle}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:CollectionToJoinedStringBindingConverter x:Key="CollectionToJoinedStringBindingConverter" />
+            <converters:ImageModelToImageSourceConverter x:Key="ImageModelToImageSourceConverter" />
+            <converters:AudioVisualToCountriesJoinNameConverter x:Key="AudioVisualToCountriesJoinNameConverter" />
+            <converters:AudioVisualToLanguageDetailConverter x:Key="AudioVisualToLanguageDetailConverter" />
+            <converters:TimeSpanToCustomStringConverter x:Key="TimeSpanToCustomStringConverter" />
+
+            <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonIconStringConverter" TrueString="&#xfd45;" FalseString="&#xf112;" />
+            <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonTextStringConverter" TrueString="Quitar" FalseString="Agergar" />
+            <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonTextColorConverter" TrueString="IndianRed" FalseString="Black" />
+            <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonBackgroundColorConverter" TrueString="Snow" FalseString="{StaticResource PrimaryActionColor}" />
+            <sscxftoolkitpresentationconverters:FileSizeLongToStringConverter x:Key="FileSizeLongToStringConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid ColumnSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <ScrollView Grid.RowSpan="2">
+                <StackLayout Padding="0,56,0,0">
+                    <Grid>
+                        <ffil:CachedImage
+                            Source="{Binding Path=AudioVisual.PlacardImage, Converter={StaticResource ImageModelToImageSourceConverter}}"
+                            Aspect="AspectFit" />
+                        <Grid>
+                            <Grid.Background>
+                                <LinearGradientBrush
+                                    StartPoint="0,0"
+                                    EndPoint="0,1">
+                                    <GradientStop Color="Transparent" Offset="0.0" />
+                                    <GradientStop Color="{StaticResource DefaultBackgroundColor}" Offset="1.0" />
+                                </LinearGradientBrush>
+                            </Grid.Background>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid 
+                                Grid.Row="1"
+                                Margin="16,16,16,8">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <StackLayout
+                                    Grid.Row="1"
+                                    Orientation="Horizontal">
+                                    <Label 
+                                        Text="{Binding Path=AudioVisual.Title}"
+                                        FontSize="{StaticResource LargeHeader3FontSize}">
+                                        <Label.FontFamily>
+                                            <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed">
+                                                <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-COND.OTF#Myriad Pro" />
+                                            </OnPlatform>
+                                        </Label.FontFamily>
+                                    </Label>
+                                    <Frame
+                                        Padding="6"
+                                        HorizontalOptions="StartAndExpand" VerticalOptions="Start"
+                                        BackgroundColor="Transparent"
+                                        HasShadow="False"
+                                        BorderColor="White">
+                                        <Label 
+                                            Text="{Binding Path=AudioVisual.Year}"
+                                            FontSize="{StaticResource MiddleTextFontSize}"/>
+                                    </Frame>
+                                </StackLayout>
+                                <Label 
+                                    Grid.Row="2"
+                                    Text="{Binding Path=AudioVisual.Genres, Converter={StaticResource CollectionToJoinedStringBindingConverter}}"
+                                    TextColor="{StaticResource SecoundaryAccentColor}"
+                                    FontSize="{StaticResource Header3FontSize}">
+                                    <Label.FontFamily>
+                                        <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed Italic">
+                                            <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-CONDIT.OTF#Myriad Pro" />
+                                        </OnPlatform>
+                                    </Label.FontFamily>
+                                </Label>
+                                <StackLayout
+                                    Grid.Row="3"
+                                    Orientation="Horizontal">
+                                    <Label
+                                        Text="{Binding Path=AudioVisual, Converter={StaticResource AudioVisualToCountriesJoinNameConverter}}"
+                                        FontSize="{StaticResource Header2FontSize}" />
+                                    <Label
+                                        VerticalOptions="Center" HorizontalOptions="StartAndExpand"
+                                        Text="{Binding Path=AudioVisual, Converter={StaticResource AudioVisualToLanguageDetailConverter}}"
+                                        FontSize="{StaticResource Header4FontSize}" />
+                                </StackLayout>
+                                <StackLayout
+                                    Margin="0,4,0,0"
+                                    Grid.Row="4"
+                                    Orientation="Horizontal"
+                                    Spacing="12">
+                                    <Frame
+                                        Padding="0"
+                                        BackgroundColor="Transparent"
+                                        HasShadow="False"
+                                        BorderColor="White">
+                                        <StackLayout 
+                                            Orientation="Horizontal"
+                                            Spacing="0">
+                                            <Label
+                                                BackgroundColor="White"
+                                                Padding="6"
+                                                Text="&#xf953;"
+                                                TextColor="{StaticResource DefaultBackgroundColor}"
+                                                FontSize="{StaticResource Header5FontSize}">
+                                                <Label.FontFamily>
+                                                    <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                                        <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                                    </OnPlatform>
+                                                </Label.FontFamily>
+                                            </Label>
+                                            <Label 
+                                                Margin="10,6"
+                                                Text="{Binding Path=AudioVisual.Duration, Converter={StaticResource TimeSpanToCustomStringConverter}}"
+                                                FontSize="{StaticResource MiddleTextFontSize}" />
+                                        </StackLayout>
+                                    </Frame>
+                                    <Frame
+                                        Padding="0"
+                                        BackgroundColor="Transparent"
+                                        HasShadow="False"
+                                        BorderColor="White">
+                                        <StackLayout 
+                                            Orientation="Horizontal"
+                                            Spacing="0">
+                                            <Label
+                                                BackgroundColor="White"
+                                                Padding="6"
+                                                Text="&#xf22b;"
+                                                TextColor="{StaticResource DefaultBackgroundColor}"
+                                                FontSize="{StaticResource Header5FontSize}">
+                                                <Label.FontFamily>
+                                                    <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                                        <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                                    </OnPlatform>
+                                                </Label.FontFamily>
+                                            </Label>
+                                            <Label 
+                                                Margin="10,6"
+                                                Text="{Binding Path=AudioVisual.Format}"
+                                                FontSize="{StaticResource MiddleTextFontSize}" />
+                                        </StackLayout>
+                                    </Frame>
+                                    <Frame
+                                        Padding="0"
+                                        BackgroundColor="Transparent"
+                                        HasShadow="False"
+                                        BorderColor="White">
+                                        <StackLayout 
+                                            Orientation="Horizontal"
+                                            Spacing="0">
+                                            <Label
+                                                BackgroundColor="White"
+                                                Padding="6"
+                                                Text="&#xfa23;"
+                                                TextColor="{StaticResource DefaultBackgroundColor}"
+                                                FontSize="{StaticResource Header5FontSize}">
+                                                <Label.FontFamily>
+                                                    <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                                        <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                                    </OnPlatform>
+                                                </Label.FontFamily>
+                                            </Label>
+                                            <Label 
+                                                Margin="10,6"
+                                                FontSize="{StaticResource MiddleTextFontSize}">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding Path=AudioVisual.Quality}" />
+                                                        <Span Text=" " />
+                                                        <Span Text="{Binding Path=AudioVisual.Resolution}" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </StackLayout>
+                                    </Frame>
+                                    <Frame
+                                        Padding="0"
+                                        BackgroundColor="Transparent"
+                                        HasShadow="False"
+                                        BorderColor="White">
+                                        <StackLayout 
+                                            Orientation="Horizontal"
+                                            Spacing="0">
+                                            <Label
+                                                BackgroundColor="White"
+                                                Padding="6"
+                                                Text="&#xf5a1;"
+                                                TextColor="{StaticResource DefaultBackgroundColor}"
+                                                FontSize="{StaticResource Header5FontSize}">
+                                                <Label.FontFamily>
+                                                    <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                                        <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                                    </OnPlatform>
+                                                </Label.FontFamily>
+                                            </Label>
+                                            <Label 
+                                                Margin="10,6"
+                                                Text="{Binding Path=AudioVisual.FileSize, Converter={StaticResource FileSizeLongToStringConverter}}"
+                                                FontSize="{StaticResource MiddleTextFontSize}" />
+                                        </StackLayout>
+                                    </Frame>
+                                </StackLayout>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Label 
+                        Margin="16,0"
+                        Text="{Binding Path=AudioVisual.About}"
+                        TextColor="{StaticResource SecoundaryTextColor}"
+                        FontSize="{StaticResource MiddleTextFontSize}"
+                        LineBreakMode="TailTruncation"
+                        MaxLines="3" />
+                    <Grid 
+                        Margin="16,8,16,16"
+                        ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Button
+                            Grid.Column="0"
+                            BackgroundColor="{Binding Path=IsMarkedForFetch, Converter={StaticResource FetchMarkToogleToButtonBackgroundColorConverter}}"
+                            Padding="8,4"
+                            ContentLayout="Left,4"
+                            Text="{Binding Path=IsMarkedForFetch, Converter={StaticResource FetchMarkToogleToButtonTextStringConverter}}"
+                            TextColor="{Binding Path=IsMarkedForFetch, Converter={StaticResource FetchMarkToogleToButtonTextColorConverter}}"
+                            FontSize="{StaticResource Header5FontSize}"
+                            Clicked="FetchMarkToogleButton_Clicked">
+                            <Button.ImageSource>
+                                <FontImageSource
+                                    Glyph="{Binding Path=IsMarkedForFetch, Converter={StaticResource FetchMarkToogleToButtonIconStringConverter}}"
+                                    Color="{Binding Path=IsMarkedForFetch, Converter={StaticResource FetchMarkToogleToButtonTextColorConverter}}">
+                                    <FontImageSource.FontFamily>
+                                        <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                            <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                        </OnPlatform>
+                                    </FontImageSource.FontFamily>
+                                </FontImageSource>
+                            </Button.ImageSource>
+                        </Button>
+                        <Button
+                            Grid.Column="1"
+                            BackgroundColor="{StaticResource SecoundaryActionColor}"
+                            Padding="8,4"
+                            ContentLayout="Left,4"
+                            Text="Trailer"
+                            TextColor="Black"
+                            FontSize="{StaticResource Header5FontSize}">
+                            <Button.ImageSource>
+                                <FontImageSource
+                                    Glyph="&#xf40d;"
+                                    Color="Black">
+                                    <FontImageSource.FontFamily>
+                                        <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                            <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                        </OnPlatform>
+                                    </FontImageSource.FontFamily>
+                                </FontImageSource>
+                            </Button.ImageSource>
+                        </Button>
+                        <StackLayout
+                            Grid.Column="2"
+                            Margin="24,0,8,0"
+                            Orientation="Horizontal">
+                            <Label
+                                VerticalOptions="CenterAndExpand"
+                                Text="&#xf208;"
+                                FontSize="{StaticResource SmallIconSize}">
+                                <Label.FontFamily>
+                                    <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                        <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                    </OnPlatform>
+                                </Label.FontFamily>
+                            </Label>
+                            <Label 
+                                VerticalOptions="CenterAndExpand"
+                                Text="{Binding Path=CheckCount}"
+                                FontSize="{StaticResource DefaultTextFontSize}" />
+                        </StackLayout>
+                        <StackLayout
+                            Grid.Column="3"
+                            Margin="8,0"
+                            Orientation="Horizontal">
+                            <Label
+                                VerticalOptions="CenterAndExpand"
+                                Text="&#xf1da;"
+                                FontSize="{StaticResource SmallIconSize}">
+                                <Label.FontFamily>
+                                    <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                        <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                    </OnPlatform>
+                                </Label.FontFamily>
+                            </Label>
+                            <Label
+                                VerticalOptions="CenterAndExpand" 
+                                Text="{Binding Path=DownloadCount}" />
+                        </StackLayout>
+                        <StackLayout
+                            Grid.Column="4"
+                            Margin="8,0"
+                            Orientation="Horizontal">
+                            <Label
+                                VerticalOptions="CenterAndExpand"
+                                Text="&#xf85f;"
+                                FontSize="{StaticResource SmallIconSize}">
+                                <Label.FontFamily>
+                                    <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                        <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                    </OnPlatform>
+                                </Label.FontFamily>
+                            </Label>
+                            <Label 
+                            VerticalOptions="CenterAndExpand"
+                            Text="{Binding Path=CommentCount}" />
+                        </StackLayout>
+                        <Grid
+                            IsVisible="{Binding Path=IsBusy}"
+                            BackgroundColor="{StaticResource DefaultBackgroundColor}"
+                            Grid.Column="2" Grid.ColumnSpan="4">
+                            <ActivityIndicator
+                                HorizontalOptions="Start" VerticalOptions="Center"
+                                IsRunning="{Binding Path=IsBusy}" />
+                        </Grid>
+                    </Grid>
+                </StackLayout>
+            </ScrollView>
+            <Grid
+                Grid.Row="0"
+                BackgroundColor="#CC000000"
+                HeightRequest="56">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button
+                    Grid.Column="0"
+                    Margin="8,0,0,0"
+                    VerticalOptions="Center" HorizontalOptions="Start"
+                    Padding="0"
+                    BackgroundColor="Transparent"
+                    Text="&#xfcba;"
+                    TextColor="White"
+                    FontSize="{StaticResource Header2FontSize}"
+                    CornerRadius="12"
+                    WidthRequest="{StaticResource DefaultIconSize}" HeightRequest="{StaticResource DefaultIconSize}"
+                    Clicked="AlternativeBackButton_Clicked">
+                    <Button.FontFamily>
+                        <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                            <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                        </OnPlatform>
+                    </Button.FontFamily>
+                </Button>
+                <Label
+                    Grid.Column="1"
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    LineBreakMode="TailTruncation">
+                    <Label.FontFamily>
+                        <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Regular">
+                            <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-REGULAR.OTF#Myriad Pro" />
+                        </OnPlatform>
+                    </Label.FontFamily>
+                    <Label.FontSize>
+                        <OnPlatform x:TypeArguments="x:Double" Default="36"></OnPlatform>
+                    </Label.FontSize>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <FormattedString.Spans>
+                                <Span Text="Mediateca " TextColor="{StaticResource PrimaryTextColor}" />
+                                <Span Text="Nuevo Mundo" TextColor="{StaticResource SecoundaryTextColor}" />
+                            </FormattedString.Spans>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </Grid>
+        </Grid>        
+    </ContentPage.Content>
+</basepages:FetchOrderAudioVisualPresentBaseContentPage>

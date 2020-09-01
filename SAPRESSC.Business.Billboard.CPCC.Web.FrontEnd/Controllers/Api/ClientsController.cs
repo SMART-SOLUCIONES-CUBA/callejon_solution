@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Persistence.Entities;
-using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api;
+using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models;
 using SmartSolucionesCuba.SAPRESSC.Core.Persistence.Repositories;
 using SmartSolucionesCuba.SAPRESSC.Middleware.Media.Persistence.Entities;
 
@@ -27,7 +27,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
             {
                 var entity = repository.Get(key);
 
-                var model = new ClientApiModel
+                var model = new ClientModel
                 {
                     Id = entity.Id,
                     FirstName = entity.FirstName,
@@ -49,7 +49,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         }
 
         [HttpPost]
-        public IActionResult Add([FromBody] ClientApiModel model)
+        public IActionResult Add([FromBody] ClientModel model)
         {
             if (ModelState.IsValid)
             {
@@ -75,7 +75,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         }
 
         [HttpPut("{key}")]
-        public IActionResult Update(System.Guid key, [FromBody] ClientApiModel model)
+        public IActionResult Update(System.Guid key, [FromBody] ClientModel model)
         {
             try
             {

@@ -5,6 +5,12 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Ent
 {
     public class Genre : Core.Persistence.Entities.INamedEntity<int>
     {
+        public Genre()
+        {
+            ProductionGenreBridges = new List<ProductionGenreBridge>();
+            CollectionBridges = new List<CollectionGenreBridge>();
+        }
+
         [Key]
         public int Id { get; set; }
 
@@ -13,9 +19,6 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Ent
 
         public ICollection<ProductionGenreBridge> ProductionGenreBridges { get; set; }
 
-        public Genre()
-        {
-            ProductionGenreBridges = new List<ProductionGenreBridge>();
-        }
+        public ICollection<CollectionGenreBridge> CollectionBridges { get; set; }
     }
 }

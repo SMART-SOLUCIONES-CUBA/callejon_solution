@@ -1,4 +1,4 @@
-﻿using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.Api;
+﻿using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models;
 using System.Collections.Generic;
 using System.Net.Http;
 
@@ -6,7 +6,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Api.Client
 {
     public static class CinemaBillboardsApiClient
     {
-        public static ICollection<CinemaBillboardApiModel> Get(System.Uri apiServerBaseUri, bool cached, string clientId = null, long startDateTicks = 0, long endDateTicks = 0)
+        public static ICollection<CinemaBillboardModel> Get(System.Uri apiServerBaseUri, bool cached, string clientId = null, long startDateTicks = 0, long endDateTicks = 0)
         {
             var task = GetAsyncTask(apiServerBaseUri, cached, clientId, startDateTicks, endDateTicks);
 
@@ -15,7 +15,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Api.Client
             return task.Result;
         }
 
-        private static async System.Threading.Tasks.Task<ICollection<CinemaBillboardApiModel>> GetAsyncTask(System.Uri baseAddress, bool cached, string clientId, long startDateTicks, long endDateTicks)
+        private static async System.Threading.Tasks.Task<ICollection<CinemaBillboardModel>> GetAsyncTask(System.Uri baseAddress, bool cached, string clientId, long startDateTicks, long endDateTicks)
         {
             using (var client = new HttpClient())
             {
@@ -48,7 +48,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Api.Client
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
 
-                    return Newtonsoft.Json.JsonConvert.DeserializeObject<ICollection<CinemaBillboardApiModel>>(responseContent);
+                    return Newtonsoft.Json.JsonConvert.DeserializeObject<ICollection<CinemaBillboardModel>>(responseContent);
                 }
             }
 

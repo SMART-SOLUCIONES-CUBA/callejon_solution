@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api;
+using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models;
 using SmartSolucionesCuba.SAPRESSC.Core.Persistence.Repositories;
 using SmartSolucionesCuba.SAPRESSC.Middleware.Media.Web.Common.Facades.Manager;
 using System.Collections.Generic;
@@ -23,7 +23,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
 
         [HttpGet]
         [HttpGet("cached/{cached}")]
-        public IEnumerable<EventApiModel> Get(bool cached = false)
+        public IEnumerable<EventModel> Get(bool cached = false)
         {
             var startEdgeDate = System.DateTime.Today;
 
@@ -38,11 +38,11 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
 
             var entities = repository.FindBy(criteria).OrderBy(entity => entity.Start);
 
-            var models = new List<EventApiModel>();
+            var models = new List<EventModel>();
 
             foreach (var item in entities)
             {
-                models.Add(Factories.Api.Models.EventApiModelFactory.BuildFor(item, mediaFileManagerFacade, cached));
+                models.Add(Factories.Api.Models.EventModelFactory.BuildFor(item, mediaFileManagerFacade, cached));
             }
 
             return models;

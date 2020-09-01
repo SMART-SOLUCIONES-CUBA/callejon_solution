@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.Api;
+using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models;
 using SmartSolucionesCuba.SAPRESSC.Core.Persistence.Repositories;
 using SmartSolucionesCuba.SAPRESSC.Middleware.Media.Web.Common.Facades.Manager;
 using System.Collections.Generic;
@@ -23,13 +23,13 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.FrontEnd.Co
 
         [HttpGet]
         [HttpGet("cached/{cached}")]
-        public IEnumerable<CinemaBillboardApiModel> Get(bool cached = false)
+        public IEnumerable<CinemaBillboardModel> Get(bool cached = false)
         {
             var entities = repository.GetAll();
 
             var publicsOnly = !Request.Headers.Contains(new KeyValuePair<string, Microsoft.Extensions.Primitives.StringValues>("x-client", new Microsoft.Extensions.Primitives.StringValues("SAPRESSC.WpfApp.CPCC.Billboard.ReferenceClient")));
 
-            var models = new List<CinemaBillboardApiModel>();
+            var models = new List<CinemaBillboardModel>();
 
             var startDate = System.DateTime.Today;
             var endDate = System.DateTime.Today.AddDays(7);
@@ -46,7 +46,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.FrontEnd.Co
 
             foreach (var item in entities)
             {
-                var model = Factories.Api.Models.CinemaBillboardApiModelFactory.BuildFor(item, mediaFileManagerFacade, startDate, endDate, cached, publicsOnly);
+                var model = Factories.Api.Models.CinemaBillboardModelFactory.BuildFor(item, mediaFileManagerFacade, startDate, endDate, cached, publicsOnly);
 
                 if (model.RoomBillboards.Count <= 0) continue;
 

@@ -1,11 +1,11 @@
-﻿using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api;
+﻿using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models;
 using System.Net.Http;
 
 namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Client
 {
     public static class FixScreenClientConfigurationsClient
     {
-        public static FixScreenClientConfigurationApiModel Get(System.Uri apiServerBaseUri, System.Guid key)
+        public static FixScreenClientConfigurationModel Get(System.Uri apiServerBaseUri, System.Guid key)
         {
             var task = GetAsyncTask(apiServerBaseUri, key);
 
@@ -14,7 +14,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Client
             return task.Result;
         }
 
-        private static async System.Threading.Tasks.Task<FixScreenClientConfigurationApiModel> GetAsyncTask(System.Uri baseAddress, System.Guid key)
+        private static async System.Threading.Tasks.Task<FixScreenClientConfigurationModel> GetAsyncTask(System.Uri baseAddress, System.Guid key)
         {
             using (var client = new HttpClient())
             {
@@ -28,7 +28,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Client
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
 
-                    return Newtonsoft.Json.JsonConvert.DeserializeObject<FixScreenClientConfigurationApiModel>(responseContent);
+                    return Newtonsoft.Json.JsonConvert.DeserializeObject<FixScreenClientConfigurationModel>(responseContent);
                 }
             }
 

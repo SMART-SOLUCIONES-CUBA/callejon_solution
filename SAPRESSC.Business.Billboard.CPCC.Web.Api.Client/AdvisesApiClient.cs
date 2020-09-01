@@ -1,4 +1,4 @@
-﻿using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api;
+﻿using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models;
 using System.Collections.Generic;
 using System.Net.Http;
 
@@ -6,7 +6,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Client
 {
     public static class AdvisesApiClient
     {
-        public static ICollection<AdviseApiModel> Get(System.Uri apiServerBaseUri)
+        public static ICollection<AdviseModel> Get(System.Uri apiServerBaseUri)
         {
             var task = GetAsyncTask(apiServerBaseUri);
 
@@ -15,7 +15,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Client
             return task.Result;
         }
 
-        private static async System.Threading.Tasks.Task<ICollection<AdviseApiModel>> GetAsyncTask(System.Uri baseAddress)
+        private static async System.Threading.Tasks.Task<ICollection<AdviseModel>> GetAsyncTask(System.Uri baseAddress)
         {
             using (var client = new HttpClient())
             {
@@ -29,7 +29,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Client
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
 
-                    return Newtonsoft.Json.JsonConvert.DeserializeObject<ICollection<AdviseApiModel>>(responseContent);
+                    return Newtonsoft.Json.JsonConvert.DeserializeObject<ICollection<AdviseModel>>(responseContent);
                 }
             }
 

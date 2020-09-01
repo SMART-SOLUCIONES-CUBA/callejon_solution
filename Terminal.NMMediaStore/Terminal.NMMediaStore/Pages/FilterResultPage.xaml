@@ -1,0 +1,332 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<basepages:FetchOrderAudioVisualPresentBaseContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mg="clr-namespace:MagicGradients;assembly=MagicGradients"
+    xmlns:ffil="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Converters"
+    xmlns:basepages="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages.Base"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages.FilterResultPage"   
+    NavigationPage.HasNavigationBar="False"
+    Style="{StaticResource BasePageStyle}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InvalidYearToReplacementStringConverter x:Key="InvalidYearToReplacementStringConverter" InvalidStringReplacement="-" />
+            <converters:NullToReplacementStringConverter x:Key="NullToReplacementStringConverter" NullStringReplacement="-" />
+            <converters:FlextLayoutToResponsiveItemWidthConverter x:Key="FlextLayoutToResponsiveItemWidthConverter" ItemMinWidth="320" ItemHorizontalMargin="12" />
+            <converters:CollectionToJoinedStringBindingConverter x:Key="NoEmptyCollectionToJoinedStringBindingConverter" EmptyStringReplacement="-" />
+            <converters:SearchModelToInlineSummaryFormattedTextConverter x:Key="SearchModelToInlineSummaryFormattedTextConverter" CaptionColor="Black" ValueColor="DimGray" />
+            <converters:ImageModelToImageSourceConverter x:Key="ImageModelToImageSourceConverter" />
+
+            <sscxftoolkitpresentationconverters:BoolToBoolNegationConverter x:Key="BoolToBoolNegationConverter" />
+            <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonIconStringConverter" TrueString="&#xfd45;" FalseString="&#xf112;" />
+            <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonTextColorConverter" TrueString="IndianRed" FalseString="Black" />
+            <sscxftoolkitpresentationconverters:FractionConverter x:Key="FractionConverter" />
+
+            <Style x:Key="SearchItemFieldCaptionLabel" TargetType="Label">
+                <Setter Property="Margin" Value="8,0" />
+                <Setter Property="HorizontalTextAlignment" Value="End" />
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="Grid.Column" Value="1" />
+            </Style>
+            <Style x:Key="FirstSearchItemFieldCaptionLabel" TargetType="Label" BasedOn="{StaticResource SearchItemFieldCaptionLabel}">
+                <Setter Property="Margin" Value="8,4,8,0" />
+            </Style>
+            <Style x:Key="LastSearchItemFieldCaptionLabel" TargetType="Label" BasedOn="{StaticResource SearchItemFieldCaptionLabel}">
+                <Setter Property="Margin" Value="8,0,8,4" />
+            </Style>
+
+            <Style x:Key="SearchItemFieldValueLabel" TargetType="Label">
+                <Setter Property="Margin" Value="0,0,8,0" />
+                <Setter Property="LineBreakMode" Value="TailTruncation" />
+                <Setter Property="TextColor" Value="DimGray" />
+                <Setter Property="Grid.Column" Value="2" />
+            </Style>
+            <Style x:Key="FirstSearchItemFieldValueLabel" TargetType="Label" BasedOn="{StaticResource SearchItemFieldValueLabel}">
+                <Setter Property="Margin" Value="0,4,8,0" />
+            </Style>
+            <Style x:Key="LastSearchItemFieldValueLabel" TargetType="Label" BasedOn="{StaticResource SearchItemFieldValueLabel}">
+                <Setter Property="Margin" Value="0,0,8,4" />
+            </Style>
+
+            <DataTemplate x:Key="AudioVisualWidthPlacardDataTemplate">
+                <StackLayout 
+                    WidthRequest="{Binding Source={x:Reference ResultsContainer}, Path=Width, Converter={StaticResource FlextLayoutToResponsiveItemWidthConverter}}"
+                    Margin="6">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="AudioVisualItem_Tapped" />
+                    </StackLayout.GestureRecognizers>
+                    <Grid>
+                        <ffil:CachedImage
+                            HeightRequest="{Binding Source={x:RelativeSource Mode=Self}, Path=Width, Converter={StaticResource FractionConverter}, ConverterParameter=1.777777777777778}"
+                            Source="{Binding Path=AudioVisual.PlacardImage, Converter={StaticResource ImageModelToImageSourceConverter}}"
+                            Aspect="AspectFill" />
+                        <Button
+                            Margin="8"
+                            VerticalOptions="Start" HorizontalOptions="End"
+                            Padding="0"
+                            BackgroundColor="#CCF2F2F2"
+                            Text="{Binding Path=IsMarkedForFetch, Converter={StaticResource FetchMarkToogleToButtonIconStringConverter}}"
+                            TextColor="{Binding Path=IsMarkedForFetch, Converter={StaticResource FetchMarkToogleToButtonTextColorConverter}}"
+                            FontSize="{StaticResource Header4FontSize}"
+                            CornerRadius="0"
+                            WidthRequest="{StaticResource DefaultIconSize}" HeightRequest="{StaticResource DefaultIconSize}"
+                            Clicked="AudioVisualItemFetchMarkToogleButton_Clicked">
+                            <Button.FontFamily>
+                                <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                    <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                </OnPlatform>
+                            </Button.FontFamily>
+                        </Button>
+                    </Grid>
+                    <Label 
+                        LineBreakMode="TailTruncation"
+                        Text="{Binding Path=AudioVisual.Genres, Converter={StaticResource NoEmptyCollectionToJoinedStringBindingConverter}}"
+                        TextColor="{StaticResource SecoundaryTextColor}" />
+                    <Label 
+                        LineBreakMode="TailTruncation"
+                        Text="{Binding Path=AudioVisual.Title}}"
+                        FontSize="{StaticResource Header4FontSize}" />
+                    <Label 
+                        LineBreakMode="TailTruncation"
+                        MaxLines="3"
+                        Text="{Binding Path=AudioVisual.About}"
+                        TextColor="{StaticResource SecoundaryTextColor}" />
+                </StackLayout>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid ColumnSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <ScrollView Grid.RowSpan="2">
+                <StackLayout 
+                    Padding="0,56,0,4"
+                    Spacing="0">
+                    <Label
+                        Margin="12,12,12,6"
+                        Text="Búsqueda"
+                        TextColor="{StaticResource SecoundaryTextColor}"
+                        FontSize="{StaticResource Header5FontSize}" />
+                    <Grid
+                        IsVisible="{Binding Path=IsSearchSummaryExpanded, Converter={StaticResource BoolToBoolNegationConverter}}"
+                        ColumnSpacing="0"
+                        Margin="12,0,12,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <BoxView 
+                            Grid.Column="0"
+                            Color="{StaticResource PrimaryAccentColor}"
+                            WidthRequest="6"/>
+                        <mg:GradientView Grid.Column="1">
+                            <mg:GradientView.GradientSource>
+                                <mg:CssGradientSource>
+                                    <x:String>
+                                        <![CDATA[
+                                            radial-gradient(circle at left bottom, rgb(242, 242, 242) 0%, rgb(242, 242, 242) 6%, rgb(238, 238, 238) 6%, rgb(238, 238, 238) 15%, rgb(234, 234, 234) 15%, rgb(234, 234, 234) 47%, rgb(230, 230, 230) 47%, rgb(230, 230, 230) 54%, rgb(225, 225, 225) 54%, rgb(225, 225, 225) 56%, rgb(221, 221, 221) 56%, rgb(221, 221, 221) 90%, rgb(217, 217, 217) 90%, rgb(217, 217, 217) 100%)
+                                        ]]>
+                                    </x:String>
+                                </mg:CssGradientSource>
+                            </mg:GradientView.GradientSource>
+                        </mg:GradientView>
+                        <Label
+                            Grid.Column="1"
+                            Padding="12"
+                            LineBreakMode="TailTruncation"
+                            FormattedText="{Binding Path=Search, Converter={StaticResource SearchModelToInlineSummaryFormattedTextConverter}}"/>
+                    </Grid>
+                    <Grid
+                        IsVisible="{Binding Path=IsSearchSummaryExpanded}"
+                        ColumnSpacing="0" RowSpacing="2"
+                        Margin="12,0,12,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <BoxView 
+                            Grid.Column="0" Grid.RowSpan="8"
+                            Color="{StaticResource PrimaryAccentColor}"
+                            WidthRequest="6"/>
+                        <mg:GradientView Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="8">
+                            <mg:GradientView.GradientSource>
+                                <mg:CssGradientSource>
+                                    <x:String>
+                                        <![CDATA[
+                                            radial-gradient(circle at left bottom, rgb(242, 242, 242) 0%, rgb(242, 242, 242) 6%, rgb(238, 238, 238) 6%, rgb(238, 238, 238) 15%, rgb(234, 234, 234) 15%, rgb(234, 234, 234) 47%, rgb(230, 230, 230) 47%, rgb(230, 230, 230) 54%, rgb(225, 225, 225) 54%, rgb(225, 225, 225) 56%, rgb(221, 221, 221) 56%, rgb(221, 221, 221) 90%, rgb(217, 217, 217) 90%, rgb(217, 217, 217) 100%)
+                                        ]]>
+                                    </x:String>
+                                </mg:CssGradientSource>
+                            </mg:GradientView.GradientSource>
+                        </mg:GradientView>
+                        <Label
+                            Style="{StaticResource FirstSearchItemFieldCaptionLabel}"
+                            Grid.Row="0"
+                            Text="Título:" />
+                        <Label
+                            Style="{StaticResource FirstSearchItemFieldValueLabel}"
+                            Grid.Row="0"
+                            Text="{Binding Path=Search.TitleTemathic, Converter={StaticResource NullToReplacementStringConverter}}" />
+                        <Label
+                            Style="{StaticResource SearchItemFieldCaptionLabel}"
+                            Grid.Row="1"
+                            Text="Categoría:" />
+                        <Label
+                            Style="{StaticResource SearchItemFieldValueLabel}"
+                            Grid.Row="1"
+                            Text="{Binding Path=Search.Category, Converter={StaticResource NullToReplacementStringConverter}}" />
+                        <Label
+                            Style="{StaticResource SearchItemFieldCaptionLabel}"
+                            Grid.Row="2"
+                            Text="Año:" />
+                        <Label
+                            Style="{StaticResource SearchItemFieldValueLabel}"
+                            Grid.Row="2"
+                            Text="{Binding Path=Search.Year, Converter={StaticResource InvalidYearToReplacementStringConverter}}" />
+                        <Label
+                            Style="{StaticResource SearchItemFieldCaptionLabel}"
+                            Grid.Row="3"
+                            Text="País:" />
+                        <Label
+                            Style="{StaticResource SearchItemFieldValueLabel}"
+                            Grid.Row="3"
+                            Text="{Binding Path=Search.Country, Converter={StaticResource NullToReplacementStringConverter}}" />
+                        <Label
+                            Style="{StaticResource SearchItemFieldCaptionLabel}"
+                            Grid.Row="4"
+                            Text="Casa Productora:" />
+                        <Label
+                            Style="{StaticResource SearchItemFieldValueLabel}"
+                            Grid.Row="4"
+                            Text="{Binding Path=Search.ProducerHouse, Converter={StaticResource NullToReplacementStringConverter}}" />
+                        <Label
+                            Style="{StaticResource SearchItemFieldCaptionLabel}"
+                            Grid.Row="5"
+                            Text="Géneros:" />
+                        <Label
+                            Style="{StaticResource SearchItemFieldValueLabel}"
+                            Grid.Row="5"
+                            Text="{Binding Path=Search.Genres, Converter={StaticResource NoEmptyCollectionToJoinedStringBindingConverter}}" />
+                        <Label
+                            Style="{StaticResource SearchItemFieldCaptionLabel}"
+                            Grid.Row="6"
+                            Text="Elenco:" />
+                        <Label
+                            Style="{StaticResource SearchItemFieldValueLabel}"
+                            Grid.Row="6"
+                            Text="{Binding Path=Search.Personalities, Converter={StaticResource NoEmptyCollectionToJoinedStringBindingConverter}}" />
+                        <Label
+                            Style="{StaticResource LastSearchItemFieldCaptionLabel}"
+                            Grid.Row="7"
+                            Text="Etiquetas:" />
+                        <Label
+                            Style="{StaticResource LastSearchItemFieldValueLabel}"
+                            Grid.Row="7"
+                            Text="{Binding Path=Search.Tags, Converter={StaticResource NoEmptyCollectionToJoinedStringBindingConverter}}" />
+                    </Grid>
+                    <Label
+                        Margin="12,0"
+                        Text="Resultados"
+                        TextColor="{StaticResource SecoundaryTextColor}"
+                        FontSize="{StaticResource Header5FontSize}" />
+                    <FlexLayout
+                        x:Name="ResultsContainer"
+                        Margin="6,0,6,6"
+                        Wrap="Wrap"
+                        AlignItems="Start"
+                        AlignContent="Start"
+                        BindableLayout.ItemsSource="{Binding Path=Results}"
+                        BindableLayout.ItemTemplate="{StaticResource AudioVisualWidthPlacardDataTemplate}">
+                        <BindableLayout.EmptyView>
+                            <Label
+                                IsVisible="{Binding Path=IsBusy, Converter={StaticResource BoolToBoolNegationConverter}}"
+                                Margin="12"
+                                Text="Sin elementos que mostrar"
+                                TextColor="{StaticResource SecoundaryTextColor}" />
+                        </BindableLayout.EmptyView>
+                    </FlexLayout>
+                    <Button
+                        Margin="12"
+                        Text="Mostrar más"
+                        HorizontalOptions="Center"
+                        IsVisible="{Binding Path=PaginationHasNext}"
+                        Clicked="LoadNextPageButton_Clicked" />
+                    <ActivityIndicator
+                        Margin="12"
+                        HorizontalOptions="Center"
+                        HeightRequest="32" WidthRequest="32"
+                        IsVisible="{Binding Path=IsBusy}"
+                        IsRunning="{Binding Path=IsBusy}" />
+                </StackLayout>
+            </ScrollView>
+            <Grid
+                Grid.Row="0"
+                BackgroundColor="#CC000000"
+                HeightRequest="56">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button
+                    Grid.Column="0"
+                    Margin="8,0,0,0"
+                    VerticalOptions="Center" HorizontalOptions="Start"
+                    Padding="0"
+                    BackgroundColor="Transparent"
+                    Text="&#xfcba;"
+                    TextColor="White"
+                    FontSize="{StaticResource Header2FontSize}"
+                    CornerRadius="12"
+                    WidthRequest="{StaticResource DefaultIconSize}" HeightRequest="{StaticResource DefaultIconSize}"
+                    Clicked="AlternativeBackButton_Clicked">
+                    <Button.FontFamily>
+                        <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                            <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                        </OnPlatform>
+                    </Button.FontFamily>
+                </Button>
+                <Label
+                    Grid.Column="1"
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    LineBreakMode="TailTruncation">
+                    <Label.FontFamily>
+                        <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Regular">
+                            <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-REGULAR.OTF#Myriad Pro" />
+                        </OnPlatform>
+                    </Label.FontFamily>
+                    <Label.FontSize>
+                        <OnPlatform x:TypeArguments="x:Double" Default="36"></OnPlatform>
+                    </Label.FontSize>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <FormattedString.Spans>
+                                <Span Text="Mediateca " TextColor="{StaticResource PrimaryTextColor}" />
+                                <Span Text="Nuevo Mundo" TextColor="{StaticResource SecoundaryTextColor}" />
+                            </FormattedString.Spans>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</basepages:FetchOrderAudioVisualPresentBaseContentPage>

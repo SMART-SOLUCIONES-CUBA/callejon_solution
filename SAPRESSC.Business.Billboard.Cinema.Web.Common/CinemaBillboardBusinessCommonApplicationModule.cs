@@ -32,7 +32,15 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common
                 new CategoryEntityTypeConfigurator(),
                 new CollectionEntityTypeConfigurator(),
                 new TagEntityTypeConfigurator(),
-                new ProductionTagBridgeEntityTypeConfigurator()
+                new ProductionTagBridgeEntityTypeConfigurator(),
+                new CollectionGenreBridgeEntityTypeConfigurator(),
+                new CollectionProducerHouseBridgeEntityTypeConfigurator(),
+                new CollectionTagBridgeEntityTypeConfigurator(),
+                new ProductionCheckoutEntityTypeConfigurator(),
+                new CollectionCheckoutEntityTypeConfigurator(),
+                new FetchOrderEntityTypeConfigurator(),
+                new FetchOrderProductionBridgeEntityTypeConfigurator(),
+                new FetchOrderCollectionBridgeEntityTypeConfigurator()
             };
         }
 
@@ -54,6 +62,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common
             services.AddScoped<IEntityRepository<Category, System.Guid>, CategoryRepository>();
             services.AddScoped<IEntityRepository<Tag, int>, TagRepository>();
             services.AddScoped<IEntityRepository<Collection, System.Guid>, CollectionRepository>();
+            services.AddScoped<IEntityRepository<FetchOrder, long>, FetchOrderRepository>();
         }
     }
 }

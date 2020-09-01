@@ -6,6 +6,8 @@
 
         public string Name { get; set; }
 
+        public string Slug { get => Providers.SlugHelperProvider.Instance.Get().GenerateSlug(Name); }
+
         public CategoryDisplayViewModel Parent { get; set; }
 
         public virtual string TreeName

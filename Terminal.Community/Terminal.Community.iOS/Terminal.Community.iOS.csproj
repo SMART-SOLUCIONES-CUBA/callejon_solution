@@ -217,7 +217,7 @@
     <PackageReference Include="Xamarin.FFImageLoading.Transformations">
       <Version>2.4.11.982</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Forms" Version="4.6.0.847" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1269" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
     <PackageReference Include="ZXing.Net.Mobile.Forms">
       <Version>2.4.1</Version>
@@ -231,13 +231,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\" />
-    <Folder Include="Views\Renderer\" />
-    <Folder Include="Effects\" />
-    <Folder Include="Recognizers\" />
-    <Folder Include="Assets.xcassets\ProjectLogo.imageset\" />
     <Folder Include="Assets.xcassets\ContractorIdentityLogo.imageset\" />
     <Folder Include="Assets.xcassets\ContractorSignature.imageset\" />
+    <Folder Include="Assets.xcassets\ProjectLogo.imageset\" />
     <Folder Include="Assets.xcassets\ProjectPortalThumbnail.imageset\" />
   </ItemGroup>
 </Project>

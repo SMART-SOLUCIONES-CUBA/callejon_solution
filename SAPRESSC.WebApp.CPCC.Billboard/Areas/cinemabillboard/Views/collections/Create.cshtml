@@ -78,6 +78,40 @@
                 @Html.ValidationMessageFor(model => model.About, null, new { @class = "text-danger" })
             </div>
 
+            <fieldset style="margin-bottom: 20px;">
+                <legend style="margin-bottom: 0;">@Html.LabelFor(model => model.SelectableGenres)</legend>
+                <div class="row">
+                    @if (Model.SelectableGenres != null && Model.SelectableGenres.Count() > 0)
+                    {
+                        for (int i = 0; i < Model.SelectableGenres.Count(); i++)
+                        {
+                            @Html.EditorFor(subModel => subModel.SelectableGenres[i], "SelectionIntIDItemInputViewModel");
+                        }
+                    }
+                    else
+                    {
+                        <div class="col-md-12"><h5>Sin elementos que mostrar.</h5></div>
+                    }
+                </div>
+            </fieldset>
+
+            <fieldset style="margin-bottom: 20px;">
+                <legend style="margin-bottom: 0;">@Html.LabelFor(model => model.SelectableProducerHouses)</legend>
+                <div class="row">
+                    @if (Model.SelectableProducerHouses != null && Model.SelectableProducerHouses.Count() > 0)
+                    {
+                        for (int i = 0; i < Model.SelectableProducerHouses.Count(); i++)
+                        {
+                            @Html.EditorFor(subModel => subModel.SelectableProducerHouses[i], "SelectionLongIDItemInputViewModel");
+                        }
+                    }
+                    else
+                    {
+                        <div class="col-md-12"><h5>Sin elementos que mostrar.</h5></div>
+                    }
+                </div>
+            </fieldset>
+
             <div>
                 <button type="submit" class="btn btn-primary">Crear</button>
                 <a class="btn btn-default" href="@Url.Action("index")">Cancelar</a>

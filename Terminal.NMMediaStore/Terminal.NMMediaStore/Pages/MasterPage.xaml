@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ic="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+    xmlns:mg="clr-namespace:MagicGradients;assembly=MagicGradients"
+    xmlns:ffil="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Converters"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages.MasterPage"
+    BackgroundColor="#8a9ca8"
+    Title="Mediateca">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:StorageUsedBoxWidthConverter x:Key="StorageUsedBoxWidthConverter" TotalUsedPageReferenceView="{x:Reference TargetStorageTotalSpaceBoxView}" />
+            <converters:ImageModelToImageSourceConverter x:Key="ImageModelToImageSourceConverter" />
+
+            <sscxftoolkitpresentationconverters:FileSizeLongToStringConverter x:Key="FileSizeLongToStringConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <mg:GradientView Grid.Row="0">
+                <mg:GradientView.GradientSource>
+                    <mg:CssGradientSource>
+                        <x:String>
+                            <![CDATA[
+                                radial-gradient(circle at left bottom, rgb(242, 242, 242) 0%, rgb(242, 242, 242) 6%, rgb(238, 238, 238) 6%, rgb(238, 238, 238) 15%, rgb(234, 234, 234) 15%, rgb(234, 234, 234) 47%, rgb(230, 230, 230) 47%, rgb(230, 230, 230) 54%, rgb(225, 225, 225) 54%, rgb(225, 225, 225) 56%, rgb(221, 221, 221) 56%, rgb(221, 221, 221) 90%, rgb(217, 217, 217) 90%, rgb(217, 217, 217) 100%)
+                            ]]>
+                        </x:String>
+                    </mg:CssGradientSource>
+                </mg:GradientView.GradientSource>
+            </mg:GradientView>
+            <ScrollView Grid.Row="0">
+                <StackLayout>
+                    <Grid>
+                        <BoxView
+                            BackgroundColor="{StaticResource PrimaryAccentColor}"
+                            CornerRadius="0,0,20,20" />
+                        <StackLayout 
+                            Margin="20"
+                            Spacing="0">
+                            <ic:CircleImage
+                                HorizontalOptions="Center" VerticalOptions="Center"
+                                Margin="0,8"
+                                BorderThickness="2"
+                                BorderColor="Snow"
+                                WidthRequest="{StaticResource MiddleAvatarSize}"
+                                HeightRequest="{StaticResource MiddleAvatarSize}" 
+                                Source="{Binding Path=Subscriptor.Image, Converter={StaticResource ImageModelToImageSourceConverter}}">
+                            </ic:CircleImage>
+                            <Label
+                                HorizontalOptions="Center"
+                                Text="{Binding Path=Subscriptor.Name}"
+                                TextColor="Black"
+                                FontSize="{StaticResource Header2FontSize}">
+                                <Label.FontFamily>
+                                    <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed Italic">
+                                        <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-CONDIT.OTF#Myriad Pro" />
+                                    </OnPlatform>
+                                </Label.FontFamily>
+                            </Label>
+                            <Label
+                                HorizontalOptions="Center"
+                                Text="{Binding Path=Subscriptor.LastName}"
+                                TextColor="Black"
+                                FontSize="{StaticResource Header3FontSize}">
+                                <Label.FontFamily>
+                                    <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed Italic">
+                                        <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-CONDIT.OTF#Myriad Pro" />
+                                    </OnPlatform>
+                                </Label.FontFamily>
+                            </Label>
+                            <Grid Margin="0,16,0,2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <BoxView
+                                    Grid.RowSpan="2" Grid.ColumnSpan="3"
+                                    BackgroundColor="{StaticResource AlternativeBackgroundColor}"
+                                    CornerRadius="12"
+                                    HeightRequest="80"/>
+                                <Label
+                                    Grid.Row="0" Grid.Column="0"
+                                    Margin="8,8,0,0"
+                                    Text="{Binding Path=TargetStorage.FamilyRepresentativeIconGlyph}"
+                                    TextColor="White"
+                                    FontSize="{StaticResource DefaultIconSize}">
+                                    <Label.FontFamily>
+                                        <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                            <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                        </OnPlatform>
+                                    </Label.FontFamily>
+                                </Label>
+                                <Label
+                                    Grid.Row="0" Grid.Column="1"
+                                    Margin="0,8,0,0"
+                                    LineBreakMode="TailTruncation"
+                                    VerticalTextAlignment="Center"
+                                    Text="{Binding Path=TargetStorage.Caption}"
+                                    TextColor="White"
+                                    FontSize="{StaticResource Header4FontSize}">
+                                    <Label.FontFamily>
+                                        <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed">
+                                            <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-COND.OTF#Myriad Pro" />
+                                        </OnPlatform>
+                                    </Label.FontFamily>
+                                </Label>
+                                <Button
+                                    Grid.Row="0" Grid.Column="2"
+                                    Margin="0,8,8,0"
+                                    VerticalOptions="Center"
+                                    Padding="0"
+                                    BackgroundColor="Transparent"
+                                    Text="&#xf140;"
+                                    TextColor="White"
+                                    FontSize="{StaticResource Header2FontSize}"
+                                    CornerRadius="12"
+                                    WidthRequest="{StaticResource DefaultIconSize}" HeightRequest="{StaticResource DefaultIconSize}">
+                                    <Button.FontFamily>
+                                        <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                            <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                        </OnPlatform>
+                                    </Button.FontFamily>
+                                </Button>
+                                <BoxView
+                                    x:Name="TargetStorageTotalSpaceBoxView"
+                                    Grid.Row="1" Grid.ColumnSpan="3"
+                                    BackgroundColor="White"
+                                    CornerRadius="12"
+                                    HeightRequest="24" />
+                                <BoxView
+                                    Grid.Row="1" Grid.ColumnSpan="3"
+                                    BackgroundColor="{StaticResource PrimaryDarkActionColor}"
+                                    CornerRadius="12"
+                                    HeightRequest="24"
+                                    WidthRequest="{Binding Path=TargetStorage.VirtualUsedPercentFactor, Converter={StaticResource StorageUsedBoxWidthConverter}}"
+                                    HorizontalOptions="Start" />
+                                <BoxView
+                                    Grid.Row="1" Grid.ColumnSpan="3"
+                                    BackgroundColor="{StaticResource SecoundaryDarkActionColor}"
+                                    CornerRadius="12"
+                                    HeightRequest="24"
+                                    WidthRequest="{Binding Path=TargetStorage.CurrentUsedPercentFactor, Converter={StaticResource StorageUsedBoxWidthConverter}}"
+                                    HorizontalOptions="Start" />
+                            </Grid>
+                        </StackLayout>
+                    </Grid>
+                    <Grid Margin="12,4,12,6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Label
+                            Grid.Row="0" Grid.Column="0"
+                            Text="&#xf111;"
+                            TextColor="{StaticResource SecoundaryDarkActionColor}"
+                            FontSize="{StaticResource SmallIconSize}">
+                            <Label.FontFamily>
+                                <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                    <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                </OnPlatform>
+                            </Label.FontFamily>
+                        </Label>
+                        <Label 
+                            Grid.Row="0" Grid.Column="1"
+                            VerticalOptions="Center"
+                            Text="Vista rápida"
+                            TextColor="{StaticResource SecoundaryDarkActionColor}"
+                            FontSize="{StaticResource Header5FontSize}"/>
+                        <BoxView 
+                            Grid.ColumnSpan="2" Grid.Row="1"
+                            Color="{StaticResource SecoundaryDarkActionColor}"
+                            HeightRequest="2" />
+                    </Grid>
+                    <StackLayout 
+                        Margin="12,0,0,12"
+                        BindableLayout.ItemsSource="{Binding Path=FetchOrderAudioVisuals}">
+                        <BindableLayout.EmptyView>
+                            <Label
+                                Text="No se han agregado elementos"
+                                TextColor="{StaticResource PrimaryDarkActionColor}" />
+                        </BindableLayout.EmptyView>
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Grid 
+                                    BackgroundColor="#AAF2F2F2" 
+                                    HeightRequest="90">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="60" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <ffil:CachedImage 
+                                        Grid.Column="0" Grid.RowSpan="2"
+                                        Aspect="AspectFill"
+                                        Source="{Binding Path=PosterImage, Converter={StaticResource ImageModelToImageSourceConverter}}"
+                                        DownsampleHeight="90"
+                                        DownsampleUseDipUnits="True"
+                                        CacheType="All"
+                                        CacheDuration="8760:00:00" />
+                                    <Label 
+                                        Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4"
+                                        Margin="0,4,0,0"
+                                        LineBreakMode="TailTruncation"
+                                        MaxLines="2"
+                                        Text="{Binding Path=Title}"
+                                        TextColor="{StaticResource DarkBackgroundColor}"
+                                        FontSize="{StaticResource Header4FontSize}">
+                                        <Label.FontFamily>
+                                            <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed">
+                                                <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-COND.OTF#Myriad Pro" />
+                                            </OnPlatform>
+                                        </Label.FontFamily>
+                                    </Label>
+                                    <Button
+                                        Grid.RowSpan="2" Grid.Column="5"
+                                        VerticalOptions="Start"
+                                        Padding="2,4"
+                                        Text="&#xf1d9;"
+                                        TextColor="{StaticResource PrimaryDarkActionColor}"
+                                        FontSize="{StaticResource SmallIconSize}"
+                                        Clicked="FetchOrderAudioVisualOptionButton_Clicked">
+                                        <Button.FontFamily>
+                                            <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                                <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                            </OnPlatform>
+                                        </Button.FontFamily>
+                                    </Button>
+                                    <Label 
+                                        Grid.Row="1" Grid.Column="1"
+                                        Margin="0,0,0,6"
+                                        BackgroundColor="{StaticResource DarkBackgroundColor}"
+                                        Padding="6,4"
+                                        Text="{Binding Path=Quality}"/>
+                                    <Label 
+                                        Grid.Row="1" Grid.Column="2"
+                                        Margin="0,0,0,6"
+                                        BackgroundColor="{StaticResource DarkBackgroundColor}"
+                                        Padding="6,4"
+                                        Text="{Binding Path=FileSize, Converter={StaticResource FileSizeLongToStringConverter}}"/>
+                                    <Label 
+                                        IsVisible="{Binding Path=HasSubtitle}"
+                                        Margin="0,0,0,6"
+                                        Grid.Row="1" Grid.Column="3"
+                                        BackgroundColor="{StaticResource DarkBackgroundColor}"
+                                        Padding="6,4,7,4"
+                                        Text="+SUB"/>
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+            <Button
+                Grid.Row="1"
+                BackgroundColor="{StaticResource SecoundaryDarkActionColor}"
+                ContentLayout="Right,10"
+                Text="Carro de Compras Completo"
+                Clicked="FullShoppingCartButton_Clicked">
+                <Button.ImageSource>
+                    <FontImageSource
+                        Glyph="&#xf13e;">
+                        <FontImageSource.FontFamily>
+                            <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                            </OnPlatform>
+                        </FontImageSource.FontFamily>
+                    </FontImageSource>
+                </Button.ImageSource>
+            </Button>
+        </Grid>    
+    </ContentPage.Content>
+</ContentPage>

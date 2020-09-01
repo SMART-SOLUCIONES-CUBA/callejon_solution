@@ -42,6 +42,12 @@
         [System.ComponentModel.DataAnnotations.Display(Name = "About")]
         public string About { get; set; }
 
+        [System.ComponentModel.DataAnnotations.Display(Name = "Genres")]
+        public System.Collections.Generic.List<Core.Common.Models.View.SelectionItemInputViewModel<int>> SelectableGenres { get; set; }
+
+        [System.ComponentModel.DataAnnotations.Display(Name = "ProducerHouses")]
+        public System.Collections.Generic.List<Core.Common.Models.View.SelectionItemInputViewModel<long>> SelectableProducerHouses { get; set; }
+
         public Persistence.Entities.Collection Export()
         {
             var entity = new Persistence.Entities.Collection();

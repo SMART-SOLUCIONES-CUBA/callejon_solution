@@ -274,11 +274,11 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Controllers
 
             var events = eventRepository.FindBy(criteria).OrderBy(entity => entity.Start);
 
-            var eventModels = new System.Collections.Generic.List<Business.Billboard.CPCC.Web.Api.Common.Models.Api.EventApiModel>();
+            var eventModels = new System.Collections.Generic.List<Business.Billboard.CPCC.Web.Api.Common.Models.EventModel>();
 
             foreach (var entity in events)
             {
-                eventModels.Add(Business.Billboard.CPCC.Web.FrontEnd.Factories.Api.Models.EventApiModelFactory.BuildFor(entity, mediaFileManagerFacade, false));
+                eventModels.Add(Business.Billboard.CPCC.Web.FrontEnd.Factories.Api.Models.EventModelFactory.BuildFor(entity, mediaFileManagerFacade, false));
             }
 
             var eventsJson = Newtonsoft.Json.JsonConvert.SerializeObject(eventModels);
@@ -289,13 +289,13 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Controllers
 
             var cinemas = cinemaRepository.GetAll();
 
-            var cinemaBillboards = new System.Collections.Generic.List<Business.Billboard.Cinema.Web.Api.Common.Models.Api.CinemaBillboardApiModel>();
+            var cinemaBillboards = new System.Collections.Generic.List<Business.Billboard.Cinema.Web.Api.Common.Models.CinemaBillboardModel>();
 
             var endEdgeDate = System.DateTime.Today.AddDays(7);
 
             foreach (var item in cinemas)
             {
-                var model = Business.Billboard.Cinema.Web.FrontEnd.Factories.Api.Models.CinemaBillboardApiModelFactory.BuildFor(item, mediaFileManagerFacade, startEdgeDate, endEdgeDate, false, true);
+                var model = Business.Billboard.Cinema.Web.FrontEnd.Factories.Api.Models.CinemaBillboardModelFactory.BuildFor(item, mediaFileManagerFacade, startEdgeDate, endEdgeDate, false, true);
 
                 if (model.RoomBillboards.Count <= 0) continue;
 

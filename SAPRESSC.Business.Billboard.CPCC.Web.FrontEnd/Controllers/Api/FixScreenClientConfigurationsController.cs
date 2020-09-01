@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api;
+using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models;
 using SmartSolucionesCuba.SAPRESSC.Core.Persistence.Repositories;
 
 namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Controllers.Api
@@ -17,7 +17,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         }
 
         [HttpGet("{key}")]
-        public FixScreenClientConfigurationApiModel Get(System.Guid key)
+        public FixScreenClientConfigurationModel Get(System.Guid key)
         {
             var entity = repository.FindOneBy(e => e.Id == key && e.Enabled);
 
@@ -26,7 +26,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
                 entity = repository.Get(Common.Constants.DEFAULT_FIXSCREENCLIENT_CONFIGURATION_ID);
             }
 
-            return Factories.Api.Models.FixScreenClientConfigurationApiModelFactory.BuildFor(entity);
+            return Factories.Api.Models.FixScreenClientConfigurationModelFactory.BuildFor(entity);
         }
     }
 }

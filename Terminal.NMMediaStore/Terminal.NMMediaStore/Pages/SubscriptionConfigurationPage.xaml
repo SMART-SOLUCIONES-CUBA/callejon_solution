@@ -1,0 +1,486 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CarouselPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mg="clr-namespace:MagicGradients;assembly=MagicGradients"
+    xmlns:ffil="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Converters"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages.SubscriptionConfigurationPage">
+    <ContentPage Style="{StaticResource BasePageStyle}">
+        <ContentPage.Resources>
+            <ResourceDictionary>
+                <sscxftoolkitpresentationconverters:BoolToBoolNegationConverter x:Key="BoolToBoolNegationConverter" />
+            </ResourceDictionary>
+        </ContentPage.Resources>
+        <ContentPage.Content>
+            <Grid>
+                <StackLayout
+                    VerticalOptions="Center" HorizontalOptions="Center"
+                    Margin="16"
+                    WidthRequest="400">
+                    <Label 
+                        HorizontalTextAlignment="Center"
+                        Text="Configurar Subscripción"
+                        FontSize="{StaticResource Header2FontSize}" />
+                    <Label 
+                        HorizontalTextAlignment="Center"
+                        Text="En esta seccion podrá configurar su subscripción para que podamos realizar propuestas adecuadas a su preferencias de los contenidos disponibles en la Mediateca Nuevo Mundo."
+                        TextColor="{StaticResource SecoundaryTextColor}" />
+                    <ActivityIndicator                    
+                        IsVisible="{Binding Path=IsBusy}"
+                        Margin="0,10,0,0"
+                        VerticalOptions="Center" HorizontalOptions="Center"
+                        HeightRequest="48" WidthRequest="48"
+                        IsRunning="True" />
+                    <Button
+                        IsVisible="{Binding Path=IsBusy, Converter={StaticResource BoolToBoolNegationConverter}}"
+                        Margin="0,20,0,0"
+                        BackgroundColor="{StaticResource PrimaryActionColor}"
+                        HorizontalOptions="Center" VerticalOptions="Center"
+                        Text="Comenzar"
+                        TextColor="Black"
+                        Clicked="NextButton_Clicked" />
+                </StackLayout>
+            </Grid>
+        </ContentPage.Content>
+    </ContentPage>
+    <ContentPage Style="{StaticResource BasePageStyle}">
+        <ContentPage.Resources>
+            <ResourceDictionary>
+                <converters:FlextLayoutToResponsiveItemWidthConverter x:Key="FlextLayoutToResponsiveItemWidthConverter" ItemMinWidth="240" ItemHorizontalMargin="16" />
+            </ResourceDictionary>
+        </ContentPage.Resources>
+        <ContentPage.Content>
+            <Grid Padding="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label 
+                    Grid.ColumnSpan="3" Grid.Row="0"
+                    HorizontalTextAlignment="Center"
+                    Text="Configurar Subscripción"
+                    FontSize="{StaticResource Header2FontSize}" />
+                <Label 
+                    Grid.ColumnSpan="3" Grid.Row="1"
+                    HorizontalTextAlignment="Center"
+                    Text="Seleccione sus Géneros preferidos"
+                    TextColor="{StaticResource SecoundaryTextColor}"
+                    FontSize="{StaticResource Header5FontSize}" />
+                <BoxView 
+                    Grid.ColumnSpan="3" Grid.Row="2"
+                    Margin="0,16,0,8"
+                    Color="{StaticResource AlternativeBackgroundColor}"
+                    HeightRequest="1" />
+                <ScrollView
+                    Grid.ColumnSpan="3" Grid.Row="3">
+                    <FlexLayout
+                        x:Name="GenreChoisesResponsiveWrapper"
+                        Wrap="Wrap"
+                        AlignItems="Start"
+                        AlignContent="Start"
+                        Margin="8,0"
+                        BindableLayout.ItemsSource="{Binding Path=GenreChoises}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout
+                                    WidthRequest="{Binding Source={x:Reference GenreChoisesResponsiveWrapper}, Path=Width, Converter={StaticResource FlextLayoutToResponsiveItemWidthConverter}}"
+                                    Padding="8">
+                                    <Label
+                                        Text="{Binding Path=Genre.Name}" />
+                                    <Switch IsToggled="{Binding Path=Choised}"  />
+                                </StackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                </ScrollView>
+                <BoxView 
+                    Grid.ColumnSpan="3" Grid.Row="4"                    
+                    Margin="0,8"
+                    Color="{StaticResource AlternativeBackgroundColor}"
+                    HeightRequest="1" />
+                <Button
+                    Grid.Column="2" Grid.Row="5"
+                    Text="Siguiente"
+                    Clicked="NextButton_Clicked" />
+            </Grid>
+        </ContentPage.Content>
+    </ContentPage>
+    <ContentPage Style="{StaticResource BasePageStyle}">
+        <ContentPage.Resources>
+            <ResourceDictionary>
+                <converters:FlextLayoutToResponsiveItemWidthConverter x:Key="FlextLayoutToResponsiveItemWidthConverter" ItemMinWidth="240" ItemHorizontalMargin="16" />
+                <converters:ImageModelToImageSourceConverter x:Key="ImageModelToImageSourceConverter" />
+
+                <sscxftoolkitpresentationconverters:FractionConverter x:Key="FractionConverter" />
+            </ResourceDictionary>
+        </ContentPage.Resources>
+        <ContentPage.Content>
+            <Grid Padding="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label 
+                    Grid.ColumnSpan="3" Grid.Row="0"
+                    HorizontalTextAlignment="Center"
+                    Text="Configurar Subscripción"
+                    FontSize="{StaticResource Header2FontSize}" />
+                <Label 
+                    Grid.ColumnSpan="3" Grid.Row="1"
+                    HorizontalTextAlignment="Center"
+                    Text="Seleccione sus Casas Productoras preferidas"
+                    TextColor="{StaticResource SecoundaryTextColor}"
+                    FontSize="{StaticResource Header5FontSize}" />
+                <BoxView 
+                    Grid.ColumnSpan="3" Grid.Row="2"
+                    Margin="0,16,0,8"
+                    Color="{StaticResource AlternativeBackgroundColor}"
+                    HeightRequest="1" />
+                <ScrollView
+                    Grid.ColumnSpan="3" Grid.Row="3">
+                    <FlexLayout
+                        x:Name="ProducerHouseChoisesResponsiveWrapper"
+                        Wrap="Wrap"
+                        AlignItems="Start"
+                        AlignContent="Start"
+                        Margin="8,0"
+                        BindableLayout.ItemsSource="{Binding Path=ProducerHouseChoises}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout
+                                    WidthRequest="{Binding Source={x:Reference ProducerHouseChoisesResponsiveWrapper}, Path=Width, Converter={StaticResource FlextLayoutToResponsiveItemWidthConverter}}"
+                                    Padding="8">
+                                    <ffil:CachedImage
+                                        HorizontalOptions="Fill"
+                                        Source="{Binding Path=ProducerHouse.Image, Converter={StaticResource ImageModelToImageSourceConverter}}"
+                                        Aspect="AspectFill"
+                                        HeightRequest="{Binding Source={x:RelativeSource Mode=Self}, Path=Width, Converter={StaticResource FractionConverter}, ConverterParameter=1.777777777777778}"/>
+                                    <Label Text="{Binding Path=ProducerHouse.Name}" />
+                                    <Switch IsToggled="{Binding Path=Choised}"  />
+                                </StackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                </ScrollView>
+                <BoxView 
+                    Grid.ColumnSpan="3" Grid.Row="4"
+                    Margin="0,8"
+                    Color="{StaticResource AlternativeBackgroundColor}"
+                    HeightRequest="1" />
+                <Button
+                    Grid.Column="0" Grid.Row="5"
+                    Text="Anterior"
+                    Clicked="PreviousButton_Clicked" />
+                <Button
+                    Grid.Column="2" Grid.Row="5"
+                    Text="Siguiente"
+                    Clicked="NextButton_Clicked" />
+            </Grid>
+        </ContentPage.Content>
+    </ContentPage>
+    <ContentPage Style="{StaticResource BasePageStyle}">
+        <ContentPage.Resources>
+            <ResourceDictionary>
+                <converters:FlextLayoutToResponsiveItemWidthConverter x:Key="FlextLayoutToResponsiveItemWidthConverter" ItemMinWidth="240" ItemHorizontalMargin="16" />
+            </ResourceDictionary>
+        </ContentPage.Resources>
+        <ContentPage.Content>
+            <Grid Padding="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label 
+                    Grid.ColumnSpan="3" Grid.Row="0"
+                    HorizontalTextAlignment="Center"
+                    Text="Configurar Subscripción"
+                    FontSize="{StaticResource Header2FontSize}" />
+                <Label 
+                    Grid.ColumnSpan="3" Grid.Row="1"
+                    HorizontalTextAlignment="Center"
+                    Text="Seleccione sus Etiquetas Temáticas preferidas"
+                    TextColor="{StaticResource SecoundaryTextColor}"
+                    FontSize="{StaticResource Header5FontSize}" />
+                <BoxView 
+                    Grid.ColumnSpan="3" Grid.Row="2"
+                    Margin="0,16,0,8"
+                    Color="{StaticResource AlternativeBackgroundColor}"
+                    HeightRequest="1" />
+                <ScrollView 
+                    Grid.ColumnSpan="3" Grid.Row="3">
+                    <FlexLayout
+                        x:Name="TagChoisesResponsiveWrapper"
+                        Wrap="Wrap"
+                        AlignItems="Start"
+                        AlignContent="Start"
+                        Margin="8,0"
+                        BindableLayout.ItemsSource="{Binding Path=TagChoises}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout
+                                    WidthRequest="{Binding Source={x:Reference TagChoisesResponsiveWrapper}, Path=Width, Converter={StaticResource FlextLayoutToResponsiveItemWidthConverter}}"
+                                    Padding="8">
+                                    <Label
+                                        Text="{Binding Path=Tag.Name}" />
+                                    <Switch IsToggled="{Binding Path=Choised}"  />
+                                </StackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                </ScrollView>
+                <BoxView 
+                    Grid.ColumnSpan="3" Grid.Row="4"
+                    Margin="0,8"
+                    Color="{StaticResource AlternativeBackgroundColor}"
+                    HeightRequest="1" />
+                <Button
+                    Grid.Column="0" Grid.Row="5"
+                    Text="Anterior"
+                    Clicked="PreviousButton_Clicked" />
+                <Button
+                    Grid.Column="2" Grid.Row="5"
+                    Text="Siguiente"
+                    Clicked="NextButton_Clicked" />
+            </Grid>
+        </ContentPage.Content>
+    </ContentPage>
+    <ContentPage Style="{StaticResource BasePageStyle}">
+        <ContentPage.Resources>
+            <ResourceDictionary>
+                <sscxftoolkitpresentationconverters:BoolToBoolNegationConverter x:Key="BoolToBoolNegationConverter" />
+
+                <converters:FlextLayoutToResponsiveItemWidthConverter x:Key="FlextLayoutToResponsiveItemWidthConverter" ItemMinWidth="240" ItemHorizontalMargin="16" />
+                <converters:ImageModelToImageSourceConverter x:Key="ImageModelToImageSourceConverter" />
+            </ResourceDictionary>
+        </ContentPage.Resources>
+        <ContentPage.Content>
+            <Grid Padding="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label 
+                    Grid.ColumnSpan="3" Grid.Row="0"
+                    HorizontalTextAlignment="Center"
+                    Text="Configurar Subscripción"
+                    FontSize="{StaticResource Header2FontSize}" />
+                <Label 
+                    Grid.ColumnSpan="3" Grid.Row="1"
+                    HorizontalTextAlignment="Center"
+                    Text="Resumen de la configuración"
+                    TextColor="{StaticResource SecoundaryTextColor}"
+                    FontSize="{StaticResource Header5FontSize}" />
+                <BoxView 
+                    Grid.ColumnSpan="3" Grid.Row="2"
+                    Margin="0,16,0,8"
+                    Color="{StaticResource AlternativeBackgroundColor}"
+                    HeightRequest="1" />
+                <ScrollView 
+                    Grid.ColumnSpan="3" Grid.Row="3"
+                    IsVisible="{Binding Path=IsBusy, Converter={StaticResource BoolToBoolNegationConverter}}">
+                    <StackLayout>
+                        <StackLayout>
+                            <Label
+                                Margin="10,0"
+                                Text="Géneros"
+                                TextColor="{StaticResource SecoundaryTextColor}"
+                                FontSize="{StaticResource Header5FontSize}" />
+                            <FlexLayout
+                                Wrap="Wrap"
+                                Padding="5,0"
+                                BindableLayout.ItemsSource="{Binding Path=ChoisedGenres}">
+                                <BindableLayout.EmptyView>
+                                    <Label Margin="5,0,5,5" Text="Sin elementos seleccionados" />
+                                </BindableLayout.EmptyView>
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid 
+                                            WidthRequest="180" HeightRequest="102"
+                                            Margin="5,0,5,10">
+                                            <mg:GradientView VerticalOptions="FillAndExpand" >
+                                                <mg:GradientView.GradientSource>
+                                                    <mg:CssGradientSource>
+                                                        <x:String>
+                                                            <![CDATA[
+                                                            linear-gradient(45deg, #3b6baf 0%,#3b6baf 31%,#375f97 31%,#375f97 46%,#33537f 46%,#33537f 56%,#304664 56%,#304664 93%,#282e34 93%,#282e34 100%)
+                                                        ]]>
+                                                        </x:String>
+                                                    </mg:CssGradientSource>
+                                                </mg:GradientView.GradientSource>
+                                            </mg:GradientView>
+                                            <Label
+                                                Margin="10,6"
+                                                Text="{Binding Path=Name}"
+                                                TextColor="White"
+                                                LineBreakMode="TailTruncation"
+                                                MaxLines="3"
+                                                FontSize="{StaticResource Header3FontSize}">
+                                                <Label.FontFamily>
+                                                    <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed Italic">
+                                                        <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-CONDIT.OTF#Myriad Pro" />
+                                                    </OnPlatform>
+                                                </Label.FontFamily>
+                                            </Label>
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </FlexLayout>
+                        </StackLayout>
+                        <StackLayout>
+                            <Label
+                                Margin="10,0"
+                                Text="Casas Productoras"
+                                TextColor="{StaticResource SecoundaryTextColor}"
+                                FontSize="{StaticResource Header5FontSize}" />
+                            <FlexLayout
+                                Padding="5,0"
+                                Wrap="Wrap"
+                                BindableLayout.ItemsSource="{Binding Path=ChoisedProducerHouses}">
+                                <BindableLayout.EmptyView>
+                                    <Label Margin="5,0,5,5" Text="Sin elementos seleccionados" />
+                                </BindableLayout.EmptyView>
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid 
+                                        WidthRequest="320" HeightRequest="180"
+                                        Margin="5,0,5,10">
+                                            <ffil:CachedImage
+                                                Source="{Binding Path=Image, Converter={StaticResource ImageModelToImageSourceConverter}}"
+                                                Aspect="AspectFill" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </FlexLayout>
+                        </StackLayout>
+                        <StackLayout>
+                            <Label
+                                Margin="10,0"
+                                Text="Etiquetas Temáticas"
+                                TextColor="{StaticResource SecoundaryTextColor}"
+                                FontSize="{StaticResource Header5FontSize}" />
+                            <FlexLayout
+                                Padding="5,0"
+                                Wrap="Wrap"
+                                BindableLayout.ItemsSource="{Binding Path=ChoisedTags}">
+                                <BindableLayout.EmptyView>
+                                    <Label Margin="5,0,5,5" Text="Sin elementos seleccionados" />
+                                </BindableLayout.EmptyView>
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid 
+                                            WidthRequest="180" HeightRequest="102"
+                                            Margin="5,0,5,10">
+                                            <mg:GradientView VerticalOptions="FillAndExpand" >
+                                                <mg:GradientView.GradientSource>
+                                                    <mg:CssGradientSource>
+                                                        <x:String>
+                                                            <![CDATA[
+                                                                linear-gradient(0, rgb(255,255,255) 0%, transparent 100%), linear-gradient(0, rgb(255, 255, 255) 0%, transparent 100%), linear-gradient(135deg, rgba(96, 96, 96, 0.21) 0%, rgba(96, 96, 96, 0.21) 50%, rgba(45, 45, 45, 0.21) 50%, rgba(45, 45, 45, 0.21) 100%), linear-gradient(0, rgba(220, 220, 220, 0.2) 0%, rgba(220, 220, 220, 0.2) 31%, rgba(200, 200, 200, 0.2) 31%, rgba(200, 200, 200, 0.2) 100%), linear-gradient(0, rgba(124, 124, 124, 0.26) 0%, rgba(124, 124, 124, 0.26) 15%, rgba(218, 218, 218, 0.26) 15%, rgba(218, 218, 218, 0.26) 100%), linear-gradient(45deg, rgba(157, 157, 157, 0.14) 0%, rgba(157, 157, 157, 0.14) 46%, rgba(26, 26, 26, 0.14) 46%, rgba(26, 26, 26, 0.14) 100%), linear-gradient(45deg, rgba(180, 180, 180, 0.1) 0%, rgba(180, 180, 180, 0.1) 45%, rgba(62, 62, 62, 0.1) 46%, rgba(62, 62, 62, 0.1) 100%), linear-gradient(135deg, rgba(33, 33, 33, 0.22) 0%, rgba(33, 33, 33, 0.22) 59%, rgba(164, 164, 164, 0.22) 59%, rgba(164, 164, 164, 0.22) 100%), linear-gradient(135deg, rgba(24, 24, 24, 0.11) 0%, rgba(24, 24, 24, 0.11) 71%, rgba(245, 245, 245, 0.11) 71%, rgba(245, 245, 245, 0.11) 100%), linear-gradient(0, rgba(5, 5, 5, 0.15) 0%, rgba(5, 5, 5, 0.15) 91%, rgba(50, 50, 50, 0.15) 91%, rgba(50, 50, 50, 0.15) 100%), linear-gradient(90deg, rgb(198, 198, 198), rgb(158, 158, 158))
+                                                            ]]>
+                                                        </x:String>
+                                                    </mg:CssGradientSource>
+                                                </mg:GradientView.GradientSource>
+                                            </mg:GradientView>
+                                            <Label
+                                                Margin="10,6"
+                                                Text="{Binding Path=Name}"
+                                                TextColor="{StaticResource DefaultBackgroundColor}"
+                                                LineBreakMode="TailTruncation"
+                                                MaxLines="3"
+                                                FontSize="{StaticResource Header3FontSize}">
+                                                <Label.FontFamily>
+                                                    <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed Italic">
+                                                        <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-CONDIT.OTF#Myriad Pro" />
+                                                    </OnPlatform>
+                                                </Label.FontFamily>
+                                            </Label>
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </FlexLayout>
+                        </StackLayout>
+                    </StackLayout>
+                </ScrollView>
+                <ActivityIndicator                    
+                    Grid.ColumnSpan="3" Grid.Row="3"
+                    IsVisible="{Binding Path=IsBusy}"
+                    Margin="0,10,0,0"
+                    VerticalOptions="Center" HorizontalOptions="Center"
+                    HeightRequest="48" WidthRequest="48"
+                    IsRunning="True" />
+                <BoxView 
+                    Grid.ColumnSpan="3" Grid.Row="4"
+                    Margin="0,8"
+                    Color="{StaticResource AlternativeBackgroundColor}"
+                    HeightRequest="1" />
+                <Button
+                    Grid.Column="0" Grid.Row="5"
+                    HorizontalOptions="Start"
+                    Text="Anterior"
+                    Clicked="PreviousButton_Clicked" />
+                <Label
+                    Grid.Column="1" Grid.Row="5"
+                    VerticalOptions="Center"
+                    HorizontalTextAlignment="Center"
+                    Text="Revise antes de completar"
+                    TextColor="{StaticResource SecoundaryTextColor}"
+                    FontSize="{StaticResource Header5FontSize}">
+                    <Label.FontFamily>
+                        <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed Italic">
+                            <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-CONDIT.OTF#Myriad Pro" />
+                        </OnPlatform>
+                    </Label.FontFamily>
+                </Label>
+                <Button
+                    Grid.Column="2" Grid.Row="5"
+                    IsEnabled="{Binding Path=IsBusy, Converter={StaticResource BoolToBoolNegationConverter}}"
+                    BackgroundColor="{StaticResource PrimaryActionColor}"
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    Text="Completar"
+                    TextColor="Black"
+                    Clicked="CompleteButton_Clicked" />
+            </Grid>
+        </ContentPage.Content>
+    </ContentPage>
+</CarouselPage>

@@ -90,7 +90,15 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Persistence.Context
         public DbSet<EventCommentDelation> EventCommentDelations { get; set; }
         public DbSet<ProductionCommentDelation> ProductionCommentDelations { get; set; }
         public DbSet<PersonalityCommentDelation> PersonalityCommentDelations { get; set; }
+        public DbSet<CollectionGenreBridge> CollectionGenreBridges { get; set; }
+        public DbSet<CollectionTagBridge> CollectionTagBridges { get; set; }
+        public DbSet<CollectionProducerHouseBridge> CollectionProducerHouseBridges { get; set; }
         public DbSet<PortableDbDownload> PortableDbDownloads { get; set; }
+        public DbSet<CollectionCheckout> CollectionCheckouts { get; set; }
+        public DbSet<ProductionCheckout> ProductionCheckouts { get; set; }
+        public DbSet<FetchOrder> FetchOrders { get; set; }
+        public DbSet<FetchOrderCollectionBridge> FetchOrderCollectionBridges { get; set; }
+        public DbSet<FetchOrderProductionBridge> FetchOrderProductionBridges { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

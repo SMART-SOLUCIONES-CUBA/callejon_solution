@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <x:Double x:Key="AlternativeNavigationPageHeight">96</x:Double>
+            <x:Double x:Key="MiddleAvatarSize">96</x:Double>
+            <x:Double x:Key="DefaultAvatarSize">72</x:Double>
+            
+            <x:Double x:Key="LargeIconSize">64</x:Double>
+            <x:Double x:Key="MiddleIconSize">48</x:Double>
+            <x:Double x:Key="DefaultIconSize">36</x:Double>
+            <x:Double x:Key="SmallIconSize">28</x:Double>
+
+            <x:Double x:Key="LargeHeader3FontSize">48</x:Double>
+            <x:Double x:Key="Header1FontSize">36</x:Double>
+            <x:Double x:Key="Header2FontSize">30</x:Double>
+            <x:Double x:Key="Header3FontSize">24</x:Double>
+            <x:Double x:Key="Header4FontSize">20</x:Double>
+            <x:Double x:Key="Header5FontSize">18</x:Double>
+
+            <x:Double x:Key="MiddleTextFontSize">16</x:Double>
+            <x:Double x:Key="DefaultTextFontSize">14</x:Double>
+            <x:Double x:Key="CaptionTextFontSize">12</x:Double>
+
+            <Color x:Key="DefaultBackgroundColor">#3f4042</Color>
+            <Color x:Key="AlternativeBackgroundColor">#5b646a</Color>
+            <Color x:Key="DarkBackgroundColor">#191a1b</Color>
+            <Color x:Key="PrimaryTextColor">White</Color>
+            <Color x:Key="SecoundaryTextColor">#dddddd</Color>
+            <Color x:Key="PrimaryAccentColor">#63a0b2</Color>
+            <Color x:Key="SecoundaryAccentColor">#f3f1bc</Color>
+            <Color x:Key="PrimaryActionColor">#f3f1bc</Color>
+            <Color x:Key="SecoundaryActionColor">#b2d7ea</Color>
+            <Color x:Key="PrimaryDarkActionColor">#33537f</Color>
+            <Color x:Key="SecoundaryDarkActionColor">#003356</Color>
+
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontFamily">
+                    <Setter.Value>
+                        <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Regular">
+                            <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-REGULAR.OTF#Myriad Pro" />
+                        </OnPlatform>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="{StaticResource DarkBackgroundColor}" />
+            </Style>
+            
+            <Style x:Key="BasePageStyle" TargetType="Page">
+                <Setter Property="BackgroundColor" Value="{StaticResource DefaultBackgroundColor}" />
+            </Style>
+            <Style x:Key="PivotButtonStyle" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontFamily">
+                    <Setter.Value>
+                        <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Regular">
+                            <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-REGULAR.OTF#Myriad Pro" />
+                        </OnPlatform>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

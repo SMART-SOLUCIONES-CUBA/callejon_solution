@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Persistence.Entities;
-using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api;
+using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models;
 using SmartSolucionesCuba.SAPRESSC.Core.Persistence.Repositories;
 using System.Linq;
 
@@ -31,9 +31,9 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         }
 
         [HttpGet("eventcomment/client/{clientId}")]
-        public CommentDelationApiModel[] GetAllClientEventCommentDelations(System.Guid clientId)
+        public CommentDelationModel[] GetAllClientEventCommentDelations(System.Guid clientId)
         {
-            return eventCommentDelationRepository.FindBy(entity => entity.Client.Id == clientId && !entity.Revoked).Select(entity => new CommentDelationApiModel
+            return eventCommentDelationRepository.FindBy(entity => entity.Client.Id == clientId && !entity.Revoked).Select(entity => new CommentDelationModel
             {
                 Id = entity.Id,
                 Created = entity.Created,
@@ -46,9 +46,9 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
 
 
         [HttpGet("productioncomment/client/{clientId}")]
-        public CommentDelationApiModel[] GetAllClientProductionCommentDelations(System.Guid clientId)
+        public CommentDelationModel[] GetAllClientProductionCommentDelations(System.Guid clientId)
         {
-            return productionCommentDelationRepository.FindBy(entity => entity.Client.Id == clientId && !entity.Revoked).Select(entity => new CommentDelationApiModel
+            return productionCommentDelationRepository.FindBy(entity => entity.Client.Id == clientId && !entity.Revoked).Select(entity => new CommentDelationModel
             {
                 Id = entity.Id,
                 Created = entity.Created,
@@ -61,9 +61,9 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
 
 
         [HttpGet("personalitycomment/client/{clientId}")]
-        public CommentDelationApiModel[] GetAllClientPerosnalityCommentDelations(System.Guid clientId)
+        public CommentDelationModel[] GetAllClientPerosnalityCommentDelations(System.Guid clientId)
         {
-            return personalityCommentDelationRepository.FindBy(entity => entity.Client.Id == clientId && !entity.Revoked).Select(entity => new CommentDelationApiModel
+            return personalityCommentDelationRepository.FindBy(entity => entity.Client.Id == clientId && !entity.Revoked).Select(entity => new CommentDelationModel
             {
                 Id = entity.Id,
                 Created = entity.Created,
@@ -74,7 +74,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         }
 
         [HttpPut("eventcomment/{key}")]
-        public IActionResult AddEventCommentDelation(System.Guid key, [FromBody] CommentDelationInputApiModel model)
+        public IActionResult AddEventCommentDelation(System.Guid key, [FromBody] CommentDelationInputModel model)
         {
             try
             {
@@ -121,7 +121,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         }
 
         [HttpPut("personalitycomment/{key}")]
-        public IActionResult AddPersonalityCommentDelation(System.Guid key, [FromBody] CommentDelationInputApiModel model)
+        public IActionResult AddPersonalityCommentDelation(System.Guid key, [FromBody] CommentDelationInputModel model)
         {
             try
             {
@@ -168,7 +168,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         }
 
         [HttpPut("productioncomment/{key}")]
-        public IActionResult AddProductionCommentDelation(System.Guid key, [FromBody] CommentDelationInputApiModel model)
+        public IActionResult AddProductionCommentDelation(System.Guid key, [FromBody] CommentDelationInputModel model)
         {
             try
             {

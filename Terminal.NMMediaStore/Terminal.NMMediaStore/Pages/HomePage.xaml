@@ -1,0 +1,278 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<basepages:FetchOrderAudioVisualPresentBaseContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ffil="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:cvc="clr-namespace:CarouselView.FormsPlugin.Abstractions;assembly=CarouselView.FormsPlugin.Abstractions"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Converters"
+    xmlns:basepages="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages.Base"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages.HomePage"
+    NavigationPage.HasNavigationBar="False"
+    Style="{StaticResource BasePageStyle}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <sscxftoolkitpresentationconverters:NotNullToBooleanConverter x:Key="NotNullToBooleanConverter" />
+            <sscxftoolkitpresentationconverters:FractionConverter x:Key="FractionConverter" />
+            <sscxftoolkitpresentationconverters:FactorConverter x:Key="FactorConverter" />
+            <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonIconStringConverter" TrueString="&#xfd45;" FalseString="&#xf112;" />
+            <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonTextColorConverter" TrueString="IndianRed" FalseString="Black" />
+
+            <converters:CollectionToJoinedStringBindingConverter x:Key="CollectionToJoinedStringBindingConverter" />
+            <converters:ImageModelToImageSourceConverter x:Key="ImageModelToImageSourceConverter" />
+
+            <DataTemplate x:Key="AudioVisualWidthPlacardDataTemplate">
+                <StackLayout 
+                    WidthRequest="320"
+                    Margin="5,0,5,10">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="AudioVisualItem_Tapped" />
+                    </StackLayout.GestureRecognizers>
+                    <Grid>
+                        <ffil:CachedImage
+                            WidthRequest="320" HeightRequest="180"
+                            Source="{Binding Path=AudioVisual.PlacardImage, Converter={StaticResource ImageModelToImageSourceConverter}}"
+                            Aspect="AspectFill" />
+                        <Button
+                            Margin="8"
+                            VerticalOptions="Start" HorizontalOptions="End"
+                            Padding="0"
+                            BackgroundColor="#CCF2F2F2"
+                            Text="{Binding Path=IsMarkedForFetch, Converter={StaticResource FetchMarkToogleToButtonIconStringConverter}}"
+                            TextColor="{Binding Path=IsMarkedForFetch, Converter={StaticResource FetchMarkToogleToButtonTextColorConverter}}"
+                            FontSize="{StaticResource Header4FontSize}"
+                            CornerRadius="0"
+                            WidthRequest="{StaticResource DefaultIconSize}" HeightRequest="{StaticResource DefaultIconSize}"
+                            Clicked="AudioVisualItemFetchMarkToogleButton_Clicked">
+                            <Button.FontFamily>
+                                <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                    <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                </OnPlatform>
+                            </Button.FontFamily>
+                        </Button>
+                    </Grid>
+                    <Label 
+                        LineBreakMode="TailTruncation"
+                        Text="{Binding Path=AudioVisual.Genres, Converter={StaticResource CollectionToJoinedStringBindingConverter}}"
+                        TextColor="{StaticResource SecoundaryTextColor}" />
+                    <Label 
+                        LineBreakMode="TailTruncation"
+                        Text="{Binding Path=AudioVisual.Title}}"
+                        FontSize="{StaticResource Header4FontSize}" />
+                    <Label 
+                        LineBreakMode="TailTruncation"
+                        MaxLines="3"
+                        Text="{Binding Path=AudioVisual.About}"
+                        TextColor="{StaticResource SecoundaryTextColor}" />
+                </StackLayout>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ScrollView
+                Grid.RowSpan="3"
+                HorizontalScrollBarVisibility="Never">
+                <StackLayout Padding="0,56,0,48">
+                    <cvc:CarouselViewControl
+                        x:Name="AdvertisementsCarouselView"
+                        HeightRequest="{Binding Source={RelativeSource Mode=Self}, Path=Width, Converter={StaticResource FractionConverter}, ConverterParameter=3}"
+                        ItemsSource="{Binding Path=Advertisements}"
+                        ShowIndicators="True"
+                        ShowArrows="True"
+                        CurrentPageIndicatorTintColor="{StaticResource PrimaryAccentColor}">
+                        <cvc:CarouselViewControl.ItemTemplate>
+                            <DataTemplate>
+                                <ffil:CachedImage
+                                    Source="{Binding Path=PlacardImage, Converter={StaticResource ImageModelToImageSourceConverter}}"
+                                    Aspect="AspectFill" />
+                            </DataTemplate>
+                        </cvc:CarouselViewControl.ItemTemplate>
+                    </cvc:CarouselViewControl>
+                    <StackLayout 
+                        Padding="0,10,0,0"
+                        IsVisible="{Binding Path=PopularAudioVisuals, Converter={StaticResource NotNullToBooleanConverter}}">
+                        <StackLayout.Background>
+                            <LinearGradientBrush
+                                StartPoint="0,0"
+                                EndPoint="0,1">
+                                <GradientStop Color="{StaticResource DefaultBackgroundColor}" Offset="0.0" />
+                                <GradientStop Color="{StaticResource DarkBackgroundColor}" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </StackLayout.Background>
+                        <Label
+                            Margin="10,0"
+                            Text="Lo más popular"
+                            TextColor="{StaticResource SecoundaryTextColor}"
+                            FontSize="{StaticResource Header5FontSize}" />
+                        <ScrollView Orientation="Horizontal">
+                            <FlexLayout
+                                Padding="5,0"
+                                BindableLayout.ItemsSource="{Binding Path=PopularAudioVisuals}"
+                                BindableLayout.ItemTemplate="{StaticResource AudioVisualWidthPlacardDataTemplate}" />
+                        </ScrollView>
+                    </StackLayout>
+                    <StackLayout 
+                        Padding="0,10,0,0"
+                        IsVisible="{Binding Path=LastAudioVisuals, Converter={StaticResource NotNullToBooleanConverter}}">
+                        <StackLayout.Background>
+                            <LinearGradientBrush
+                                StartPoint="0,0"
+                                EndPoint="0,1">
+                                <GradientStop Color="{StaticResource DefaultBackgroundColor}" Offset="0.0" />
+                                <GradientStop Color="{StaticResource DarkBackgroundColor}" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </StackLayout.Background>
+                        <Label
+                            Margin="10,0"
+                            Text="Nuevas propuestas"
+                            TextColor="{StaticResource SecoundaryTextColor}"
+                            FontSize="{StaticResource Header5FontSize}" />
+                        <ScrollView Orientation="Horizontal">
+                            <FlexLayout
+                                Padding="5,0"
+                                BindableLayout.ItemsSource="{Binding Path=LastAudioVisuals}"
+                                BindableLayout.ItemTemplate="{StaticResource AudioVisualWidthPlacardDataTemplate}" />
+                        </ScrollView>
+                    </StackLayout>
+                    <StackLayout 
+                        Padding="0,10,0,0"
+                        IsVisible="{Binding Path=RecomendedAudioVisuals, Converter={StaticResource NotNullToBooleanConverter}}">
+                        <StackLayout.Background>
+                            <LinearGradientBrush
+                                StartPoint="0,0"
+                                EndPoint="0,1">
+                                <GradientStop Color="{StaticResource DefaultBackgroundColor}" Offset="0.0" />
+                                <GradientStop Color="{StaticResource DarkBackgroundColor}" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </StackLayout.Background>
+                        <Label
+                            Margin="10,0"
+                            Text="Recomendado para ti"
+                            TextColor="{StaticResource SecoundaryTextColor}"
+                            FontSize="{StaticResource Header5FontSize}" />
+                        <ScrollView Orientation="Horizontal">
+                            <FlexLayout
+                                Padding="5,0"
+                                BindableLayout.ItemsSource="{Binding Path=RecomendedAudioVisuals}"
+                                BindableLayout.ItemTemplate="{StaticResource AudioVisualWidthPlacardDataTemplate}" />
+                        </ScrollView>
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+            <Grid
+                Grid.Row="0"
+                BackgroundColor="#CC000000"
+                HeightRequest="56">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Column="1"
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    LineBreakMode="TailTruncation">
+                    <Label.FontFamily>
+                        <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Regular">
+                            <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-REGULAR.OTF#Myriad Pro" />
+                        </OnPlatform>
+                    </Label.FontFamily>
+                    <Label.FontSize>
+                        <OnPlatform x:TypeArguments="x:Double" Default="36"></OnPlatform>
+                    </Label.FontSize>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <FormattedString.Spans>
+                                <Span Text="Mediateca " TextColor="{StaticResource PrimaryTextColor}" />
+                                <Span Text="Nuevo Mundo" TextColor="{StaticResource SecoundaryTextColor}" />
+                            </FormattedString.Spans>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </Grid>
+            <Grid 
+                Grid.Row="2"
+                ColumnSpacing="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>                
+                <BoxView 
+                    Grid.Row="1" Grid.ColumnSpan="3"
+                    BackgroundColor="#CC000000"/>
+                <Button
+                    Grid.Row="1" Grid.Column="0"
+                    Text="Inicio"
+                    TextColor="{StaticResource PrimaryAccentColor}"
+                    Style="{StaticResource PivotButtonStyle}">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            Glyph="&#xf4dc;"
+                            Color="{StaticResource PrimaryAccentColor}">
+                            <FontImageSource.FontFamily>
+                                <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                    <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                </OnPlatform>
+                            </FontImageSource.FontFamily>
+                        </FontImageSource>
+                    </Button.ImageSource>
+                </Button>
+                <Button
+                    Grid.Row="1" Grid.Column="1"
+                    Text="Catálogo"
+                    TextColor="White"
+                    Style="{StaticResource PivotButtonStyle}"
+                    Clicked="LibraryPivotButton_Clicked">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            Glyph="&#xf638;"
+                            Color="White">
+                            <FontImageSource.FontFamily>
+                                <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                    <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                </OnPlatform>
+                            </FontImageSource.FontFamily>
+                        </FontImageSource>
+                    </Button.ImageSource>
+                </Button>
+                <Button
+                    Grid.Row="1" Grid.Column="2"
+                    Text="Buscar"
+                    TextColor="White"
+                    Style="{StaticResource PivotButtonStyle}"
+                    Clicked="SearchPivotButton_Clicked">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            Glyph="&#xf349;"
+                            Color="White">
+                            <FontImageSource.FontFamily>
+                                <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                    <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                </OnPlatform>
+                            </FontImageSource.FontFamily>
+                        </FontImageSource>
+                    </Button.ImageSource>
+                </Button>
+            </Grid>
+            <Grid
+                Grid.Row="1" Grid.RowSpan="2"
+                IsVisible="{Binding Path=IsBusy}"
+                BackgroundColor="#CC000000">
+                <ActivityIndicator 
+                    VerticalOptions="Center" HorizontalOptions="Center"
+                    HeightRequest="48" WidthRequest="48"
+                    IsRunning="True" />
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</basepages:FetchOrderAudioVisualPresentBaseContentPage>

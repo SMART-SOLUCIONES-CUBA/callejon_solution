@@ -208,7 +208,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
                             reportProgressAction.Invoke(0, true, "Enviando perfil ...");
                         });
 
-                        using (var content = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(new SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api.ClientApiModel
+                        using (var content = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(new SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.ClientModel
                         {
                             Id = profile.Id,
                             FirstName = profile.FirstName,
@@ -243,7 +243,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
                             {
                                 foreach (var current in newEventComments)
                                 {
-                                    using (var content = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(new SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api.CommentInputApiModel
+                                    using (var content = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(new SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.CommentInputModel
                                     {
                                         Id = current.Id,
                                         ClientId = current.Client.Id,
@@ -274,7 +274,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
                             {
                                 foreach (var current in newProductionComments)
                                 {
-                                    using (var content = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(new SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api.CommentInputApiModel
+                                    using (var content = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(new SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.CommentInputModel
                                     {
                                         Id = current.Id,
                                         ClientId = current.Client.Id,
@@ -305,7 +305,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
                             {
                                 foreach (var current in newPersonalityComments)
                                 {
-                                    using (var content = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(new SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api.CommentInputApiModel
+                                    using (var content = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(new SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.CommentInputModel
                                     {
                                         Id = current.Id,
                                         ClientId = current.Client.Id,
@@ -336,7 +336,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
 
                                 foreach (var delation in eventCommentDelations)
                                 {
-                                    using (var content = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(new SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api.CommentDelationInputApiModel
+                                    using (var content = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(new SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.CommentDelationInputModel
                                     {
                                         Id = delation.Id,
                                         Note = delation.Note,
@@ -355,7 +355,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
 
                                 foreach (var delation in productionCommentDelations)
                                 {
-                                    using (var content = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(new SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api.CommentDelationInputApiModel
+                                    using (var content = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(new SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.CommentDelationInputModel
                                     {
                                         Id = delation.Id,
                                         Note = delation.Note,
@@ -374,7 +374,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
 
                                 foreach (var delation in personalityCommentDelations)
                                 {
-                                    using (var content = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(new SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api.CommentDelationInputApiModel
+                                    using (var content = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(new SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.CommentDelationInputModel
                                     {
                                         Id = delation.Id,
                                         Note = delation.Note,
@@ -463,7 +463,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
 
                             response.EnsureSuccessStatusCode();
 
-                            var personalityCommentModels = Newtonsoft.Json.JsonConvert.DeserializeObject<SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api.PersonalityCommentApiModel[]>(await response.Content.ReadAsStringAsync());
+                            var personalityCommentModels = Newtonsoft.Json.JsonConvert.DeserializeObject<SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.PersonalityCommentModel[]>(await response.Content.ReadAsStringAsync());
 
                             foreach (var item in personalityCommentModels)
                             {
@@ -505,7 +505,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
 
                             response.EnsureSuccessStatusCode();
 
-                            var productionCommentModels = Newtonsoft.Json.JsonConvert.DeserializeObject<SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api.ProductionCommentApiModel[]>(await response.Content.ReadAsStringAsync());
+                            var productionCommentModels = Newtonsoft.Json.JsonConvert.DeserializeObject<SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.ProductionCommentModel[]>(await response.Content.ReadAsStringAsync());
 
                             foreach (var item in productionCommentModels)
                             {
@@ -547,7 +547,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
 
                             response.EnsureSuccessStatusCode();
 
-                            var eventCommentModels = Newtonsoft.Json.JsonConvert.DeserializeObject<SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api.EventCommentApiModel[]>(await response.Content.ReadAsStringAsync());
+                            var eventCommentModels = Newtonsoft.Json.JsonConvert.DeserializeObject<SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.EventCommentModel[]>(await response.Content.ReadAsStringAsync());
 
                             foreach (var item in eventCommentModels)
                             {
@@ -587,7 +587,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
 
                         response.EnsureSuccessStatusCode();
 
-                        var eventCommentDelations = Newtonsoft.Json.JsonConvert.DeserializeObject<SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api.CommentDelationApiModel[]>(await response.Content.ReadAsStringAsync());
+                        var eventCommentDelations = Newtonsoft.Json.JsonConvert.DeserializeObject<SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.CommentDelationModel[]>(await response.Content.ReadAsStringAsync());
 
                         foreach (var item in eventCommentDelations)
                         {
@@ -605,7 +605,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
 
                         response.EnsureSuccessStatusCode();
 
-                        var productionCommentDelations = Newtonsoft.Json.JsonConvert.DeserializeObject<SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api.CommentDelationApiModel[]>(await response.Content.ReadAsStringAsync());
+                        var productionCommentDelations = Newtonsoft.Json.JsonConvert.DeserializeObject<SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.CommentDelationModel[]>(await response.Content.ReadAsStringAsync());
 
                         foreach (var item in productionCommentDelations)
                         {
@@ -623,7 +623,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
 
                         response.EnsureSuccessStatusCode();
 
-                        var personalityCommentDelations = Newtonsoft.Json.JsonConvert.DeserializeObject<SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api.CommentDelationApiModel[]>(await response.Content.ReadAsStringAsync());
+                        var personalityCommentDelations = Newtonsoft.Json.JsonConvert.DeserializeObject<SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.CommentDelationModel[]>(await response.Content.ReadAsStringAsync());
 
                         foreach (var item in personalityCommentDelations)
                         {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api;
+using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models;
 using SmartSolucionesCuba.SAPRESSC.Core.Persistence.Repositories;
 using System.Collections.Generic;
 
@@ -18,15 +18,15 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         }
 
         [HttpGet]
-        public IEnumerable<AdviseApiModel> Get()
+        public IEnumerable<AdviseModel> Get()
         {
             var entities = repository.FindBy(entity => entity.Enabled);
 
-            var models = new List<AdviseApiModel>();
+            var models = new List<AdviseModel>();
 
             foreach (var item in entities)
             {
-                models.Add(Factories.Api.Models.AdviseApiModelFactory.BuildFor(item));
+                models.Add(Factories.Api.Models.AdviseModelFactory.BuildFor(item));
             }
 
             return models;

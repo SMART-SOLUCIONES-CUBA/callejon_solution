@@ -39,8 +39,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.UWP
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
-                Rg.Plugins.Popup.Popup.Init();
-
                 ImageCircle.Forms.Plugin.UWP.ImageCircleRenderer.Init();
 
                 Xamarin.Forms.Forms.Init(e);

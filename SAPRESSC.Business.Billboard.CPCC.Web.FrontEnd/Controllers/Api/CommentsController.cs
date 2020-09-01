@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Persistence.Entities;
-using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models.Api;
+using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.Models;
 using SmartSolucionesCuba.SAPRESSC.Core.Persistence.Repositories;
 using System.Linq;
 
@@ -34,17 +34,17 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         }
 
         [HttpGet("event/{eventId}")]
-        public EventCommentApiModel[] GetAllEventComments(System.Guid eventId)
+        public EventCommentModel[] GetAllEventComments(System.Guid eventId)
         {
             var startEdgeDate = System.DateTime.Now;
             var passYearEdgeDate = startEdgeDate.AddMonths(-11);
 
-            return eventCommentsRepository.FindBy(entity => !entity.Banish && entity.Syncronized && entity.Event.Id == eventId && entity.Created <= startEdgeDate && entity.Created >= passYearEdgeDate).OrderBy(entity => entity.Created).Select(entity => new EventCommentApiModel
+            return eventCommentsRepository.FindBy(entity => !entity.Banish && entity.Syncronized && entity.Event.Id == eventId && entity.Created <= startEdgeDate && entity.Created >= passYearEdgeDate).OrderBy(entity => entity.Created).Select(entity => new EventCommentModel
             {
                 Id = entity.Id,
                 Created = entity.Created,
                 Message = entity.Message,
-                Client = new ClientApiModel
+                Client = new ClientModel
                 {
                     Id = entity.Client.Id,
                     FirstName = entity.Client.FirstName,
@@ -62,7 +62,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         }
 
         [HttpPut("event/{key}")]
-        public IActionResult AddEventComment(System.Guid key, [FromBody] CommentInputApiModel model)
+        public IActionResult AddEventComment(System.Guid key, [FromBody] CommentInputModel model)
         {
             try
             {
@@ -98,17 +98,17 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         }
 
         [HttpGet("production/{productionId}")]
-        public ProductionCommentApiModel[] GetAllProductionComments(long productionId)
+        public ProductionCommentModel[] GetAllProductionComments(long productionId)
         {
             var startEdgeDate = System.DateTime.Now;
             var passYearEdgeDate = startEdgeDate.AddMonths(-11);
 
-            return productionCommentsRepository.FindBy(entity => !entity.Banish && entity.Syncronized && entity.Production.Id == productionId && entity.Created <= startEdgeDate && entity.Created >= passYearEdgeDate).OrderBy(entity => entity.Created).Select(entity => new ProductionCommentApiModel
+            return productionCommentsRepository.FindBy(entity => !entity.Banish && entity.Syncronized && entity.Production.Id == productionId && entity.Created <= startEdgeDate && entity.Created >= passYearEdgeDate).OrderBy(entity => entity.Created).Select(entity => new ProductionCommentModel
             {
                 Id = entity.Id,
                 Created = entity.Created,
                 Message = entity.Message,
-                Client = new ClientApiModel
+                Client = new ClientModel
                 {
                     Id = entity.Client.Id,
                     FirstName = entity.Client.FirstName,
@@ -126,7 +126,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         }
 
         [HttpPut("production/{key}")]
-        public IActionResult AddProductionComment(long key, [FromBody] CommentInputApiModel model)
+        public IActionResult AddProductionComment(long key, [FromBody] CommentInputModel model)
         {
             try
             {
@@ -162,17 +162,17 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         }
 
         [HttpGet("personality/{personalityId}")]
-        public PersonalityCommentApiModel[] GetAllPersonalityComments(long personalityId)
+        public PersonalityCommentModel[] GetAllPersonalityComments(long personalityId)
         {
             var startEdgeDate = System.DateTime.Now;
             var passYearEdgeDate = startEdgeDate.AddMonths(-11);
 
-            return personalityCommentsRepository.FindBy(entity => !entity.Banish && entity.Syncronized && entity.Personality.Id == personalityId && entity.Created <= startEdgeDate && entity.Created >= passYearEdgeDate).OrderBy(entity => entity.Created).Select(entity => new PersonalityCommentApiModel
+            return personalityCommentsRepository.FindBy(entity => !entity.Banish && entity.Syncronized && entity.Personality.Id == personalityId && entity.Created <= startEdgeDate && entity.Created >= passYearEdgeDate).OrderBy(entity => entity.Created).Select(entity => new PersonalityCommentModel
             {
                 Id = entity.Id,
                 Created = entity.Created,
                 Message = entity.Message,
-                Client = new ClientApiModel
+                Client = new ClientModel
                 {
                     Id = entity.Client.Id,
                     FirstName = entity.Client.FirstName,
@@ -190,7 +190,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         }
 
         [HttpPut("personality/{key}")]
-        public IActionResult AddPersonalityComment(long key, [FromBody] CommentInputApiModel model)
+        public IActionResult AddPersonalityComment(long key, [FromBody] CommentInputModel model)
         {
             try
             {

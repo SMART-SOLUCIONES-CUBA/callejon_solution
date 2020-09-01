@@ -5,6 +5,10 @@
         public Collection()
         {
             Id = System.Guid.NewGuid();
+            Productions = new System.Collections.Generic.List<Production>();
+            GenreBridges = new System.Collections.Generic.List<CollectionGenreBridge>();
+            TagBridges = new System.Collections.Generic.List<CollectionTagBridge>();
+            ProducerHouseBridges = new System.Collections.Generic.List<CollectionProducerHouseBridge>();
         }
 
         [System.ComponentModel.DataAnnotations.Key]
@@ -12,6 +16,8 @@
 
         [System.ComponentModel.DataAnnotations.Required]
         public string Name { get; set; }
+
+        public Clasification Clasification { get; set; }
 
         public Middleware.Media.Persistence.Entities.Image PosterImage { get; set; }
 
@@ -29,6 +35,14 @@
 
         [System.ComponentModel.DataAnnotations.Required]
         public string About { get; set; }
+
+        public System.Collections.Generic.List<Production> Productions { get; set; }
+
+        public System.Collections.Generic.List<CollectionGenreBridge> GenreBridges { get; set; }
+
+        public System.Collections.Generic.List<CollectionTagBridge> TagBridges { get; set; }
+
+        public System.Collections.Generic.List<CollectionProducerHouseBridge> ProducerHouseBridges { get; set; }
 
         public virtual string GetTreeName()
         {
