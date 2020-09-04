@@ -78,18 +78,29 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
         private void FetchMarkToogleButton_Clicked(object sender, System.EventArgs eventArgs)
         {
-            if (BindingContextModel.IsMarkedForFetch)
+            try
             {
-                Xamarin.Forms.Application.Current.RemoveAudioVisualForFetch(BindingContextModel.AudioVisual);
+                if (BindingContextModel.IsMarkedForFetch)
+                {
+                    Xamarin.Forms.Application.Current.RemoveAudioVisualForFetch(BindingContextModel.AudioVisual);
+                }
+                else
+                {
+                    Xamarin.Forms.Application.Current.AddAudioVisualForFetch(BindingContextModel.AudioVisual);
+                }
+
+                BindingContextModel.IsMarkedForFetch = !BindingContextModel.IsMarkedForFetch;
+
+                navigationParent.OnAudioViualFetchMarkToogle(BindingContextModel.AudioVisual);
             }
-            else
+            catch (System.InvalidOperationException)
             {
-                Xamarin.Forms.Application.Current.AddAudioVisualForFetch(BindingContextModel.AudioVisual);
+                DisplayAlert("Aviso", "Espacio de almacenamiento disponible en su dispositivo no será suficiente para descargar este audio visual.", "Aceptar");
             }
-
-            BindingContextModel.IsMarkedForFetch = !BindingContextModel.IsMarkedForFetch;
-
-            navigationParent.OnAudioViualFetchMarkToogle(BindingContextModel.AudioVisual);
+            catch
+            {
+                // TODO Handle unespected exception!
+            }
         }
     }
 }

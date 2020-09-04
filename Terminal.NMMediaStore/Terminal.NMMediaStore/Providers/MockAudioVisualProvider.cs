@@ -74,7 +74,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Providers
                     Title = "After Earth",
                     Year = 2018,
                     Duration = new System.TimeSpan(2, 33, 0),
-                    FileSize = 880640,
+                    FileSize = 1677721600,
                     Resolution = "1920x1080",
                     Quality = SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.FHD,
                     Format = "MKV",
@@ -120,7 +120,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Providers
                     Title = "SuperMan: Man in Steel",
                     Year = 2018,
                     Duration = new System.TimeSpan(2, 33, 0),
-                    FileSize = 880640,
+                    FileSize = 1677721600,
                     Resolution = "1920x1080",
                     Quality = SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.FHD,
                     Format = "MKV",
@@ -170,7 +170,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Providers
                     Title = "Iron Man 3",
                     Year = 2018,
                     Duration = new System.TimeSpan(2, 33, 0),
-                    FileSize = 880640,
+                    FileSize = 1677721600,
                     Resolution = "1920x1080",
                     Quality = SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.FHD,
                     Format = "MKV",
@@ -216,7 +216,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Providers
                     Title = "Batman: The Dark Knight Rises",
                     Year = 2018,
                     Duration = new System.TimeSpan(2, 33, 0),
-                    FileSize = 880640,
+                    FileSize = 1677721600,
                     Resolution = "1920x1080",
                     Quality = SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.FHD,
                     Format = "MKV",
@@ -267,7 +267,53 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Providers
                     Title = "Sin Escape",
                     Year = 2018,
                     Duration = new System.TimeSpan(2, 33, 0),
-                    FileSize = 880640,
+                    FileSize = 1677721600,
+                    Resolution = "1920x1080",
+                    Quality = SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.FHD,
+                    Format = "MKV",
+                    Language = new LanguageModel
+                    {
+                        Id = 2,
+                        Name = "Inglés"
+                    },
+                    Country = new CountryModel { Id = 1, Name = "Estados Unidos" },
+                    PosterImage = new ImageModel
+                    {
+                        Id = new System.Guid("361FC194-FD80-4EA4-B6A4-85EDF079980D"),
+                        ContentType = "image/png"
+                    },
+                    PlacardImage = new ImageModel
+                    {
+                        Id = new System.Guid("FD67E511-520E-4344-849E-B9C273A9A50E"),
+                        ContentType = "image/jpeg"
+                    },
+                    About = "Marina (Daniela Vega) una joven camarera aspirante a cantante y Orlando (Francisco Reyes), veinte años mayor, planean un futuro juntos. Tras una noche de fiesta, Marina lo lleva a urgencias, pero él muere al llegar al hospital.",
+                    Genres = new GenreModel[]
+                    {
+                        new GenreModel
+                        {
+                            Id = 1,
+                            Name = "Acción"
+                        },
+                        new GenreModel
+                        {
+                            Id = 2,
+                            Name = "Aventura"
+                        },
+                        new GenreModel
+                        {
+                            Id = 5,
+                            Name = "Ciencia Ficción"
+                        },
+                    }
+                },
+                new AudioVisualModel
+                {
+                    Id = 6,
+                    Title = "Esta si que tiene un titulo grando para saber que pasa",
+                    Year = 2018,
+                    Duration = new System.TimeSpan(2, 33, 0),
+                    FileSize = 1677721600,
                     Resolution = "1920x1080",
                     Quality = SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.FHD,
                     Format = "MKV",

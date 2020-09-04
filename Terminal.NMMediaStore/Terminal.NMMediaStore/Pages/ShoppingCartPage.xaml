@@ -4,22 +4,50 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mg="clr-namespace:MagicGradients;assembly=MagicGradients"
     xmlns:ic="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
     xmlns:ffil="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
     xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Converters"
+    xmlns:views="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Views"
     mc:Ignorable="d"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages.ShoppingCartPage"
+    x:Name="Page"
     Style="{StaticResource BasePageStyle}">
     <ContentPage.Resources>
         <ResourceDictionary>
+            <converters:CurrentStorageUsedBoxWidthConverter x:Key="CurrentStorageUsedBoxWidthConverter" Page="{x:Reference Page}" />
+            <converters:VirtualStorageUsedBoxWidthConverter x:Key="VirtualStorageUsedBoxWidthConverter" Page="{x:Reference Page}" />
             <converters:ImageModelToImageSourceConverter x:Key="ImageModelToImageSourceConverter" />
+            <converters:AudioVisualEnumerationToStorageSpaceConverter x:Key="AudioVisualEnumerationToStorageSpaceConverter" />
+            <converters:MasterPageModelToVirtualStorageUsedSpaceConverter x:Key="MasterPageModelToVirtualStorageUsedSpaceConverter" />
+            <converters:CollectionToJoinedStringBindingConverter x:Key="CollectionToJoinedStringBindingConverter" />
 
             <sscxftoolkitpresentationconverters:FileSizeLongToStringConverter x:Key="FileSizeLongToStringConverter" />
+            <sscxftoolkitpresentationconverters:IfNullOrEmptyToStringConverter x:Key="StorageCaptionIfNullOrEmptyToStringConverter" StringReplacement="Seleccione Almacenamiento" />
+            <sscxftoolkitpresentationconverters:EnumerationToCountConverter x:Key="EnumerationToCountConverter" />
+
+            <x:Double x:Key="TargetStorageSpaceBoxViewHeight">12</x:Double>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
-        <StackLayout>
+        <Grid RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <mg:GradientView Grid.RowSpan="3">
+                <mg:GradientView.GradientSource>
+                    <mg:CssGradientSource>
+                        <x:String>
+                            <![CDATA[
+                                radial-gradient(circle at left bottom, #555555 0%,#555555 6%,#535353 6%,#535353 15%,#525252 15%,#525252 47%,#515151 47%,#515151 54%,#4f4f4f 54%,#4f4f4f 56%,#4d4d4d 56%,#4d4d4d 90%,#4c4c4c 90%,#4c4c4c 100%)
+                            ]]>
+                        </x:String>
+                    </mg:CssGradientSource>
+                </mg:GradientView.GradientSource>
+            </mg:GradientView>
             <StackLayout
                 Grid.Row="0"
                 BackgroundColor="#CC000000"
@@ -45,21 +73,24 @@
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
-                <Label
-                    HorizontalOptions="Center"
-                    Text="Carro de Compras"
-                    TextColor="{StaticResource PrimaryAccentColor}"
-                    FontSize="{StaticResource Header3FontSize}">
-                    <Label.FontFamily>
-                        <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Italic">
-                            <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-IT.OTF#Myriad Pro" />
-                        </OnPlatform>
-                    </Label.FontFamily>
-                </Label>
             </StackLayout>
+            <Label
+                Grid.Row="1"
+                HorizontalTextAlignment="Center"
+                Padding="0,3,0,4"
+                BackgroundColor="{StaticResource DarkBackgroundColor}"
+                Text="Carro de Compras"
+                TextColor="{StaticResource PrimaryAccentColor}"
+                FontSize="{StaticResource Header3FontSize}">
+                <Label.FontFamily>
+                    <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Italic">
+                        <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-IT.OTF#Myriad Pro" />
+                    </OnPlatform>
+                </Label.FontFamily>
+            </Label>
             <Grid 
-                VerticalOptions="FillAndExpand"
-                Padding="12"
+                Grid.Row="2"                
+                Padding="12,12,12,0"
                 ColumnSpacing="12" RowSpacing="12">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -68,16 +99,18 @@
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <StackLayout
-                    Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0">
+                    Grid.ColumnSpan="2" Grid.Row="0">
                     <Label
                         Text="Cliente"
                         TextColor="{StaticResource SecoundaryTextColor}" />
                     <Grid 
-                        Margin="20"
+                        Margin="16"
                         ColumnSpacing="12"
                         RowSpacing="0">
                         <Grid.ColumnDefinitions>
@@ -123,8 +156,185 @@
                         </Label>
                     </Grid>
                 </StackLayout>
+                <StackLayout
+                    Grid.ColumnSpan="2" Grid.Row="1">
+                    <Label
+                        Text="Resumen"
+                        TextColor="{StaticResource SecoundaryTextColor}" />
+                    <Grid Margin="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Label
+                            Grid.Column="0" Grid.Row="0"
+                            Text="Cantidad de Audio Visuales a descargar"/>
+                        <Label
+                            x:Name="FetchOrderAudioVisualSummaryCountLabel"
+                            Grid.Column="0" Grid.Row="0"
+                            HorizontalTextAlignment="End"
+                            Text="{Binding Path=FetchOrderAudioVisuals, Converter={StaticResource EnumerationToCountConverter}}"
+                            TextColor="{StaticResource SecoundaryAccentColor}" />
+                        <Label
+                            Grid.Column="0" Grid.Row="1"
+                            Text="Espacio de almacenamiento necesario"/>
+                        <Label
+                            Grid.Column="0" Grid.Row="1"
+                            HorizontalTextAlignment="End"
+                            Text="{Binding Path=FetchOrderAudioVisuals, Converter={StaticResource AudioVisualEnumerationToStorageSpaceConverter}}"
+                            TextColor="{StaticResource SecoundaryAccentColor}" />
+                    </Grid>
+                </StackLayout>
+                <StackLayout Grid.ColumnSpan="2" Grid.Row="2">
+                    <Label
+                        Text="Destino"
+                        TextColor="{StaticResource SecoundaryTextColor}" />
+                    <Grid 
+                        Margin="16,16,32,0"
+                        ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Label
+                            Grid.Column="0" Grid.RowSpan="3"
+                            VerticalOptions="Center"
+                            Margin="6,0"
+                            Text="ANTES"
+                            TextColor="{StaticResource SecoundaryTextColor}"
+                            Rotation="-90" />
+                        <Label
+                            Grid.Column="1" Grid.RowSpan="3"
+                            VerticalOptions="Center"
+                            Text="{Binding Path=Target.FamilyRepresentativeIconGlyph}"
+                            TextColor="White"
+                            FontSize="{StaticResource LargeIconSize}">
+                            <Label.FontFamily>
+                                <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                    <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                </OnPlatform>
+                            </Label.FontFamily>
+                        </Label>
+                        <Label
+                            Grid.Column="2" Grid.Row="0"
+                            LineBreakMode="TailTruncation"
+                            Text="{Binding Path=Target.Storage.Caption, Converter={StaticResource StorageCaptionIfNullOrEmptyToStringConverter}}"
+                            TextColor="White"
+                            FontSize="{StaticResource Header3FontSize}">
+                            <Label.FontFamily>
+                                <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed">
+                                    <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-COND.OTF#Myriad Pro" />
+                                </OnPlatform>
+                            </Label.FontFamily>
+                        </Label>
+                        <BoxView
+                            x:Name="TargetStorageCurrentTotalSpaceBoxView"
+                            Grid.Column="2" Grid.Row="1"
+                            BackgroundColor="White"
+                            HeightRequest="{StaticResource TargetStorageSpaceBoxViewHeight}" />
+                        <BoxView
+                            Grid.Column="2" Grid.Row="1"
+                            BackgroundColor="{StaticResource SecoundaryDarkActionColor}"
+                            HeightRequest="{StaticResource TargetStorageSpaceBoxViewHeight}"
+                            WidthRequest="{Binding Source={x:Reference TargetStorageCurrentTotalSpaceBoxView}, Path=Width, Converter={StaticResource CurrentStorageUsedBoxWidthConverter}}"
+                            HorizontalOptions="Start" />
+                        <Label
+                            Grid.Column="2" Grid.Row="2"
+                            Margin="0,0,0,10">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding Path=Target.Storage.UsedSpace, Converter={StaticResource FileSizeLongToStringConverter}}" />
+                                    <Span Text="  usados de " TextColor="{StaticResource SecoundaryTextColor}" />
+                                    <Span Text="{Binding Path=Target.Storage.TotalSpace, Converter={StaticResource FileSizeLongToStringConverter}}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </Grid>
+                    <BoxView 
+                        Margin="14,4"
+                        Color="{StaticResource AlternativeBackgroundColor}"
+                        HeightRequest="1" />
+                    <Grid 
+                        Margin="16,0,32,16"
+                        ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Label
+                            VerticalOptions="Center"
+                            Grid.Column="0" Grid.RowSpan="3"
+                            Text="DESPUES"
+                            TextColor="{StaticResource SecoundaryTextColor}"
+                            Rotation="-90" />
+                        <Label
+                            Grid.Column="1" Grid.RowSpan="3"
+                            VerticalOptions="Center"
+                            Text="{Binding Path=Target.FamilyRepresentativeIconGlyph}"
+                            TextColor="White"
+                            FontSize="{StaticResource LargeIconSize}">
+                            <Label.FontFamily>
+                                <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
+                                    <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
+                                </OnPlatform>
+                            </Label.FontFamily>
+                        </Label>
+                        <Label
+                            Grid.Column="2" Grid.Row="0"
+                            LineBreakMode="TailTruncation"
+                            Text="{Binding Path=Target.Storage.Caption, Converter={StaticResource StorageCaptionIfNullOrEmptyToStringConverter}}"
+                            TextColor="White"
+                            FontSize="{StaticResource Header3FontSize}">
+                            <Label.FontFamily>
+                                <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed">
+                                    <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-COND.OTF#Myriad Pro" />
+                                </OnPlatform>
+                            </Label.FontFamily>
+                        </Label>
+                        <views:StorageSpaceReferenceBoxView
+                            x:Name="TargetStorageVirtualTotalSpaceBoxView"
+                            Grid.Column="2" Grid.Row="1"
+                            BackgroundColor="White"
+                            HeightRequest="{StaticResource TargetStorageSpaceBoxViewHeight}" />
+                        <BoxView
+                            Grid.Column="2" Grid.Row="1"
+                            BackgroundColor="{StaticResource PrimaryDarkActionColor}"
+                            HeightRequest="{StaticResource TargetStorageSpaceBoxViewHeight}"
+                            WidthRequest="{Binding Source={x:Reference TargetStorageVirtualTotalSpaceBoxView}, Path=Width, Converter={StaticResource VirtualStorageUsedBoxWidthConverter}}"
+                            HorizontalOptions="Start" />
+                        <Label
+                            Grid.Column="2" Grid.Row="2"
+                            Margin="0,0,0,10">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding Converter={StaticResource MasterPageModelToVirtualStorageUsedSpaceConverter}}" />
+                                    <Span Text="  usados de " TextColor="{StaticResource SecoundaryTextColor}" />
+                                    <Span Text="{Binding Path=Target.Storage.TotalSpace, Converter={StaticResource FileSizeLongToStringConverter}}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </Grid>
+                </StackLayout>
                 <Button
-                    Grid.Row="2" Grid.Column="0"
+                    Grid.Row="4" Grid.Column="0"
+                    Margin="0,0,0,12"
                     BackgroundColor="{StaticResource SecoundaryDarkActionColor}"
                     ContentLayout="Left,10"
                     Text="Agregar Más"
@@ -141,7 +351,8 @@
                     </Button.ImageSource>
                 </Button>
                 <Button
-                    Grid.Row="2" Grid.Column="1"
+                    Grid.Row="4" Grid.Column="1"
+                    Margin="0,0,0,12"
                     BackgroundColor="{StaticResource PrimaryActionColor}"
                     ContentLayout="Left,10"
                     Text="Completar"
@@ -158,14 +369,20 @@
                         </FontImageSource>
                     </Button.ImageSource>
                 </Button>
-                <StackLayout
-                    Grid.Column="2" Grid.RowSpan="3">
+                <StackLayout 
+                    Grid.Column="2" Grid.RowSpan="5"
+                    Spacing="0">
                     <Label
                         Text="Listado de Descargas"
                         TextColor="{StaticResource SecoundaryTextColor}" />
-                    <ScrollView
-                        VerticalOptions="FillAndExpand">
-                        <StackLayout 
+                    <BoxView 
+                        Margin="0,6,0,0"
+                        Color="{StaticResource AlternativeBackgroundColor}"
+                        HeightRequest="1" />
+                    <ScrollView VerticalOptions="FillAndExpand">
+                        <StackLayout
+                            Margin="0,6,0,6"
+                            Spacing="0"
                             BindableLayout.ItemsSource="{Binding Path=FetchOrderAudioVisuals}">
                             <BindableLayout.EmptyView>
                                 <Label
@@ -174,11 +391,9 @@
                             </BindableLayout.EmptyView>
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid 
-                                        BackgroundColor="#AAF2F2F2" 
-                                        HeightRequest="150">
+                                    <Grid Margin="0,6,6,6">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="100" />
+                                            <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="Auto" />
@@ -186,38 +401,49 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
                                             <RowDefinition />
                                             <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
-                                        <ffil:CachedImage 
-                                            Grid.Column="0" Grid.RowSpan="2"
-                                            Aspect="AspectFill"
-                                            Source="{Binding Path=PosterImage, Converter={StaticResource ImageModelToImageSourceConverter}}"
-                                            DownsampleHeight="150"
-                                            DownsampleUseDipUnits="True"
-                                            CacheType="All"
-                                            CacheDuration="8760:00:00" />
+                                        <ffil:CachedImage
+                                            Grid.Column="0" Grid.RowSpan="4"
+                                            WidthRequest="320" HeightRequest="180"
+                                            Source="{Binding Path=PlacardImage, Converter={StaticResource ImageModelToImageSourceConverter}}"
+                                            Aspect="AspectFill" />
                                         <Label 
                                             Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4"
-                                            Margin="0,4,0,0"
                                             LineBreakMode="TailTruncation"
                                             MaxLines="2"
                                             Text="{Binding Path=Title}"
-                                            TextColor="{StaticResource DarkBackgroundColor}"
-                                            FontSize="{StaticResource Header4FontSize}">
+                                            FontSize="{StaticResource Header4FontSize}" />
+                                        <Label 
+                                            Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4"
+                                            LineBreakMode="TailTruncation"
+                                            Text="{Binding Path=Genres, Converter={StaticResource CollectionToJoinedStringBindingConverter}}"
+                                            TextColor="{StaticResource SecoundaryAccentColor}"
+                                            FontSize="{StaticResource Header5FontSize}">
                                             <Label.FontFamily>
-                                                <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed">
-                                                    <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-COND.OTF#Myriad Pro" />
+                                                <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed Italic">
+                                                    <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-CONDIT.OTF#Myriad Pro" />
                                                 </OnPlatform>
                                             </Label.FontFamily>
                                         </Label>
+                                        <Label 
+                                            Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4"
+                                            LineBreakMode="TailTruncation"
+                                            MaxLines="3"
+                                            Text="{Binding Path=About}"
+                                            TextColor="{StaticResource SecoundaryTextColor}" />
                                         <Button
                                             Grid.RowSpan="2" Grid.Column="5"
                                             VerticalOptions="Start"
-                                            Padding="2,4"
-                                            Text="&#xf1d9;"
-                                            TextColor="{StaticResource PrimaryDarkActionColor}"
-                                            FontSize="{StaticResource SmallIconSize}">
+                                            Padding="4"
+                                            BackgroundColor="Transparent"
+                                            Text="&#xfd45;"
+                                            TextColor="Red"
+                                            FontSize="{StaticResource SmallIconSize}"
+                                            Clicked="FetchOrderAudioVisualItemRemoveButton_Clicked">
                                             <Button.FontFamily>
                                                 <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
                                                     <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
@@ -225,24 +451,27 @@
                                             </Button.FontFamily>
                                         </Button>
                                         <Label 
-                                            Grid.Row="1" Grid.Column="1"
+                                            Grid.Row="3" Grid.Column="1"
                                             Margin="0,0,0,6"
-                                            BackgroundColor="{StaticResource DarkBackgroundColor}"
+                                            BackgroundColor="White"
                                             Padding="6,4"
-                                            Text="{Binding Path=Quality}"/>
+                                            Text="{Binding Path=Quality}"
+                                            TextColor="{StaticResource DarkBackgroundColor}" />
                                         <Label 
-                                            Grid.Row="1" Grid.Column="2"
+                                            Grid.Row="3" Grid.Column="2"
                                             Margin="0,0,0,6"
-                                            BackgroundColor="{StaticResource DarkBackgroundColor}"
+                                            BackgroundColor="White"
                                             Padding="6,4"
-                                            Text="{Binding Path=FileSize, Converter={StaticResource FileSizeLongToStringConverter}}"/>
+                                            Text="{Binding Path=FileSize, Converter={StaticResource FileSizeLongToStringConverter}}"
+                                            TextColor="{StaticResource DarkBackgroundColor}" />
                                         <Label 
+                                            Grid.Row="3" Grid.Column="3"
                                             IsVisible="{Binding Path=HasSubtitle}"
                                             Margin="0,0,0,6"
-                                            Grid.Row="1" Grid.Column="3"
-                                            BackgroundColor="{StaticResource DarkBackgroundColor}"
+                                            BackgroundColor="White"
                                             Padding="6,4,7,4"
-                                            Text="+SUB"/>
+                                            Text="+SUB"
+                                            TextColor="{StaticResource DarkBackgroundColor}" />
                                     </Grid>
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>
@@ -250,6 +479,6 @@
                     </ScrollView>
                 </StackLayout>
             </Grid>
-        </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

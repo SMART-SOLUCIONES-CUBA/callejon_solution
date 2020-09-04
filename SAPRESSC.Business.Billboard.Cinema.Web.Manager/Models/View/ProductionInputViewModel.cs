@@ -126,8 +126,8 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Mod
             PlacardImageId = entity.PlacardImage?.Id ?? System.Guid.Empty;
             TrailerVideoId = entity.TrailerVideo != null ? entity.TrailerVideo.Id : System.Guid.Empty;
             TrailerVideoExtension = entity.TrailerVideo != null ? entity.TrailerVideo.Extension : string.Empty;
-            CollectionId = entity.CollectionId;
-            CategoryId = entity.CategoryId;
+            CollectionId = entity.CollectionId ?? System.Guid.Empty;
+            CategoryId = entity.CategoryId ?? System.Guid.Empty;
         }
 
         public void Mergue(Production entity)
@@ -140,14 +140,42 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Mod
             entity.Argument = Argument;
             entity.Rate = Rate;
 
-            if (entity.CollectionId != CollectionId)
+            if (entity.CategoryId == null)
             {
-                entity.CollectionId = CollectionId;
+                if (CategoryId != System.Guid.Empty)
+                {
+                    entity.CategoryId = CategoryId;
+                }
+            }
+            else
+            {
+                if (CategoryId != System.Guid.Empty && entity.CategoryId.Value != CategoryId)
+                {
+                    entity.CategoryId = CategoryId;
+                }
+                else
+                {
+                    entity.CategoryId = null;
+                }
             }
 
-            if (entity.CategoryId != CategoryId)
+            if (entity.CollectionId == null)
             {
-                entity.CategoryId = CategoryId;
+                if (CollectionId != System.Guid.Empty)
+                {
+                    entity.CollectionId = CollectionId;
+                }
+            }
+            else
+            {
+                if (CollectionId != System.Guid.Empty && entity.CollectionId.Value != CollectionId)
+                {
+                    entity.CollectionId = CollectionId;
+                }
+                else
+                {
+                    entity.CollectionId = null;
+                }
             }
         }
     }

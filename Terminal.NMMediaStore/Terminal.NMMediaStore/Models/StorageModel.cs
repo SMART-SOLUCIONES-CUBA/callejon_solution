@@ -6,9 +6,9 @@
 
         public Enumerations.StorageFamiliy Family { get; set; }
 
-        public double UsedSpace { get; set; }
+        public long UsedSpace { get; set; }
 
-        public double TotalSpace { get; set; }
+        public long TotalSpace { get; set; }
 
         public string Path { get; set; }
     }

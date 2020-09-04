@@ -49,12 +49,12 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Ent
         [System.ComponentModel.DataAnnotations.Schema.ForeignKey("CategoryId")]
         public Category Category { get; set; }
 
-        public System.Guid CategoryId { get; set; }
+        public System.Guid? CategoryId { get; set; }
 
         [System.ComponentModel.DataAnnotations.Schema.ForeignKey("CollectionId")]
         public Collection Collection { get; set; }
 
-        public System.Guid CollectionId { get; set; }
+        public System.Guid? CollectionId { get; set; }
 
         public ICollection<ProductionTagBridge> TagBridges { get; set; }
 

@@ -104,18 +104,29 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
         private void AudioVisualItemFetchMarkToogleButton_Clicked(object sender, System.EventArgs eventArgs)
         {
-            var model = (sender as Xamarin.Forms.BindableObject).BindingContext as Models.View.AudioVisualViewModel;
-
-            if (model.IsMarkedForFetch)
+            try
             {
-                Xamarin.Forms.Application.Current.RemoveAudioVisualForFetch(model.AudioVisual);
-            }
-            else
-            {
-                Xamarin.Forms.Application.Current.AddAudioVisualForFetch(model.AudioVisual);
-            }
+                var model = (sender as Xamarin.Forms.BindableObject).BindingContext as Models.View.AudioVisualViewModel;
 
-            OnAudioViualFetchMarkToogle(model.AudioVisual);
+                if (model.IsMarkedForFetch)
+                {
+                    Xamarin.Forms.Application.Current.RemoveAudioVisualForFetch(model.AudioVisual);
+                }
+                else
+                {
+                    Xamarin.Forms.Application.Current.AddAudioVisualForFetch(model.AudioVisual);
+                }
+
+                OnAudioViualFetchMarkToogle(model.AudioVisual);
+            }
+            catch (System.InvalidOperationException)
+            {
+                DisplayAlert("Aviso", "Espacio de almacenamiento disponible en su dispositivo no será suficiente para descargar este audio visual.", "Aceptar");
+            }
+            catch
+            {
+                // TODO Handle unespected exception!
+            }
         }
 
         public override void OnAudioViualFetchMarkToogle(SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.AudioVisualModel target)

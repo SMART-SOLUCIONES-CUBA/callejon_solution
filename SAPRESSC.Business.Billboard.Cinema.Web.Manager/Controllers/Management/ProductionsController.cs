@@ -632,16 +632,16 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
         {
             base.PopulateViewModelDisplayExtras(modelDisplay, entity);
 
-            if (entity.CategoryId != System.Guid.Empty)
+            if (entity.CategoryId != null && entity.CategoryId.Value != System.Guid.Empty)
             {
-                var category = categoryRepository.Get(entity.CategoryId);
+                var category = categoryRepository.Get(entity.CategoryId.Value);
 
                 modelDisplay.Category = category.GetTreeName();
             }
 
-            if (entity.CollectionId != System.Guid.Empty)
+            if (entity.CollectionId != null && entity.CollectionId.Value != System.Guid.Empty)
             {
-                var collection = collectionRepository.Get(entity.CollectionId);
+                var collection = collectionRepository.Get(entity.CollectionId.Value);
 
                 modelDisplay.Collection = collection.GetTreeName();
             }

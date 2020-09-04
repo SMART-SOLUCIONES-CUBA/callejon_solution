@@ -673,11 +673,11 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
 
                     b.Property<string>("Argument");
 
-                    b.Property<Guid>("CategoryId");
+                    b.Property<Guid?>("CategoryId");
 
                     b.Property<int>("ClasificationId");
 
-                    b.Property<Guid>("CollectionId");
+                    b.Property<Guid?>("CollectionId");
 
                     b.Property<int>("CountryId");
 
@@ -1726,8 +1726,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
                 {
                     b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CategoryId");
 
                     b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Clasification", "Clasification")
                         .WithMany()
@@ -1736,8 +1735,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
 
                     b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Collection", "Collection")
                         .WithMany("Productions")
-                        .HasForeignKey("CollectionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CollectionId");
 
                     b.HasOne("SmartSolucionesCuba.SAPRESSC.Middleware.Region.Persistence.Entities.Country", "Country")
                         .WithMany()

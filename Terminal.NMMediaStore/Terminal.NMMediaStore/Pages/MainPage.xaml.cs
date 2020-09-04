@@ -50,14 +50,15 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                         LastName = subscriptor.LastName,
                         Image = subscriptor.Subscription.Image
                     },
-                    TargetStorage = new Models.View.StorageViewModel
+                    Target = new Models.View.StorageViewModel
                     {
-                        Caption = storage?.Caption ?? "Seleccione Almacenamiento",
+                        Storage = storage,
                         FamilyRepresentativeIconGlyph = storage?.Family.ToFamilyRepresentativeIconGlyph() ?? "\uf028",
-                        CurrentUsedPercentFactor = storage?.UsedSpace / storage?.TotalSpace ?? 0.00d,
-                        VirtualUsedPercentFactor = storage?.UsedSpace / storage?.TotalSpace + 0.12d ?? 0.00d
+                        CurrentUsedPercentFactor = storage?.UsedSpace / storage?.TotalSpace ?? 0.00d
                     }
                 };
+
+                (Master as MasterPage).InvalidateTargetStorageState();
 
                 PivotToHomePage();
 

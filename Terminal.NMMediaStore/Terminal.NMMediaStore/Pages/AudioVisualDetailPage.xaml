@@ -22,8 +22,8 @@
 
             <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonIconStringConverter" TrueString="&#xfd45;" FalseString="&#xf112;" />
             <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonTextStringConverter" TrueString="Quitar" FalseString="Agergar" />
-            <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonTextColorConverter" TrueString="IndianRed" FalseString="Black" />
-            <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonBackgroundColorConverter" TrueString="Snow" FalseString="{StaticResource PrimaryActionColor}" />
+            <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonTextColorConverter" TrueString="White" FalseString="Black" />
+            <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonBackgroundColorConverter" TrueString="IndianRed" FalseString="{StaticResource PrimaryActionColor}" />
             <sscxftoolkitpresentationconverters:FileSizeLongToStringConverter x:Key="FileSizeLongToStringConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>

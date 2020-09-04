@@ -3,7 +3,7 @@
     public class MasterPageModel : XFToolKit.Mvvm.Models.Page.BasePageModel
     {
         private View.SubscriptorViewModel subscriptor;
-        private View.StorageViewModel targetStorage;
+        private View.StorageViewModel target;
 
         public MasterPageModel()
         {
@@ -12,8 +12,13 @@
 
         public View.SubscriptorViewModel Subscriptor { get => subscriptor; set => SetProperty(ref subscriptor, value); }
 
-        public View.StorageViewModel TargetStorage { get => targetStorage; set => SetProperty(ref targetStorage, value); }
+        public View.StorageViewModel Target { get => target; set => SetProperty(ref target, value); }
 
         public System.Collections.ObjectModel.ObservableCollection<SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.AudioVisualModel> FetchOrderAudioVisuals { get; set; }
+
+        public void RaiseFetchOrderAudioVisualsChanged()
+        {
+            RaisePropertyChanged("FetchOrderAudioVisuals");
+        }
     }
 }

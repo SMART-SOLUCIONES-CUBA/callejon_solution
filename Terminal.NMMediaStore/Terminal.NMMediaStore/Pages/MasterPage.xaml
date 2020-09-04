@@ -9,16 +9,20 @@
     xmlns:ffil="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
     xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Converters"
+    xmlns:views="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Views"
     mc:Ignorable="d"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages.MasterPage"
+    x:Name="Page"
     BackgroundColor="#8a9ca8"
     Title="Mediateca">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <converters:StorageUsedBoxWidthConverter x:Key="StorageUsedBoxWidthConverter" TotalUsedPageReferenceView="{x:Reference TargetStorageTotalSpaceBoxView}" />
+            <converters:CurrentStorageUsedBoxWidthConverter x:Key="CurrentStorageUsedBoxWidthConverter" Page="{x:Reference Page}" />
+            <converters:VirtualStorageUsedBoxWidthConverter x:Key="VirtualStorageUsedBoxWidthConverter" Page="{x:Reference Page}" />
             <converters:ImageModelToImageSourceConverter x:Key="ImageModelToImageSourceConverter" />
 
             <sscxftoolkitpresentationconverters:FileSizeLongToStringConverter x:Key="FileSizeLongToStringConverter" />
+            <sscxftoolkitpresentationconverters:IfNullOrEmptyToStringConverter x:Key="StorageCaptionIfNullOrEmptyToStringConverter" StringReplacement="Seleccione Almacenamiento" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
@@ -96,7 +100,7 @@
                                 <Label
                                     Grid.Row="0" Grid.Column="0"
                                     Margin="8,8,0,0"
-                                    Text="{Binding Path=TargetStorage.FamilyRepresentativeIconGlyph}"
+                                    Text="{Binding Path=Target.FamilyRepresentativeIconGlyph}"
                                     TextColor="White"
                                     FontSize="{StaticResource DefaultIconSize}">
                                     <Label.FontFamily>
@@ -110,7 +114,7 @@
                                     Margin="0,8,0,0"
                                     LineBreakMode="TailTruncation"
                                     VerticalTextAlignment="Center"
-                                    Text="{Binding Path=TargetStorage.Caption}"
+                                    Text="{Binding Path=Target.Storage.Caption, Converter={StaticResource StorageCaptionIfNullOrEmptyToStringConverter}}"
                                     TextColor="White"
                                     FontSize="{StaticResource Header4FontSize}">
                                     <Label.FontFamily>
@@ -136,8 +140,8 @@
                                         </OnPlatform>
                                     </Button.FontFamily>
                                 </Button>
-                                <BoxView
-                                    x:Name="TargetStorageTotalSpaceBoxView"
+                                <views:StorageSpaceReferenceBoxView
+                                    x:Name="StorageSpaceReferenceBoxView"
                                     Grid.Row="1" Grid.ColumnSpan="3"
                                     BackgroundColor="White"
                                     CornerRadius="12"
@@ -147,14 +151,14 @@
                                     BackgroundColor="{StaticResource PrimaryDarkActionColor}"
                                     CornerRadius="12"
                                     HeightRequest="24"
-                                    WidthRequest="{Binding Path=TargetStorage.VirtualUsedPercentFactor, Converter={StaticResource StorageUsedBoxWidthConverter}}"
+                                    WidthRequest="{Binding Source={x:Reference StorageSpaceReferenceBoxView}, Path=Width, Converter={StaticResource VirtualStorageUsedBoxWidthConverter}}"
                                     HorizontalOptions="Start" />
                                 <BoxView
                                     Grid.Row="1" Grid.ColumnSpan="3"
                                     BackgroundColor="{StaticResource SecoundaryDarkActionColor}"
                                     CornerRadius="12"
                                     HeightRequest="24"
-                                    WidthRequest="{Binding Path=TargetStorage.CurrentUsedPercentFactor, Converter={StaticResource StorageUsedBoxWidthConverter}}"
+                                    WidthRequest="{Binding Source={x:Reference StorageSpaceReferenceBoxView}, Path=Width, Converter={StaticResource CurrentStorageUsedBoxWidthConverter}}"
                                     HorizontalOptions="Start" />
                             </Grid>
                         </StackLayout>
@@ -171,7 +175,7 @@
                         <Label
                             Grid.Row="0" Grid.Column="0"
                             Text="&#xf111;"
-                            TextColor="{StaticResource SecoundaryDarkActionColor}"
+                            TextColor="Black"
                             FontSize="{StaticResource SmallIconSize}">
                             <Label.FontFamily>
                                 <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
@@ -183,11 +187,11 @@
                             Grid.Row="0" Grid.Column="1"
                             VerticalOptions="Center"
                             Text="Vista rápida"
-                            TextColor="{StaticResource SecoundaryDarkActionColor}"
+                            TextColor="Black"
                             FontSize="{StaticResource Header5FontSize}"/>
                         <BoxView 
                             Grid.ColumnSpan="2" Grid.Row="1"
-                            Color="{StaticResource SecoundaryDarkActionColor}"
+                            Color="Black"
                             HeightRequest="2" />
                     </Grid>
                     <StackLayout 
@@ -196,7 +200,7 @@
                         <BindableLayout.EmptyView>
                             <Label
                                 Text="No se han agregado elementos"
-                                TextColor="{StaticResource PrimaryDarkActionColor}" />
+                                TextColor="DimGray" />
                         </BindableLayout.EmptyView>
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>

@@ -19,7 +19,7 @@
             <sscxftoolkitpresentationconverters:FractionConverter x:Key="FractionConverter" />
             <sscxftoolkitpresentationconverters:FactorConverter x:Key="FactorConverter" />
             <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonIconStringConverter" TrueString="&#xfd45;" FalseString="&#xf112;" />
-            <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonTextColorConverter" TrueString="IndianRed" FalseString="Black" />
+            <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonTextColorConverter" TrueString="Red" FalseString="Black" />
 
             <converters:CollectionToJoinedStringBindingConverter x:Key="CollectionToJoinedStringBindingConverter" />
             <converters:ImageModelToImageSourceConverter x:Key="ImageModelToImageSourceConverter" />

@@ -13,6 +13,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             InitializeComponent();
         }
 
+        public void InvalidateTargetStorageState()
+        {
+            StorageSpaceReferenceBoxView.InvalidateWidth();
+        }
+
         private void FullShoppingCartButton_Clicked(object sender, System.EventArgs eventArgs)
         {
             ((Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Detail as Xamarin.Forms.NavigationPage).Navigation.PushModalAsync(new ShoppingCartPage(), false);
