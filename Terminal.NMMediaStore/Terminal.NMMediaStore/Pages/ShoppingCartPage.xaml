@@ -210,8 +210,8 @@
                         <Label
                             Grid.Column="0" Grid.RowSpan="3"
                             VerticalOptions="Center"
-                            Margin="6,0"
-                            Text="ANTES"
+                            Margin="4,0"
+                            Text="AHORA"
                             TextColor="{StaticResource SecoundaryTextColor}"
                             Rotation="-90" />
                         <Label
@@ -255,7 +255,7 @@
                             <Label.FormattedText>
                                 <FormattedString>
                                     <Span Text="{Binding Path=Target.Storage.UsedSpace, Converter={StaticResource FileSizeLongToStringConverter}}" />
-                                    <Span Text="  usados de " TextColor="{StaticResource SecoundaryTextColor}" />
+                                    <Span Text="  usados de  " TextColor="{StaticResource SecoundaryTextColor}" />
                                     <Span Text="{Binding Path=Target.Storage.TotalSpace, Converter={StaticResource FileSizeLongToStringConverter}}" />
                                 </FormattedString>
                             </Label.FormattedText>
@@ -324,8 +324,8 @@
                             Margin="0,0,0,10">
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <Span Text="{Binding Converter={StaticResource MasterPageModelToVirtualStorageUsedSpaceConverter}}" />
-                                    <Span Text="  usados de " TextColor="{StaticResource SecoundaryTextColor}" />
+                                    <views:VirtualStorageSpaceUseSpan Text="{Binding Converter={StaticResource MasterPageModelToVirtualStorageUsedSpaceConverter}}" x:Name="VirtualStoreUsedSpaceSpan" />
+                                    <Span Text="  usados de  " TextColor="{StaticResource SecoundaryTextColor}" />
                                     <Span Text="{Binding Path=Target.Storage.TotalSpace, Converter={StaticResource FileSizeLongToStringConverter}}" />
                                 </FormattedString>
                             </Label.FormattedText>
@@ -401,9 +401,9 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
                                             <RowDefinition />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
                                             <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
                                         <ffil:CachedImage

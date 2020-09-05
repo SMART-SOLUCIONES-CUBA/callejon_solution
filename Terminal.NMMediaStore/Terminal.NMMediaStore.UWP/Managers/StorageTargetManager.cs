@@ -15,7 +15,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Managers
                 Caption = "(E:) Memoria de Miguel 16GB",
                 Family = Enumerations.StorageFamiliy.UsbFlashDrive,
                 TotalSpace = 8160437248,
-                UsedSpace = 2936012,
+                UsedSpace = 566231040,
                 Path = @"E:\"
             };
         }

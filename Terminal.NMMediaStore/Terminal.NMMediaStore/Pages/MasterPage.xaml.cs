@@ -16,6 +16,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
         public void InvalidateTargetStorageState()
         {
             StorageSpaceReferenceBoxView.InvalidateWidth();
+            VirtualStoreUsedSpaceSpan.InvalidateText();
         }
 
         private void FullShoppingCartButton_Clicked(object sender, System.EventArgs eventArgs)

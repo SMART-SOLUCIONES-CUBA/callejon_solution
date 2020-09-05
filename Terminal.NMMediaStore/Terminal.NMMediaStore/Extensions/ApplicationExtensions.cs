@@ -8,9 +8,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Extensions
         {
             var bindingContextModel = (target.MainPage as Xamarin.Forms.MasterDetailPage).Master.BindingContext as Models.Page.MasterPageModel;
 
+            if (bindingContextModel.Target.Storage == null) throw new Exceptions.UnspecifiedStorageDeviceException();
+
             var afterSpace =  bindingContextModel.Target.Storage.UsedSpace + bindingContextModel.FetchOrderAudioVisuals.ToStorageSpace() + model.FileSize;
 
-            if (afterSpace > bindingContextModel.Target.Storage.TotalSpace) throw new System.InvalidOperationException();
+            if (afterSpace > bindingContextModel.Target.Storage.TotalSpace) throw new Exceptions.InsufficientStorageSpaceException();
 
             bindingContextModel.FetchOrderAudioVisuals.Insert(0, model);
 

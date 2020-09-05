@@ -50,7 +50,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP
                 FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
 
                 // TODO Remove when feature released
-                Xamarin.Forms.Forms.SetFlags("Brush_Experimental");
+                Xamarin.Forms.Forms.SetFlags("Brush_Experimental", "Expander_Experimental");
                 //Xamarin.Forms.Forms.SetFlags("Shapes_Experimental");
 
                 var assembliesToInclude = new System.Collections.Generic.List<System.Reflection.Assembly>();

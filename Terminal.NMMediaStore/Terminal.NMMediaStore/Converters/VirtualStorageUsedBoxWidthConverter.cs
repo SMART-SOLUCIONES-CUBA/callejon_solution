@@ -6,6 +6,13 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Converters
     {
         public Xamarin.Forms.ContentPage Page { get; set; }
 
+        public double MinValue { get; set; }
+
+        public VirtualStorageUsedBoxWidthConverter()
+        {
+            MinValue = 1;
+        }
+
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             var width = (double)value;
@@ -16,7 +23,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Converters
 
             if (model == null) return 0;
 
-            return width * (model.Target.Storage.UsedSpace + model.FetchOrderAudioVisuals.ToStorageSpace()) / model.Target.Storage.TotalSpace;
+            var result = width * (model.Target.Storage.UsedSpace + model.FetchOrderAudioVisuals.ToStorageSpace()) / model.Target.Storage.TotalSpace;
+
+            return result < MinValue ? 1 : result;
         }
 
         public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)

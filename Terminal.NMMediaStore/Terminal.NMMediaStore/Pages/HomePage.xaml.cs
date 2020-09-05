@@ -119,9 +119,13 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
                 OnAudioViualFetchMarkToogle(model.AudioVisual);
             }
-            catch (System.InvalidOperationException)
+            catch (Exceptions.UnspecifiedStorageDeviceException)
             {
-                DisplayAlert("Aviso", "Espacio de almacenamiento disponible en su dispositivo no será suficiente para descargar este audio visual.", "Aceptar");
+                DisplayAlert(Providers.Constatnt.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, Providers.Constatnt.StringConstantProvider.UNSPECIFIED_STORAGE_DEVICE_EXCEPTION_MESSAGE, Providers.Constatnt.StringConstantProvider.OK_ACTION);
+            }
+            catch (Exceptions.InsufficientStorageSpaceException)
+            {
+                DisplayAlert(Providers.Constatnt.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, Providers.Constatnt.StringConstantProvider.INSUFFICIENT_STORAGE_SPACE_EXCEPTION_MESSAGE, Providers.Constatnt.StringConstantProvider.OK_ACTION);
             }
             catch
             {

@@ -57,6 +57,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                     ((Application.Current.MainPage as MasterDetailPage).Master as Pages.MasterPage).InvalidateTargetStorageState();
 
                     TargetStorageVirtualTotalSpaceBoxView.InvalidateWidth();
+                    VirtualStoreUsedSpaceSpan.InvalidateText();
 
                     BindingContextModel.RaiseFetchOrderAudioVisualsChanged();
 
