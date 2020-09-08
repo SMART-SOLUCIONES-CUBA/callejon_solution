@@ -57,6 +57,16 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                     CurrentUsedPercentFactor = storage?.UsedSpace / storage?.TotalSpace ?? 0.00d
                 };
 
+                if (storage == null)
+                {
+                    var currentModalPage = (Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Detail.Navigation.ModalStack.LastOrDefault();
+
+                    if (currentModalPage != null && currentModalPage is ShoppingCartPage)
+                    {
+                        (Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Detail.Navigation.PopModalAsync();
+                    }
+                }
+
                 InvalidateTargetStorageStats();
             });
         }
