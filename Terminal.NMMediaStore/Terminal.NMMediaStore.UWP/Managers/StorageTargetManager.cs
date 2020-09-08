@@ -6,14 +6,19 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Managers
 {
     public class StorageTargetManager : NMMediaStore.Managers.Facade.IStorageTargetManagerFacade
     {
-        private const string FREE_SPACE_PROPERTY_NAME = "System.FreeSpace";
-        private const string TOTAL_SPACE_PROPERTY_NAME = "System.Capacity";
-
         private Models.StorageModel target;
+        private Windows.Devices.Enumeration.DeviceWatcher targetWatcher;
+
+        private Action targeRemovedCallbackAction;
+
+        public void ConfigurateCallbacks(Action targeRemovedCallbackAction)
+        {
+            this.targeRemovedCallbackAction = targeRemovedCallbackAction;
+        }
 
         public async System.Threading.Tasks.Task<Models.StorageModel[]> GetAvailableStoragesAsync()
         {
-            var externalDevices = await Windows.Devices.Enumeration.DeviceInformation.FindAllAsync(Windows.Devices.Portable.StorageDevice.GetDeviceSelector(), null);
+            var externalDevices = await Windows.Devices.Enumeration.DeviceInformation.FindAllAsync(Windows.Devices.Portable.StorageDevice.GetDeviceSelector());
 
             var result = new System.Collections.Generic.List<Models.StorageModel>();
 
@@ -54,7 +59,34 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Managers
 
         public void TargetStorage(Models.StorageModel target)
         {
+            if (this.target != null)
+            {
+                targetWatcher.Stop();
+
+                targetWatcher.Removed -= TargetWatcher_Removed;
+
+                targetWatcher = null;
+            }
+
             this.target = target;
+
+            if (target != null)
+            {
+                targetWatcher = Windows.Devices.Enumeration.DeviceInformation.CreateWatcher(Windows.Devices.Portable.StorageDevice.GetDeviceSelector());
+
+                targetWatcher.Removed += TargetWatcher_Removed;
+
+                targetWatcher.Start();
+            }
+        }
+
+        private void TargetWatcher_Removed(Windows.Devices.Enumeration.DeviceWatcher sender, Windows.Devices.Enumeration.DeviceInformationUpdate args)
+        {
+            if (args.Id != target.Id) return;
+
+            TargetStorage(null);
+
+            targeRemovedCallbackAction?.Invoke();
         }
     }
 }

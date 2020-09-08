@@ -39,8 +39,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
                 var storage = storageTargetManager.GetStorageTarget();
 
-                // TODO Remove mock code block sections!!
-
                 Master.BindingContext = new Models.Page.MasterPageModel
                 {
                     IsBusy = false,

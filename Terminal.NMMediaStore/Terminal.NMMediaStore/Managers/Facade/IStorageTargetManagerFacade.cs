@@ -2,6 +2,8 @@
 {
     public interface IStorageTargetManagerFacade
     {
+        void ConfigurateCallbacks(System.Action targeRemovedCallbackAction);
+
         Models.StorageModel GetStorageTarget();
 
         void TargetStorage(Models.StorageModel target);

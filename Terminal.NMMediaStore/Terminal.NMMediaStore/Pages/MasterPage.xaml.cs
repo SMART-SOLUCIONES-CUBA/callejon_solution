@@ -12,6 +12,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
         public MasterPage()
         {
             InitializeComponent();
+
+            Xamarin.Forms.DependencyService.Get<Managers.Facade.IStorageTargetManagerFacade>().ConfigurateCallbacks(InvalidateTargetStorageOnMainThread);
         }
 
         private Models.Page.MasterPageModel BindingContextModel
@@ -22,38 +24,41 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             }
         }
 
-        public void InvalidateTargetStorage()
+        private void InvalidateTargetStorageOnMainThread()
         {
-            var storageTargetManager = Xamarin.Forms.DependencyService.Get<Managers.Facade.IStorageTargetManagerFacade>();
-
-            var storage = storageTargetManager.GetStorageTarget();
-
-            var presentedDetailPage = ((Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Detail as Xamarin.Forms.NavigationPage).CurrentPage;
-
-            if (presentedDetailPage is HomePage)
+            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
             {
-                foreach (var item in BindingContextModel.FetchOrderAudioVisuals)
+                var storageTargetManager = Xamarin.Forms.DependencyService.Get<Managers.Facade.IStorageTargetManagerFacade>();
+
+                var storage = storageTargetManager.GetStorageTarget();
+
+                var presentedDetailPage = ((Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Detail as Xamarin.Forms.NavigationPage).CurrentPage;
+
+                if (presentedDetailPage is HomePage)
                 {
-                    (presentedDetailPage as Base.FetchOrderAudioVisualPresentBaseContentPage).OnAudioViualFetchMarkToogle(item);
+                    foreach (var item in BindingContextModel.FetchOrderAudioVisuals)
+                    {
+                        (presentedDetailPage as Base.FetchOrderAudioVisualPresentBaseContentPage).OnAudioViualFetchMarkToogle(item);
+                    }
+
+                    BindingContextModel.FetchOrderAudioVisuals.Clear();
+                }
+                else
+                {
+                    BindingContextModel.FetchOrderAudioVisuals.Clear();
+
+                    (Xamarin.Forms.Application.Current.MainPage as MainPage).PivotToHomePage();
                 }
 
-                BindingContextModel.FetchOrderAudioVisuals.Clear();
-            }
-            else
-            {
-                BindingContextModel.FetchOrderAudioVisuals.Clear();
+                BindingContextModel.Target = new Models.View.StorageViewModel
+                {
+                    Storage = storage,
+                    FamilyRepresentativeIconGlyph = storage?.Family.ToFamilyRepresentativeIconGlyph() ?? "\uf028",
+                    CurrentUsedPercentFactor = storage?.UsedSpace / storage?.TotalSpace ?? 0.00d
+                };
 
-                (Xamarin.Forms.Application.Current.MainPage as MainPage).PivotToHomePage();
-            }
-            
-            BindingContextModel.Target = new Models.View.StorageViewModel
-            {
-                Storage = storage,
-                FamilyRepresentativeIconGlyph = storage?.Family.ToFamilyRepresentativeIconGlyph() ?? "\uf028",
-                CurrentUsedPercentFactor = storage?.UsedSpace / storage?.TotalSpace ?? 0.00d
-            };
-
-            InvalidateTargetStorageStats();
+                InvalidateTargetStorageStats();
+            });
         }
 
         public void InvalidateTargetStorageStats()
@@ -83,7 +88,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                                 case Providers.Constant.StringConstantProvider.MALE_NONE_OPTION:
                                     storageTargetManager.TargetStorage(null);
 
-                                    Xamarin.Forms.Device.BeginInvokeOnMainThread(InvalidateTargetStorage);
+                                    InvalidateTargetStorageOnMainThread();
 
                                     break;
                                 case Providers.Constant.StringConstantProvider.CANCEL_ACTION:
@@ -91,7 +96,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                                 default:
                                     storageTargetManager.TargetStorage(getAvailableStoragesTask.Result.First(item => item.Caption == pickTask.Result));
 
-                                    Xamarin.Forms.Device.BeginInvokeOnMainThread(InvalidateTargetStorage);
+                                    InvalidateTargetStorageOnMainThread();
 
                                     break;
                             }
