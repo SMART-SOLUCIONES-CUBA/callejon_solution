@@ -58,7 +58,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                     }
                 };
 
-                (Master as MasterPage).InvalidateTargetStorageState();
+                (Master as MasterPage).InvalidateTargetStorageStats();
 
                 PivotToHomePage();
 

@@ -12,7 +12,7 @@
 
             var model = Page.BindingContext as Models.Page.MasterPageModel;
 
-            if (model == null) return 0;
+            if (model == null || model.Target.Storage == null) return 0;
 
             return width * model.Target.Storage.UsedSpace / model.Target.Storage.TotalSpace;
         }

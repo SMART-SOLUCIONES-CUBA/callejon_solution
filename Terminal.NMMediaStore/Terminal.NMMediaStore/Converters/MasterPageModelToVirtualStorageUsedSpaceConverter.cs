@@ -10,7 +10,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Converters
 
             var model = value as Models.Page.MasterPageModel;
 
-            if (model == null) return 0L;
+            if (model == null || model.Target.Storage == null) return 0L;
 
             var fileSizeLongToStringConverter = new XFToolKit.Presentation.Converters.FileSizeLongToStringConverter();
 

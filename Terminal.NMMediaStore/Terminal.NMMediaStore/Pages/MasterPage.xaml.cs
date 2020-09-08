@@ -1,4 +1,5 @@
 ﻿using SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Extensions;
+using System.Linq;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 {
@@ -13,14 +14,119 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             InitializeComponent();
         }
 
-        public void InvalidateTargetStorageState()
+        private Models.Page.MasterPageModel BindingContextModel
+        {
+            get
+            {
+                return BindingContext as Models.Page.MasterPageModel;
+            }
+        }
+
+        public void InvalidateTargetStorage()
+        {
+            var storageTargetManager = Xamarin.Forms.DependencyService.Get<Managers.Facade.IStorageTargetManagerFacade>();
+
+            var storage = storageTargetManager.GetStorageTarget();
+
+            var presentedDetailPage = ((Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Detail as Xamarin.Forms.NavigationPage).CurrentPage;
+
+            if (presentedDetailPage is HomePage)
+            {
+                foreach (var item in BindingContextModel.FetchOrderAudioVisuals)
+                {
+                    (presentedDetailPage as Base.FetchOrderAudioVisualPresentBaseContentPage).OnAudioViualFetchMarkToogle(item);
+                }
+
+                BindingContextModel.FetchOrderAudioVisuals.Clear();
+            }
+            else
+            {
+                BindingContextModel.FetchOrderAudioVisuals.Clear();
+
+                (Xamarin.Forms.Application.Current.MainPage as MainPage).PivotToHomePage();
+            }
+            
+            BindingContextModel.Target = new Models.View.StorageViewModel
+            {
+                Storage = storage,
+                FamilyRepresentativeIconGlyph = storage?.Family.ToFamilyRepresentativeIconGlyph() ?? "\uf028",
+                CurrentUsedPercentFactor = storage?.UsedSpace / storage?.TotalSpace ?? 0.00d
+            };
+
+            InvalidateTargetStorageStats();
+        }
+
+        public void InvalidateTargetStorageStats()
         {
             StorageSpaceReferenceBoxView.InvalidateWidth();
             VirtualStoreUsedSpaceSpan.InvalidateText();
         }
 
+        private void PresentForStoragePick()
+        {
+            var storageTargetManager = Xamarin.Forms.DependencyService.Get<Managers.Facade.IStorageTargetManagerFacade>();
+
+            storageTargetManager.GetAvailableStoragesAsync().ContinueWith(getAvailableStoragesTask =>
+            {
+                if (getAvailableStoragesTask.Exception != null)
+                {
+                    DisplayAlert(Providers.Constant.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, "No fue posible listar los dispositivos de almacenamiento disponibles.", Providers.Constant.StringConstantProvider.OK_ACTION);
+                }
+                else
+                {
+                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                    {
+                        DisplayActionSheet("Seleccione dispositivo de almacenamiento:", Providers.Constant.StringConstantProvider.CANCEL_ACTION, Providers.Constant.StringConstantProvider.MALE_NONE_OPTION, getAvailableStoragesTask.Result.Select(item => item.Caption).ToArray()).ContinueWith(pickTask =>
+                        {
+                            switch (pickTask.Result)
+                            {
+                                case Providers.Constant.StringConstantProvider.MALE_NONE_OPTION:
+                                    storageTargetManager.TargetStorage(null);
+
+                                    Xamarin.Forms.Device.BeginInvokeOnMainThread(InvalidateTargetStorage);
+
+                                    break;
+                                case Providers.Constant.StringConstantProvider.CANCEL_ACTION:
+                                    break;
+                                default:
+                                    storageTargetManager.TargetStorage(getAvailableStoragesTask.Result.First(item => item.Caption == pickTask.Result));
+
+                                    Xamarin.Forms.Device.BeginInvokeOnMainThread(InvalidateTargetStorage);
+
+                                    break;
+                            }
+                        });
+                    });
+                }
+            });
+        }
+
+        private void PickStorageDeviceButton_Clicked(object sender, System.EventArgs eventArgs)
+        {
+            if (BindingContextModel.FetchOrderAudioVisuals.Count > 0)
+            {
+                DisplayAlert(Providers.Constant.StringConstantProvider.CONFIRMATION_ALERT_DIALOG_TITLE, string.Format("Al cambiar de dispositivo de almacenamiento se retirarán los elementos en el carro de compras.{0}{0}Está seguro que desea continuar?", System.Environment.NewLine), Providers.Constant.StringConstantProvider.OK_ACTION, Providers.Constant.StringConstantProvider.CANCEL_ACTION).ContinueWith(task =>
+                {
+                    if (!task.Result) return;
+
+                    PresentForStoragePick();
+                });
+            }
+            else
+            {
+                PresentForStoragePick();
+            }
+        }
+
         private void FullShoppingCartButton_Clicked(object sender, System.EventArgs eventArgs)
         {
+            if (BindingContextModel.Target.Storage == null)
+            {
+                DisplayAlert(Providers.Constant.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, Providers.Constant.StringConstantProvider.UNSPECIFIED_STORAGE_DEVICE_EXCEPTION_MESSAGE, Providers.Constant.StringConstantProvider.OK_ACTION);
+
+                return;
+            }
+
             ((Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Detail as Xamarin.Forms.NavigationPage).Navigation.PushModalAsync(new ShoppingCartPage(), false);
         }
 

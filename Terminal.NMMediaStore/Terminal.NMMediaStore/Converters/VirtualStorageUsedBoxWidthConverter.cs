@@ -21,7 +21,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Converters
 
             var model = Page.BindingContext as Models.Page.MasterPageModel;
 
-            if (model == null) return 0;
+            if (model == null || model.Target.Storage == null) return 0;
 
             var result = width * (model.Target.Storage.UsedSpace + model.FetchOrderAudioVisuals.ToStorageSpace()) / model.Target.Storage.TotalSpace;
 

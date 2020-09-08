@@ -1,4 +1,4 @@
-﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Providers.Constatnt
+﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Providers.Constant
 {
     public static class StringConstantProvider
     {
@@ -9,6 +9,8 @@
         public const string ADVICE_ALERT_DIALOG_TITLE = "Aviso";
 
         public const string CONFIRMATION_ALERT_DIALOG_TITLE = "Confirmar";
+
+        public const string MALE_NONE_OPTION = "Ninguno";
 
         public const string OK_ACTION = "Aceptar";
 

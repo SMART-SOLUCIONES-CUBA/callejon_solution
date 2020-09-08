@@ -49,6 +49,19 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             LoadNextPageSearchResults();
         }
 
+        private void CategoryItem_Tapped(object sender, System.EventArgs eventArgs)
+        {
+            BindingContextModel.Search = new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel
+            {
+                Category = (sender as Xamarin.Forms.BindableObject).BindingContext as SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.CategoryModel
+            };
+
+            BindingContextModel.SubCategories = null;
+            BindingContextModel.Results = null;
+
+            LoadNextPageSearchResults();
+        }
+
         private void AudioVisualItemFetchMarkToogleButton_Clicked(object sender, System.EventArgs eventArgs)
         {
             try
@@ -68,11 +81,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             }
             catch (Exceptions.UnspecifiedStorageDeviceException)
             {
-                DisplayAlert(Providers.Constatnt.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, Providers.Constatnt.StringConstantProvider.UNSPECIFIED_STORAGE_DEVICE_EXCEPTION_MESSAGE, Providers.Constatnt.StringConstantProvider.OK_ACTION);
+                DisplayAlert(Providers.Constant.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, Providers.Constant.StringConstantProvider.UNSPECIFIED_STORAGE_DEVICE_EXCEPTION_MESSAGE, Providers.Constant.StringConstantProvider.OK_ACTION);
             }
             catch (Exceptions.InsufficientStorageSpaceException)
             {
-                DisplayAlert(Providers.Constatnt.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, Providers.Constatnt.StringConstantProvider.INSUFFICIENT_STORAGE_SPACE_EXCEPTION_MESSAGE, Providers.Constatnt.StringConstantProvider.OK_ACTION);
+                DisplayAlert(Providers.Constant.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, Providers.Constant.StringConstantProvider.INSUFFICIENT_STORAGE_SPACE_EXCEPTION_MESSAGE, Providers.Constant.StringConstantProvider.OK_ACTION);
             }
             catch
             {
@@ -98,8 +111,22 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             System.Threading.Tasks.Task.Run(async () =>
             {
                 var audioVisualProvider = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Providers.Facade.IAudioVisualProviderFacade>();
-
+                
                 var nextPage = BindingContextModel.PaginationCurrentPage + 1;
+
+                SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.CategoryModel[] subCategories = null;
+
+                if (BindingContextModel.Search.Category != null)
+                {
+                    var categoryProvider = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Providers.Facade.ICategoryProviderFacade>();
+
+                    subCategories = await categoryProvider.GetByParentAsync(BindingContextModel.Search.Category);
+
+                    if (subCategories != null && subCategories.Length <= 0)
+                    {
+                        subCategories = null;
+                    }
+                }
 
                 var result = await audioVisualProvider.SearchAsync(BindingContextModel.Search, nextPage);
 
@@ -129,6 +156,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                     {
                         BindingContextModel.PaginationHasNext = false;
                     }
+
+                    BindingContextModel.SubCategories = subCategories;
 
                     BindingContextModel.IsBusy = false;
                 });

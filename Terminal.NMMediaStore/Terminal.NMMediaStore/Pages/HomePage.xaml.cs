@@ -121,11 +121,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             }
             catch (Exceptions.UnspecifiedStorageDeviceException)
             {
-                DisplayAlert(Providers.Constatnt.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, Providers.Constatnt.StringConstantProvider.UNSPECIFIED_STORAGE_DEVICE_EXCEPTION_MESSAGE, Providers.Constatnt.StringConstantProvider.OK_ACTION);
+                DisplayAlert(Providers.Constant.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, Providers.Constant.StringConstantProvider.UNSPECIFIED_STORAGE_DEVICE_EXCEPTION_MESSAGE, Providers.Constant.StringConstantProvider.OK_ACTION);
             }
             catch (Exceptions.InsufficientStorageSpaceException)
             {
-                DisplayAlert(Providers.Constatnt.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, Providers.Constatnt.StringConstantProvider.INSUFFICIENT_STORAGE_SPACE_EXCEPTION_MESSAGE, Providers.Constatnt.StringConstantProvider.OK_ACTION);
+                DisplayAlert(Providers.Constant.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, Providers.Constant.StringConstantProvider.INSUFFICIENT_STORAGE_SPACE_EXCEPTION_MESSAGE, Providers.Constant.StringConstantProvider.OK_ACTION);
             }
             catch
             {

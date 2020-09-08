@@ -159,6 +159,9 @@
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
       <Version>5.2.8</Version>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.2</Version>
+    </PackageReference>
     <PackageReference Include="SSCXFToolKit.Presentation">
       <Version>0.4.5-alpha</Version>
     </PackageReference>
@@ -179,6 +182,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Terminal.NMMediaStore.UWP.Supporter.Api.Common\Terminal.NMMediaStore.UWP.Supporter.Api.Common.csproj">
+      <Project>{3d4bdc72-c6b9-4b63-9a24-65ce7c588cf8}</Project>
+      <Name>Terminal.NMMediaStore.UWP.Supporter.Api.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Terminal.NMMediaStore\Terminal.NMMediaStore.csproj">
       <Project>{C04D6F06-3676-441F-94AD-ABEBACEE66A7}</Project>
       <Name>Terminal.NMMediaStore</Name>
@@ -198,6 +205,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Fonts\materialdesignicons-webfont.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="WindowsDesktop, Version=10.0.17134.0">
+      <Name>Windows Desktop Extensions for the UWP</Name>
+    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

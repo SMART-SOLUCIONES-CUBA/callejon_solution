@@ -6,6 +6,6 @@
 
         void TargetStorage(Models.StorageModel target);
 
-        Models.StorageModel[] GetAvailableStorages();
+        System.Threading.Tasks.Task<Models.StorageModel[]> GetAvailableStoragesAsync();
     }
 }

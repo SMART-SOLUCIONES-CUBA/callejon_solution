@@ -22,6 +22,7 @@
             <converters:SearchModelToInlineSummaryFormattedTextConverter x:Key="SearchModelToInlineSummaryFormattedTextConverter" CaptionColor="Black" ValueColor="DimGray" />
             <converters:ImageModelToImageSourceConverter x:Key="ImageModelToImageSourceConverter" />
 
+            <sscxftoolkitpresentationconverters:NotNullToBooleanConverter x:Key="NotNullToBooleanConverter" />
             <sscxftoolkitpresentationconverters:BoolToBoolNegationConverter x:Key="BoolToBoolNegationConverter" />
             <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonIconStringConverter" TrueString="&#xfd45;" FalseString="&#xf112;" />
             <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonTextColorConverter" TrueString="IndianRed" FalseString="Black" />
@@ -116,7 +117,6 @@
                         TextColor="{StaticResource SecoundaryTextColor}"
                         FontSize="{StaticResource Header5FontSize}" />
                     <Grid
-                        IsVisible="{Binding Path=IsSearchSummaryExpanded, Converter={StaticResource BoolToBoolNegationConverter}}"
                         ColumnSpacing="0"
                         Margin="12,0,12,12">
                         <Grid.ColumnDefinitions>
@@ -144,7 +144,7 @@
                             LineBreakMode="TailTruncation"
                             FormattedText="{Binding Path=Search, Converter={StaticResource SearchModelToInlineSummaryFormattedTextConverter}}"/>
                     </Grid>
-                    <Grid
+                    <!--<Grid
                         IsVisible="{Binding Path=IsSearchSummaryExpanded}"
                         ColumnSpacing="0" RowSpacing="2"
                         Margin="12,0,12,12">
@@ -242,7 +242,55 @@
                             Style="{StaticResource LastSearchItemFieldValueLabel}"
                             Grid.Row="7"
                             Text="{Binding Path=Search.Tags, Converter={StaticResource NoEmptyCollectionToJoinedStringBindingConverter}}" />
-                    </Grid>
+                    </Grid>-->
+                    <StackLayout
+                        IsVisible="{Binding Path=SubCategories, Converter={StaticResource NotNullToBooleanConverter}}">
+                        <Label
+                            Margin="10,0"
+                            Text="Sub-Categorías"
+                            TextColor="{StaticResource SecoundaryTextColor}"
+                            FontSize="{StaticResource Header5FontSize}" />
+                        <ScrollView Orientation="Horizontal">
+                            <FlexLayout
+                                Padding="5,0"
+                                BindableLayout.ItemsSource="{Binding Path=SubCategories}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid 
+                                            WidthRequest="180" HeightRequest="102"
+                                            Margin="5,0,5,10">
+                                            <Grid.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="CategoryItem_Tapped" />
+                                            </Grid.GestureRecognizers>
+                                            <mg:GradientView VerticalOptions="FillAndExpand" >
+                                                <mg:GradientView.GradientSource>
+                                                    <mg:CssGradientSource>
+                                                        <x:String>
+                                                            <![CDATA[
+                                                                linear-gradient(177deg, rgba(122, 122, 122, 0.05) 0%, rgba(122, 122, 122, 0.05) 40%, rgba(64, 64, 64, 0.05) 40%, rgba(64, 64, 64, 0.05) 100%), linear-gradient(300deg, rgba(200, 200, 200, 0.1) 0%, rgba(200, 200, 200, 0.1) 62%, rgba(39, 39, 39, 0.1) 62%, rgba(39, 39, 39, 0.1) 100%), linear-gradient(28deg, rgba(243, 243, 243, 0.01) 0%, rgba(243, 243, 243, 0.01) 58%, rgba(154, 154, 154, 0.01) 58%, rgba(154, 154, 154, 0.01) 100%), linear-gradient(318deg, rgba(136, 136, 136, 0.04) 0%, rgba(136, 136, 136, 0.04) 58%, rgba(205, 205, 205, 0.04) 58%, rgba(205, 205, 205, 0.04) 100%), linear-gradient(297deg, rgba(240, 240, 240, 0.09) 0%, rgba(240, 240, 240, 0.09) 53%, rgba(146, 146, 146, 0.09) 53%, rgba(146, 146, 146, 0.09) 100%), linear-gradient(10deg, rgba(19, 19, 19, 0.1) 0%, rgba(19, 19, 19, 0.1) 18%, rgba(125, 125, 125, 0.1) 18%, rgba(125, 125, 125, 0.1) 100%), linear-gradient(84deg, rgba(146, 146, 146, 0.08) 0%, rgba(146, 146, 146, 0.08) 10%, rgba(123, 123, 123, 0.08) 10%, rgba(123, 123, 123, 0.08) 100%), linear-gradient(90deg, rgb(71, 65, 230), rgb(121, 231, 221))
+                                                            ]]>
+                                                        </x:String>
+                                                    </mg:CssGradientSource>
+                                                </mg:GradientView.GradientSource>
+                                            </mg:GradientView>
+                                            <Label
+                                                Margin="10,6"
+                                                Text="{Binding Path=Name}"
+                                                LineBreakMode="TailTruncation"
+                                                MaxLines="3"
+                                                FontSize="{StaticResource Header3FontSize}">
+                                                <Label.FontFamily>
+                                                    <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed Italic">
+                                                        <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-CONDIT.OTF#Myriad Pro" />
+                                                    </OnPlatform>
+                                                </Label.FontFamily>
+                                            </Label>
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </FlexLayout>
+                        </ScrollView>
+                    </StackLayout>                    
                     <Label
                         Margin="12,0"
                         Text="Resultados"

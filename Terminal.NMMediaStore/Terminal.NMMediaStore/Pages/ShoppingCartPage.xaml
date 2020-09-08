@@ -24,7 +24,8 @@
             <converters:CollectionToJoinedStringBindingConverter x:Key="CollectionToJoinedStringBindingConverter" />
 
             <sscxftoolkitpresentationconverters:FileSizeLongToStringConverter x:Key="FileSizeLongToStringConverter" />
-            <sscxftoolkitpresentationconverters:IfNullOrEmptyToStringConverter x:Key="StorageCaptionIfNullOrEmptyToStringConverter" StringReplacement="Seleccione Almacenamiento" />
+            <sscxftoolkitpresentationconverters:NullToBooleanConverter x:Key="NullToBooleanConverter" />
+            <sscxftoolkitpresentationconverters:NotNullToBooleanConverter x:Key="NotNullToBooleanConverter" />
             <sscxftoolkitpresentationconverters:EnumerationToCountConverter x:Key="EnumerationToCountConverter" />
 
             <x:Double x:Key="TargetStorageSpaceBoxViewHeight">12</x:Double>
@@ -229,7 +230,7 @@
                         <Label
                             Grid.Column="2" Grid.Row="0"
                             LineBreakMode="TailTruncation"
-                            Text="{Binding Path=Target.Storage.Caption, Converter={StaticResource StorageCaptionIfNullOrEmptyToStringConverter}}"
+                            Text="{Binding Path=Target.Storage.Caption}"
                             TextColor="White"
                             FontSize="{StaticResource Header3FontSize}">
                             <Label.FontFamily>
@@ -299,7 +300,7 @@
                         <Label
                             Grid.Column="2" Grid.Row="0"
                             LineBreakMode="TailTruncation"
-                            Text="{Binding Path=Target.Storage.Caption, Converter={StaticResource StorageCaptionIfNullOrEmptyToStringConverter}}"
+                            Text="{Binding Path=Target.Storage.Caption}"
                             TextColor="White"
                             FontSize="{StaticResource Header3FontSize}">
                             <Label.FontFamily>
