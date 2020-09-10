@@ -40,7 +40,7 @@
                 var categories = await categoryProvider.GetByParentAsync(null);
                 var relevantProducerHouses = await producerHouseProvider.GetRelevantsAsync();
                 var relevantGenres = await genreProvider.GetRelevantsAsync();
-                var relevantYears = await yearProvider.GetRelevantAsync();
+                var relevantYears = await yearProvider.GetRelevantsAsync();
                 var relevantPerformancePersonalities = await personalityProvider.GetRelevantActorsAsync();
                 var relevantDirectionPersonalities = await personalityProvider.GetRelevantDirectorsAsync();
 

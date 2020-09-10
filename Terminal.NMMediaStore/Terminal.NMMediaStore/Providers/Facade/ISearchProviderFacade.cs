@@ -6,6 +6,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Providers.Facade
     {
         System.Threading.Tasks.Task<SearchModel[]> GetLastSubscriptorSearchesAsync(string id);
 
-        System.Threading.Tasks.Task<SearchModel[]> GetLastOtherSubscriptorsSearchesAsync();
+        System.Threading.Tasks.Task<SearchModel[]> GetLastOtherSubscriptorsSearchesAsync(string id);
     }
 }

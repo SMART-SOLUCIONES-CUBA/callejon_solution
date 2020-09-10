@@ -99,6 +99,15 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Persistence.Context
         public DbSet<FetchOrder> FetchOrders { get; set; }
         public DbSet<FetchOrderCollectionBridge> FetchOrderCollectionBridges { get; set; }
         public DbSet<FetchOrderProductionBridge> FetchOrderProductionBridges { get; set; }
+        public DbSet<Search> Searches { get; set; }
+        public DbSet<SearchGenreBridge> SearchGenreBridges { get; set; }
+        public DbSet<SearchPersonalityBridge> SearchPersonalityBridges { get; set; }
+        public DbSet<SearchTagBridge> SearchTagBridges { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
+        public DbSet<SubscriptionGenreBridge> SubscriptionGenreBridges { get; set; }
+        public DbSet<SubscriptionProducerHouseBridge> SubscriptionProducerHouses { get; set; }
+        public DbSet<SubscriptionTagBridge> SubscriptionTagBridges { get; set; }
+        public DbSet<Advertisement> Advertisements { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

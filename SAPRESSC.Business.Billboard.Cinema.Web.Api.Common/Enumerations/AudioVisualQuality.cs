@@ -6,8 +6,7 @@
         SD,
         HD,
         FHD,
-        HDR,
-        K4,
+        UHD,
         K8
     }
 }

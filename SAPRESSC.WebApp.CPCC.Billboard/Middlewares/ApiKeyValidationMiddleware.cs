@@ -8,17 +8,17 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Middlewares
 
         private readonly RequestDelegate next;
 
-        private readonly Microsoft.Extensions.Options.IOptions<Settings.ApiKeySetting> apiKeySetting;
+        private readonly Microsoft.Extensions.Options.IOptions<Options.ApiSecurityOptions> apiSecurityOptions;
 
-        public ApiKeyValidationMiddleware(RequestDelegate next, Microsoft.Extensions.Options.IOptions<Settings.ApiKeySetting> apiKeySetting)
+        public ApiKeyValidationMiddleware(RequestDelegate next, Microsoft.Extensions.Options.IOptions<Options.ApiSecurityOptions> apiSecurityOptions)
         {
             this.next = next;
-            this.apiKeySetting = apiKeySetting;
+            this.apiSecurityOptions = apiSecurityOptions;
         }
 
         public async System.Threading.Tasks.Task Invoke(HttpContext context)
         {
-            if (context.Request.Path.StartsWithSegments(new PathString("/api")) && (!context.Request.Headers.Keys.Contains(API_KEY_HEADER_PROPERTY) || !context.Request.Headers[API_KEY_HEADER_PROPERTY][0].Equals(apiKeySetting.Value.Secret)))
+            if (context.Request.Path.StartsWithSegments(new PathString("/api")) && (!context.Request.Headers.Keys.Contains(API_KEY_HEADER_PROPERTY) || !context.Request.Headers[API_KEY_HEADER_PROPERTY][0].Equals(apiSecurityOptions.Value.Key)))
             {
                 context.Response.StatusCode = (int)System.Net.HttpStatusCode.UpgradeRequired;
 

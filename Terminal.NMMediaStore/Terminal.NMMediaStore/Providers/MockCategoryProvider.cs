@@ -12,22 +12,22 @@
                 {
                     new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.CategoryModel
                     {
-                        Id = 1,
+                        Id = System.Guid.NewGuid(),
                         Name = "Películas"
                     },
                     new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.CategoryModel
                     {
-                        Id = 2,
+                        Id = System.Guid.NewGuid(),
                         Name = "Series"
                     },
                     new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.CategoryModel
                     {
-                        Id = 3,
+                        Id = System.Guid.NewGuid(),
                         Name = "Video Clips"
                     },
                     new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.CategoryModel
                     {
-                        Id = 4,
+                        Id = System.Guid.NewGuid(),
                         Name = "Cortos"
                     }
                 };
@@ -37,12 +37,12 @@
             {
                 new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.CategoryModel
                 {
-                    Id = 5,
+                    Id = System.Guid.NewGuid(),
                     Name = "Cubanas"
                 },
                 new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.CategoryModel
                 {
-                    Id = 6,
+                    Id = System.Guid.NewGuid(),
                     Name = "Premiadas"
                 }
             };

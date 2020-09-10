@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.SecurityShared;
-using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.Filter;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View;
 using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
@@ -27,7 +26,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
         private const string PLACARD_IMAGE_FILE_FIELD_NAME = "PlacardImageFile";
         private const string TRAILER_VIDEO_FILE_FIELD_NAME = "TrailerVideoFile";
 
-        private readonly Microsoft.Extensions.Options.IOptions<FfmpegOptions> ffmpegOptions;
+        private readonly Microsoft.Extensions.Options.IOptions<Common.Options.FfmpegOptions> ffmpegOptions;
 
         private readonly IEntityRepository<Thumbnail, System.Guid> thumbnailRepository;
         private readonly IEntityRepository<Video, System.Guid> videoRepository;
@@ -45,7 +44,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
         private readonly IEntityRepository<Category, System.Guid> categoryRepository;
         private readonly IEntityRepository<Collection, System.Guid> collectionRepository;
 
-        public ProductionsController(IEntityRepository<Collection, System.Guid> collectionRepository, IEntityRepository<Category, System.Guid> categoryRepository, Microsoft.Extensions.Options.IOptions<FfmpegOptions> ffmpegOptions, IEntityRepository<Thumbnail, System.Guid> thumbnailRepository, IEntityRepository<Video, System.Guid> videoRepository, IEntityRepository<Clasification, int> clasificationRepository, IEntityRepository<Participation, long> participationRepository, IEntityRepository<Personality, long> personalityRepository, IEntityRepository<AwardWinning, int> awardWinningRepository, IEntityRepository<Award, int> awardRepository, IEntityRepository<Country, int> countryRepository, IEntityRepository<ProducerHouse, long> producerHouseRepository, IEntityRepository<Genre, int> genreRepository, IEntityRepository<Language, int> languageRepository, IMediaFileManagerFacade mediaFileManagerFacade, IEntityRepository<Image, System.Guid> imageRepository, IEntityRepository<Production, long> repository, Microsoft.Extensions.Localization.IStringLocalizer<ProductionsController> localizer, ILogger<ProductionsController> logger) : base(repository, localizer, logger)
+        public ProductionsController(IEntityRepository<Collection, System.Guid> collectionRepository, IEntityRepository<Category, System.Guid> categoryRepository, Microsoft.Extensions.Options.IOptions<Common.Options.FfmpegOptions> ffmpegOptions, IEntityRepository<Thumbnail, System.Guid> thumbnailRepository, IEntityRepository<Video, System.Guid> videoRepository, IEntityRepository<Clasification, int> clasificationRepository, IEntityRepository<Participation, long> participationRepository, IEntityRepository<Personality, long> personalityRepository, IEntityRepository<AwardWinning, int> awardWinningRepository, IEntityRepository<Award, int> awardRepository, IEntityRepository<Country, int> countryRepository, IEntityRepository<ProducerHouse, long> producerHouseRepository, IEntityRepository<Genre, int> genreRepository, IEntityRepository<Language, int> languageRepository, IMediaFileManagerFacade mediaFileManagerFacade, IEntityRepository<Image, System.Guid> imageRepository, IEntityRepository<Production, long> repository, Microsoft.Extensions.Localization.IStringLocalizer<ProductionsController> localizer, ILogger<ProductionsController> logger) : base(repository, localizer, logger)
         {
             this.ffmpegOptions = ffmpegOptions;
 

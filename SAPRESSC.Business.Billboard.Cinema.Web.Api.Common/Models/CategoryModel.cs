@@ -2,9 +2,13 @@
 {
     public class CategoryModel
     {
-        public int Id { get; set; }
+        public System.Guid Id { get; set; }
 
         public string Name { get; set; }
+
+        public CategoryModel Parent { get; set; }
+
+        public string StorageRelativePath { get; set; }
 
         public override string ToString()
         {

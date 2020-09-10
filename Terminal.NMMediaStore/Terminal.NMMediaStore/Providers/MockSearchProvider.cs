@@ -11,7 +11,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Providers
             return BuildMockList();
         }
 
-        public async System.Threading.Tasks.Task<SearchModel[]> GetLastOtherSubscriptorsSearchesAsync()
+        public async System.Threading.Tasks.Task<SearchModel[]> GetLastOtherSubscriptorsSearchesAsync(string id)
         {
             await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(1));
 

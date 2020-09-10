@@ -1,4 +1,4 @@
-﻿namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common
+﻿namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common.Options
 {
     public class FfmpegOptions
     {

@@ -2,7 +2,7 @@
 {
     public class MockYearProvider : Facade.IYearProviderFacade
     {
-        public async System.Threading.Tasks.Task<int[]> GetRelevantAsync()
+        public async System.Threading.Tasks.Task<int[]> GetRelevantsAsync()
         {
             await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(1));
 

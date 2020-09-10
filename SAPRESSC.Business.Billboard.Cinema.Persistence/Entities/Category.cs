@@ -16,7 +16,7 @@
         [System.ComponentModel.DataAnnotations.Schema.ForeignKey("ParentId")]
         public Category Parent { get; set; }
 
-        public System.Guid ParentId { get; set; }
+        public System.Guid? ParentId { get; set; }
 
         public virtual string GetTreeName()
         {

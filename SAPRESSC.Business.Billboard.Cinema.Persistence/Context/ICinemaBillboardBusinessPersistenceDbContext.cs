@@ -34,29 +34,5 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Con
         DbSet<Presentation> Presentations { get; set; }
 
         DbSet<CountryCoProductionBridge> CountryCoProductionBridges { get; set; }
-
-        //DbSet<ProductionTagBridge> ProductionTagBridges { get; set; }
-
-        //DbSet<Category> Categories { get; set; }
-
-        //DbSet<Tag> Tags { get; set; }
-
-        //DbSet<Collection> Collections { get; set; }
-
-        //DbSet<CollectionGenreBridge> CollectionGenreBridges { get; set; }
-
-        //DbSet<CollectionTagBridge> CollectionTagBridges { get; set; }
-
-        //DbSet<CollectionProducerHouseBridge> CollectionProducerHouseBridges { get; set; }
-
-        //DbSet<CollectionCheckout> CollectionCheckouts { get; set; }
-
-        //DbSet<ProductionCheckout> ProductionCheckouts { get; set; }
-
-        //DbSet<FetchOrder> FetchOrders { get; set; }
-
-        //DbSet<FetchOrderCollectionBridge> FetchOrderCollectionBridges { get; set; }
-
-        //DbSet<FetchOrderProductionBridge> FetchOrderProductionBridges { get; set; }
     }
 }

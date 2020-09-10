@@ -1,4 +1,4 @@
-﻿namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Providers
+﻿namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common.Providers
 {
     public class SlugHelperProvider
     {

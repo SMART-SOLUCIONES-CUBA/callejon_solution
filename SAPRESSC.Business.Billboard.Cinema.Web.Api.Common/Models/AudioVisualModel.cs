@@ -4,6 +4,8 @@
     {
         public string Slug { get; set; }
 
+        public CategoryModel Category { get; set; }
+
         public ImageModel PlacardImage { get; set; }
 
         public string Format { get; set; }

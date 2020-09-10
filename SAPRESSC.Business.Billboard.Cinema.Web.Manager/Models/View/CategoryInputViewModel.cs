@@ -31,16 +31,30 @@
         {
             Id = entity.Id;
             Name = entity.Name;
-            ParentId = entity.ParentId;
+            ParentId = entity.ParentId ?? System.Guid.Empty;
         }
 
         public void Mergue(Persistence.Entities.Category entity)
         {
             entity.Name = Name;
 
-            if (entity.ParentId != ParentId)
+            if (entity.ParentId == null)
             {
-                entity.ParentId = ParentId;
+                if (ParentId != System.Guid.Empty)
+                {
+                    entity.ParentId = ParentId;
+                }
+            }
+            else
+            {
+                if (ParentId != System.Guid.Empty && entity.ParentId.Value != ParentId)
+                {
+                    entity.ParentId = ParentId;
+                }
+                else
+                {
+                    entity.ParentId = null;
+                }
             }
         }
     }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common</AssemblyName>
@@ -17,6 +17,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="SAPRESSC.Middleware.Identity.Web.Common" Version="0.4.0-alpha" />
+    <PackageReference Include="MediaToolkit.NetCore" Version="0.1.0-preview" />
+    <PackageReference Include="Slugify.Core" Version="2.3.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SAPRESSC.Business.Billboard.Cinema.Persistence\SAPRESSC.Business.Billboard.Cinema.Persistence.csproj" />

@@ -33,6 +33,7 @@
     <PackageReference Include="CarouselView.FormsPlugin.Fix" Version="5.2.1" />
     <PackageReference Include="MagicGradients" Version="1.1.1" />
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.8" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="SSCXFToolKit.IoC" Version="0.2.0-alpha" />
     <PackageReference Include="SSCXFToolKit.Mvvm" Version="0.4.0-alpha" />
     <PackageReference Include="SSCXFToolKit.Presentation" Version="0.4.5-alpha" />

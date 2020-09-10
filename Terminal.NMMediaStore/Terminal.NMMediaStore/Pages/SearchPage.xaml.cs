@@ -37,8 +37,8 @@
                     var countryProvider = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Providers.Facade.ICountryProviderFacade>();
 
                     var categories = await categoryProvider.GetByParentAsync(null);
-                    var producerHouses = await producerHouseProvider.GetRelevantsAsync();
-                    var years = await yearProvider.GetRelevantAsync();
+                    var producerHouses = await producerHouseProvider.GetAllAsync();
+                    var years = await yearProvider.GetAllAsync();
                     var countries = await countryProvider.GetAllAsync();
 
                     await LoadSearchsAsync();
@@ -134,7 +134,7 @@
             var subscriptor = subscriptionManager.GetAuthenticatedSubscritor();
 
             var subscriptorSearches = await searchProvider.GetLastSubscriptorSearchesAsync(subscriptor.Subscription.Id);
-            var otherSubscriptorsSearches = await searchProvider.GetLastOtherSubscriptorsSearchesAsync();
+            var otherSubscriptorsSearches = await searchProvider.GetLastOtherSubscriptorsSearchesAsync(subscriptor.Subscription.Id);
 
             Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
             {
