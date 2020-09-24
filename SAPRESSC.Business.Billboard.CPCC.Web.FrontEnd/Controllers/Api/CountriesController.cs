@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System.Linq;
 
-namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.FrontEnd.Controllers.Api
+namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Controllers.Api
 {
     [Route("api/[area]/[controller]")]
     [Area("mediastore")]
@@ -18,7 +18,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.FrontEnd.Co
         [HttpGet]
         public virtual IActionResult Get()
         {
-            return Ok(repository.GetAll().Select(entity => new Web.Api.Common.Models.CountryModel
+            return Ok(repository.GetAll().Select(entity => new Cinema.Web.Api.Common.Models.CountryModel
             {
                 Id = entity.Id,
                 Name = entity.Name

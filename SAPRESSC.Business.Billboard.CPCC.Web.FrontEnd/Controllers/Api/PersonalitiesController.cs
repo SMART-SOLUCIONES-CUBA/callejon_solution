@@ -3,15 +3,15 @@ using Microsoft.Extensions.Logging;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.FrontEnd.Extensions;
 using System.Linq;
 
-namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.FrontEnd.Controllers.Api
+namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Controllers.Api
 {
     [Route("api/[area]/[controller]")]
     [Area("mediastore")]
     public class PersonalitiesController : Core.Web.Common.Controllers.BaseWebController
     {
-        private readonly Core.Persistence.Repositories.IEntityRepository<Persistence.Entities.Personality, long> repository;
+        private readonly Core.Persistence.Repositories.IEntityRepository<Cinema.Persistence.Entities.Personality, long> repository;
 
-        public PersonalitiesController(Core.Persistence.Repositories.IEntityRepository<Persistence.Entities.Personality, long> repository, Microsoft.Extensions.Localization.IStringLocalizer<PersonalitiesController> localizer, ILogger<PersonalitiesController> logger) : base(localizer, logger)
+        public PersonalitiesController(Core.Persistence.Repositories.IEntityRepository<Cinema.Persistence.Entities.Personality, long> repository, Microsoft.Extensions.Localization.IStringLocalizer<PersonalitiesController> localizer, ILogger<PersonalitiesController> logger) : base(localizer, logger)
         {
             this.repository = repository;
         }
@@ -39,13 +39,13 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.FrontEnd.Co
 
             var maxCount = selection.Count();
 
-            var paginationModel = new Web.Api.Common.Models.PaginationModel<Web.Api.Common.Models.PersonalityModel>
+            var paginationModel = new Cinema.Web.Api.Common.Models.PaginationModel<Cinema.Web.Api.Common.Models.PersonalityModel>
             {
                 Limit = limit,
                 Page = 0,
                 HasNext = false,
                 HasPrevious = false,
-                List = new System.Collections.Generic.List<Web.Api.Common.Models.PersonalityModel>()
+                List = new System.Collections.Generic.List<Cinema.Web.Api.Common.Models.PersonalityModel>()
             };
 
             if (maxCount > 0)
@@ -62,7 +62,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.FrontEnd.Co
                     sheet = 1;
                 }
 
-                var entities = new System.Collections.Generic.List<Persistence.Entities.Personality>();
+                var entities = new System.Collections.Generic.List<Cinema.Persistence.Entities.Personality>();
 
                 if (!repository.IsPagingOrderDescending())
                 {
@@ -75,7 +75,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.FrontEnd.Co
 
                 var models = entities.Select(entity => entity.ToModel()).ToList();
 
-                paginationModel = new Web.Api.Common.Models.PaginationModel<Web.Api.Common.Models.PersonalityModel>
+                paginationModel = new Cinema.Web.Api.Common.Models.PaginationModel<Cinema.Web.Api.Common.Models.PersonalityModel>
                 {
                     Limit = limit,
                     Page = sheet,

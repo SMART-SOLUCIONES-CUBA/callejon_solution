@@ -6,7 +6,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mg="clr-namespace:MagicGradients;assembly=MagicGradients"
     xmlns:ic="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
-    xmlns:ffil="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
     xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Converters"
     xmlns:views="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Views"
@@ -18,7 +17,7 @@
         <ResourceDictionary>
             <converters:CurrentStorageUsedBoxWidthConverter x:Key="CurrentStorageUsedBoxWidthConverter" Page="{x:Reference Page}" />
             <converters:VirtualStorageUsedBoxWidthConverter x:Key="VirtualStorageUsedBoxWidthConverter" Page="{x:Reference Page}" />
-            <converters:ImageModelToImageSourceConverter x:Key="ImageModelToImageSourceConverter" />
+            <converters:AudioVisualToPlacardContentViewConverter x:Key="AudioVisualToPlacardContentViewConverter" />
             <converters:AudioVisualEnumerationToStorageSpaceConverter x:Key="AudioVisualEnumerationToStorageSpaceConverter" />
             <converters:MasterPageModelToVirtualStorageUsedSpaceConverter x:Key="MasterPageModelToVirtualStorageUsedSpaceConverter" />
             <converters:CollectionToJoinedStringBindingConverter x:Key="CollectionToJoinedStringBindingConverter" />
@@ -131,7 +130,7 @@
                             BorderColor="Snow"
                             WidthRequest="{StaticResource MiddleAvatarSize}"
                             HeightRequest="{StaticResource MiddleAvatarSize}" 
-                            Source="{Binding Path=Subscriptor.Image, Converter={StaticResource ImageModelToImageSourceConverter}}">
+                            Source="{Binding Path=Subscriptor.ImageSource}">
                         </ic:CircleImage>
                         <Label
                             Grid.Column="1" Grid.Row="0"
@@ -407,11 +406,10 @@
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
-                                        <ffil:CachedImage
+                                        <ContentView
                                             Grid.Column="0" Grid.RowSpan="4"
                                             WidthRequest="320" HeightRequest="180"
-                                            Source="{Binding Path=PlacardImage, Converter={StaticResource ImageModelToImageSourceConverter}}"
-                                            Aspect="AspectFill" />
+                                            Content="{Binding Converter={StaticResource AudioVisualToPlacardContentViewConverter}}" />
                                         <Label 
                                             Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4"
                                             LineBreakMode="TailTruncation"

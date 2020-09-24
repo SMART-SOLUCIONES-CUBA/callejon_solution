@@ -55,7 +55,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Terminal.NMMediaStore.iOS",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Terminal.NMMediaStore", "Terminal.NMMediaStore\Terminal.NMMediaStore\Terminal.NMMediaStore.csproj", "{87CD7105-E74C-4243-B739-E6DF9AD7D144}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Terminal.NMMediaStore.UWP.Supporter", "Terminal.NMMediaStore.UWP.Supporter\Terminal.NMMediaStore.UWP.Supporter.csproj", "{0E145537-71A5-45C1-BB25-6E80FFB6825C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Terminal.NMMediaStore.UWP.Supporter", "Terminal.NMMediaStore.UWP.Supporter\Terminal.NMMediaStore.UWP.Supporter.csproj", "{0E145537-71A5-45C1-BB25-6E80FFB6825C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Terminal.NMMediaStore.UWP.Supporter.Api.Common", "Terminal.NMMediaStore.UWP.Supporter.Api.Common\Terminal.NMMediaStore.UWP.Supporter.Api.Common.csproj", "{3D4BDC72-C6B9-4B63-9A24-65CE7C588CF8}"
 EndProject

@@ -4,11 +4,19 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Providers
 {
     public class MockPersonalityProvider : Facade.IPersonalityProviderFacade
     {
-        public async System.Threading.Tasks.Task<PersonalityModel[]> GetAllAsync()
+        public async System.Threading.Tasks.Task<PaginationModel<PersonalityModel>> GetPaginateAsync(int page, int limit)
         {
             await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(1));
 
-            return BuildMockList();
+            return new PaginationModel<PersonalityModel>
+            {
+                Page = page,
+                Limit = limit,
+                HasNext = true,
+                HasPrevious = false,
+                MaxPageCount = 1,
+                List = new System.Collections.Generic.List<PersonalityModel>(BuildMockList())
+            };
         }
 
         public async System.Threading.Tasks.Task<PersonalityModel[]> GetRelevantActorsAsync()

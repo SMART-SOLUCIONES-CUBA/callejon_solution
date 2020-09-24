@@ -19,7 +19,5 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Ent
         public List<SubscriptionGenreBridge> PreferedGenreBridges { get; set; }
 
         public List<SubscriptionTagBridge> PreferedTagBridges { get; set; }
-
-        public Middleware.Media.Persistence.Entities.Image Image { get; set; }
     }
 }

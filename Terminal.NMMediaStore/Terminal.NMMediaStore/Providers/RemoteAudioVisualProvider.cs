@@ -5,7 +5,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Providers
 {
     public class RemoteAudioVisualProvider : Facade.IAudioVisualProviderFacade
     {
-        private const string TARGET_API_BASE_QUERY = "mediateca/audiovisuals";
+        private const string TARGET_API_BASE_QUERY = "mediastore/audiovisuals";
 
         public Task<PaginationModel<AudioVisualModel>> GetLastsAsync(int page = 1, int limit = 20)
         {

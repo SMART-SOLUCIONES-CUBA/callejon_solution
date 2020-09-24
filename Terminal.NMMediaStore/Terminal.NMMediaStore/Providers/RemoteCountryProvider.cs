@@ -2,7 +2,7 @@
 {
     public class RemoteCountryProvider : Facade.ICountryProviderFacade
     {
-        private const string TARGET_API_BASE_QUERY = "mediateca/countries";
+        private const string TARGET_API_BASE_QUERY = "mediastore/countries";
 
         public System.Threading.Tasks.Task<SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.CountryModel[]> GetAllAsync()
         {

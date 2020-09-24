@@ -880,11 +880,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("ImageId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ImageId");
 
                     b.ToTable("subscriptions","cpcc_billboard_cinemabillboard");
                 });
@@ -2010,13 +2006,6 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
                         .WithMany()
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Subscription", b =>
-                {
-                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Middleware.Media.Persistence.Entities.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId");
                 });
 
             modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.SubscriptionGenreBridge", b =>

@@ -2,7 +2,7 @@
 {
     public class RemoteTagProvider : Facade.ITagProviderFacade
     {
-        private const string TARGET_API_BASE_QUERY = "mediateca/tags";
+        private const string TARGET_API_BASE_QUERY = "mediastore/tags";
 
         public System.Threading.Tasks.Task<SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.TagModel[]> GetAllAsync()
         {

@@ -99,7 +99,6 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\AuthenticationContextPlatformParameterProvider.cs" />
     <Compile Include="Views\Renderer\RingActivityIndicatorRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -157,11 +156,11 @@
     <PackageReference Include="MagicGradients">
       <Version>1.1.1</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
-      <Version>5.2.8</Version>
-    </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="Novell.Directory.Ldap.NETStandard">
+      <Version>3.3.1</Version>
     </PackageReference>
     <PackageReference Include="SSCXFToolKit.Presentation">
       <Version>0.4.5-alpha</Version>
@@ -173,6 +172,9 @@
       <Version>3.0.0.5</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.FFImageLoading.Forms">
+      <Version>2.4.11.982</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.FFImageLoading.Transformations">
       <Version>2.4.11.982</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="4.8.0.1269" />
@@ -212,7 +214,9 @@
       <Name>Windows Desktop Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Terminal.NMMediaStore.UWP_TemporaryKey.pfx" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

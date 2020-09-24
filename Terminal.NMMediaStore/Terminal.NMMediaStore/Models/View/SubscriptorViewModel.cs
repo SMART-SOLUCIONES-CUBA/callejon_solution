@@ -4,12 +4,12 @@
     {
         private string name;
         private string lastName;
-        private SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.ImageModel image;
+        private Xamarin.Forms.ImageSource image;
 
         public string Name { get => name; set => SetProperty(ref name, value); }
 
         public string LastName { get => lastName; set => SetProperty(ref lastName, value); }
 
-        public SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.ImageModel Image { get => image; set => SetProperty(ref image, value); }
+        public Xamarin.Forms.ImageSource ImageSource { get => image; set => SetProperty(ref image, value); }
     }
 }

@@ -22,7 +22,7 @@
             <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonTextColorConverter" TrueString="Red" FalseString="Black" />
 
             <converters:CollectionToJoinedStringBindingConverter x:Key="CollectionToJoinedStringBindingConverter" />
-            <converters:ImageModelToImageSourceConverter x:Key="ImageModelToImageSourceConverter" />
+            <converters:AudioVisualToPlacardContentViewConverter x:Key="AudioVisualToPlacardContentViewConverter" />
 
             <DataTemplate x:Key="AudioVisualWidthPlacardDataTemplate">
                 <StackLayout 
@@ -32,10 +32,9 @@
                         <TapGestureRecognizer Tapped="AudioVisualItem_Tapped" />
                     </StackLayout.GestureRecognizers>
                     <Grid>
-                        <ffil:CachedImage
+                        <ContentView
                             WidthRequest="320" HeightRequest="180"
-                            Source="{Binding Path=AudioVisual.PlacardImage, Converter={StaticResource ImageModelToImageSourceConverter}}"
-                            Aspect="AspectFill" />
+                            Content="{Binding Path=AudioVisual, Converter={StaticResource AudioVisualToPlacardContentViewConverter}}" />
                         <Button
                             Margin="8"
                             VerticalOptions="Start" HorizontalOptions="End"

@@ -2,7 +2,7 @@
 {
     public class RemoteAdvertisementProvider : Facade.IAdvertisementProviderFacade
     {
-        private const string TARGET_API_BASE_QUERY = "mediateca/advertisements";
+        private const string TARGET_API_BASE_QUERY = "mediastore/advertisements";
 
         public System.Threading.Tasks.Task<SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.AdvertisementModel[]> GetAllAsync()
         {

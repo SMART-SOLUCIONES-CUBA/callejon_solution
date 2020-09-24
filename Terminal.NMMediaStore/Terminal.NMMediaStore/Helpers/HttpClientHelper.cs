@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -16,42 +15,41 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Helpers
                 if (instance == null)
                 {
                     instance = new HttpClientHelper("http://sgc.elcallejon.net/api/");
+                    //instance = new HttpClientHelper("http://localhost:5000/api/");
                 }
 
                 return instance;
             }
         }
 
-        private static readonly string CONTENT_TYPE = "APPLICATION/JSON";
+        private const string API_KEY_HEADER_PROPERTY = "X-Api-Key";
+        private const string API_KEY_VALUE = "terminal-mediastore-v0.1.0-rc-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ0";
+        private const string CONTENT_TYPE = "APPLICATION/JSON";
 
         private readonly HttpClient client;
 
-        private readonly System.Func<KeyValuePair<string, string>> authorizationTokenGetter;
-        private readonly System.Func<KeyValuePair<string, string>[]> extraHeadersGetter;
-
-        public HttpClientHelper(string baseUrl, System.Func<KeyValuePair<string, string>> authorizationTokenGetter = null, System.Func<KeyValuePair<string, string>[]> extraHeadersGetter = null)
+        public HttpClientHelper(string baseUrl)
         {
-            this.authorizationTokenGetter = authorizationTokenGetter;
-
-            this.extraHeadersGetter = extraHeadersGetter;
-
             client = new HttpClient { BaseAddress = new System.Uri(baseUrl), Timeout = System.TimeSpan.FromSeconds(30) };
+
+            client.DefaultRequestHeaders.Add(API_KEY_HEADER_PROPERTY, API_KEY_VALUE);
         }
 
         public async Task DeleteAsync(string url)
         {
-            EnsureRequiredHeadersInclution();
-
             var response = await client.DeleteAsync(url);
+
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                throw new Exceptions.UnspectedHttpStatusException { HttpStatusCode = response.StatusCode };
+            }
         }
 
         public async Task<TResponse> GetAsync<TResponse>(string url)
         {
-            EnsureRequiredHeadersInclution();
-
             var response = await client.GetAsync(url);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 throw new Exceptions.UnspectedHttpStatusException { HttpStatusCode = response.StatusCode };
             }
@@ -59,18 +57,15 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Helpers
             var responseContent = await response.Content.ReadAsStringAsync();
 
             return JsonConvert.DeserializeObject<TResponse>(responseContent);
-
         }
 
         public async Task PostAsync<TRequest>(string urlOrResource, TRequest request)
         {
             var content = new StringContent(JsonConvert.SerializeObject(request), System.Text.Encoding.UTF8, CONTENT_TYPE);
 
-            EnsureRequiredHeadersInclution();
-
             var response = await client.PostAsync(urlOrResource, content);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 throw new Exceptions.UnspectedHttpStatusException { HttpStatusCode = response.StatusCode };
             }
@@ -80,11 +75,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Helpers
         {
             var content = new StringContent(JsonConvert.SerializeObject(request), System.Text.Encoding.UTF8, CONTENT_TYPE);
 
-            EnsureRequiredHeadersInclution();
-
             var response = await client.PostAsync(urlOrResource, content);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 throw new Exceptions.UnspectedHttpStatusException { HttpStatusCode = response.StatusCode };
             }
@@ -96,11 +89,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Helpers
 
         public async Task PostFormAsync(string urlOrResource, MultipartFormDataContent multipartFormDataContent)
         {
-            EnsureRequiredHeadersInclution();
-
             var response = await client.PostAsync(urlOrResource, multipartFormDataContent);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 throw new Exceptions.UnspectedHttpStatusException { HttpStatusCode = response.StatusCode };
             }
@@ -108,11 +99,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Helpers
 
         public async Task PutFormAsync(string urlOrResource, MultipartFormDataContent multipartFormDataContent)
         {
-            EnsureRequiredHeadersInclution();
-
             var response = await client.PutAsync(urlOrResource, multipartFormDataContent);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 throw new Exceptions.UnspectedHttpStatusException { HttpStatusCode = response.StatusCode };
             }
@@ -122,11 +111,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Helpers
         {
             var content = new StringContent(JsonConvert.SerializeObject(request), System.Text.Encoding.UTF8, CONTENT_TYPE);
 
-            EnsureRequiredHeadersInclution();
-
             var response = await client.PutAsync(urlOrResource, content);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 throw new Exceptions.UnspectedHttpStatusException { HttpStatusCode = response.StatusCode };
             }
@@ -140,11 +127,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Helpers
         {
             var content = new StringContent(JsonConvert.SerializeObject(request), System.Text.Encoding.UTF8, CONTENT_TYPE);
 
-            EnsureRequiredHeadersInclution();
-
             var response = await client.PutAsync(urlOrResource, content);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 throw new Exceptions.UnspectedHttpStatusException { HttpStatusCode = response.StatusCode };
             }
@@ -154,44 +139,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Helpers
         {
             var content = new StringContent(string.Empty, System.Text.Encoding.UTF8, CONTENT_TYPE);
 
-            EnsureRequiredHeadersInclution();
-
             var response = await client.PutAsync(urlOrResource, content);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 throw new Exceptions.UnspectedHttpStatusException { HttpStatusCode = response.StatusCode };
-            }
-        }
-
-        private void EnsureRequiredHeadersInclution()
-        {
-            if (authorizationTokenGetter != null)
-            {
-
-                var authorizationToken = authorizationTokenGetter.Invoke();
-
-                if (string.IsNullOrWhiteSpace(authorizationToken.Key) || string.IsNullOrWhiteSpace(authorizationToken.Value))
-                {
-                    return;
-                }
-
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(authorizationToken.Key, authorizationToken.Value);
-            }
-
-            if (extraHeadersGetter != null)
-            {
-                var extraHeaders = extraHeadersGetter.Invoke();
-
-                foreach (var header in extraHeaders)
-                {
-                    if (client.DefaultRequestHeaders.Contains(header.Key))
-                    {
-                        client.DefaultRequestHeaders.Remove(header.Key);
-                    }
-
-                    client.DefaultRequestHeaders.Add(header.Key, header.Value);
-                }
             }
         }
     }

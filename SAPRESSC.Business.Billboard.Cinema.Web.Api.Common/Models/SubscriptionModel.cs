@@ -9,7 +9,5 @@
         public GenreModel[] PreferedGenres { get; set; }
 
         public TagModel[] PreferedTags { get; set; }
-
-        public ImageModel Image { get; set; }
     }
 }

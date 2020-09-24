@@ -62,7 +62,7 @@
                                 BorderColor="Snow"
                                 WidthRequest="{StaticResource MiddleAvatarSize}"
                                 HeightRequest="{StaticResource MiddleAvatarSize}" 
-                                Source="{Binding Path=Subscriptor.Image, Converter={StaticResource ImageModelToImageSourceConverter}}">
+                                Source="{Binding Path=Subscriptor.ImageSource}">
                             </ic:CircleImage>
                             <Label
                                 HorizontalOptions="Center"

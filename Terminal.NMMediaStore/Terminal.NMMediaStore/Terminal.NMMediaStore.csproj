@@ -32,14 +32,15 @@
     <PackageReference Include="CardsView" Version="2.6.3" />
     <PackageReference Include="CarouselView.FormsPlugin.Fix" Version="5.2.1" />
     <PackageReference Include="MagicGradients" Version="1.1.1" />
-    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.8" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Novell.Directory.Ldap.NETStandard" Version="3.3.1" />
     <PackageReference Include="SSCXFToolKit.IoC" Version="0.2.0-alpha" />
     <PackageReference Include="SSCXFToolKit.Mvvm" Version="0.4.0-alpha" />
     <PackageReference Include="SSCXFToolKit.Presentation" Version="0.4.5-alpha" />
     <PackageReference Include="SSCXFToolKit.Presentation.Transform" Version="0.2.0-alpha" />
     <PackageReference Include="Xam.Plugins.Forms.ImageCircle" Version="3.0.0.5" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
+    <PackageReference Include="Xamarin.FFImageLoading.Transformations" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.Forms" Version="4.8.0.1269" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
     <PackageReference Include="Xamarin.Forms.PancakeView" Version="2.1.0.714" />
@@ -52,6 +53,9 @@
   <ItemGroup>
     <Compile Update="Pages\SignInPage.xaml.cs">
       <DependentUpon>SignInPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Wrapper\HorizontalPosterWrapperView.xaml.cs">
+      <DependentUpon>HorizontalPosterWrapperView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -84,6 +88,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\SubscriptionConfigurationPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Wrapper\HorizontalPosterWrapperView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

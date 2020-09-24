@@ -4,7 +4,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Providers
 {
     public class RemotePersonalityProvider : Facade.IPersonalityProviderFacade
     {
-        private const string TARGET_API_BASE_QUERY = "mediateca/personalities";
+        private const string TARGET_API_BASE_QUERY = "mediastore/personalities";
 
         public System.Threading.Tasks.Task<PaginationModel<PersonalityModel>> GetPaginateAsync(int page = 1, int limit = 20)
         {

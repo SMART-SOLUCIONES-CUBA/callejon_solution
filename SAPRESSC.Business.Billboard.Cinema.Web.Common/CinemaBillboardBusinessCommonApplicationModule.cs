@@ -74,6 +74,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common
             services.AddScoped<IEntityRepository<FetchOrder, long>, FetchOrderRepository>();
             services.AddScoped<IEntityRepository<Search, long>, SearchRepository>();
             services.AddScoped<IEntityRepository<Advertisement, System.Guid>, AdvertisementRepository>();
+            services.AddScoped<IEntityRepository<Subscription, string>, SubscriptionRepository>();
         }
     }
 }

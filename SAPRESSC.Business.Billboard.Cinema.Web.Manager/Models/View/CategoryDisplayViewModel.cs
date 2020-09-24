@@ -6,7 +6,7 @@
 
         public string Name { get; set; }
 
-        public string Slug { get => Common.Providers.SlugHelperProvider.Instance.Get().GenerateSlug(Name); }
+        public string Slug { get => Name == null ? null : Common.Providers.SlugHelperProvider.Instance.Get().GenerateSlug(Name); }
 
         public CategoryDisplayViewModel Parent { get; set; }
 

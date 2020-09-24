@@ -47,6 +47,10 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
+                //var a = Windows.System.User.GetFromId(string.Empty);
+
+                //var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+
                 FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
 
                 // TODO Remove when feature released

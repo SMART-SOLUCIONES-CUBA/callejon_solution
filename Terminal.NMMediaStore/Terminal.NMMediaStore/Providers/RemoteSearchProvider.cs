@@ -2,7 +2,7 @@
 {
     public class RemoteSearchProvider : Facade.ISearchProviderFacade
     {
-        private const string TARGET_API_BASE_QUERY = "mediateca/searchs";
+        private const string TARGET_API_BASE_QUERY = "mediastore/searchs";
 
         public System.Threading.Tasks.Task<SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel[]> GetLastOtherSubscriptorsSearchesAsync(string id)
         {

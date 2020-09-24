@@ -17,7 +17,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Mod
 
         public string Title { get; set; }
 
-        public string Slug { get => Common.Providers.SlugHelperProvider.Instance.Get().GenerateSlug(Title); }
+        public string Slug { get => Title == null ? null : Common.Providers.SlugHelperProvider.Instance.Get().GenerateSlug(Title); }
 
         public string LocalizedTitle { get; set; }
 

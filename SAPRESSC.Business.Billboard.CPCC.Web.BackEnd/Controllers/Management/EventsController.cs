@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities;
-using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Persistence.Entities;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.SecurityShared;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Models.Filter;
@@ -27,7 +26,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Contr
         private const string POSTER_IMAGE_FILE_FIELD_NAME = "PosterImageFile";
         private const string PROMO_VIDEO_FILE_FIELD_NAME = "PromoVideoFile";
 
-        private readonly Microsoft.Extensions.Options.IOptions<FfmpegOptions> ffmpegOptions;
+        private readonly Microsoft.Extensions.Options.IOptions<Cinema.Web.Common.Options.FfmpegOptions> ffmpegOptions;
 
         private readonly IEntityRepository<Thumbnail, Guid> thumbnailRepository;
         private readonly IEntityRepository<Video, Guid> videoRepository;
@@ -36,7 +35,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Contr
         private readonly IEntityRepository<Personality, long> personalityRepository;
         private readonly Microsoft.EntityFrameworkCore.DbContext dbContext;
 
-        public EventsController(Microsoft.Extensions.Options.IOptions<FfmpegOptions> ffmpegOptions, IEntityRepository<Thumbnail, Guid> thumbnailRepository, IEntityRepository<Video, Guid> videoRepository, Microsoft.EntityFrameworkCore.DbContext dbContext, IEntityRepository<Personality, long> personalityRepository, IMediaFileManagerFacade mediaFileManagerFacade, IEntityRepository<Image, Guid> imageRepository, IEntityRepository<Event, Guid> repository, Microsoft.Extensions.Localization.IStringLocalizer<EventsController> localizer, ILogger<EventsController> logger) : base(repository, localizer, logger)
+        public EventsController(Microsoft.Extensions.Options.IOptions<Cinema.Web.Common.Options.FfmpegOptions> ffmpegOptions, IEntityRepository<Thumbnail, Guid> thumbnailRepository, IEntityRepository<Video, Guid> videoRepository, Microsoft.EntityFrameworkCore.DbContext dbContext, IEntityRepository<Personality, long> personalityRepository, IMediaFileManagerFacade mediaFileManagerFacade, IEntityRepository<Image, Guid> imageRepository, IEntityRepository<Event, Guid> repository, Microsoft.Extensions.Localization.IStringLocalizer<EventsController> localizer, ILogger<EventsController> logger) : base(repository, localizer, logger)
         {
             this.ffmpegOptions = ffmpegOptions;
             this.thumbnailRepository = thumbnailRepository;

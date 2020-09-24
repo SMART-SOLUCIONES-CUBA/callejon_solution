@@ -2,7 +2,7 @@
 {
     public class RemoteProducerHouseProvider : Facade.IProducerHouseProviderFacade
     {
-        private const string TARGET_API_BASE_QUERY = "mediateca/producerhouses";
+        private const string TARGET_API_BASE_QUERY = "mediastore/producerhouses";
 
         public System.Threading.Tasks.Task<SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.ProducerHouseModel[]> GetAllAsync()
         {

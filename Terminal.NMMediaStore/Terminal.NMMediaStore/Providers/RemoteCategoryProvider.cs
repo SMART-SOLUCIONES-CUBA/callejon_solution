@@ -2,7 +2,7 @@
 {
     public class RemoteCategoryProvider : Facade.ICategoryProviderFacade
     {
-        private const string TARGET_API_BASE_QUERY = "mediateca/categories";
+        private const string TARGET_API_BASE_QUERY = "mediastore/categories";
 
         public System.Threading.Tasks.Task<SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.CategoryModel[]> GetByParentAsync(SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.CategoryModel parent)
         {

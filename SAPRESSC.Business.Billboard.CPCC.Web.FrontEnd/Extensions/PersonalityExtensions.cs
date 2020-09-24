@@ -12,7 +12,7 @@
                 BornDate = target.BornDate,
                 IsMale = target.Sex == Middleware.Identity.Persistence.Enumerations.Sex.Male,
                 About = target.About,
-                Image = new Api.Common.Models.ImageModel { Id = target.Image.Id, ContentType = target.Image.ContentType }
+                Image = target.Image == null ? null : new Api.Common.Models.ImageModel { Id = target.Image.Id, ContentType = target.Image.ContentType }
             };
         }
     }

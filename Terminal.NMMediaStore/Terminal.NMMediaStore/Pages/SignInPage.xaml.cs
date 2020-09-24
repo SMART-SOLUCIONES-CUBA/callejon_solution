@@ -1,4 +1,6 @@
-﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
+﻿using SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Providers.Constant;
+
+namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 {
     [Xamarin.Forms.Xaml.XamlCompilation(Xamarin.Forms.Xaml.XamlCompilationOptions.Compile)]
     public partial class SignInPage : Xamarin.Forms.ContentPage
@@ -49,9 +51,7 @@
                     }
                     else
                     {
-                        // TODO Handle exception !!
-
-                        DisplayAlert("Aviso", "Exception no gestionada.", "Aceptar");
+                        XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Helpers.Facade.IExceptionHandlingHelperFacade>().HandleException(authenticationTask.Exception);
                     }
 
                     BindingContextModel.IsBusy = false;

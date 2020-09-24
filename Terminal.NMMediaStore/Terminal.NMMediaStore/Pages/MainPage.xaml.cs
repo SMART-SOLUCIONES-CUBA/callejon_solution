@@ -46,7 +46,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                     {
                         Name = subscriptor.Name,
                         LastName = subscriptor.LastName,
-                        Image = subscriptor.Subscription.Image
+                        ImageSource = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Providers.Facade.IImageSourceProviderFacade>().GetForSubscriptor(subscriptor)
                     },
                     Target = new Models.View.StorageViewModel
                     {

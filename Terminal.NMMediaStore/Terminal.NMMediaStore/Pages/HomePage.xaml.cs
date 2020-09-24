@@ -82,6 +82,15 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                         return true;
                     });
                 });
+            }).ContinueWith(appearingLoadTask =>
+            {
+                if (appearingLoadTask.Exception != null)
+                {
+                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                    {
+                        XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Helpers.Facade.IExceptionHandlingHelperFacade>().HandleException(appearingLoadTask.Exception);
+                    });                    
+                }
             });
         }
 

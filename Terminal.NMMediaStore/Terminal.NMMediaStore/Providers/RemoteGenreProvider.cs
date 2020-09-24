@@ -2,7 +2,7 @@
 {
     public class RemoteGenreProvider : Facade.IGenreProviderFacade
     {
-        private const string TARGET_API_BASE_QUERY = "mediateca/genres";
+        private const string TARGET_API_BASE_QUERY = "mediastore/genres";
 
         public System.Threading.Tasks.Task<SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.GenreModel[]> GetAllAsync()
         {

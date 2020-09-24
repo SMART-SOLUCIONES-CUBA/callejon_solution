@@ -2,7 +2,7 @@
 {
     public class RemoteYearProvider : Facade.IYearProviderFacade
     {
-        private const string TARGET_API_BASE_QUERY = "mediateca/years";
+        private const string TARGET_API_BASE_QUERY = "mediastore/years";
 
         public System.Threading.Tasks.Task<int[]> GetAllAsync()
         {

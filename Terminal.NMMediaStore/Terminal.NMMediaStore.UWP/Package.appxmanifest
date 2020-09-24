@@ -10,7 +10,7 @@
   <Identity
     Name="2c5b796d-6009-4963-b16b-74b0b40bc4fc"
     Publisher="CN=SMART SOLUCIONES CUBA"
-    Version="1.0.0.0" />
+    Version="0.8.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="ec0cc741-fd3e-485c-81be-68815c480690" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
@@ -55,5 +55,6 @@
     <Capability Name="privateNetworkClientServer" />
     <uap:Capability Name="removableStorage" />
     <rescap:Capability Name="broadFileSystemAccess" />
+    <uap:Capability Name="userAccountInformation"/>
   </Capabilities>
 </Package>

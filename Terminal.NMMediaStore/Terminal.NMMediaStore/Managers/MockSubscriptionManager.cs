@@ -26,12 +26,7 @@
                 LastName = "Martínez Basulto",
                 Subscription = !hasSubscription ? null : new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SubscriptionModel
                 {
-                    Id = "dbasulto",
-                    Image = new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.ImageModel
-                    {
-                        Id = new System.Guid("485A1093-45B0-49B5-97FA-227ED0435A6A"),
-                        ContentType = "image/png"
-                    }
+                    Id = "dbasulto"
                 }
             };
         }

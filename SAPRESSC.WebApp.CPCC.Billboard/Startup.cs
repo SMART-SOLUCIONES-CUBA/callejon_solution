@@ -31,7 +31,8 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<Options.ApiSecurityOptions>(Configuration.GetSection("ApiSecurity"));
-            services.Configure<Business.Billboard.Cinema.Web.FrontEnd.Options.MediaStoreOptions>(Configuration.GetSection("MediaStore"));
+            services.Configure<Business.Billboard.CPCC.Web.FrontEnd.Options.MediaStoreOptions>(Configuration.GetSection("MediaStore"));
+            services.Configure<Business.Billboard.Cinema.Web.Common.Options.FfmpegOptions>(Configuration.GetSection("FFMPEG"));
 
             services.AddDbContext<Persistence.Context.ApplicationDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection"), mySqlOptions =>
             {
@@ -41,8 +42,6 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard
             services.AddScoped<DbContext, Persistence.Context.ApplicationDbContext>();
 
             services.AddLogging();
-
-            services.Configure<Business.Billboard.Cinema.Web.Common.FfmpegOptions>(Configuration.GetSection("FFMPEG"));
 
             var appContext = new BaseApplicationContext(
                 "CPCCBillboardCookies",

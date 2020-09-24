@@ -48,13 +48,13 @@
             </div>
 
             <div class="row">
-                <div class="col-lg-2 col-md-3" style="margin-bottom: 20px;">
+                <div class="col-md-6" style="margin-bottom: 20px;">
                     @{
                         var imageUrl = Model.ImageId != System.Guid.Empty ? Url.Action("image", "default", new { Area = "media", key = Model.ImageId }) : "/img/default-person-picture.jpg";
                     }
-                    <img class="img-circle" src="@imageUrl" />
+                    <img class="img-thumbnail" src="@imageUrl" />
                 </div>
-                <div class="col-lg-10 col-md-9" style="margin-bottom: 20px;">
+                <div class="col-md-6" style="margin-bottom: 20px;">
                     @Html.LabelFor(model => model.ImageFile, new { @class = "control-label" })
                     @Html.EditorFor(model => model.ImageFile, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.ImageFile, null, new { @class = "text-danger" })
