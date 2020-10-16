@@ -14,7 +14,7 @@
             entityTypeBuilder.HasKey(entity => new { entity.FetchOrderId, entity.ProductionId });
 
             entityTypeBuilder.HasOne(bridge => bridge.FetchOrder).WithMany(entity => entity.ProductionBridges).HasForeignKey(bridge => bridge.FetchOrderId);
-            entityTypeBuilder.HasOne(bridge => bridge.Production).WithMany().HasForeignKey(bridge => bridge.ProductionId);
+            entityTypeBuilder.HasOne(bridge => bridge.Production).WithMany(entity => entity.FetchOrders).HasForeignKey(bridge => bridge.ProductionId);
         }
     }
 }

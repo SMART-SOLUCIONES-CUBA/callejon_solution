@@ -6,7 +6,7 @@
 
         public System.Threading.Tasks.Task<SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.TagModel[]> GetAllAsync()
         {
-            return Helpers.HttpClientHelper.Instance.GetAsync<SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.TagModel[]>(TARGET_API_BASE_QUERY);
+            return Common.Helpers.HttpClientHelper.Instance.GetAsync<SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.TagModel[]>(TARGET_API_BASE_QUERY);
         }
     }
 }

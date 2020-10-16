@@ -20,14 +20,14 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         [HttpGet("lastforsubscriptor/{key}/take/{limit}")]
         public virtual IActionResult GetLastForSubscriptor(string key, int limit = 10)
         {
-            return Ok(searchRepository.FindBy(entity => entity.SubscriptionId == key).Select(entity => EntityToModel(entity)).Take(limit).ToArray());
+            return Ok(searchRepository.FindBy(e => e.SubscriptionId == key).Select(e => EntityToModel(e)).OrderByDescending(e => e.Id).Take(limit).ToArray());
         }
 
         [HttpGet("lastotherforsubscriptor/{key}")]
         [HttpGet("lastotherforsubscriptor/{key}/take/{limit}")]
         public virtual IActionResult GetLastOtherForSubscriptor(string key, int limit = 10)
         {
-            return Ok(searchRepository.FindBy(entity => entity.SubscriptionId != key).Select(entity => EntityToModel(entity)).Take(limit).ToArray());
+            return Ok(searchRepository.FindBy(e => e.SubscriptionId != key).Select(e => EntityToModel(e)).OrderByDescending(e => e.Id).Take(limit).ToArray());
         }
 
         private Cinema.Web.Api.Common.Models.SearchModel EntityToModel(Cinema.Persistence.Entities.Search entity)
@@ -37,10 +37,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
                 Id = entity.Id,
                 TitleTemathic = entity.TitleTemathic,
                 Year = entity.Year,
-                SubscriptionProfile = new Cinema.Web.Api.Common.Models.SubscriptionModel
-                {
-                    Id = entity.SubscriptionId
-                },
+                SubscriptionId = entity.SubscriptionId,
                 Category = entity.Category == null ? null : new Cinema.Web.Api.Common.Models.CategoryModel { Id = entity.Category.Id, Name = entity.Category.Name },
                 Country = entity.Country == null ? null : new Cinema.Web.Api.Common.Models.CountryModel { Id = entity.Country.Id, Name = entity.Country.Name, IsoCode = entity.Country.IsoCode },
                 ProducerHouse = entity.ProducerHouse == null ? null : new Cinema.Web.Api.Common.Models.ProducerHouseModel
@@ -60,7 +57,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
                     BornDate = bridge.Personality.BornDate,
                     IsMale = bridge.Personality.Sex == Middleware.Identity.Persistence.Enumerations.Sex.Male,
                     About = bridge.Personality.About,
-                    Image = new Cinema.Web.Api.Common.Models.ImageModel { Id = bridge.Personality.Image.Id, ContentType = bridge.Personality.Image.ContentType }
+                    Image = bridge.Personality.Image == null ? null : new Cinema.Web.Api.Common.Models.ImageModel { Id = bridge.Personality.Image.Id, ContentType = bridge.Personality.Image.ContentType }
                 }).ToArray(),
                 Tags = entity.TagBridges.Select(bridge => new Cinema.Web.Api.Common.Models.TagModel { Id = bridge.TagId, Name = bridge.Tag.Name }).ToArray()
             };

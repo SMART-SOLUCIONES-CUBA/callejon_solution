@@ -13,9 +13,9 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Rep
             return base.GetQueryableDbSet()
                 .Include(entity => entity.Category)
                 .Include(entity => entity.Country)
-                .Include(entity => entity.ProducerHouse)
+                .Include(entity => entity.ProducerHouse).ThenInclude(entity => entity.Image)
                 .Include(entity => entity.GenreBridges).ThenInclude(bridge => bridge.Genre)
-                .Include(entity => entity.PersonalityBridges).ThenInclude(bridge => bridge.Personality)
+                .Include(entity => entity.PersonalityBridges).ThenInclude(bridge => bridge.Personality).ThenInclude(entity => entity.Image)
                 .Include(entity => entity.TagBridges).ThenInclude(bridge => bridge.Tag);
         }
 

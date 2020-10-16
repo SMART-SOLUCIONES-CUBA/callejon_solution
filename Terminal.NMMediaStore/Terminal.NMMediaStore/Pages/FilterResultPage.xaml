@@ -20,7 +20,7 @@
             <converters:FlextLayoutToResponsiveItemWidthConverter x:Key="FlextLayoutToResponsiveItemWidthConverter" ItemMinWidth="320" ItemHorizontalMargin="12" />
             <converters:CollectionToJoinedStringBindingConverter x:Key="NoEmptyCollectionToJoinedStringBindingConverter" EmptyStringReplacement="-" />
             <converters:SearchModelToInlineSummaryFormattedTextConverter x:Key="SearchModelToInlineSummaryFormattedTextConverter" CaptionColor="Black" ValueColor="DimGray" />
-            <converters:ImageModelToImageSourceConverter x:Key="ImageModelToImageSourceConverter" />
+            <converters:AudioVisualToPlacardContentViewConverter x:Key="AudioVisualToPlacardContentViewConverter" DownsampleHeight="180" />
 
             <sscxftoolkitpresentationconverters:NotNullToBooleanConverter x:Key="NotNullToBooleanConverter" />
             <sscxftoolkitpresentationconverters:BoolToBoolNegationConverter x:Key="BoolToBoolNegationConverter" />
@@ -62,10 +62,9 @@
                         <TapGestureRecognizer Tapped="AudioVisualItem_Tapped" />
                     </StackLayout.GestureRecognizers>
                     <Grid>
-                        <ffil:CachedImage
+                        <ContentView
                             HeightRequest="{Binding Source={x:RelativeSource Mode=Self}, Path=Width, Converter={StaticResource FractionConverter}, ConverterParameter=1.777777777777778}"
-                            Source="{Binding Path=AudioVisual.PlacardImage, Converter={StaticResource ImageModelToImageSourceConverter}}"
-                            Aspect="AspectFill" />
+                            Content="{Binding Path=AudioVisual, Converter={StaticResource AudioVisualToPlacardContentViewConverter}}" />
                         <Button
                             Margin="8"
                             VerticalOptions="Start" HorizontalOptions="End"

@@ -28,24 +28,31 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Managers
                 {
                     var storageDevice = Windows.Devices.Portable.StorageDevice.FromId(externalDevice.Id);
 
-                    var response = await httpClient.GetAsync(string.Format("http://127.0.0.1:5000/api/driveinfo/{0}", storageDevice.Path));
+                    var response = await httpClient.GetAsync(string.Format("http://127.0.0.1:5666/api/driveinfo/{0}", storageDevice.Path));
 
                     var responseContent = await response.Content.ReadAsStringAsync();
 
-                    var storageDriveInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<Supporter.Api.Common.Models.DriveInfoModel>(responseContent);
-
-                    var totalSpace = storageDriveInfo.TotalSize;
-                    var usedSpace = totalSpace - storageDriveInfo.TotalFreeSpace;
-
-                    result.Add(new Models.StorageModel
+                    try
                     {
-                        Id = externalDevice.Id,
-                        Caption = storageDevice.DisplayName,
-                        Family = storageDriveInfo.DriveType == System.IO.DriveType.Fixed ? Enumerations.StorageFamiliy.UsbHDDrive : Enumerations.StorageFamiliy.UsbFlashDrive,
-                        Path = storageDevice.Path,
-                        TotalSpace = totalSpace,
-                        UsedSpace = usedSpace
-                    });
+                        var storageDriveInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<Supporter.Api.Common.Models.DriveInfoModel>(responseContent);
+
+                        var totalSpace = storageDriveInfo.TotalSize;
+                        var usedSpace = totalSpace - storageDriveInfo.TotalFreeSpace;
+
+                        result.Add(new Models.StorageModel
+                        {
+                            Id = externalDevice.Id,
+                            Caption = storageDevice.DisplayName,
+                            Family = storageDriveInfo.DriveType == System.IO.DriveType.Fixed ? Enumerations.StorageFamiliy.UsbHDDrive : Enumerations.StorageFamiliy.UsbFlashDrive,
+                            Path = storageDevice.Path,
+                            TotalSpace = totalSpace,
+                            UsedSpace = usedSpace
+                        });
+                    }
+                    catch
+                    {
+                        continue;
+                    }                   
                 }
             }
 

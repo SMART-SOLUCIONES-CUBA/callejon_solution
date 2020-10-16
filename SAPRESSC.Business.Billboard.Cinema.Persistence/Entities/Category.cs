@@ -18,6 +18,8 @@
 
         public System.Guid? ParentId { get; set; }
 
+        public System.Collections.Generic.List<Category> Children { get; set; }
+
         public virtual string GetTreeName()
         {
             return Parent != null ? string.Format("{0} | {1}", Parent.GetTreeName(), Name) : Name;

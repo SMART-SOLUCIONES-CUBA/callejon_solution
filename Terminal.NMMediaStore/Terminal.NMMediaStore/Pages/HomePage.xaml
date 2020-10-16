@@ -22,7 +22,7 @@
             <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonTextColorConverter" TrueString="Red" FalseString="Black" />
 
             <converters:CollectionToJoinedStringBindingConverter x:Key="CollectionToJoinedStringBindingConverter" />
-            <converters:AudioVisualToPlacardContentViewConverter x:Key="AudioVisualToPlacardContentViewConverter" />
+            <converters:AudioVisualToPlacardContentViewConverter x:Key="AudioVisualToPlacardContentViewConverter" DownsampleHeight="180" />
 
             <DataTemplate x:Key="AudioVisualWidthPlacardDataTemplate">
                 <StackLayout 

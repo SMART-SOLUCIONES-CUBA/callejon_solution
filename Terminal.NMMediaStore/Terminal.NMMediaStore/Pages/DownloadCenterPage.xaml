@@ -1,31 +1,34 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage 
+<sscxftoolkitmvvmpages:ContentPage 
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mg="clr-namespace:MagicGradients;assembly=MagicGradients"
     xmlns:ic="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
     xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
     xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Converters"
     xmlns:views="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Views"
     mc:Ignorable="d"
-    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages.ShoppingCartPage"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages.DownloadCenterPage"
     x:Name="Page"
     Style="{StaticResource BasePageStyle}">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:CurrentStorageUsedBoxWidthConverter x:Key="CurrentStorageUsedBoxWidthConverter" Page="{x:Reference Page}" />
             <converters:VirtualStorageUsedBoxWidthConverter x:Key="VirtualStorageUsedBoxWidthConverter" Page="{x:Reference Page}" />
-            <converters:AudioVisualToPlacardContentViewConverter x:Key="AudioVisualToPlacardContentViewConverter" />
+            <converters:AudioVisualToPlacardContentViewConverter x:Key="AudioVisualToPlacardContentViewConverter" DownsampleHeight="180" />
             <converters:AudioVisualEnumerationToStorageSpaceConverter x:Key="AudioVisualEnumerationToStorageSpaceConverter" />
             <converters:MasterPageModelToVirtualStorageUsedSpaceConverter x:Key="MasterPageModelToVirtualStorageUsedSpaceConverter" />
             <converters:CollectionToJoinedStringBindingConverter x:Key="CollectionToJoinedStringBindingConverter" />
+            <converters:TimeSpanToFullStringConverter x:Key="TimeSpanToFullStringConverter" />
 
             <sscxftoolkitpresentationconverters:FileSizeLongToStringConverter x:Key="FileSizeLongToStringConverter" />
             <sscxftoolkitpresentationconverters:NullToBooleanConverter x:Key="NullToBooleanConverter" />
             <sscxftoolkitpresentationconverters:NotNullToBooleanConverter x:Key="NotNullToBooleanConverter" />
             <sscxftoolkitpresentationconverters:EnumerationToCountConverter x:Key="EnumerationToCountConverter" />
+            <sscxftoolkitpresentationconverters:BoolToBoolNegationConverter x:Key="BoolToBoolNegationConverter" />
 
             <x:Double x:Key="TargetStorageSpaceBoxViewHeight">12</x:Double>
         </ResourceDictionary>
@@ -79,7 +82,7 @@
                 HorizontalTextAlignment="Center"
                 Padding="0,3,0,4"
                 BackgroundColor="{StaticResource DarkBackgroundColor}"
-                Text="Carro de Compras"
+                Text="Centro de Descargas"
                 TextColor="{StaticResource PrimaryAccentColor}"
                 FontSize="{StaticResource Header3FontSize}">
                 <Label.FontFamily>
@@ -130,12 +133,12 @@
                             BorderColor="Snow"
                             WidthRequest="{StaticResource MiddleAvatarSize}"
                             HeightRequest="{StaticResource MiddleAvatarSize}" 
-                            Source="{Binding Path=Subscriptor.ImageSource}">
+                            Source="{Binding Path=MasterBindingContext.Subscriptor.ImageSource}">
                         </ic:CircleImage>
                         <Label
                             Grid.Column="1" Grid.Row="0"
                             VerticalOptions="End"
-                            Text="{Binding Path=Subscriptor.Name}"
+                            Text="{Binding Path=MasterBindingContext.Subscriptor.Name}"
                             FontSize="{StaticResource Header1FontSize}">
                             <Label.FontFamily>
                                 <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed Italic">
@@ -146,7 +149,7 @@
                         <Label
                             Grid.Column="1" Grid.Row="1"
                             VerticalOptions="Start"
-                            Text="{Binding Path=Subscriptor.LastName}"
+                            Text="{Binding Path=MasterBindingContext.Subscriptor.LastName}"
                             FontSize="{StaticResource Header2FontSize}">
                             <Label.FontFamily>
                                 <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed Italic">
@@ -178,7 +181,7 @@
                             x:Name="FetchOrderAudioVisualSummaryCountLabel"
                             Grid.Column="0" Grid.Row="0"
                             HorizontalTextAlignment="End"
-                            Text="{Binding Path=FetchOrderAudioVisuals, Converter={StaticResource EnumerationToCountConverter}}"
+                            Text="{Binding Path=MasterBindingContext.FetchOrderAudioVisuals, Converter={StaticResource EnumerationToCountConverter}}"
                             TextColor="{StaticResource SecoundaryAccentColor}" />
                         <Label
                             Grid.Column="0" Grid.Row="1"
@@ -186,7 +189,7 @@
                         <Label
                             Grid.Column="0" Grid.Row="1"
                             HorizontalTextAlignment="End"
-                            Text="{Binding Path=FetchOrderAudioVisuals, Converter={StaticResource AudioVisualEnumerationToStorageSpaceConverter}}"
+                            Text="{Binding Path=MasterBindingContext.FetchOrderAudioVisuals, Converter={StaticResource AudioVisualEnumerationToStorageSpaceConverter}}"
                             TextColor="{StaticResource SecoundaryAccentColor}" />
                     </Grid>
                 </StackLayout>
@@ -217,7 +220,7 @@
                         <Label
                             Grid.Column="1" Grid.RowSpan="3"
                             VerticalOptions="Center"
-                            Text="{Binding Path=Target.FamilyRepresentativeIconGlyph}"
+                            Text="{Binding Path=MasterBindingContext.Target.FamilyRepresentativeIconGlyph}"
                             TextColor="White"
                             FontSize="{StaticResource LargeIconSize}">
                             <Label.FontFamily>
@@ -229,7 +232,7 @@
                         <Label
                             Grid.Column="2" Grid.Row="0"
                             LineBreakMode="TailTruncation"
-                            Text="{Binding Path=Target.Storage.Caption}"
+                            Text="{Binding Path=MasterBindingContext.Target.Storage.Caption}"
                             TextColor="White"
                             FontSize="{StaticResource Header3FontSize}">
                             <Label.FontFamily>
@@ -254,9 +257,9 @@
                             Margin="0,0,0,10">
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <Span Text="{Binding Path=Target.Storage.UsedSpace, Converter={StaticResource FileSizeLongToStringConverter}}" />
+                                    <Span Text="{Binding Path=MasterBindingContext.Target.Storage.UsedSpace, Converter={StaticResource FileSizeLongToStringConverter}}" />
                                     <Span Text="  usados de  " TextColor="{StaticResource SecoundaryTextColor}" />
-                                    <Span Text="{Binding Path=Target.Storage.TotalSpace, Converter={StaticResource FileSizeLongToStringConverter}}" />
+                                    <Span Text="{Binding Path=MasterBindingContext.Target.Storage.TotalSpace, Converter={StaticResource FileSizeLongToStringConverter}}" />
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -287,7 +290,7 @@
                         <Label
                             Grid.Column="1" Grid.RowSpan="3"
                             VerticalOptions="Center"
-                            Text="{Binding Path=Target.FamilyRepresentativeIconGlyph}"
+                            Text="{Binding Path=MasterBindingContext.Target.FamilyRepresentativeIconGlyph}"
                             TextColor="White"
                             FontSize="{StaticResource LargeIconSize}">
                             <Label.FontFamily>
@@ -299,7 +302,7 @@
                         <Label
                             Grid.Column="2" Grid.Row="0"
                             LineBreakMode="TailTruncation"
-                            Text="{Binding Path=Target.Storage.Caption}"
+                            Text="{Binding Path=MasterBindingContext.Target.Storage.Caption}"
                             TextColor="White"
                             FontSize="{StaticResource Header3FontSize}">
                             <Label.FontFamily>
@@ -324,9 +327,9 @@
                             Margin="0,0,0,10">
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <views:VirtualStorageSpaceUseSpan Text="{Binding Converter={StaticResource MasterPageModelToVirtualStorageUsedSpaceConverter}}" x:Name="VirtualStoreUsedSpaceSpan" />
+                                    <views:VirtualStorageSpaceUseSpan Text="{Binding Path=MasterBindingContext, Converter={StaticResource MasterPageModelToVirtualStorageUsedSpaceConverter}}" x:Name="VirtualStoreUsedSpaceSpan" />
                                     <Span Text="  usados de  " TextColor="{StaticResource SecoundaryTextColor}" />
-                                    <Span Text="{Binding Path=Target.Storage.TotalSpace, Converter={StaticResource FileSizeLongToStringConverter}}" />
+                                    <Span Text="{Binding Path=MasterBindingContext.Target.Storage.TotalSpace, Converter={StaticResource FileSizeLongToStringConverter}}" />
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -335,6 +338,7 @@
                 <Button
                     Grid.Row="4" Grid.Column="0"
                     Margin="0,0,0,12"
+                    IsEnabled="{Binding Path=IsBusy, Converter={StaticResource BoolToBoolNegationConverter}}"
                     BackgroundColor="{StaticResource SecoundaryDarkActionColor}"
                     ContentLayout="Left,10"
                     Text="Agregar Más"
@@ -353,10 +357,12 @@
                 <Button
                     Grid.Row="4" Grid.Column="1"
                     Margin="0,0,0,12"
+                    IsEnabled="{Binding Path=IsBusy, Converter={StaticResource BoolToBoolNegationConverter}}"
                     BackgroundColor="{StaticResource PrimaryActionColor}"
                     ContentLayout="Left,10"
                     Text="Completar"
-                    TextColor="Black">
+                    TextColor="Black"
+                    Clicked="FetchOrderCompleteButton_Clicked">
                     <Button.ImageSource>
                         <FontImageSource
                             Color="Black"
@@ -383,7 +389,7 @@
                         <StackLayout
                             Margin="0,6,0,6"
                             Spacing="0"
-                            BindableLayout.ItemsSource="{Binding Path=FetchOrderAudioVisuals}">
+                            BindableLayout.ItemsSource="{Binding Path=MasterBindingContext.FetchOrderAudioVisuals}">
                             <BindableLayout.EmptyView>
                                 <Label
                                     Text="No se han agregado elementos"
@@ -478,6 +484,61 @@
                     </ScrollView>
                 </StackLayout>
             </Grid>
+            <Grid
+                Grid.Row="2"
+                IsVisible="{Binding Path=IsBusy}"
+                BackgroundColor="#EF000000">
+                <StackLayout 
+                    VerticalOptions="Center" HorizontalOptions="Center"
+                    WidthRequest="280">
+                    <ActivityIndicator 
+                        VerticalOptions="Center" HorizontalOptions="Center"
+                        HeightRequest="64" WidthRequest="64"
+                        IsRunning="True" />
+                    <Label
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Path=BusyProgressMessage}"
+                        FontSize="{StaticResource Header3FontSize}" />
+                    <StackLayout
+                        Margin="0,10,0,0"
+                        IsVisible="{Binding Path=DownloadingIndex}">
+                        <Label
+                            TextColor="{StaticResource SecoundaryTextColor}"
+                            FontSize="{StaticResource MiddleTextFontSize}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Audio Visual " />
+                                    <Span Text="{Binding Path=DownloadingIndex}" />
+                                    <Span Text=" de " />
+                                    <Span Text="{Binding Path=MasterBindingContext.FetchOrderAudioVisuals, Converter={StaticResource EnumerationToCountConverter}}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <ProgressBar Progress="{Binding Path=ProgressPercent}" />
+                        <Label
+                            TextColor="{StaticResource SecoundaryTextColor}"
+                            HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding Path=TransferProgress, Converter={StaticResource FileSizeLongToStringConverter}}" />
+                                    <Span Text=" de " />
+                                    <Span Text="{Binding Path=TransferLength, Converter={StaticResource FileSizeLongToStringConverter}}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label
+                            Margin="0,6,0,0"
+                            TextColor="{StaticResource SecoundaryTextColor}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Tiempo transcurrido: " />
+                                    <Span Text="{Binding Path=Time, Converter={StaticResource TimeSpanToFullStringConverter}}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                </StackLayout>
+            </Grid>
         </Grid>
     </ContentPage.Content>
-</ContentPage>
+</sscxftoolkitmvvmpages:ContentPage>

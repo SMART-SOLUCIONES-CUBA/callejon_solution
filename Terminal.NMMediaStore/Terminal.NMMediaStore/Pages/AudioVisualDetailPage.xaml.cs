@@ -1,4 +1,5 @@
 ﻿using SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Extensions;
+using SmartSolucionesCuba.XFToolKit.Mvvm.Extensions;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 {
@@ -52,6 +53,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
+                    if (BindingContextModel == null) return;
+
                     BindingContextModel.CheckCount = checkoutCount;
                     BindingContextModel.DownloadCount = downloadCount;
                     BindingContextModel.CommentCount = commentCount;
@@ -73,7 +76,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
         private void AlternativeBackButton_Clicked(object sender, System.EventArgs eventArgs)
         {
-            Navigation.PopAsync();
+            this.NavigationPopPageAsync();
         }
 
         private void FetchMarkToogleButton_Clicked(object sender, System.EventArgs eventArgs)

@@ -18,14 +18,14 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         [HttpGet]
         public virtual IActionResult Get()
         {
-            return Ok(repository.GetAll().GroupBy(entity => entity.Year).Select(group => group.Key).ToArray());
+            return Ok(repository.GetAll().GroupBy(entity => entity.Year).Select(group => group.Key).OrderByDescending(item => item).ToArray());
         }
 
         [HttpGet("relevant")]
         [HttpGet("relevant/{limit}")]
         public virtual IActionResult GetRelevant(int limit = 20)
         {
-            return Ok(repository.GetAll().GroupBy(entity => entity.Year).Select(group => group.Key).Take(limit).ToArray());
+            return Ok(repository.GetAll().GroupBy(entity => entity.Year).Select(group => group.Key).OrderByDescending(item => item).Take(limit).ToArray());
         }
     }
 }

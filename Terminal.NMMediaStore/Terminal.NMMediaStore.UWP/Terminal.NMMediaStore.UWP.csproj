@@ -20,6 +20,13 @@
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <PackageCertificateThumbprint>4BE9C1E16BB4139C372F61C10F90562307FEA5D4</PackageCertificateThumbprint>
     <PackageCertificateKeyFile />
+    <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+    <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <GenerateTestArtifacts>True</GenerateTestArtifacts>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
+    <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -94,6 +101,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\FetchOrderDownloadRequestHelper.cs" />
     <Compile Include="Managers\StorageTargetManager.cs" />
     <Compile Include="Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -156,6 +164,9 @@
     <PackageReference Include="MagicGradients">
       <Version>1.1.1</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client">
+      <Version>3.1.1</Version>
+    </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.2</Version>
     </PackageReference>
@@ -188,6 +199,10 @@
     <ProjectReference Include="..\..\Terminal.NMMediaStore.UWP.Supporter.Api.Common\Terminal.NMMediaStore.UWP.Supporter.Api.Common.csproj">
       <Project>{3d4bdc72-c6b9-4b63-9a24-65ce7c588cf8}</Project>
       <Name>Terminal.NMMediaStore.UWP.Supporter.Api.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Terminal.NMMediaStore.UWP.Supporter.SignalR.Connect\Terminal.NMMediaStore.UWP.Supporter.SignalR.Connect.csproj">
+      <Project>{EC666ECA-CF24-4361-8E9D-73B050343703}</Project>
+      <Name>Terminal.NMMediaStore.UWP.Supporter.SignalR.Connect</Name>
     </ProjectReference>
     <ProjectReference Include="..\Terminal.NMMediaStore\Terminal.NMMediaStore.csproj">
       <Project>{C04D6F06-3676-441F-94AD-ABEBACEE66A7}</Project>

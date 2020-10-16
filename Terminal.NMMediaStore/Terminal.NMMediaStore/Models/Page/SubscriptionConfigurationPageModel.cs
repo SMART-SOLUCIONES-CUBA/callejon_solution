@@ -24,5 +24,20 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Models.Page
         public ProducerHouseModel[] ChoisedProducerHouses { get => choisedProducerHouses; set => SetProperty(ref choisedProducerHouses, value); }
 
         public TagModel[] ChoisedTags { get => choisedTags; set => SetProperty(ref choisedTags, value); }
+
+        protected override void DisposeUnmanagementResources()
+        {
+            base.DisposeUnmanagementResources();
+
+            GenreChoises = null;
+            ProducerHouseChoises = null;
+            TagChoises = null;
+
+            ChoisedGenres = null;
+            ChoisedProducerHouses = null;
+            ChoisedTags = null;
+
+            Subscriptor = null;
+        }
     }
 }

@@ -17,5 +17,12 @@
         public long DownloadCount { get => downloadCount; set => SetProperty(ref downloadCount, value); }
 
         public long CommentCount { get => commentCount; set => SetProperty(ref commentCount, value); }
+
+        protected override void DisposeUnmanagementResources()
+        {
+            base.DisposeUnmanagementResources();
+
+            AudioVisual = null;
+        }
     }
 }

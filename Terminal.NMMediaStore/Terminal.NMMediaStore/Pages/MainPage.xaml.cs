@@ -1,4 +1,5 @@
 ﻿using SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Extensions;
+using SmartSolucionesCuba.XFToolKit.Mvvm.Extensions;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 {
@@ -27,11 +28,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             
             if (subscriptor == null)
             {
-                Navigation.PushModalAsync(new SignInPage(OnAppearing));
+                this.NavigationPushModalPageAsync(new SignInPage(OnAppearing));
             }
             else if (subscriptor.Subscription == null)
             {
-                Navigation.PushModalAsync(new SubscriptionConfigurationPage(OnAppearing));
+                this.NavigationPushModalPageAsync(new SubscriptionConfigurationPage(OnAppearing));
             }
             else
             {
@@ -58,6 +59,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
                 (Master as MasterPage).InvalidateTargetStorageStats();
 
+                if (storage == null)
+                {
+                    (Master as MasterPage).PresentForStoragePick();
+                }
+
                 PivotToHomePage();
 
                 IsEnabled = true;
@@ -66,17 +72,36 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
         public void PivotToHomePage()
         {
-            Detail = new Xamarin.Forms.NavigationPage(new HomePage());
+            PivotTo(new HomePage());
         }
 
         public void PivotToLibraryPage()
         {
-            Detail = new Xamarin.Forms.NavigationPage(new LibraryPage());
+            PivotTo(new LibraryPage());
         }
 
         public void PivotToSearchPage()
         {
-            Detail = new Xamarin.Forms.NavigationPage(new SearchPage());
+            PivotTo(new SearchPage());
+        }
+
+        private void PivotTo(Xamarin.Forms.Page incomingPage)
+        {
+            var outgoingPage = Detail;
+
+            if (Detail is Xamarin.Forms.NavigationPage)
+            {
+                (Detail as Xamarin.Forms.NavigationPage).PopToRootAsync(false);
+
+                outgoingPage = (Detail as Xamarin.Forms.NavigationPage).RootPage;
+            }
+
+            Detail = new Xamarin.Forms.NavigationPage(incomingPage);
+
+            if (outgoingPage is System.IDisposable)
+            {
+                (outgoingPage as System.IDisposable).Dispose();
+            }
         }
     }
 }

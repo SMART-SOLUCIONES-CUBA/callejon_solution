@@ -10,11 +10,11 @@
 
             if (width <= 0) return 0;
 
-            var model = Page.BindingContext as Models.Page.MasterPageModel;
+            var model = Page.BindingContext as Models.Page.Facade.IMasterPageModelWrapper;
 
-            if (model == null || model.Target.Storage == null) return 0.5d;
+            if (model == null || model.MasterBindingContext.Target.Storage == null) return 0.5d;
 
-            return width * model.Target.Storage.UsedSpace / model.Target.Storage.TotalSpace;
+            return width * model.MasterBindingContext.Target.Storage.UsedSpace / model.MasterBindingContext.Target.Storage.TotalSpace;
         }
 
         public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)

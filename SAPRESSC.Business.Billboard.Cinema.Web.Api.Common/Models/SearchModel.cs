@@ -4,7 +4,7 @@
     {
         public long Id { get; set; }
 
-        public SubscriptionModel SubscriptionProfile { get; set; }
+        public string SubscriptionId { get; set; }
 
         public string TitleTemathic { get; set; }
 

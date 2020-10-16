@@ -31,11 +31,15 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Ent
 
         public Middleware.Media.Persistence.Entities.Video TrailerVideo { get; set; }
 
-        public ICollection<ProductionGenreBridge> ProductionGenreBridges { get; set; }
+        public List<ProductionGenreBridge> ProductionGenreBridges { get; set; }
 
         public ICollection<ProducerHouseProductionBridge> ProducerHouseProductionBridges { get; set; }
 
         public ICollection<CountryCoProductionBridge> CountryCoProductionBridges { get; set; }
+
+        public List<ProductionCheckout> Checkouts { get; set; }
+
+        public List<FetchOrderProductionBridge> FetchOrders { get; set; }
 
         [Required]
         public Language Language { get; set; }
@@ -72,6 +76,8 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Ent
             AwardWinnings = new List<AwardWinning>();
             Participations = new List<Participation>();
             CountryCoProductionBridges = new List<CountryCoProductionBridge>();
+            Checkouts = new List<ProductionCheckout>();
+            FetchOrders = new List<FetchOrderProductionBridge>();
         }
 
         public ICollection<Genre> GetGenres()

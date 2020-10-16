@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Extensions
+namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common.Extensions
 {
     public static class CombineExpressions
     {

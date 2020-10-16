@@ -20,5 +20,17 @@
         public bool PaginationHasNext { get => paginationHasNext; set => SetProperty(ref paginationHasNext, value); }
 
         public int PaginationCurrentPage { get => paginationCurrentPage; set => SetProperty(ref paginationCurrentPage, value); }
+
+        protected override void DisposeUnmanagementResources()
+        {
+            base.DisposeUnmanagementResources();
+
+            Results?.Clear();
+            Results = null;
+
+            Search = null;
+
+            SubCategories = null;
+        }
     }
 }

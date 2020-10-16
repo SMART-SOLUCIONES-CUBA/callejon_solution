@@ -1,7 +1,9 @@
-﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
+﻿using SmartSolucionesCuba.XFToolKit.Mvvm.Extensions;
+
+namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 {
     [Xamarin.Forms.Xaml.XamlCompilation(Xamarin.Forms.Xaml.XamlCompilationOptions.Compile)]
-    public partial class LibraryPage : Xamarin.Forms.ContentPage
+    public partial class LibraryPage : XFToolKit.Mvvm.Pages.ContentPage
     {
         public LibraryPage()
         {
@@ -57,6 +59,15 @@
 
                     IsEnabled = true;
                 });
+            }).ContinueWith(filterTask =>
+            {
+                if (filterTask.Exception != null)
+                {
+                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                    {
+                        XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Helpers.Facade.IExceptionHandlingHelperFacade>().HandleException(filterTask.Exception);
+                    });
+                }
             });
         }
 
@@ -72,40 +83,45 @@
 
         private void CategoryItem_Tapped(object sender, System.EventArgs eventArgs)
         {
-            Navigation.PushAsync(new FilterResultPage(new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel
+            this.NavigationPushPageAsync(new FilterResultPage(new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel
             {
+                SubscriptionId = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Managers.Facade.ISubscriptionManagerFacade>().GetAuthenticatedSubscritor().Subscription.Id,
                 Category = (sender as Xamarin.Forms.BindableObject).BindingContext as SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.CategoryModel
             }));
         }
 
         private void ProducerHouseItem_Tapped(object sender, System.EventArgs eventArgs)
         {
-            Navigation.PushAsync(new FilterResultPage(new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel
+            this.NavigationPushPageAsync(new FilterResultPage(new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel
             {
+                SubscriptionId = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Managers.Facade.ISubscriptionManagerFacade>().GetAuthenticatedSubscritor().Subscription.Id,
                 ProducerHouse = (sender as Xamarin.Forms.BindableObject).BindingContext as SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.ProducerHouseModel
             }));
         }
 
         private void GenreItem_Tapped(object sender, System.EventArgs eventArgs)
         {
-            Navigation.PushAsync(new FilterResultPage(new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel
+            this.NavigationPushPageAsync(new FilterResultPage(new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel
             {
+                SubscriptionId = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Managers.Facade.ISubscriptionManagerFacade>().GetAuthenticatedSubscritor().Subscription.Id,
                 Genres = new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.GenreModel[] { (sender as Xamarin.Forms.BindableObject).BindingContext as SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.GenreModel }
             }));
         }
 
         private void YearItem_Tapped(object sender, System.EventArgs eventArgs)
         {
-            Navigation.PushAsync(new FilterResultPage(new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel
+            this.NavigationPushPageAsync(new FilterResultPage(new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel
             {
+                SubscriptionId = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Managers.Facade.ISubscriptionManagerFacade>().GetAuthenticatedSubscritor().Subscription.Id,
                 Year = (int)(sender as Xamarin.Forms.BindableObject).BindingContext
             }));
         }
 
         private void PersonalityItem_Tapped(object sender, System.EventArgs eventArgs)
         {
-            Navigation.PushAsync(new FilterResultPage(new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel
+            this.NavigationPushPageAsync(new FilterResultPage(new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel
             {
+                SubscriptionId = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Managers.Facade.ISubscriptionManagerFacade>().GetAuthenticatedSubscritor().Subscription.Id,
                 Personalities = new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.PersonalityModel[] { (sender as Xamarin.Forms.BindableObject).BindingContext as SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.PersonalityModel }
             }));
         }

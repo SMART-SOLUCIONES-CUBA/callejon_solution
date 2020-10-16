@@ -17,5 +17,21 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Models.Page
         public List<View.AudioVisualViewModel> LastAudioVisuals { get => lastAudioVisuals; set => SetProperty(ref lastAudioVisuals, value); }
 
         public List<View.AudioVisualViewModel> RecomendedAudioVisuals { get => recomendedAudioVisuals; set => SetProperty(ref recomendedAudioVisuals, value); }
+
+        protected override void DisposeUnmanagementResources()
+        {
+            base.DisposeUnmanagementResources();
+
+            Advertisements = null;
+
+            PopularAudioVisuals?.Clear();
+            PopularAudioVisuals = null;
+
+            LastAudioVisuals?.Clear();
+            LastAudioVisuals = null;
+
+            RecomendedAudioVisuals?.Clear();
+            RecomendedAudioVisuals = null;
+        }
     }
 }

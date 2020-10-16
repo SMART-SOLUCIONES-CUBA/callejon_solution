@@ -19,11 +19,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Converters
 
             if (width <= 0) return 0;
 
-            var model = Page.BindingContext as Models.Page.MasterPageModel;
+            var model = Page.BindingContext as Models.Page.Facade.IMasterPageModelWrapper;
 
-            if (model == null || model.Target.Storage == null) return 0.5d;
+            if (model == null || model.MasterBindingContext.Target.Storage == null) return 0.5d;
 
-            var result = width * (model.Target.Storage.UsedSpace + model.FetchOrderAudioVisuals.ToStorageSpace()) / model.Target.Storage.TotalSpace;
+            var result = width * (model.MasterBindingContext.Target.Storage.UsedSpace + model.MasterBindingContext.FetchOrderAudioVisuals.ToStorageSpace()) / model.MasterBindingContext.Target.Storage.TotalSpace;
 
             return result < MinValue ? 1 : result;
         }

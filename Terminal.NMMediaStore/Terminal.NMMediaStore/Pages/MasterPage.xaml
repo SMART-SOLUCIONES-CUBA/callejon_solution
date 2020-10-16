@@ -296,7 +296,7 @@
                         </Grid.RowDefinitions>
                         <Label
                             Grid.Row="0" Grid.Column="0"
-                            Text="&#xf111;"
+                            Text="&#xf9e8;"
                             TextColor="Black"
                             FontSize="{StaticResource SmallIconSize}">
                             <Label.FontFamily>
@@ -347,7 +347,7 @@
                                         Source="{Binding Path=PosterImage, Converter={StaticResource ImageModelToImageSourceConverter}}"
                                         DownsampleHeight="90"
                                         DownsampleUseDipUnits="True"
-                                        CacheType="All"
+                                        CacheType="Disk"
                                         CacheDuration="8760:00:00" />
                                     <Label 
                                         Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4"
@@ -406,7 +406,7 @@
                 Grid.Row="1"
                 BackgroundColor="{StaticResource SecoundaryDarkActionColor}"
                 ContentLayout="Right,10"
-                Text="Carro de Compras Completo"
+                Text="Ir al Centro de Descargas"
                 Clicked="FullShoppingCartButton_Clicked">
                 <Button.ImageSource>
                     <FontImageSource

@@ -1,6 +1,6 @@
 ﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Models.Page
 {
-    public class MasterPageModel : XFToolKit.Mvvm.Models.Page.BasePageModel
+    public class MasterPageModel : XFToolKit.Mvvm.Models.Page.BasePageModel, Facade.IMasterPageModelWrapper
     {
         private View.SubscriptorViewModel subscriptor;
         private View.StorageViewModel target;
@@ -15,6 +15,8 @@
         public View.StorageViewModel Target { get => target; set => SetProperty(ref target, value); }
 
         public System.Collections.ObjectModel.ObservableCollection<SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.AudioVisualModel> FetchOrderAudioVisuals { get; set; }
+
+        public MasterPageModel MasterBindingContext => this;
 
         public void RaiseFetchOrderAudioVisualsChanged()
         {

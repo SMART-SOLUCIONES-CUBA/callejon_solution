@@ -1,9 +1,10 @@
-﻿using System.Linq;
+﻿using SmartSolucionesCuba.XFToolKit.Mvvm.Extensions;
+using System.Linq;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 {
     [Xamarin.Forms.Xaml.XamlCompilation(Xamarin.Forms.Xaml.XamlCompilationOptions.Compile)]
-    public partial class SubscriptionConfigurationPage : Xamarin.Forms.CarouselPage
+    public partial class SubscriptionConfigurationPage : XFToolKit.Mvvm.Pages.CarouselPage
     {
         private System.Action callbackAction;
 
@@ -109,7 +110,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                 {
                     if (persistTask.Exception == null)
                     {
-                        Navigation.PopModalAsync();
+                        this.NavigationPopModalPageAsync();
 
                         callbackAction?.Invoke();
 
@@ -117,9 +118,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                     }
                     else
                     {
-                        // TODO Handle exception !!
-
-                        DisplayAlert("Aviso", "Exception no gestionada.", "Aceptar");
+                        XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Helpers.Facade.IExceptionHandlingHelperFacade>().HandleException(persistTask.Exception);
                     }
 
                     BindingContextModel.IsBusy = false;

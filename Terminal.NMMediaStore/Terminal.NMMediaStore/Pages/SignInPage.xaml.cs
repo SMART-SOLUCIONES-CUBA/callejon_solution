@@ -1,9 +1,9 @@
-﻿using SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Providers.Constant;
+﻿using SmartSolucionesCuba.XFToolKit.Mvvm.Extensions;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 {
     [Xamarin.Forms.Xaml.XamlCompilation(Xamarin.Forms.Xaml.XamlCompilationOptions.Compile)]
-    public partial class SignInPage : Xamarin.Forms.ContentPage
+    public partial class SignInPage : XFToolKit.Mvvm.Pages.ContentPage
     {
         private System.Action callbackAction;
 
@@ -43,7 +43,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                 {
                     if (authenticationTask.Exception == null)
                     {
-                        Navigation.PopModalAsync();
+                        this.NavigationPopModalPageAsync();
 
                         callbackAction?.Invoke();
 

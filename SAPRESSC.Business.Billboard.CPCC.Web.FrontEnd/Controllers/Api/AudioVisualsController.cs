@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models;
+using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common.Extensions;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.FrontEnd.Extensions;
 using SmartSolucionesCuba.SAPRESSC.Core.Persistence.Repositories;
 using System.Linq;
@@ -55,57 +56,61 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
 
         [HttpPost("search/sheet/{sheet}")]
         [HttpPost("search/sheet/{sheet}/limit/{limit}")]
-        public virtual IActionResult Searh(SearchModel search, int sheet = 1, int limit = 20)
+        public virtual IActionResult Searh([FromBody]SearchModel search, int sheet = 1, int limit = 20)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var entity = new Search
+                    if (search.Id <= 0)
                     {
-                        Id = search.Id,
-                        SubscriptionId = search.SubscriptionProfile.Id,
-                        TitleTemathic = search.TitleTemathic,
-                        Year = search.Year,
-                        Category = search.Category == null ? null : categoryRepository.Get(search.Category.Id),
-                        Country = search.Country == null ? null : countryRepository.Get(search.Country.Id),
-                        ProducerHouse = search.ProducerHouse == null ? null : producerHouseRepository.Get(search.ProducerHouse.Id)                        
-                    };
-
-                    if (search.Genres != null)
-                    {
-                        entity.GenreBridges.AddRange(search.Genres.Select(item => new SearchGenreBridge
+                        var entity = new Search
                         {
-                            Search = entity,
-                            GenreId = item.Id
-                        }));
-                    }
+                            SubscriptionId = search.SubscriptionId,
+                            TitleTemathic = search.TitleTemathic,
+                            Year = search.Year,
+                            Category = search.Category == null ? null : categoryRepository.Get(search.Category.Id),
+                            Country = search.Country == null ? null : countryRepository.Get(search.Country.Id),
+                            ProducerHouse = search.ProducerHouse == null ? null : producerHouseRepository.Get(search.ProducerHouse.Id)                        
+                        };
 
-                    if (search.Tags != null)
-                    {
-                        entity.TagBridges.AddRange(search.Tags.Select(item => new SearchTagBridge
+                        if (search.Genres != null)
                         {
-                            Search = entity,
-                            TagId = item.Id
-                        }));
-                    }
+                            entity.GenreBridges.AddRange(search.Genres.Select(item => new SearchGenreBridge
+                            {
+                                Search = entity,
+                                GenreId = item.Id
+                            }));
+                        }
 
-                    if (search.Personalities != null)
-                    {
-                        entity.PersonalityBridges.AddRange(search.Personalities.Select(item => new SearchPersonalityBridge
+                        if (search.Tags != null)
                         {
-                            Search = entity,
-                            PersonalityId = item.Id
-                        }));
-                    }
+                            entity.TagBridges.AddRange(search.Tags.Select(item => new SearchTagBridge
+                            {
+                                Search = entity,
+                                TagId = item.Id
+                            }));
+                        }
 
-                    searchRepository.Add(entity, User.Identity.Name);
+                        if (search.Personalities != null)
+                        {
+                            entity.PersonalityBridges.AddRange(search.Personalities.Select(item => new SearchPersonalityBridge
+                            {
+                                Search = entity,
+                                PersonalityId = item.Id
+                            }));
+                        }
+
+                        entity = searchRepository.Add(entity, User.Identity.Name);
+
+                        search.Id = entity.Id;
+                    }
 
                     return BuildPaginationModelActionResult(sheet, limit, e => e.Title, false, search);
                 }
                 catch (System.Exception e)
                 {
-                    logger.LogError(e.InnerException, e.Message);
+                    logger.LogError(e, e.Message);
 
                     return Conflict();
                 }
@@ -118,7 +123,19 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         {
             IQueryable<Production> selection = null;
 
-            var filterSelector = searchModel == null ? null : SearchToSelector(searchModel);
+            System.Linq.Expressions.Expression<System.Func<Production, bool>> filterSelector = null;
+
+            if (searchModel != null)
+            {
+                if (searchModel.Category != null)
+                {
+                    filterSelector = SearchToSelector(searchModel, GetCategoryDepthIds(categoryRepository.Get(searchModel.Category.Id)));
+                }
+                else
+                {
+                    filterSelector = SearchToSelector(searchModel);
+                }
+            }
 
             if (filterSelector != null)
             {
@@ -178,29 +195,140 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
                     HasPrevious = page > 1,
                     HasNext = page < maxPageCount,
                     MaxPageCount = maxPageCount,
-                    List = models
+                    List = models,
+                    SerializedContext = searchModel?.Id.ToString()
                 };
             }
 
             return Ok(paginationModel);
         }
 
-        private System.Linq.Expressions.Expression<System.Func<Production, bool>> SearchToSelector(SearchModel model)
+        private System.Linq.Expressions.Expression<System.Func<Production, bool>> SearchToSelector(SearchModel model, System.Collections.Generic.List<System.Guid> categoryDepthIds = null)
         {
-            // TODO Implement expected behavior!!
-            return entity => true;
+            System.Linq.Expressions.Expression<System.Func<Production, bool>> result = null;
+
+            if (!string.IsNullOrEmpty(model.TitleTemathic) && !string.IsNullOrWhiteSpace(model.TitleTemathic))
+            {
+                logger.LogInformation("SSSSSSSSSSSSSSSSS model.TitleTemathic: {0}", model.TitleTemathic);
+
+                result = entity => entity.Title.Contains(model.TitleTemathic);
+            }
+
+            if (model.Year > 0)
+            {
+                logger.LogInformation("SSSSSSSSSSSSSSSSS model.Year: {0}", model.Year);
+
+                System.Linq.Expressions.Expression<System.Func<Production, bool>> expression = entity => entity.Year == model.Year;
+
+                if (result == null)
+                {
+                    result = expression;
+                }
+                else
+                {
+                    result = result.CombineWithAndAlso(expression);
+                }
+            }
+
+            if (model.Country != null)
+            {
+                System.Linq.Expressions.Expression<System.Func<Production, bool>> expression = entity => entity.Country.Id == model.Country.Id || entity.CountryCoProductionBridges.Any(bridge => bridge.CountryId == model.Country.Id);
+
+                if (result == null)
+                {
+                    result = expression;
+                }
+                else
+                {
+                    result = result.CombineWithAndAlso(expression);
+                }
+            }
+
+            if (model.Category != null)
+            {
+                System.Linq.Expressions.Expression<System.Func<Production, bool>> expression = entity => entity.CategoryId == model.Category.Id || categoryDepthIds.Any(item => item == entity.CategoryId);
+
+                if (result == null)
+                {
+                    result = expression;
+                }
+                else
+                {
+                    result = result.CombineWithAndAlso(expression);
+                }
+            }
+
+            if (model.ProducerHouse != null)
+            {
+                System.Linq.Expressions.Expression<System.Func<Production, bool>> expression = entity => entity.ProducerHouseProductionBridges.Any(bridge => bridge.ProducerHouseId == model.ProducerHouse.Id);
+
+                if (result == null)
+                {
+                    result = expression;
+                }
+                else
+                {
+                    result = result.CombineWithAndAlso(expression);
+                }
+            }
+
+            if (model.Genres != null && model.Genres.Length > 0)
+            {
+                System.Linq.Expressions.Expression<System.Func<Production, bool>> expression = entity => entity.ProductionGenreBridges.Any(bridge => model.Genres.Any(item => item.Id == bridge.GenreId));
+
+                if (result == null)
+                {
+                    result = expression;
+                }
+                else
+                {
+                    result = result.CombineWithAndAlso(expression);
+                }
+            }
+
+            if (model.Personalities != null && model.Personalities.Length > 0)
+            {
+                System.Linq.Expressions.Expression<System.Func<Production, bool>> expression = entity => entity.Participations.Any(bridge => model.Personalities.Any(item => item.Id == bridge.Personality.Id));
+
+                if (result == null)
+                {
+                    result = expression;
+                }
+                else
+                {
+                    result = result.CombineWithAndAlso(expression);
+                }
+            }
+
+            if (model.Tags != null && model.Tags.Length > 0)
+            {
+                System.Linq.Expressions.Expression<System.Func<Production, bool>> expression = entity => entity.TagBridges.Any(bridge => model.Tags.Any(item => item.Id == bridge.TagId));
+
+                if (result == null)
+                {
+                    result = expression;
+                }
+                else
+                {
+                    result = result.CombineWithAndAlso(expression);
+                }
+            }
+
+            logger.LogInformation("SSSSSSSSSSSSSSSSS expresion: {0}", result);
+
+            return result;
         }
 
-        private object PopularOrdering(Production entity)
+        private System.Func<Production, object> PopularOrdering(Production entity)
         {
-            // TODO Implement expected behavior!!
-            return entity.Rate;
+            // TODO Improve behavior!!
+            return item => (item.Checkouts.Count * 2) + (item.FetchOrders.Count * 3);
         }
 
-        private object RecomendationOrdering(Production entity)
+        private System.Func<Production, object> RecomendationOrdering(Production entity)
         {
             // TODO Implement expected behavior!!
-            return entity.Rate;
+            return item => item.Rate;
         }
 
         private AudioVisualModel EntityToModel(Production entity, MediaToolkit.Engine engine)
@@ -236,29 +364,21 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
 
             var avFolderPath = System.IO.Path.Combine(mediaStoreOptions.Value.AudioVisualsPath, category.StorageRelativePath, model.Slug);
 
-            logger.LogDebug("XXXXXXXXXXXXXXXXXXXXX avFolderPath: {0}", avFolderPath);
+            logger.LogInformation("XXXXXXXXXXXXXXXXXXXXX avFolderPath: {0}", avFolderPath);
 
             var fileNames = System.IO.Directory.EnumerateFiles(avFolderPath, string.Format("{0}.*", model.Slug));
 
-            logger.LogDebug("XXXXXXXXXXXXXXXXXXXXX fileNames: {0}", string.Join(", ", fileNames));
+            logger.LogInformation("XXXXXXXXXXXXXXXXXXXXX fileNames: {0}", string.Join(", ", fileNames));
 
-            var avFileName = fileNames.First(item => 
-                item.EndsWith(".mpg") || 
-                item.EndsWith(".avi") || 
-                item.EndsWith(".mp4") || 
-                item.EndsWith(".mkv") || 
-                item.EndsWith(".avi") || 
-                item.EndsWith(".ts") || 
-                item.EndsWith(".vod") || 
-                item.EndsWith(".data"));
+            var avFileName = fileNames.First(item => mediaStoreOptions.Value.SupportVideoFileExtensions.Any(ext => item.EndsWith(ext, true, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var subtitleFileName = fileNames.FirstOrDefault(item => item.EndsWith(".srt") || item.EndsWith(".sub"));
+            var subtitleFileName = fileNames.FirstOrDefault(item => mediaStoreOptions.Value.SupportSubtitleFileExtensions.Any(ext => item.EndsWith(ext, true, System.Globalization.CultureInfo.InvariantCulture)));
 
             var avFileInfo = new System.IO.FileInfo(avFileName);
 
             model.HasSubtitle = subtitleFileName != null;
             model.FileSize = avFileInfo.Length;
-            model.Format = avFileInfo.Extension.Substring(1);
+            model.Format = avFileInfo.Extension.Substring(1).ToUpper();
 
             var avMediaFile = new MediaToolkit.Model.MediaFile(avFileInfo.FullName);
             
@@ -266,7 +386,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
 
             model.Resolution = string.IsNullOrEmpty(avMediaFile.Metadata.VideoData.FrameSize) ? "352x288" : avMediaFile.Metadata.VideoData.FrameSize;
 
-            logger.LogDebug("XXXXXXXXXXXXXXXXXXXXX model.Resolution: {0}", model.Resolution);
+            logger.LogInformation("XXXXXXXXXXXXXXXXXXXXX model.Resolution: {0}", model.Resolution);
 
             var resolutionParts = model.Resolution.Split('x').Select(s => int.Parse(s)).ToArray();
 
@@ -322,8 +442,29 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
             }
             else
             {
-                return string.Format("{0}\\{1}", CategoryToStorageRelativePath(model.Parent), model.Name);
+                return string.Format("{0}\\{1}", CategoryToStorageRelativePath(model.Parent), Cinema.Web.Common.Providers.SlugHelperProvider.Instance.Get().GenerateSlug(model.Name));
             }
+        }
+
+        private System.Collections.Generic.List<System.Guid> GetCategoryDepthIds(Category entity)
+        {
+            var result = new System.Collections.Generic.List<System.Guid>();
+
+            if (entity.Children == null || entity.Children.Count <= 0)
+            {
+                return result;
+            }
+
+            foreach (var item in entity.Children)
+            {
+                result.Add(item.Id);
+
+                var child = categoryRepository.Get(item.Id);
+
+                result.AddRange(GetCategoryDepthIds(child));
+            }
+
+            return result;
         }
     }
 }

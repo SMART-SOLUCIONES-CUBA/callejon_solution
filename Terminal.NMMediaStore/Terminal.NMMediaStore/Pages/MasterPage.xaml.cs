@@ -1,4 +1,5 @@
 ﻿using SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Extensions;
+using SmartSolucionesCuba.XFToolKit.Mvvm.Extensions;
 using System.Linq;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
@@ -61,9 +62,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                 {
                     var currentModalPage = (Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Detail.Navigation.ModalStack.LastOrDefault();
 
-                    if (currentModalPage != null && currentModalPage is ShoppingCartPage)
+                    if (currentModalPage != null && currentModalPage is DownloadCenterPage)
                     {
-                        (Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Detail.Navigation.PopModalAsync();
+                        (Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Detail.NavigationPopModalPageAsync();
                     }
                 }
 
@@ -77,19 +78,19 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             VirtualStoreUsedSpaceSpan.InvalidateText();
         }
 
-        private void PresentForStoragePick()
+        public void PresentForStoragePick()
         {
             var storageTargetManager = Xamarin.Forms.DependencyService.Get<Managers.Facade.IStorageTargetManagerFacade>();
 
             storageTargetManager.GetAvailableStoragesAsync().ContinueWith(getAvailableStoragesTask =>
             {
-                if (getAvailableStoragesTask.Exception != null)
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
-                    DisplayAlert(Providers.Constant.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, "No fue posible listar los dispositivos de almacenamiento disponibles.", Providers.Constant.StringConstantProvider.OK_ACTION);
-                }
-                else
-                {
-                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                    if (getAvailableStoragesTask.Exception != null)
+                    {
+                        DisplayAlert(Providers.Constant.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, "No fue posible listar los dispositivos de almacenamiento disponibles.", Providers.Constant.StringConstantProvider.OK_ACTION);
+                    }
+                    else
                     {
                         DisplayActionSheet("Seleccione dispositivo de almacenamiento:", Providers.Constant.StringConstantProvider.CANCEL_ACTION, Providers.Constant.StringConstantProvider.MALE_NONE_OPTION, getAvailableStoragesTask.Result.Select(item => item.Caption).ToArray()).ContinueWith(pickTask =>
                         {
@@ -103,6 +104,10 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                                     break;
                                 case Providers.Constant.StringConstantProvider.CANCEL_ACTION:
                                     break;
+
+                                case null:
+                                    break;
+
                                 default:
                                     storageTargetManager.TargetStorage(getAvailableStoragesTask.Result.First(item => item.Caption == pickTask.Result));
 
@@ -111,8 +116,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                                     break;
                             }
                         });
-                    });
-                }
+                    }
+                });                
             });
         }
 
@@ -142,7 +147,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                 return;
             }
 
-            ((Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Detail as Xamarin.Forms.NavigationPage).Navigation.PushModalAsync(new ShoppingCartPage(), false);
+            ((Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Detail as Xamarin.Forms.NavigationPage).NavigationPushModalPageAsync(new DownloadCenterPage(), false);
         }
 
         private void FetchOrderAudioVisualOptionButton_Clicked(object sender, System.EventArgs eventArgs)

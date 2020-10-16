@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Helpers
+namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Common.Helpers
 {
     public class HttpClientHelper
     {
@@ -15,7 +15,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Helpers
                 if (instance == null)
                 {
                     instance = new HttpClientHelper("http://sgc.elcallejon.net/api/");
-                    //instance = new HttpClientHelper("http://localhost:5000/api/");
                 }
 
                 return instance;

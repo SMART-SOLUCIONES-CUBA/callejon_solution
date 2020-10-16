@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-
-namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
+﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class StartingPage : ContentPage
+    [Xamarin.Forms.Xaml.XamlCompilation(Xamarin.Forms.Xaml.XamlCompilationOptions.Compile)]
+    public partial class StartingPage : Xamarin.Forms.ContentPage
     {
         public StartingPage()
         {

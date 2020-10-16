@@ -1,4 +1,5 @@
 ﻿using SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Extensions;
+using SmartSolucionesCuba.XFToolKit.Mvvm.Extensions;
 using System.Linq;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
@@ -40,9 +41,13 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                 var audioVisualProvider = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Providers.Facade.IAudioVisualProviderFacade>();
 
                 var advertisements = await advertisementProvider.GetAllAsync();
+
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                {
+                    BindingContextModel.Advertisements = advertisements;
+                });
+
                 var popularAudioVisualsPagination = await audioVisualProvider.GetPopularsAsync(1, 10);
-                var lastAudioVisualsPagination = await audioVisualProvider.GetLastsAsync(1, 10);
-                var recomendedAudioVisualsPagination = await audioVisualProvider.GetRecomendedsAsync(1, 10);
 
                 var popularAudioVisuals = popularAudioVisualsPagination.List.Select(item => new Models.View.AudioVisualViewModel
                 {
@@ -50,11 +55,25 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                     IsMarkedForFetch = Xamarin.Forms.Application.Current.HasAudioVisualForFetch(item)
                 }).ToList();
 
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                {
+                    BindingContextModel.PopularAudioVisuals = popularAudioVisuals;
+                });
+
+                var lastAudioVisualsPagination = await audioVisualProvider.GetLastsAsync(1, 10);
+
                 var lastAudioVisuals = lastAudioVisualsPagination.List.Select(item => new Models.View.AudioVisualViewModel
                 {
                     AudioVisual = item,
                     IsMarkedForFetch = Xamarin.Forms.Application.Current.HasAudioVisualForFetch(item)
                 }).ToList();
+
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                {
+                    BindingContextModel.LastAudioVisuals = lastAudioVisuals;
+                });
+
+                var recomendedAudioVisualsPagination = await audioVisualProvider.GetRecomendedsAsync(1, 10);
 
                 var recomendedAudioVisuals = recomendedAudioVisualsPagination.List.Select(item => new Models.View.AudioVisualViewModel
                 {
@@ -64,9 +83,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
-                    BindingContextModel.Advertisements = advertisements;
-                    BindingContextModel.PopularAudioVisuals = popularAudioVisuals;
-                    BindingContextModel.LastAudioVisuals = lastAudioVisuals;
                     BindingContextModel.RecomendedAudioVisuals = recomendedAudioVisuals;
 
                     BindingContextModel.IsBusy = false;
@@ -75,11 +91,18 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
                     Xamarin.Forms.Device.StartTimer(System.TimeSpan.FromSeconds(5), () =>
                     {
-                        var nextPosition = AdvertisementsCarouselView.Position + 1;
+                        try
+                        {
+                            var nextPosition = AdvertisementsCarouselView.Position + 1;
 
-                        AdvertisementsCarouselView.Position = nextPosition >= BindingContextModel.Advertisements.Length ? 0 : nextPosition;
+                            AdvertisementsCarouselView.Position = nextPosition >= BindingContextModel.Advertisements.Length ? 0 : nextPosition;
 
-                        return true;
+                            return true;
+                        }
+                        catch
+                        {
+                            return false;
+                        }
                     });
                 });
             }).ContinueWith(appearingLoadTask =>
@@ -108,7 +131,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
         {
             var model = (sender as Xamarin.Forms.BindableObject).BindingContext as Models.View.AudioVisualViewModel;
 
-            Navigation.PushAsync(new AudioVisualDetailPage(model, this));
+            this.NavigationPushPageAsync(new AudioVisualDetailPage(model, this));
         }
 
         private void AudioVisualItemFetchMarkToogleButton_Clicked(object sender, System.EventArgs eventArgs)

@@ -18,15 +18,17 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
 
         [HttpGet("relevant/actors")]
         [HttpGet("relevant/actors/{limit}")]
-        public virtual IActionResult GetRelevantActors(int limit = 10)
+        public virtual IActionResult GetRelevantActors(int limit = 20)
         {
+            // TODO Apply expected filter !!
             return Ok(repository.GetAll().Select(entity => entity.ToModel()).Take(limit).ToArray());
         }
 
         [HttpGet("relevant/directors")]
-        [HttpGet("relevant/actors/{limit}")]
-        public virtual IActionResult GetRelevantDirectors(int limit = 10)
+        [HttpGet("relevant/directors/{limit}")]
+        public virtual IActionResult GetRelevantDirectors(int limit = 20)
         {
+            // TODO Apply expected filter !!
             return Ok(repository.GetAll().Select(entity => entity.ToModel()).Take(limit).ToArray());
         }
 

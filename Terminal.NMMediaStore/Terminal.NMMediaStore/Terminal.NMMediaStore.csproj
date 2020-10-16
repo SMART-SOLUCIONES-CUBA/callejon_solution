@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -18,6 +18,7 @@
     <None Remove="Resources\Fonts\MYRIADPRO-CONDIT.OTF" />
     <None Remove="Resources\Fonts\MYRIADPRO-IT.OTF" />
     <None Remove="Resources\Fonts\MYRIADPRO-REGULAR.OTF" />
+    <None Remove="Resources\Images\1.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +27,7 @@
     <EmbeddedResource Include="Resources\Fonts\MYRIADPRO-CONDIT.OTF" />
     <EmbeddedResource Include="Resources\Fonts\MYRIADPRO-IT.OTF" />
     <EmbeddedResource Include="Resources\Fonts\MYRIADPRO-REGULAR.OTF" />
+    <EmbeddedResource Include="Resources\Images\1.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,9 +50,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\SAPRESSC.Business.Billboard.CPCC.Web.Api.Common\SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.csproj" />
+    <ProjectReference Include="..\..\Terminal.NMMediaStore.Common\Terminal.NMMediaStore.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Pages\DownloadCenterPage.xaml.cs">
+      <DependentUpon>DownloadCenterPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\SignInPage.xaml.cs">
       <DependentUpon>SignInPage.xaml</DependentUpon>
     </Compile>
@@ -78,7 +84,7 @@
     <EmbeddedResource Update="Pages\SearchPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\ShoppingCartPage.xaml">
+    <EmbeddedResource Update="Pages\DownloadCenterPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\SignInPage.xaml">

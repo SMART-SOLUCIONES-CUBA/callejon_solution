@@ -2,6 +2,6 @@
 {
     public interface IExceptionHandlingHelperFacade
     {
-        void HandleException(System.Exception exception);
+        void HandleException(System.Exception exception, System.Action callbackAction = null);
     }
 }

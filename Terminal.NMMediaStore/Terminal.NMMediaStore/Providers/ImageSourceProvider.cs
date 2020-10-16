@@ -11,8 +11,9 @@
         {
             if (model.ThumbnailContent == null)
             {
-                // TODO Get random default user image!!
-                throw new System.InvalidOperationException();
+                var randomizer = new System.Random();
+
+                return Xamarin.Forms.ImageSource.FromResource(string.Format("SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Resources.Images.{0}.jpg", randomizer.Next(1, 1)), typeof(App).Assembly);
             }
 
             return Xamarin.Forms.ImageSource.FromStream(() => new System.IO.MemoryStream(model.ThumbnailContent));

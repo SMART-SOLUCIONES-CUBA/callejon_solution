@@ -13,5 +13,7 @@
         public int MaxPageCount { get; set; }
 
         public int Limit { get; set; }
+
+        public string SerializedContext { get; set; }
     }
 }

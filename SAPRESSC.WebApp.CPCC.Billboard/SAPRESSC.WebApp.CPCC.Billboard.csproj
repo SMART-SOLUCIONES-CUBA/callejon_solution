@@ -75,6 +75,7 @@
     <PackageReference Include="SAPRESSC.Middleware.Region.Web.Manager" Version="0.5.0-alpha" />
     <PackageReference Include="SAPRESSC.Middleware.Region.Web.SecurityLocal" Version="0.5.0-alpha" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="1.1.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SAPRESSC.Business.Billboard.Cinema.Persistence\SAPRESSC.Business.Billboard.Cinema.Persistence.csproj" />

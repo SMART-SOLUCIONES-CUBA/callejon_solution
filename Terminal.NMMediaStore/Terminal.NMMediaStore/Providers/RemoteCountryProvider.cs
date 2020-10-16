@@ -6,7 +6,7 @@
 
         public System.Threading.Tasks.Task<SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.CountryModel[]> GetAllAsync()
         {
-            return Helpers.HttpClientHelper.Instance.GetAsync<SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.CountryModel[]>(TARGET_API_BASE_QUERY);
+            return Common.Helpers.HttpClientHelper.Instance.GetAsync<SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.CountryModel[]>(TARGET_API_BASE_QUERY);
         }
     }
 }

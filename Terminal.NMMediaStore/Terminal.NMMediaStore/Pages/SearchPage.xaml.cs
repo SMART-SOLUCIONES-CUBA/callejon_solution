@@ -1,7 +1,9 @@
-﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
+﻿using SmartSolucionesCuba.XFToolKit.Mvvm.Extensions;
+
+namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 {
     [Xamarin.Forms.Xaml.XamlCompilation(Xamarin.Forms.Xaml.XamlCompilationOptions.Compile)]
-    public partial class SearchPage : Xamarin.Forms.ContentPage
+    public partial class SearchPage : XFToolKit.Mvvm.Pages.ContentPage
     {
         public SearchPage()
         {
@@ -36,7 +38,7 @@
                     var yearProvider = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Providers.Facade.IYearProviderFacade>();
                     var countryProvider = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Providers.Facade.ICountryProviderFacade>();
 
-                    var categories = await categoryProvider.GetByParentAsync(null);
+                    var categories = await categoryProvider.GetAllAsync();
                     var producerHouses = await producerHouseProvider.GetAllAsync();
                     var years = await yearProvider.GetAllAsync();
                     var countries = await countryProvider.GetAllAsync();
@@ -49,24 +51,38 @@
                         BindingContextModel.PickableYears = years;
                         BindingContextModel.PickableProducerHouses = producerHouses;
                         BindingContextModel.PickableCountries = countries;
+                    });
+                }).ContinueWith(appearingLoadTask =>
+                {
+                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                    {
+                        if (appearingLoadTask.Exception != null)
+                        {
+                            XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Helpers.Facade.IExceptionHandlingHelperFacade>().HandleException(appearingLoadTask.Exception, () =>
+                            {
+                                Xamarin.Forms.Device.BeginInvokeOnMainThread((Xamarin.Forms.Application.Current.MainPage as MainPage).PivotToHomePage);
+                            });
+                        }
 
                         BindingContextModel.IsBusy = false;
 
                         IsEnabled = true;
-                    });
+                    });                    
                 });
             }
             else
             {
                 BindingContextModel.IsBusy = true;
 
-                System.Threading.Tasks.Task.Run(async () =>
-                {
-                    await LoadSearchsAsync();
-                }).ContinueWith(_ =>
+                LoadSearchsAsync().ContinueWith(appearingLoadTask =>
                 {
                     Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                     {
+                        if (appearingLoadTask.Exception != null)
+                        {
+                            XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Helpers.Facade.IExceptionHandlingHelperFacade>().HandleException(appearingLoadTask.Exception);
+                        }
+
                         BindingContextModel.IsBusy = false;
                     });
                 });
@@ -102,14 +118,9 @@
 
         private void SearchFormCommitButton_Click(object sender, System.EventArgs eventArgs)
         {
-            var subscriptionManager = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Managers.Facade.ISubscriptionManagerFacade>();
-
-            Navigation.PushAsync(new FilterResultPage(new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel
+            this.NavigationPushPageAsync(new FilterResultPage(new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel
             {
-                SubscriptionProfile = new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SubscriptionModel
-                {
-                    Id = subscriptionManager.GetAuthenticatedSubscritor().Subscription.Id
-                },
+                SubscriptionId = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Managers.Facade.ISubscriptionManagerFacade>().GetAuthenticatedSubscritor().Subscription.Id,
                 TitleTemathic = BindingContextModel.TitleTemathic,
                 Category = BindingContextModel.Category,
                 Country = BindingContextModel.Country,
@@ -123,7 +134,7 @@
 
         private void SearchItem_Tapped(object sender, System.EventArgs eventArgs)
         {
-            Navigation.PushAsync(new FilterResultPage((sender as Xamarin.Forms.BindableObject).BindingContext as SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel));
+            this.NavigationPushPageAsync(new FilterResultPage((sender as Xamarin.Forms.BindableObject).BindingContext as SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel));
         }
 
         private async System.Threading.Tasks.Task LoadSearchsAsync()
@@ -138,8 +149,8 @@
 
             Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
             {
-                BindingContextModel.SubscriptorSearches = subscriptorSearches;
-                BindingContextModel.OtherSubscriptorsSearches = otherSubscriptorsSearches;
+                BindingContextModel.SubscriptorSearches = subscriptorSearches.Length <= 0 ? null : subscriptorSearches;
+                BindingContextModel.OtherSubscriptorsSearches = otherSubscriptorsSearches.Length <= 0 ? null : otherSubscriptorsSearches;
             });
         }
     }

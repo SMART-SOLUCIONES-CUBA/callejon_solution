@@ -117,7 +117,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Converters
             {
                 result.AddSepparatorIfRequired(CaptionColor);
 
-                var names = model.Personalities.Select(item => item.Name).ToArray();
+                var names = model.Personalities.Select(item => item.ToString()).ToArray();
 
                 result.Spans.Add(new Xamarin.Forms.Span
                 {

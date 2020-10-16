@@ -4,15 +4,25 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Supporter</RootNamespace>
+    <Version>0.8.0</Version>
+    <Authors>SSC DevTeam</Authors>
+    <Company>SMART SOLUCIONES CUBA</Company>
+    <PackageProjectUrl>https://www.smartsoluciones.nat.cu</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="2.2.0" />
+    <PackageReference Include="SharpCifs.Std" Version="0.2.13" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Terminal.NMMediaStore.UWP.Supporter.Api.Common\Terminal.NMMediaStore.UWP.Supporter.Api.Common.csproj" />
+    <ProjectReference Include="..\SAPRESSC.Business.Billboard.CPCC.Web.Api.Common\SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.csproj" />
+    <ProjectReference Include="..\Terminal.NMMediaStore.Common\Terminal.NMMediaStore.Common.csproj" />
+    <ProjectReference Include="..\Terminal.NMMediaStore.UWP.Supporter.SignalR.Connect\Terminal.NMMediaStore.UWP.Supporter.SignalR.Connect.csproj" />
   </ItemGroup>
 
 </Project>

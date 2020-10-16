@@ -1,4 +1,5 @@
 ﻿using SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Extensions;
+using SmartSolucionesCuba.XFToolKit.Mvvm.Extensions;
 using System.Linq;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
@@ -34,14 +35,14 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
         private void AlternativeBackButton_Clicked(object sender, System.EventArgs eventArgs)
         {
-            Navigation.PopAsync();
+            this.NavigationPopPageAsync();
         }
 
         private void AudioVisualItem_Tapped(object sender, System.EventArgs eventArgs)
         {
             var model = (sender as Xamarin.Forms.BindableObject).BindingContext as Models.View.AudioVisualViewModel;
 
-            Navigation.PushAsync(new AudioVisualDetailPage(model, this));
+            this.NavigationPushPageAsync(new AudioVisualDetailPage(model, this));
         }
 
         private void LoadNextPageButton_Clicked(object sender, System.EventArgs eventArgs)
@@ -53,6 +54,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
         {
             BindingContextModel.Search = new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel
             {
+                SubscriptionId = BindingContextModel.Search.SubscriptionId,
                 Category = (sender as Xamarin.Forms.BindableObject).BindingContext as SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.CategoryModel
             };
 
@@ -132,6 +134,13 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
+                    BindingContextModel.PaginationCurrentPage = result.Page;
+
+                    if (result.SerializedContext != null)
+                    {
+                        BindingContextModel.Search.Id = int.Parse(result.SerializedContext);
+                    }
+
                     var fetchOrderManager = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Managers.Facade.IFetchOrderManagerFacade>();
 
                     if (BindingContextModel.Results == null)
@@ -161,6 +170,15 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
                     BindingContextModel.IsBusy = false;
                 });
+            }).ContinueWith(filterTask =>
+            {
+                if (filterTask.Exception != null)
+                {
+                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                    {
+                        XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Helpers.Facade.IExceptionHandlingHelperFacade>().HandleException(filterTask.Exception);
+                    });
+                }
             });
         }
     }

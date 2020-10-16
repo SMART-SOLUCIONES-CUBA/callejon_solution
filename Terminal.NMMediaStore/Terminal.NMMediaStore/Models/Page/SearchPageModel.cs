@@ -54,5 +54,27 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Models.Page
         public SearchModel[] SubscriptorSearches { get => subscriptorSearches; set => SetProperty(ref subscriptorSearches, value); }
 
         public SearchModel[] OtherSubscriptorsSearches { get => otherSubscriptorsSearches; set => SetProperty(ref otherSubscriptorsSearches, value); }
+
+        protected override void DisposeUnmanagementResources()
+        {
+            base.DisposeUnmanagementResources();
+
+            Genres?.Clear();
+            Genres = null;
+
+            Personalities?.Clear();
+            Personalities = null;
+
+            Tags?.Clear();
+            Tags = null;
+
+            PickableCategories = null;
+            PickableYears = null;
+            PickableCountries = null;
+            pickableProducerHouses = null;
+
+            SubscriptorSearches = null;
+            OtherSubscriptorsSearches = null;
+        }
     }
 }

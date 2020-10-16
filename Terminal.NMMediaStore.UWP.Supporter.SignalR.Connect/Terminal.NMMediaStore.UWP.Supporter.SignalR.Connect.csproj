@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Supporter.SignalR.Connect</AssemblyName>
+    <RootNamespace>SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Supporter.SignalR.Connect</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Terminal.NMMediaStore.UWP.Supporter.Api.Common\Terminal.NMMediaStore.UWP.Supporter.Api.Common.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,8 +1,8 @@
 ﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Extensions
 {
-    internal static class LongExtensions
+    public static class LongExtensions
     {
-        internal static int ToSelfPercent(this long target, double percent)
+        public static int ToSelfPercent(this long target, double percent)
         {
             double selfPercent = target * percent;
 
@@ -11,7 +11,7 @@
             return selfPercent > intPercent ? intPercent + 1 : intPercent;
         }
 
-        internal static string ToFileSizeString(this long target)
+        public static string ToFileSizeString(this long target)
         {
             decimal pivote = target;
 

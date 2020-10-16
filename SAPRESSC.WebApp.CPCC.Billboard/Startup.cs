@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Controllers.Management;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Controllers.Management;
 using SmartSolucionesCuba.SAPRESSC.Core.Web.Common;
@@ -14,27 +15,22 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard
 {
     public class Startup
     {
-        protected IConfigurationRoot Configuration { get; }
+        private readonly IConfiguration configuration;
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
 
-            builder.AddEnvironmentVariables();
-
-            Configuration = builder.Build();
+            this.configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<Options.ApiSecurityOptions>(Configuration.GetSection("ApiSecurity"));
-            services.Configure<Business.Billboard.CPCC.Web.FrontEnd.Options.MediaStoreOptions>(Configuration.GetSection("MediaStore"));
-            services.Configure<Business.Billboard.Cinema.Web.Common.Options.FfmpegOptions>(Configuration.GetSection("FFMPEG"));
+            services.Configure<Options.ApiSecurityOptions>(configuration.GetSection("ApiSecurity"));
+            services.Configure<Business.Billboard.CPCC.Web.FrontEnd.Options.MediaStoreOptions>(configuration.GetSection("MediaStore"));
+            services.Configure<Business.Billboard.Cinema.Web.Common.Options.FfmpegOptions>(configuration.GetSection("FFMPEG"));
 
-            services.AddDbContext<Persistence.Context.ApplicationDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection"), mySqlOptions =>
+            services.AddDbContext<Persistence.Context.ApplicationDbContext>(options => options.UseMySql(configuration.GetConnectionString("DefaultConnection"), mySqlOptions =>
             {
                 mySqlOptions.ServerVersion(new System.Version(5, 5, 24), Pomelo.EntityFrameworkCore.MySql.Infrastructure.ServerType.MySql);
             }));
@@ -115,7 +111,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddFile("logs/default-{Date}.log", LogLevel.Warning);
+            loggerFactory.AddSerilog(Log.Logger);
 
             var localizaionOptions = app.ApplicationServices.GetService<Microsoft.Extensions.Options.IOptions<RequestLocalizationOptions>>();
 

@@ -17,17 +17,19 @@
     <ContentView.Content>
         <Grid>
             <ffilforms:CachedImage
+                x:Name="BlurFillCachedImage"
                 Aspect="AspectFill"
                 Source="{Binding Path=PosterImage, Converter={StaticResource ImageModelToImageSourceConverter}}"
-                CacheType="All"
+                CacheType="Disk"
                 CacheDuration="8760:00:00">
                 <ffilforms:CachedImage.Transformations>
                     <ffiltransformations:BlurredTransformation />
                 </ffilforms:CachedImage.Transformations>
             </ffilforms:CachedImage>
             <ffilforms:CachedImage
+                x:Name="MainCachedImage"
                 Source="{Binding Path=PosterImage, Converter={StaticResource ImageModelToImageSourceConverter}}"
-                CacheType="All"
+                CacheType="Disk"
                 CacheDuration="8760:00:00" />
         </Grid>
     </ContentView.Content>  

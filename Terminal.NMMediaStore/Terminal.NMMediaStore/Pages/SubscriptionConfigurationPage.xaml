@@ -1,16 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<CarouselPage 
+<sscxftoolkitmvvmpages:CarouselPage 
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mg="clr-namespace:MagicGradients;assembly=MagicGradients"
     xmlns:ffil="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
     xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
     xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Converters"
     mc:Ignorable="d"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages.SubscriptionConfigurationPage">
-    <ContentPage Style="{StaticResource BasePageStyle}">
+    <sscxftoolkitmvvmpages:ContentPage Style="{StaticResource BasePageStyle}">
         <ContentPage.Resources>
             <ResourceDictionary>
                 <sscxftoolkitpresentationconverters:BoolToBoolNegationConverter x:Key="BoolToBoolNegationConverter" />
@@ -47,8 +48,8 @@
                 </StackLayout>
             </Grid>
         </ContentPage.Content>
-    </ContentPage>
-    <ContentPage Style="{StaticResource BasePageStyle}">
+    </sscxftoolkitmvvmpages:ContentPage>
+    <sscxftoolkitmvvmpages:ContentPage Style="{StaticResource BasePageStyle}">
         <ContentPage.Resources>
             <ResourceDictionary>
                 <converters:FlextLayoutToResponsiveItemWidthConverter x:Key="FlextLayoutToResponsiveItemWidthConverter" ItemMinWidth="240" ItemHorizontalMargin="16" />
@@ -118,8 +119,8 @@
                     Clicked="NextButton_Clicked" />
             </Grid>
         </ContentPage.Content>
-    </ContentPage>
-    <ContentPage Style="{StaticResource BasePageStyle}">
+    </sscxftoolkitmvvmpages:ContentPage>
+    <sscxftoolkitmvvmpages:ContentPage Style="{StaticResource BasePageStyle}">
         <ContentPage.Resources>
             <ResourceDictionary>
                 <converters:FlextLayoutToResponsiveItemWidthConverter x:Key="FlextLayoutToResponsiveItemWidthConverter" ItemMinWidth="240" ItemHorizontalMargin="16" />
@@ -177,6 +178,9 @@
                                         HorizontalOptions="Fill"
                                         Source="{Binding Path=ProducerHouse.Image, Converter={StaticResource ImageModelToImageSourceConverter}}"
                                         Aspect="AspectFill"
+                                        DownsampleHeight="180"
+                                        CacheType="Disk"
+                                        CacheDuration="8760:00:00"
                                         HeightRequest="{Binding Source={x:RelativeSource Mode=Self}, Path=Width, Converter={StaticResource FractionConverter}, ConverterParameter=1.777777777777778}"/>
                                     <Label Text="{Binding Path=ProducerHouse.Name}" />
                                     <Switch IsToggled="{Binding Path=Choised}"  />
@@ -200,8 +204,8 @@
                     Clicked="NextButton_Clicked" />
             </Grid>
         </ContentPage.Content>
-    </ContentPage>
-    <ContentPage Style="{StaticResource BasePageStyle}">
+    </sscxftoolkitmvvmpages:ContentPage>
+    <sscxftoolkitmvvmpages:ContentPage Style="{StaticResource BasePageStyle}">
         <ContentPage.Resources>
             <ResourceDictionary>
                 <converters:FlextLayoutToResponsiveItemWidthConverter x:Key="FlextLayoutToResponsiveItemWidthConverter" ItemMinWidth="240" ItemHorizontalMargin="16" />
@@ -275,8 +279,8 @@
                     Clicked="NextButton_Clicked" />
             </Grid>
         </ContentPage.Content>
-    </ContentPage>
-    <ContentPage Style="{StaticResource BasePageStyle}">
+    </sscxftoolkitmvvmpages:ContentPage>
+    <sscxftoolkitmvvmpages:ContentPage Style="{StaticResource BasePageStyle}">
         <ContentPage.Resources>
             <ResourceDictionary>
                 <sscxftoolkitpresentationconverters:BoolToBoolNegationConverter x:Key="BoolToBoolNegationConverter" />
@@ -482,5 +486,5 @@
                     Clicked="CompleteButton_Clicked" />
             </Grid>
         </ContentPage.Content>
-    </ContentPage>
-</CarouselPage>
+    </sscxftoolkitmvvmpages:ContentPage>
+</sscxftoolkitmvvmpages:CarouselPage>

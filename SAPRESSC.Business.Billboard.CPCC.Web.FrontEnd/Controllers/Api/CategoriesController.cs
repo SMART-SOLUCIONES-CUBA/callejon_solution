@@ -15,13 +15,25 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
             this.repository = repository;
         }
 
+        [HttpGet]
+        public virtual IActionResult Get()
+        {
+            // TODO Retire ordering expression on SAPRESSC build-in support released !!
+            return Ok(repository.GetAll().OrderBy(repository.GetPagingOrderSelector()).ToArray().Select(entity => new Cinema.Web.Api.Common.Models.CategoryModel
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                Parent = entity.ParentId == null ? null : CategoryIdToModel(entity.ParentId.Value)
+            }).ToArray());
+        }
+
         [HttpGet("children")]
         [HttpGet("children/{key}")]
         public virtual IActionResult GetChildren(System.Guid key = default)
         {
             if (key == System.Guid.Empty)
             {
-                return Ok(repository.GetAll().Select(entity => new Cinema.Web.Api.Common.Models.CategoryModel
+                return Ok(repository.FindBy(entity => entity.ParentId == null).Select(entity => new Cinema.Web.Api.Common.Models.CategoryModel
                 {
                     Id = entity.Id,
                     Name = entity.Name
@@ -33,6 +45,18 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
                 Id = entity.Id,
                 Name = entity.Name
             }).ToArray());
+        }
+
+        private Cinema.Web.Api.Common.Models.CategoryModel CategoryIdToModel(System.Guid id)
+        {
+            var entity = repository.Get(id);
+
+            return new Cinema.Web.Api.Common.Models.CategoryModel
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                Parent = entity.ParentId == null ? null : CategoryIdToModel(entity.ParentId.Value)
+            };
         }
     }
 }

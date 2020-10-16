@@ -9,8 +9,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore
             InitializeComponent();
 
             XFToolKit.IoC.TinyIoCContainer.Current.Register<Managers.Facade.ISubscriptionManagerFacade, Managers.SubscriptionManager>();
+            XFToolKit.IoC.TinyIoCContainer.Current.Register<Managers.Facade.IFetchOrderManagerFacade, Managers.FetchOrderManager>();
             // TODO Replace Manager's mock implementation at IoC registration
-            XFToolKit.IoC.TinyIoCContainer.Current.Register<Managers.Facade.IFetchOrderManagerFacade, Managers.MockFetchOrderManager>();
             XFToolKit.IoC.TinyIoCContainer.Current.Register<Managers.Facade.ICommentManagerFacade, Managers.MockCommentManager>();
             XFToolKit.IoC.TinyIoCContainer.Current.Register<Managers.Facade.IProductionCheckoutManagerFacade, Managers.MockProductionCheckoutManager>();
 
@@ -43,7 +43,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore
         {
         }
 
-        public void HandleException(System.Exception exception)
+        public void HandleException(System.Exception exception, System.Action callbackAction = null)
         {
             if (exception.InnerException is Novell.Directory.Ldap.LdapException)
             {
@@ -52,36 +52,36 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore
                 switch (concreteException.ResultCode)
                 {
                     case Novell.Directory.Ldap.LdapException.InvalidCredentials:
-                        MainPage.DisplayAlert(StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, StringConstantProvider.INVALID_CREDENTIALS_LDAP_EXCEPTION_MESSAGE, StringConstantProvider.OK_ACTION);
+                        MainPage.DisplayAlert(StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, StringConstantProvider.INVALID_CREDENTIALS_LDAP_EXCEPTION_MESSAGE, StringConstantProvider.OK_ACTION).ContinueWith(_ => { callbackAction?.Invoke(); });
 
                         break;
 
                     default:
-                        MainPage.DisplayAlert(StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, StringConstantProvider.UNSPECTED_LDAP_EXCEPTION_MESSAGE, StringConstantProvider.OK_ACTION);
+                        MainPage.DisplayAlert(StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, StringConstantProvider.UNSPECTED_LDAP_EXCEPTION_MESSAGE, StringConstantProvider.OK_ACTION).ContinueWith(_ => { callbackAction?.Invoke(); });
 
                         break;
                 }
             }
-            else if (exception.InnerException is Exceptions.UnspectedHttpStatusException)
+            else if (exception.InnerException is Common.Exceptions.UnspectedHttpStatusException)
             {
-                var concreteException = exception.InnerException as Exceptions.UnspectedHttpStatusException;
+                var concreteException = exception.InnerException as Common.Exceptions.UnspectedHttpStatusException;
 
                 if (concreteException.HttpStatusCode == System.Net.HttpStatusCode.UpgradeRequired)
                 {
-                    MainPage.DisplayAlert(StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, StringConstantProvider.UPGRADE_REQUIRED_EXCEPTION_MESSAGE, StringConstantProvider.OK_ACTION);
+                    MainPage.DisplayAlert(StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, StringConstantProvider.UPGRADE_REQUIRED_EXCEPTION_MESSAGE, StringConstantProvider.OK_ACTION).ContinueWith(_ => { callbackAction?.Invoke(); });
                 }
                 else
                 {
-                    MainPage.DisplayAlert(StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, StringConstantProvider.UNSPECTED_API_RESPONSE_EXCEPTION_MESSAGE, StringConstantProvider.OK_ACTION);
+                    MainPage.DisplayAlert(StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, StringConstantProvider.UNSPECTED_API_RESPONSE_EXCEPTION_MESSAGE, StringConstantProvider.OK_ACTION).ContinueWith(_ => { callbackAction?.Invoke(); });
                 }
             }
-            else if (exception.InnerException is System.Net.Http.HttpRequestException)
+            else if (exception.InnerException is System.Net.Http.HttpRequestException || exception.InnerException is System.Net.Sockets.SocketException)
             {
-                MainPage.DisplayAlert(StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, StringConstantProvider.NETWORK_EXCEPTION_MESSAGE, StringConstantProvider.OK_ACTION);
+                MainPage.DisplayAlert(StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, StringConstantProvider.NETWORK_EXCEPTION_MESSAGE, StringConstantProvider.OK_ACTION).ContinueWith(_ => { callbackAction?.Invoke(); });
             }
             else
             {
-                MainPage.DisplayAlert(StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, StringConstantProvider.UNSPECTED_EXCEPTION_MESSAGE, StringConstantProvider.OK_ACTION);
+                MainPage.DisplayAlert(StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, StringConstantProvider.UNSPECTED_EXCEPTION_MESSAGE, StringConstantProvider.OK_ACTION).ContinueWith(_ => { callbackAction?.Invoke(); });
             }
         }
     }

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Extensions;
+using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;

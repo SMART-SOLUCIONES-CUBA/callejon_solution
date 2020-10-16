@@ -2,6 +2,8 @@
 {
     public class AudioVisualToPlacardContentViewConverter : Xamarin.Forms.IValueConverter
     {
+        public double DownsampleHeight { get; set; }
+
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value == null) return null;
@@ -17,12 +19,19 @@
                 result = new FFImageLoading.Forms.CachedImage
                 {
                     Source = (Xamarin.Forms.ImageSource)imageModelToImageSourceConverter.Convert(model.PlacardImage, targetType, parameter, culture),
-                    Aspect = Xamarin.Forms.Aspect.AspectFill
+                    Aspect = Xamarin.Forms.Aspect.AspectFill,
+                    CacheType = FFImageLoading.Cache.CacheType.Disk,
+                    CacheDuration = System.TimeSpan.MaxValue
                 };
+
+                if (DownsampleHeight > 0)
+                {
+                    (result as FFImageLoading.Forms.CachedImage).DownsampleHeight = DownsampleHeight;
+                }
             }
             else
             {
-                result = new Views.Wrapper.HorizontalPosterWrapperView(model);
+                result = new Views.Wrapper.HorizontalPosterWrapperView(model, DownsampleHeight);
             }
 
             return result;

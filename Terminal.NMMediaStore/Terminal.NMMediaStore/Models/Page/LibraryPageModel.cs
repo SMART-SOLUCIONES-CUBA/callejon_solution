@@ -22,5 +22,17 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Models.Page
         public PersonalityModel[] RelevantPerformancePersonalities { get => relevantPerformancePersonalities; set => SetProperty(ref relevantPerformancePersonalities, value); }
 
         public PersonalityModel[] RelevantDirectionPersonalities { get => relevantDirectionPersonalities; set => SetProperty(ref relevantDirectionPersonalities, value); }
+
+        protected override void DisposeUnmanagementResources()
+        {
+            base.DisposeUnmanagementResources();
+
+            Categories = null;
+            RelevantProducerHouses = null;
+            RelevantGenres = null;
+            RelevantYears = null;
+            RelevantPerformancePersonalities = null;
+            RelevantDirectionPersonalities = null;
+        }
     }
 }

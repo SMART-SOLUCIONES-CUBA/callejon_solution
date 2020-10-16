@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage 
+<sscxftoolkitmvvmpages:ContentPage 
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mg="clr-namespace:MagicGradients;assembly=MagicGradients"
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
     xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
     xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Converters"
     mc:Ignorable="d"
@@ -20,6 +21,7 @@
             <converters:FlextLayoutToResponsiveItemWidthConverter x:Key="FlextLayoutToResponsiveItemWidthConverter" ItemMinWidth="240" ItemHorizontalMargin="16" />
             <converters:CollectionToJoinedStringBindingConverter x:Key="EmptyCollectionToJoinedStringBindingConverter" />
             <converters:CollectionToJoinedStringBindingConverter x:Key="NoEmptyCollectionToJoinedStringBindingConverter" EmptyStringReplacement="-" />
+            <converters:CategoryModelToTreeNameConverter x:Key="CategoryModelToTreeNameConverter" />
 
             <Style x:Key="SearchItemFieldCaptionLabel" TargetType="Label">
                 <Setter Property="Margin" Value="8,0" />
@@ -82,7 +84,7 @@
                                 BackgroundColor="{StaticResource DarkBackgroundColor}"
                                 SelectedItem="{Binding Path=Category}"
                                 ItemsSource="{Binding Path=PickableCategories}"
-                                ItemDisplayBinding="{Binding Path=Name}" />
+                                ItemDisplayBinding="{Binding Converter={StaticResource CategoryModelToTreeNameConverter}}" />
                         </StackLayout>
                         <StackLayout 
                             Margin="8"
@@ -570,4 +572,4 @@
             </Grid>
         </Grid>
     </ContentPage.Content>
-</ContentPage>
+</sscxftoolkitmvvmpages:ContentPage>

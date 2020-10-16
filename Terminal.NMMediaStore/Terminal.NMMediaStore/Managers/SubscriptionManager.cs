@@ -45,14 +45,14 @@
                     Id = id,
                     Name = attributeSet[FIRST_NAME_LDAP_USER_ATTRIBUTE].StringValue,
                     LastName = attributeSet[LAST_NAME_LDAP_USER_ATTRIBUTE].StringValue,
-                    ThumbnailContent = attributeSet[THUMBNAIL_PHOTO_LDAP_USER_ATTRIBUTE].ByteValue
+                    ThumbnailContent = attributeSet.ContainsKey(THUMBNAIL_PHOTO_LDAP_USER_ATTRIBUTE) ? attributeSet[THUMBNAIL_PHOTO_LDAP_USER_ATTRIBUTE].ByteValue : null
                 };
 
                 try
                 {
-                    subscriptor.Subscription = await Helpers.HttpClientHelper.Instance.GetAsync<SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SubscriptionModel>(string.Format("{0}/{1}", TARGET_API_BASE_QUERY, id));
+                    subscriptor.Subscription = await Common.Helpers.HttpClientHelper.Instance.GetAsync<SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SubscriptionModel>(string.Format("{0}/{1}", TARGET_API_BASE_QUERY, id));
                 }
-                catch (Exceptions.UnspectedHttpStatusException unspectedHttpStatusException)
+                catch (Common.Exceptions.UnspectedHttpStatusException unspectedHttpStatusException)
                 {
                     if (unspectedHttpStatusException.HttpStatusCode != System.Net.HttpStatusCode.NoContent) throw;
                 }
@@ -78,7 +78,7 @@
         {
             model.Id = authenticatedSubscriptor.Id;
 
-            await Helpers.HttpClientHelper.Instance.PostAsync(TARGET_API_BASE_QUERY, model);
+            await Common.Helpers.HttpClientHelper.Instance.PostAsync(TARGET_API_BASE_QUERY, model);
 
             authenticatedSubscriptor.Subscription = model;
         }

@@ -11,5 +11,10 @@
         public System.DateTime BornDate { get; set; }
         
         public string About { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }
