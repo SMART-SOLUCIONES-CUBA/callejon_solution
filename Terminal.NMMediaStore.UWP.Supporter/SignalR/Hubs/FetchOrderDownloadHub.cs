@@ -7,12 +7,14 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Supporter.Signa
     public class FetchOrderDownloadHub : Hub<Connect.Clients.IFetchOrderDownloadSignalRClient>, Connect.Hubs.IFetchOrderDownloadSignalRHub
     {
         private readonly ILogger<FetchOrderDownloadHub> logger;
+        private readonly Microsoft.Extensions.Options.IOptions<Options.PerformanceOptions> performanceOptions;
 
         private Connect.Clients.IFetchOrderDownloadSignalRClient client;
 
-        public FetchOrderDownloadHub(ILogger<FetchOrderDownloadHub> logger)
+        public FetchOrderDownloadHub(Microsoft.Extensions.Options.IOptions<Options.PerformanceOptions> performanceOptions, ILogger<FetchOrderDownloadHub> logger)
         {
             this.logger = logger;
+            this.performanceOptions = performanceOptions;
         }
 
         public override System.Threading.Tasks.Task OnConnectedAsync()
@@ -79,28 +81,22 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Supporter.Signa
 
                                 using (var localFileStream = System.IO.File.OpenWrite(string.Format("{0}{2}{3}", localDestinationDirectoryInfo, downloadFetchOrder.TargetStorageDevicePath, item.Slug, extension)))
                                 {
-                                    //const int bufferSize = 4096; // 4 Kbyte
-                                    //const int bufferSize = 8192; // 8 Kbyte
-                                    //const int bufferSize = 40960; // 40 Kbyte
-                                    //const int bufferSize = 81920; // 80 Kbyte
-                                    const int bufferSize = 262144; // 256 Kbyte
-
                                     var inputStreamLength = inputStream.Length;
 
                                     var totalRead = 0L;
 
                                     while (totalRead < inputStreamLength)
                                     {
-                                        var data = new byte[bufferSize];
+                                        var data = new byte[performanceOptions.Value.DownloadBufferLength];
 
-                                        var amountRead = inputStream.Read(data, 0, bufferSize);
+                                        var amountRead = inputStream.Read(data, 0, performanceOptions.Value.DownloadBufferLength);
 
                                         localFileStream.Write(data, 0, amountRead);
 
                                         totalRead += amountRead;
                                         iterationDataCount += amountRead;
 
-                                        await client?.NotifyProgressAsync(counter, iterationDataCount, iterationDataLength);
+                                        client?.NotifyProgressAsync(counter, iterationDataCount, iterationDataLength).ContinueWith(_ => { });
                                     }
 
                                     localFileStream.Flush();

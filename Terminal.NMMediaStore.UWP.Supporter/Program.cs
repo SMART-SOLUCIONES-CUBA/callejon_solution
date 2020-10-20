@@ -26,8 +26,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Supporter
 
             if (isService)
             {
-                // To run the app without the CustomWebHostService change the
-                // next line to host.RunAsService();
                 host.RunAsService();
             }
             else
@@ -48,7 +46,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Supporter
                 })
                 .ConfigureKestrel((context, serverOptions) =>
                 {
-                    serverOptions.Listen(System.Net.IPAddress.Loopback, 5666);
+                    serverOptions.Listen(System.Net.IPAddress.Loopback, Api.Common.Constants.SUPPORT_KESTREL_PORT);
                 })
                 .UseStartup<Startup>();
     }

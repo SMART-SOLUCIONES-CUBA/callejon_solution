@@ -24,7 +24,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Helpers
             this.progressCallaback = progressCallaback;
 
             hubConnection = new HubConnectionBuilder()
-                .WithUrl(string.Format("http://{0}/hubs/fetchorderdownload", "127.0.0.1:5666"))
+                .WithUrl(string.Format("http://127.0.0.1:{0}/hubs/fetchorderdownload", Supporter.Api.Common.Constants.SUPPORT_KESTREL_PORT))
                 .WithAutomaticReconnect()
                 .Build();
 

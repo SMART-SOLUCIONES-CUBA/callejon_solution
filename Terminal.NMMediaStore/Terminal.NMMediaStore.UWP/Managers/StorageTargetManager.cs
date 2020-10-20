@@ -28,7 +28,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Managers
                 {
                     var storageDevice = Windows.Devices.Portable.StorageDevice.FromId(externalDevice.Id);
 
-                    var response = await httpClient.GetAsync(string.Format("http://127.0.0.1:5666/api/driveinfo/{0}", storageDevice.Path));
+                    var response = await httpClient.GetAsync(string.Format("http://127.0.0.1:{0}/api/driveinfo/{1}", Supporter.Api.Common.Constants.SUPPORT_KESTREL_PORT, storageDevice.Path));
 
                     var responseContent = await response.Content.ReadAsStringAsync();
 
