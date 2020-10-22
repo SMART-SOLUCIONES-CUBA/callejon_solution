@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities
 {
-    public class Production : Core.Persistence.Entities.IEntity<long>
+    public class Production : Core.Persistence.Entities.IEntity<long>, System.IComparable
     {
         [Key]
         public long Id { get; set; }
@@ -138,6 +138,11 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Ent
                     ProducerHouse = item
                 });
             }
+        }
+
+        public int CompareTo(object obj)
+        {
+            return 0;
         }
     }
 }

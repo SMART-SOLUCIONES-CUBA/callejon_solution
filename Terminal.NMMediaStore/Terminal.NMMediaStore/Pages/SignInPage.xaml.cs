@@ -41,7 +41,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             {
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
-                    if (authenticationTask.Exception == null)
+                    if (authenticationTask.Exception == null && !authenticationTask.IsCanceled)
                     {
                         this.NavigationPopModalPageAsync();
 

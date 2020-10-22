@@ -172,7 +172,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                 });
             }).ContinueWith(filterTask =>
             {
-                if (filterTask.Exception != null)
+                if (filterTask.Exception != null || filterTask.IsCanceled)
                 {
                     Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                     {

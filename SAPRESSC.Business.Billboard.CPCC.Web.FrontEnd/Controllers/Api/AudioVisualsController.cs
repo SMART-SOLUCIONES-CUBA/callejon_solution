@@ -37,7 +37,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         [HttpGet("populars/sheet/{sheet}/limit/{limit}")]
         public virtual IActionResult GetPopulars(int sheet = 1, int limit = 20)
         {
-            return BuildPaginationModelActionResult(sheet, limit, PopularOrdering, true);
+            return BuildPaginationModelActionResult(sheet, limit, item => item, true, new Helpers.Comparison.ProductionPopularityComparisonHelper());
         }
 
         [HttpGet("lasts")]
@@ -106,7 +106,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
                         search.Id = entity.Id;
                     }
 
-                    return BuildPaginationModelActionResult(sheet, limit, e => e.Title, false, search);
+                    return BuildPaginationModelActionResult(sheet, limit, e => e.Title, false, searchModel: search);
                 }
                 catch (System.Exception e)
                 {
@@ -119,7 +119,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
             return BadRequest();
         }
 
-        protected IActionResult BuildPaginationModelActionResult<TOrderingKey>(int page, int limit, System.Func<Production, TOrderingKey> ordering, bool descending, SearchModel searchModel = null)
+        protected IActionResult BuildPaginationModelActionResult<TOrderingKey>(int page, int limit, System.Func<Production, TOrderingKey> ordering, bool descending, System.Collections.Generic.IComparer<TOrderingKey> comparer = null, SearchModel searchModel = null)
         {
             IQueryable<Production> selection = null;
 
@@ -175,18 +175,28 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
 
                 if (!descending)
                 {
-                    entities = selection.OrderBy(ordering).Skip((page - 1) * limit).Take(limit).ToList();
+                    if (comparer != null)
+                    {
+                        entities = selection.OrderBy(ordering, comparer).Skip((page - 1) * limit).Take(limit).ToList();
+                    }
+                    else
+                    {
+                        entities = selection.OrderBy(ordering).Skip((page - 1) * limit).Take(limit).ToList();
+                    }
                 }
                 else
                 {
-                    entities = selection.OrderByDescending(ordering).Skip((page - 1) * limit).Take(limit).ToList();
+                    if (comparer != null)
+                    {
+                        entities = selection.OrderByDescending(ordering, comparer).Skip((page - 1) * limit).Take(limit).ToList();
+                    }
+                    else
+                    {
+                        entities = selection.OrderByDescending(ordering).Skip((page - 1) * limit).Take(limit).ToList();
+                    }
                 }
-
-                var engine = new MediaToolkit.Engine(ffmpegOptions.Value.Path);
-
-                var models = entities.Select(entity => EntityToModel(entity, engine)).ToList();
-
-                engine.Dispose();
+                
+                var models = entities.Select(entity => EntityToModel(entity)).ToList();
 
                 paginationModel = new PaginationModel<AudioVisualModel>
                 {
@@ -319,19 +329,13 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
             return result;
         }
 
-        private System.Func<Production, object> PopularOrdering(Production entity)
-        {
-            // TODO Improve behavior!!
-            return item => (item.Checkouts.Count * 2) + (item.FetchOrders.Count * 3);
-        }
-
         private System.Func<Production, object> RecomendationOrdering(Production entity)
         {
             // TODO Implement expected behavior!!
             return item => item.Rate;
         }
 
-        private AudioVisualModel EntityToModel(Production entity, MediaToolkit.Engine engine)
+        private AudioVisualModel EntityToModel(Production entity)
         {
             var category = CategoryIdToModel(entity.CategoryId.Value);
 
@@ -380,41 +384,35 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
             model.FileSize = avFileInfo.Length;
             model.Format = avFileInfo.Extension.Substring(1).ToUpper();
 
-            var avMediaFile = new MediaToolkit.Model.MediaFile(avFileInfo.FullName);
+            var avMediaFile = FFMediaToolkit.Decoding.MediaFile.Open(avFileInfo.FullName);
             
-            engine.GetMetadata(avMediaFile);
+            //engine.GetMetadata(avMediaFile);
 
-            model.Resolution = string.IsNullOrEmpty(avMediaFile.Metadata.VideoData.FrameSize) ? "352x288" : avMediaFile.Metadata.VideoData.FrameSize;
-
-            logger.LogInformation("XXXXXXXXXXXXXXXXXXXXX model.Resolution: {0}", model.Resolution);
-
-            var resolutionParts = model.Resolution.Split('x').Select(s => int.Parse(s)).ToArray();
-
-            var height = resolutionParts[1];
+            model.Resolution = string.Format("{0}x{1}", avMediaFile.Video.Info.FrameSize.Width, avMediaFile.Video.Info.FrameSize.Height);
 
             model.Quality = Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.LD;
 
-            if (height >= 360)
+            if (avMediaFile.Video.Info.FrameSize.Height >= 360)
             {
                 model.Quality = Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.SD;
             }
 
-            if (height >= 720)
+            if (avMediaFile.Video.Info.FrameSize.Width >= 1280 || avMediaFile.Video.Info.FrameSize.Height >= 720)
             {
                 model.Quality = Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.HD;
             }
 
-            if (height >= 1080)
+            if (avMediaFile.Video.Info.FrameSize.Width >= 1920 || avMediaFile.Video.Info.FrameSize.Height >= 1080)
             {
                 model.Quality = Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.FHD;
             }
 
-            if (height >= 2160)
+            if (avMediaFile.Video.Info.FrameSize.Height >= 2160)
             {
                 model.Quality = Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.UHD;
             }
 
-            if (height >= 4320)
+            if (avMediaFile.Video.Info.FrameSize.Height >= 4320)
             {
                 model.Quality = Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.K8;
             }

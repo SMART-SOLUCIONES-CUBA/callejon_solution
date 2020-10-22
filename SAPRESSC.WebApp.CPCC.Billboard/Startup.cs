@@ -109,8 +109,10 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard
             services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, Microsoft.Extensions.Options.IOptions<Business.Billboard.Cinema.Web.Common.Options.FfmpegOptions> ffmpegOptions)
         {
+            FFMediaToolkit.FFmpegLoader.FFmpegPath = System.IO.Path.GetDirectoryName(ffmpegOptions.Value.Path);
+
             loggerFactory.AddSerilog(Log.Logger);
 
             var localizaionOptions = app.ApplicationServices.GetService<Microsoft.Extensions.Options.IOptions<RequestLocalizationOptions>>();

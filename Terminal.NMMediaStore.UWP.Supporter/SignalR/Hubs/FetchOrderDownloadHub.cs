@@ -37,7 +37,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Supporter.Signa
 
             System.Threading.Tasks.Task.Run(async () =>
             {
-                var orderFolderName = System.DateTime.Now.ToString("dd-MM-yyyy h-mm tt"); 
+                var orderFolderName = System.DateTime.Now.ToString("dd-MM-yyyy HH-mm"); 
                 
                 try
                 {

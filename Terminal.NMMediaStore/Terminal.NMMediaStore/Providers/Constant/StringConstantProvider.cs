@@ -18,6 +18,8 @@
 
         public static string NETWORK_EXCEPTION_MESSAGE = string.Format("Error de comunicación con el proveedor del sistema.{1}{1}{0}", SUPPORT_ORIENTATION_MESSAGE, System.Environment.NewLine);
 
+        public static string TASK_CANCELED_EXCEPTION_MESSAGE = string.Format("El sistema ha tardado demasiado tiempo en responder.{1}{1}{0}", SUPPORT_ORIENTATION_MESSAGE, System.Environment.NewLine);
+
         public static string UNSPECTED_EXCEPTION_MESSAGE = string.Format("Error no esperado en el sistema.{1}{1}{0}", SUPPORT_ORIENTATION_MESSAGE, System.Environment.NewLine);
 
         public const string ADVICE_ALERT_DIALOG_TITLE = "Aviso";
