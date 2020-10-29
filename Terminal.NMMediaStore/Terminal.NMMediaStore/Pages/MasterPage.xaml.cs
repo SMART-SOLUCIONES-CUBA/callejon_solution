@@ -89,7 +89,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                     if (getAvailableStoragesTask.Exception != null)
                     {
                         DisplayAlert(Providers.Constant.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, "No fue posible listar los dispositivos de almacenamiento disponibles.", Providers.Constant.StringConstantProvider.OK_ACTION);
-                        DisplayAlert(Providers.Constant.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, string.Format("Error: {1}({2}).{0}{0}Traza:{3}.", System.Environment.NewLine, getAvailableStoragesTask.Exception.InnerException.Message, getAvailableStoragesTask.Exception.InnerException.GetType().FullName, getAvailableStoragesTask.Exception.InnerException.StackTrace), Providers.Constant.StringConstantProvider.OK_ACTION);
+                        //DisplayAlert(Providers.Constant.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, string.Format("Error: {1}({2}).{0}{0}Traza:{3}.", System.Environment.NewLine, getAvailableStoragesTask.Exception.InnerException.Message, getAvailableStoragesTask.Exception.InnerException.GetType().FullName, getAvailableStoragesTask.Exception.InnerException.StackTrace), Providers.Constant.StringConstantProvider.OK_ACTION);
                     }
                     else
                     {

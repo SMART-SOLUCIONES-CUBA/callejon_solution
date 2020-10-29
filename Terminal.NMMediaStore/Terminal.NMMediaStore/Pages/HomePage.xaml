@@ -16,6 +16,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <sscxftoolkitpresentationconverters:NotNullToBooleanConverter x:Key="NotNullToBooleanConverter" />
+            <sscxftoolkitpresentationconverters:BoolToBoolNegationConverter x:Key="BoolToBoolNegationConverter" />
             <sscxftoolkitpresentationconverters:FractionConverter x:Key="FractionConverter" />
             <sscxftoolkitpresentationconverters:FactorConverter x:Key="FactorConverter" />
             <sscxftoolkitpresentationconverters:BoolToStringConverter x:Key="FetchMarkToogleToButtonIconStringConverter" TrueString="&#xfd45;" FalseString="&#xf112;" />
@@ -79,7 +80,7 @@
             </Grid.RowDefinitions>
             <ScrollView
                 Grid.RowSpan="3"
-                HorizontalScrollBarVisibility="Never">
+                Orientation="Vertical">
                 <StackLayout Padding="0,56,0,48">
                     <cvc:CarouselViewControl
                         x:Name="AdvertisementsCarouselView"
@@ -121,29 +122,6 @@
                     </StackLayout>
                     <StackLayout 
                         Padding="0,10,0,0"
-                        IsVisible="{Binding Path=LastAudioVisuals, Converter={StaticResource NotNullToBooleanConverter}}">
-                        <StackLayout.Background>
-                            <LinearGradientBrush
-                                StartPoint="0,0"
-                                EndPoint="0,1">
-                                <GradientStop Color="{StaticResource DefaultBackgroundColor}" Offset="0.0" />
-                                <GradientStop Color="{StaticResource DarkBackgroundColor}" Offset="1.0" />
-                            </LinearGradientBrush>
-                        </StackLayout.Background>
-                        <Label
-                            Margin="10,0"
-                            Text="Nuevas propuestas"
-                            TextColor="{StaticResource SecoundaryTextColor}"
-                            FontSize="{StaticResource Header5FontSize}" />
-                        <ScrollView Orientation="Horizontal">
-                            <FlexLayout
-                                Padding="5,0"
-                                BindableLayout.ItemsSource="{Binding Path=LastAudioVisuals}"
-                                BindableLayout.ItemTemplate="{StaticResource AudioVisualWidthPlacardDataTemplate}" />
-                        </ScrollView>
-                    </StackLayout>
-                    <StackLayout 
-                        Padding="0,10,0,0"
                         IsVisible="{Binding Path=RecomendedAudioVisuals, Converter={StaticResource NotNullToBooleanConverter}}">
                         <StackLayout.Background>
                             <LinearGradientBrush
@@ -165,6 +143,36 @@
                                 BindableLayout.ItemTemplate="{StaticResource AudioVisualWidthPlacardDataTemplate}" />
                         </ScrollView>
                     </StackLayout>
+                    <StackLayout 
+                        Padding="0,10,0,0"
+                        IsVisible="{Binding Path=LastAudioVisuals, Converter={StaticResource NotNullToBooleanConverter}}">
+                        <StackLayout.Background>
+                            <LinearGradientBrush
+                                StartPoint="0,0"
+                                EndPoint="0,1">
+                                <GradientStop Color="{StaticResource DefaultBackgroundColor}" Offset="0.0" />
+                                <GradientStop Color="{StaticResource DarkBackgroundColor}" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </StackLayout.Background>
+                        <Label
+                            Margin="10,0"
+                            Text="Nuevas propuestas"
+                            TextColor="{StaticResource SecoundaryTextColor}"
+                            FontSize="{StaticResource Header5FontSize}" />
+                        <ScrollView Orientation="Horizontal">
+                            <FlexLayout
+                                Padding="5,0"
+                                BindableLayout.ItemsSource="{Binding Path=LastAudioVisuals}"
+                                BindableLayout.ItemTemplate="{StaticResource AudioVisualWidthPlacardDataTemplate}" />
+                        </ScrollView>
+                    </StackLayout>
+                    <Label
+                        IsVisible="{Binding Path=IsBusy, Converter={StaticResource BoolToBoolNegationConverter}}"
+                        HorizontalOptions="Center" HorizontalTextAlignment="Center"
+                        Margin="20,20,20,10"
+                        Text="Proyecto Callejón de los Milagros - Centro Provincial de Cine Camagüey - SMART SOLUCIONES CUBA - 2020"
+                        TextColor="{StaticResource SecoundaryTextColor}"
+                        FontSize="Caption" />
                 </StackLayout>
             </ScrollView>
             <Grid

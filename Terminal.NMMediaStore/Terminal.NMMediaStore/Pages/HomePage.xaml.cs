@@ -107,7 +107,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                 });
             }).ContinueWith(appearingLoadTask =>
             {
-                if (appearingLoadTask.Exception != null)
+                if (appearingLoadTask.Exception != null || appearingLoadTask.IsCanceled)
                 {
                     Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                     {
