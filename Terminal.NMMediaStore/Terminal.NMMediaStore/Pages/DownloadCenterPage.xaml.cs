@@ -6,8 +6,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
     [Xamarin.Forms.Xaml.XamlCompilation(Xamarin.Forms.Xaml.XamlCompilationOptions.Compile)]
     public partial class DownloadCenterPage : XFToolKit.Mvvm.Pages.ContentPage
     {
-        private System.Diagnostics.Stopwatch stopwatch;
-
         public DownloadCenterPage()
         {
             InitializeComponent();
@@ -41,11 +39,23 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             };
 
             animation.Begin();
+
+            Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().BindCallbacks(FetchOrderDownloadRequeastEnd_Callback, FetchOrderDownloadRequestProgress_Callback);
+
+            BindingContextModel.IsBusy = Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().IsDownloading;
         }
 
         private void BackButton_Clicked(object sender, System.EventArgs eventArgs)
         {
+            if (BindingContextModel.MasterBindingContext.ProgressPercent > 95) return;
+
+            Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().UnbindCallbacks();
+
             this.NavigationPopModalPageAsync();
+
+            if (!Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().IsDownloading) return;
+
+            ((Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Master as MasterPage).HandleFetchOrderDownloadProgressPresentation();
         }
 
         private void FetchOrderAudioVisualItemRemoveButton_Clicked(object sender, System.EventArgs eventArgs)
@@ -80,7 +90,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
         private void FetchOrderCompleteButton_Clicked(object sender, System.EventArgs eventArgs)
         {
             BindingContextModel.IsBusy = true;
-            BindingContextModel.BusyProgressMessage = "Registrando orden ...";
+            BindingContextModel.MasterBindingContext.BusyProgressMessage = "Registrando orden ...";
 
             System.Threading.Tasks.Task.Run(async () => 
             {
@@ -90,16 +100,12 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                     AudioVisuals = BindingContextModel.MasterBindingContext.FetchOrderAudioVisuals.ToList()
                 });
 
-                stopwatch = new System.Diagnostics.Stopwatch();
-
-                stopwatch.Start();
-
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
-                    BindingContextModel.BusyProgressMessage = "Inicando ...";
+                    BindingContextModel.MasterBindingContext.BusyProgressMessage = "Inicando ...";
                 });
 
-                await Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().RequestAsync(orderId, BindingContextModel.MasterBindingContext.Target.Storage.Path, FetchOrderDownloadRequeastEnd_Callback, FetchOrderDownloadRequestProgress_Callback);                
+                await Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().RequestAsync(orderId, BindingContextModel.MasterBindingContext.Target.Storage.Path);                
             }).ContinueWith(task =>
             {
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
@@ -108,22 +114,16 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                     {
                         // TODO Delete incomplete download FetchOrder
 
-                        stopwatch.Stop();
-
-                        stopwatch = null;
-
                         XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Helpers.Facade.IExceptionHandlingHelperFacade>().HandleException(task.Exception);
                     }
                 });
             });
         }
 
-        private void FetchOrderDownloadRequeastEnd_Callback(string orderFolderName, System.Exception exception)
+        private void FetchOrderDownloadRequeastEnd_Callback(string orderFolderName, System.TimeSpan elapsedTime, System.Exception exception)
         {
             Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
             {
-                stopwatch.Stop();
-
                 if (exception != null)
                 {
                     // TODO Delete incomplete download FetchOrder
@@ -139,7 +139,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                 {
                     var timeSpanToFullStringConverter = new Converters.TimeSpanToFullStringConverter();
 
-                    DisplayAlert(Providers.Constant.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, string.Format("Lista de descarga procesada con éxito en {1}.{0}{0}Los archivos descargados podrá encontrarlos en el dispositivo '{2}' carpeta 'Mediateca Nuevo Mundo' subcarpeta '{3}'.{0}{0}Puede continuar explorando nuestros contenidos y realizar nuevas descargas si así lo desea.", System.Environment.NewLine, timeSpanToFullStringConverter.Convert(stopwatch.Elapsed, typeof(System.TimeSpan), null, System.Globalization.CultureInfo.CurrentCulture), BindingContextModel.MasterBindingContext.Target.Storage.Caption, orderFolderName), Providers.Constant.StringConstantProvider.OK_ACTION);
+                    DisplayAlert(Providers.Constant.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, string.Format("Lista de descarga procesada con éxito en {1}.{0}{0}Los archivos descargados podrá encontrarlos en el dispositivo '{2}' carpeta 'Mediateca Nuevo Mundo' subcarpeta '{3}'.{0}{0}Puede continuar explorando nuestros contenidos y realizar nuevas descargas si así lo desea.", System.Environment.NewLine, timeSpanToFullStringConverter.Convert(elapsedTime, typeof(System.TimeSpan), null, System.Globalization.CultureInfo.CurrentCulture), BindingContextModel.MasterBindingContext.Target.Storage.Caption, orderFolderName), Providers.Constant.StringConstantProvider.OK_ACTION);
 
                     var donwloadCenterDependPage = ((Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Detail as Xamarin.Forms.NavigationPage).CurrentPage as Base.FetchOrderAudioVisualPresentBaseContentPage;
 
@@ -159,24 +159,24 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
                     BindingContextModel.MasterBindingContext.RaiseFetchOrderAudioVisualsChanged();
 
+                    Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().UnbindCallbacks();
+
                     this.NavigationPopModalPageAsync();
                 }
-
-                stopwatch = null;
             });
         }
 
-        private void FetchOrderDownloadRequestProgress_Callback(int index, long transferProgress, long transferLength)
+        private void FetchOrderDownloadRequestProgress_Callback(int index, long transferProgress, long transferLength, System.TimeSpan elapsedTime)
         {
             Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
             {
-                BindingContextModel.BusyProgressMessage = "Descargando ...";
+                BindingContextModel.MasterBindingContext.BusyProgressMessage = "Descargando ...";
 
-                BindingContextModel.DownloadingIndex = index;
-                BindingContextModel.Time = stopwatch.Elapsed;
-                BindingContextModel.TransferProgress = transferProgress;
-                BindingContextModel.TransferLength = transferLength;
-                BindingContextModel.ProgressPercent = decimal.Round(new decimal(transferProgress) / new decimal(transferLength), 2);
+                BindingContextModel.MasterBindingContext.DownloadingIndex = index;
+                BindingContextModel.MasterBindingContext.Time = elapsedTime;
+                BindingContextModel.MasterBindingContext.TransferProgress = transferProgress;
+                BindingContextModel.MasterBindingContext.TransferLength = transferLength;
+                BindingContextModel.MasterBindingContext.ProgressPercent = decimal.Round(new decimal(transferProgress) / new decimal(transferLength), 2);
             });
         }
     }

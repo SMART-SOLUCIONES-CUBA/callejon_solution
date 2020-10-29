@@ -402,6 +402,11 @@
                     </StackLayout>
                 </StackLayout>
             </ScrollView>
+            <ContentView
+                IsVisible="{Binding Path=IsBusy}"
+                Grid.Row="0">
+                <views:FetchOrderDownloadStatusView />
+            </ContentView>
             <Button
                 Grid.Row="1"
                 BackgroundColor="{StaticResource SecoundaryDarkActionColor}"

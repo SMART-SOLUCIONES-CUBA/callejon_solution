@@ -82,7 +82,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore
                     MainPage.DisplayAlert(StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, StringConstantProvider.UNSPECTED_API_RESPONSE_EXCEPTION_MESSAGE, StringConstantProvider.OK_ACTION).ContinueWith(_ => { callbackAction?.Invoke(); });
                 }
             }
-            else if (exception.InnerException is System.Net.Http.HttpRequestException || exception.InnerException.InnerException is System.Net.Sockets.SocketException)
+            else if (exception.InnerException is System.Net.Http.HttpRequestException || exception.InnerException?.InnerException is System.Net.Sockets.SocketException)
             {
                 MainPage.DisplayAlert(StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, StringConstantProvider.NETWORK_EXCEPTION_MESSAGE, StringConstantProvider.OK_ACTION).ContinueWith(_ => { callbackAction?.Invoke(); });
             }

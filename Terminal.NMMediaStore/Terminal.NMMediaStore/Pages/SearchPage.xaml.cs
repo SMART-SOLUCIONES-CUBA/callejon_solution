@@ -78,7 +78,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                 {
                     Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                     {
-                        if (appearingLoadTask.Exception != null)
+                        if (appearingLoadTask.Exception != null || appearingLoadTask.IsCanceled)
                         {
                             XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Helpers.Facade.IExceptionHandlingHelperFacade>().HandleException(appearingLoadTask.Exception);
                         }

@@ -25,6 +25,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             }
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+        }
+
         private void InvalidateTargetStorageOnMainThread()
         {
             Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
@@ -122,6 +127,13 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             });
         }
 
+        public void HandleFetchOrderDownloadProgressPresentation()
+        {
+            Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().BindCallbacks(FetchOrderDownloadRequeastEnd_Callback, FetchOrderDownloadRequestProgress_Callback);
+
+            BindingContextModel.IsBusy = true;
+        }
+
         private void PickStorageDeviceButton_Clicked(object sender, System.EventArgs eventArgs)
         {
             if (BindingContextModel.FetchOrderAudioVisuals.Count > 0)
@@ -148,7 +160,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                 return;
             }
 
-            ((Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Detail as Xamarin.Forms.NavigationPage).NavigationPushModalPageAsync(new DownloadCenterPage(), false);
+            (Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).NavigationPushModalPageAsync(new DownloadCenterPage(), false);
         }
 
         private void FetchOrderAudioVisualOptionButton_Clicked(object sender, System.EventArgs eventArgs)
@@ -194,6 +206,58 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                     }
                 });
             });            
+        }
+
+        private void FetchOrderDownloadRequeastEnd_Callback(string orderFolderName, System.TimeSpan elapsedTime, System.Exception exception)
+        {
+            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+            {
+                if (exception != null)
+                {
+                    // TODO Delete incomplete download FetchOrder
+
+                    XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Helpers.Facade.IExceptionHandlingHelperFacade>().HandleException(exception);
+                }
+                else
+                {
+                    var timeSpanToFullStringConverter = new Converters.TimeSpanToFullStringConverter();
+
+                    DisplayAlert(Providers.Constant.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, string.Format("Lista de descarga procesada con éxito en {1}.{0}{0}Los archivos descargados podrá encontrarlos en el dispositivo '{2}' carpeta 'Mediateca Nuevo Mundo' subcarpeta '{3}'.{0}{0}Puede continuar explorando nuestros contenidos y realizar nuevas descargas si así lo desea.", System.Environment.NewLine, timeSpanToFullStringConverter.Convert(elapsedTime, typeof(System.TimeSpan), null, System.Globalization.CultureInfo.CurrentCulture), BindingContextModel.MasterBindingContext.Target.Storage.Caption, orderFolderName), Providers.Constant.StringConstantProvider.OK_ACTION);
+
+                    var donwloadCenterDependPage = ((Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Detail as Xamarin.Forms.NavigationPage).CurrentPage as Base.FetchOrderAudioVisualPresentBaseContentPage;
+
+                    var items = BindingContextModel.MasterBindingContext.FetchOrderAudioVisuals.ToArray();
+
+                    foreach (var item in items)
+                    {
+                        BindingContextModel.MasterBindingContext.FetchOrderAudioVisuals.Remove(item);
+
+                        donwloadCenterDependPage?.OnAudioViualFetchMarkToogle(item);
+                    }
+
+                    BindingContextModel.MasterBindingContext.RaiseFetchOrderAudioVisualsChanged();
+                }
+
+                InvalidateTargetStorageStats();
+
+                Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().UnbindCallbacks();
+
+                BindingContextModel.IsBusy = false;
+            });
+        }
+
+        private void FetchOrderDownloadRequestProgress_Callback(int index, long transferProgress, long transferLength, System.TimeSpan elapsedTime)
+        {
+            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+            {
+                BindingContextModel.MasterBindingContext.BusyProgressMessage = "Descargando ...";
+
+                BindingContextModel.MasterBindingContext.DownloadingIndex = index;
+                BindingContextModel.MasterBindingContext.Time = elapsedTime;
+                BindingContextModel.MasterBindingContext.TransferProgress = transferProgress;
+                BindingContextModel.MasterBindingContext.TransferLength = transferLength;
+                BindingContextModel.MasterBindingContext.ProgressPercent = decimal.Round(new decimal(transferProgress) / new decimal(transferLength), 2);
+            });
         }
     }
 }

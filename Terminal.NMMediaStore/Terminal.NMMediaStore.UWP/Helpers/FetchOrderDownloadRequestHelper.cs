@@ -6,22 +6,39 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Helpers
 {
     public class FetchOrderDownloadRequestHelper : NMMediaStore.Helpers.Facade.IFetchOrderDownloadRequestHelper, Supporter.SignalR.Connect.Clients.IFetchOrderDownloadSignalRClient
     {
+        private System.Diagnostics.Stopwatch stopwatch;
+
         private HubConnection hubConnection;
 
         private Supporter.Api.Common.Models.FetchOrderDownloadModel fetchOrderDownload;
-        private System.Action<string,System.Exception> endCallback;
-        private System.Action<int,long,long> progressCallaback;
+        private System.Action<string,System.TimeSpan,System.Exception> endCallback;
+        private System.Action<int,long,long,System.TimeSpan> progressCallaback;
 
-        public async System.Threading.Tasks.Task RequestAsync(long fetchOrderId, string targetStorageDeviceRootPath, System.Action<string,System.Exception> endCallback, System.Action<int,long,long> progressCallaback)
+        public bool IsDownloading { get => fetchOrderDownload != null; }
+
+        public void BindCallbacks(System.Action<string,System.TimeSpan,System.Exception> endCallback, System.Action<int,long,long,System.TimeSpan> progressCallaback)
         {
+            this.endCallback = endCallback;
+            this.progressCallaback = progressCallaback;
+        }
+
+        public void UnbindCallbacks()
+        {
+            endCallback = null;
+            progressCallaback = null;
+        }
+
+        public async System.Threading.Tasks.Task RequestAsync(long fetchOrderId, string targetStorageDeviceRootPath)
+        {
+            stopwatch = new System.Diagnostics.Stopwatch();
+
+            stopwatch.Start();
+
             fetchOrderDownload = new Supporter.Api.Common.Models.FetchOrderDownloadModel
             {
                 FetchOrderId = fetchOrderId,
                 TargetStorageDevicePath = targetStorageDeviceRootPath
             };
-
-            this.endCallback = endCallback;
-            this.progressCallaback = progressCallaback;
 
             hubConnection = new HubConnectionBuilder()
                 .WithUrl(string.Format("http://127.0.0.1:{0}/hubs/fetchorderdownload", Supporter.Api.Common.Constants.SUPPORT_KESTREL_PORT))
@@ -49,7 +66,13 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Helpers
 
         public async System.Threading.Tasks.Task NotifyEndAsync(string orderFolderName, System.Exception exception = null)
         {
-            endCallback?.Invoke(orderFolderName, exception);
+            fetchOrderDownload = null;
+
+            stopwatch.Stop();
+
+            endCallback?.Invoke(orderFolderName, stopwatch.Elapsed, exception);
+
+            stopwatch = null;
 
             hubConnection.Closed -= Connection_ClosedAsync;
 
@@ -65,7 +88,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Helpers
 
         public System.Threading.Tasks.Task NotifyProgressAsync(int index, long transferProgress, long transferLength)
         {
-            progressCallaback?.Invoke(index, transferProgress, transferLength);
+            progressCallaback?.Invoke(index, transferProgress, transferLength, stopwatch.Elapsed);
 
             return System.Threading.Tasks.Task.CompletedTask;
         }
