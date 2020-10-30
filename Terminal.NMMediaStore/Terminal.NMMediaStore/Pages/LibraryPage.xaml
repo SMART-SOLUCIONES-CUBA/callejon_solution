@@ -79,13 +79,8 @@
                                                 Text="{Binding Path=Name}"
                                                 LineBreakMode="TailTruncation"
                                                 MaxLines="3"
-                                                FontSize="{StaticResource Header3FontSize}">
-                                                <Label.FontFamily>
-                                                    <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed Italic">
-                                                        <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-CONDIT.OTF#Myriad Pro" />
-                                                    </OnPlatform>
-                                                </Label.FontFamily>
-                                            </Label>
+                                                FontSize="{StaticResource Header3FontSize}"
+                                                FontFamily="Myriad Pro Condensed Italic" />
                                         </Grid>
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
@@ -137,13 +132,8 @@
                                                 TextColor="White"
                                                 LineBreakMode="TailTruncation"
                                                 MaxLines="3"
-                                                FontSize="{StaticResource Header3FontSize}">
-                                                <Label.FontFamily>
-                                                    <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed Italic">
-                                                        <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-CONDIT.OTF#Myriad Pro" />
-                                                    </OnPlatform>
-                                                </Label.FontFamily>
-                                            </Label>
+                                                FontSize="{StaticResource Header3FontSize}"
+                                                FontFamily="Myriad Pro Condensed Italic" />
                                         </Grid>
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
@@ -233,13 +223,8 @@
                                                 Margin="10,6"
                                                 Text="{Binding .}"
                                                 TextColor="{StaticResource DefaultBackgroundColor}"
-                                                FontSize="{StaticResource Header1FontSize}">
-                                                <Label.FontFamily>
-                                                    <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed Italic">
-                                                        <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-CONDIT.OTF#Myriad Pro" />
-                                                    </OnPlatform>
-                                                </Label.FontFamily>
-                                            </Label>
+                                                FontSize="{StaticResource Header1FontSize}"
+                                                FontFamily="Myriad Pro Condensed Italic" />
                                         </Grid>
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
@@ -366,12 +351,8 @@
                 <Label
                     Grid.Column="1"
                     HorizontalOptions="Center" VerticalOptions="Center"
-                    LineBreakMode="TailTruncation">
-                    <Label.FontFamily>
-                        <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Regular">
-                            <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-REGULAR.OTF#Myriad Pro" />
-                        </OnPlatform>
-                    </Label.FontFamily>
+                    LineBreakMode="TailTruncation"
+                    FontFamily="Myriad Pro Regular">
                     <Label.FontSize>
                         <OnPlatform x:TypeArguments="x:Double" Default="36"></OnPlatform>
                     </Label.FontSize>
@@ -402,14 +383,9 @@
                     Clicked="HomePivotButton_Clicked">
                     <Button.ImageSource>
                         <FontImageSource
-                        Glyph="&#xf4dc;"
-                        Color="White">
-                            <FontImageSource.FontFamily>
-                                <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
-                                    <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
-                                </OnPlatform>
-                            </FontImageSource.FontFamily>
-                        </FontImageSource>
+                            Glyph="&#xf4dc;"
+                            Color="White"
+                            FontFamily="Material Design Icons" />
                     </Button.ImageSource>
                 </Button>
                 <Button
@@ -419,14 +395,9 @@
                     Style="{StaticResource PivotButtonStyle}">
                     <Button.ImageSource>
                         <FontImageSource
-                        Glyph="&#xf638;"
-                        Color="{StaticResource PrimaryAccentColor}">
-                            <FontImageSource.FontFamily>
-                                <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
-                                    <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
-                                </OnPlatform>
-                            </FontImageSource.FontFamily>
-                        </FontImageSource>
+                            Glyph="&#xf638;"
+                            Color="{StaticResource PrimaryAccentColor}"
+                            FontFamily="Material Design Icons" />
                     </Button.ImageSource>
                 </Button>
                 <Button
@@ -437,14 +408,9 @@
                     Clicked="SearchPivotButton_Clicked">
                     <Button.ImageSource>
                         <FontImageSource
-                        Glyph="&#xf349;"
-                        Color="White">
-                            <FontImageSource.FontFamily>
-                                <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
-                                    <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
-                                </OnPlatform>
-                            </FontImageSource.FontFamily>
-                        </FontImageSource>
+                            Glyph="&#xf349;"
+                            Color="White"
+                            FontFamily="Material Design Icons" />
                     </Button.ImageSource>
                 </Button>
             </Grid>

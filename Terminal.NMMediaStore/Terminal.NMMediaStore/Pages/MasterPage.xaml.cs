@@ -36,7 +36,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             {
                 var storageTargetManager = Xamarin.Forms.DependencyService.Get<Managers.Facade.IStorageTargetManagerFacade>();
 
-                var storage = storageTargetManager.GetStorageTarget();
+                var storage = storageTargetManager.GetTargetStorage();
 
                 var presentedDetailPage = ((Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Detail as Xamarin.Forms.NavigationPage).CurrentPage;
 
@@ -77,10 +77,32 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             });
         }
 
-        public void InvalidateTargetStorageStats()
+        public void InvalidateTargetStorageStats(bool reload = false)
         {
-            StorageSpaceReferenceBoxView.InvalidateWidth();
-            VirtualStoreUsedSpaceSpan.InvalidateText();
+            var storageTargetManager = Xamarin.Forms.DependencyService.Get<Managers.Facade.IStorageTargetManagerFacade>();
+
+            if (reload)
+            {
+                storageTargetManager.GetReloadedTargetStorageAsync().ContinueWith(task =>
+                {
+                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                    {
+                        BindingContextModel.Target.Storage = task.Result;
+                        BindingContextModel.Target.CurrentUsedPercentFactor = BindingContextModel.Target.Storage?.UsedSpace / BindingContextModel.Target.Storage?.TotalSpace ?? 0.00d;
+
+                        StorageSpaceReferenceBoxView.InvalidateWidth();
+                        VirtualStoreUsedSpaceSpan.InvalidateText();
+                    });
+                });
+            }
+            else
+            {
+                BindingContextModel.Target.Storage = storageTargetManager.GetTargetStorage();
+                BindingContextModel.Target.CurrentUsedPercentFactor = BindingContextModel.Target.Storage?.UsedSpace / BindingContextModel.Target.Storage?.TotalSpace ?? 0.00d;
+
+                StorageSpaceReferenceBoxView.InvalidateWidth();
+                VirtualStoreUsedSpaceSpan.InvalidateText();
+            }
         }
 
         public void PresentForStoragePick()
@@ -131,7 +153,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
         {
             Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().BindCallbacks(FetchOrderDownloadRequeastEnd_Callback, FetchOrderDownloadRequestProgress_Callback);
 
-            BindingContextModel.IsBusy = true;
+            MainScrollView.ScrollToAsync(0, 0, true).ContinueWith(_ => { });
+
+            BindingContextModel.IsBusy = true;            
         }
 
         private void PickStorageDeviceButton_Clicked(object sender, System.EventArgs eventArgs)

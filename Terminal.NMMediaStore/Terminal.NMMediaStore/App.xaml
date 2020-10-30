@@ -42,13 +42,7 @@
 
             <Style TargetType="Label">
                 <Setter Property="TextColor" Value="White" />
-                <Setter Property="FontFamily">
-                    <Setter.Value>
-                        <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Regular">
-                            <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-REGULAR.OTF#Myriad Pro" />
-                        </OnPlatform>
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="FontFamily" Value="Myriad Pro Regular" />
             </Style>
             <Style TargetType="NavigationPage">
                 <Setter Property="BarBackgroundColor" Value="{StaticResource DarkBackgroundColor}" />
@@ -60,13 +54,7 @@
             <Style x:Key="PivotButtonStyle" TargetType="Button">
                 <Setter Property="BackgroundColor" Value="Transparent" />
                 <Setter Property="TextColor" Value="White" />
-                <Setter Property="FontFamily">
-                    <Setter.Value>
-                        <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Regular">
-                            <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-REGULAR.OTF#Myriad Pro" />
-                        </OnPlatform>
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="FontFamily" Value="Myriad Pro Regular" />
             </Style>
         </ResourceDictionary>
     </Application.Resources>

@@ -25,12 +25,12 @@
                 WidthRequest="280">
                 <ActivityIndicator 
                     VerticalOptions="Center" HorizontalOptions="Center"
-                    HeightRequest="64" WidthRequest="64"
+                    HeightRequest="56" WidthRequest="56"
                     IsRunning="True" />
                 <Label
                     HorizontalTextAlignment="Center"
                     Text="{Binding Path=BusyProgressMessage}"
-                    FontSize="{StaticResource Header3FontSize}" />
+                    FontSize="{StaticResource Header4FontSize}" />
                 <StackLayout
                     Margin="0,10,0,0"
                     IsVisible="{Binding Path=DownloadingIndex}">

@@ -165,7 +165,7 @@
       <Version>1.1.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client">
-      <Version>3.1.1</Version>
+      <Version>3.1.9</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.2</Version>
@@ -188,7 +188,7 @@
     <PackageReference Include="Xamarin.FFImageLoading.Transformations">
       <Version>2.4.11.982</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1269" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1560" />
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.10" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
     <PackageReference Include="Xamarin.Forms.PancakeView">
@@ -208,21 +208,6 @@
       <Project>{C04D6F06-3676-441F-94AD-ABEBACEE66A7}</Project>
       <Name>Terminal.NMMediaStore</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\Fonts\MYRIADPRO-REGULAR.OTF" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\Fonts\MYRIADPRO-COND.OTF" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\Fonts\MYRIADPRO-CONDIT.OTF" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\Fonts\MYRIADPRO-IT.OTF" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\Fonts\materialdesignicons-webfont.ttf" />
   </ItemGroup>
   <ItemGroup>
     <SDKReference Include="WindowsDesktop, Version=10.0.17134.0">

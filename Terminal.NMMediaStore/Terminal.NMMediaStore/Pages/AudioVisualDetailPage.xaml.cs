@@ -104,6 +104,10 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             {
                 DisplayAlert(Providers.Constant.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, Providers.Constant.StringConstantProvider.INSUFFICIENT_STORAGE_SPACE_EXCEPTION_MESSAGE, Providers.Constant.StringConstantProvider.OK_ACTION);
             }
+            catch (Exceptions.LockedAudioVisualForFetchListException)
+            {
+                DisplayAlert(Providers.Constant.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, Providers.Constant.StringConstantProvider.LOCKED_AUDIOVISUAL_FOR_FETCH_LIST_EXCEPTION_MESSAGE, Providers.Constant.StringConstantProvider.OK_ACTION);
+            }
             catch
             {
                 // TODO Handle unespected exception!

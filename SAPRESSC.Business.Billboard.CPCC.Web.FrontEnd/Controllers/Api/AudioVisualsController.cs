@@ -15,48 +15,48 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
     public class AudioVisualsController : Core.Web.Common.Controllers.BaseWebController
     {
         private readonly Microsoft.Extensions.Options.IOptions<Options.MediaStoreOptions> mediaStoreOptions;
-        private readonly Microsoft.Extensions.Options.IOptions<Cinema.Web.Common.Options.FfmpegOptions> ffmpegOptions;
         private readonly IEntityRepository<Production, long> productionRepository;
         private readonly IEntityRepository<Search, long> searchRepository;
         private readonly IEntityRepository<Category, System.Guid> categoryRepository;
         private readonly IEntityRepository<Middleware.Region.Persistence.Entities.Country, int> countryRepository;
         private readonly IEntityRepository<ProducerHouse, long> producerHouseRepository;
+        private readonly MediaToolkit.Services.IMediaToolkitService mediaToolkitService;
 
-        public AudioVisualsController(IEntityRepository<ProducerHouse, long> producerHouseRepository, IEntityRepository<Middleware.Region.Persistence.Entities.Country, int> countryRepository, IEntityRepository<Category, System.Guid> categoryRepository, IEntityRepository<Search, long> searchRepository, IEntityRepository<Production, long> productionRepository, Microsoft.Extensions.Options.IOptions<Cinema.Web.Common.Options.FfmpegOptions> ffmpegOptions, Microsoft.Extensions.Options.IOptions<Options.MediaStoreOptions> mediaStoreOptions, Microsoft.Extensions.Localization.IStringLocalizer<AudioVisualsController> localizer, ILogger<AudioVisualsController> logger) : base(localizer, logger)
+        public AudioVisualsController(MediaToolkit.Services.IMediaToolkitService mediaToolkitService, IEntityRepository<ProducerHouse, long> producerHouseRepository, IEntityRepository<Middleware.Region.Persistence.Entities.Country, int> countryRepository, IEntityRepository<Category, System.Guid> categoryRepository, IEntityRepository<Search, long> searchRepository, IEntityRepository<Production, long> productionRepository, Microsoft.Extensions.Options.IOptions<Options.MediaStoreOptions> mediaStoreOptions, Microsoft.Extensions.Localization.IStringLocalizer<AudioVisualsController> localizer, ILogger<AudioVisualsController> logger) : base(localizer, logger)
         {
             this.mediaStoreOptions = mediaStoreOptions;
-            this.ffmpegOptions = ffmpegOptions;
             this.productionRepository = productionRepository;
             this.searchRepository = searchRepository;
             this.categoryRepository = categoryRepository;
             this.countryRepository = countryRepository;
             this.producerHouseRepository = producerHouseRepository;
+            this.mediaToolkitService = mediaToolkitService;
         }
 
         [HttpGet("populars")]
         [HttpGet("populars/sheet/{sheet}/limit/{limit}")]
-        public virtual IActionResult GetPopulars(int sheet = 1, int limit = 20)
+        public virtual async System.Threading.Tasks.Task<IActionResult> GetPopularsAsync(int sheet = 1, int limit = 20)
         {
-            return BuildPaginationModelActionResult(sheet, limit, item => item, true, new Helpers.Comparison.ProductionPopularityComparisonHelper());
+            return await BuildPaginationModelActionResultAsync(sheet, limit, item => item, true, new Helpers.Comparison.ProductionPopularityComparisonHelper());
         }
 
         [HttpGet("lasts")]
         [HttpGet("lasts/sheet/{sheet}/limit/{limit}")]
-        public virtual IActionResult GetLasts(int sheet = 1, int limit = 20)
+        public virtual async System.Threading.Tasks.Task<IActionResult> GetLastsAsync(int sheet = 1, int limit = 20)
         {
-            return BuildPaginationModelActionResult(sheet, limit, entity => entity.Id, true);
+            return await BuildPaginationModelActionResultAsync(sheet, limit, entity => entity.Id, true);
         }
 
         [HttpGet("recomendeds")]
         [HttpGet("recomendeds/sheet/{sheet}/limit/{limit}")]
-        public virtual IActionResult GetRecomendeds(int sheet = 1, int limit = 20)
+        public virtual async System.Threading.Tasks.Task<IActionResult> GetRecomendedsAsync(int sheet = 1, int limit = 20)
         {
-            return BuildPaginationModelActionResult(sheet, limit, RecomendationOrdering, true);
+            return await BuildPaginationModelActionResultAsync(sheet, limit, RecomendationOrdering, true);
         }
 
         [HttpPost("search/sheet/{sheet}")]
         [HttpPost("search/sheet/{sheet}/limit/{limit}")]
-        public virtual IActionResult Searh([FromBody]SearchModel search, int sheet = 1, int limit = 20)
+        public virtual async System.Threading.Tasks.Task<IActionResult> SearhAsync([FromBody]SearchModel search, int sheet = 1, int limit = 20)
         {
             if (ModelState.IsValid)
             {
@@ -106,7 +106,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
                         search.Id = entity.Id;
                     }
 
-                    return BuildPaginationModelActionResult(sheet, limit, e => e.Title, false, searchModel: search);
+                    return await BuildPaginationModelActionResultAsync(sheet, limit, e => e.Title, false, searchModel: search);
                 }
                 catch (System.Exception e)
                 {
@@ -119,7 +119,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
             return BadRequest();
         }
 
-        protected IActionResult BuildPaginationModelActionResult<TOrderingKey>(int page, int limit, System.Func<Production, TOrderingKey> ordering, bool descending, System.Collections.Generic.IComparer<TOrderingKey> comparer = null, SearchModel searchModel = null)
+        protected async System.Threading.Tasks.Task<IActionResult> BuildPaginationModelActionResultAsync<TOrderingKey>(int page, int limit, System.Func<Production, TOrderingKey> ordering, bool descending, System.Collections.Generic.IComparer<TOrderingKey> comparer = null, SearchModel searchModel = null)
         {
             IQueryable<Production> selection = null;
 
@@ -195,8 +195,6 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
                         entities = selection.OrderByDescending(ordering).Skip((page - 1) * limit).Take(limit).ToList();
                     }
                 }
-                
-                var models = entities.Select(entity => EntityToModel(entity)).ToList();
 
                 paginationModel = new PaginationModel<AudioVisualModel>
                 {
@@ -205,9 +203,14 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
                     HasPrevious = page > 1,
                     HasNext = page < maxPageCount,
                     MaxPageCount = maxPageCount,
-                    List = models,
+                    List = new System.Collections.Generic.List<AudioVisualModel>(),
                     SerializedContext = searchModel?.Id.ToString()
                 };
+
+                foreach (var entity in entities)
+                {
+                    paginationModel.List.Add(await EntityToModelAsync(entity));
+                }
             }
 
             return Ok(paginationModel);
@@ -335,7 +338,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
             return item => item.Rate;
         }
 
-        private AudioVisualModel EntityToModel(Production entity)
+        private async System.Threading.Tasks.Task<AudioVisualModel> EntityToModelAsync(Production entity)
         {
             var category = CategoryIdToModel(entity.CategoryId.Value);
 
@@ -384,35 +387,41 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
             model.FileSize = avFileInfo.Length;
             model.Format = avFileInfo.Extension.Substring(1).ToUpper();
 
-            var avMediaFile = FFMediaToolkit.Decoding.MediaFile.Open(avFileInfo.FullName);
-            
-            //engine.GetMetadata(avMediaFile);
+            var getMetadataTask = new MediaToolkit.Tasks.FfTaskGetMetadata(avFileName);
 
-            model.Resolution = string.Format("{0}x{1}", avMediaFile.Video.Info.FrameSize.Width, avMediaFile.Video.Info.FrameSize.Height);
+            var getMetadataResult = await mediaToolkitService.ExecuteAsync(getMetadataTask);
+
+            var videoMediaStream = getMetadataResult.Metadata.Streams.First(stream => stream.CodecType == "video");
+
+            model.Resolution = string.Format("{0}x{1}", videoMediaStream.Width, videoMediaStream.Height);
+
+            //var avMediaFile = FFMediaToolkit.Decoding.MediaFile.Open(avFileInfo.FullName);
+
+            //model.Resolution = string.Format("{0}x{1}", videoMediaStream.Width, videoMediaStream.Height);
 
             model.Quality = Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.LD;
 
-            if (avMediaFile.Video.Info.FrameSize.Height >= 360)
+            if (videoMediaStream.Height >= 360)
             {
                 model.Quality = Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.SD;
             }
 
-            if (avMediaFile.Video.Info.FrameSize.Width >= 1280 || avMediaFile.Video.Info.FrameSize.Height >= 720)
+            if (videoMediaStream.Width >= 1280 || videoMediaStream.Height >= 720)
             {
                 model.Quality = Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.HD;
             }
 
-            if (avMediaFile.Video.Info.FrameSize.Width >= 1920 || avMediaFile.Video.Info.FrameSize.Height >= 1080)
+            if (videoMediaStream.Width >= 1920 || videoMediaStream.Height >= 1080)
             {
                 model.Quality = Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.FHD;
             }
 
-            if (avMediaFile.Video.Info.FrameSize.Height >= 2160)
+            if (videoMediaStream.Height >= 2160)
             {
                 model.Quality = Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.UHD;
             }
 
-            if (avMediaFile.Video.Info.FrameSize.Height >= 4320)
+            if (videoMediaStream.Height >= 4320)
             {
                 model.Quality = Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.K8;
             }

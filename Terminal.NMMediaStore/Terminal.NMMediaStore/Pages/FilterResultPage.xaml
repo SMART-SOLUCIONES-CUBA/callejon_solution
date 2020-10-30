@@ -73,15 +73,10 @@
                             Text="{Binding Path=IsMarkedForFetch, Converter={StaticResource FetchMarkToogleToButtonIconStringConverter}}"
                             TextColor="{Binding Path=IsMarkedForFetch, Converter={StaticResource FetchMarkToogleToButtonTextColorConverter}}"
                             FontSize="{StaticResource Header4FontSize}"
+                            FontFamily="Material Design Icons"
                             CornerRadius="0"
                             WidthRequest="{StaticResource DefaultIconSize}" HeightRequest="{StaticResource DefaultIconSize}"
-                            Clicked="AudioVisualItemFetchMarkToogleButton_Clicked">
-                            <Button.FontFamily>
-                                <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
-                                    <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
-                                </OnPlatform>
-                            </Button.FontFamily>
-                        </Button>
+                            Clicked="AudioVisualItemFetchMarkToogleButton_Clicked" />
                     </Grid>
                     <Label 
                         LineBreakMode="TailTruncation"
@@ -277,13 +272,8 @@
                                                 Text="{Binding Path=Name}"
                                                 LineBreakMode="TailTruncation"
                                                 MaxLines="3"
-                                                FontSize="{StaticResource Header3FontSize}">
-                                                <Label.FontFamily>
-                                                    <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed Italic">
-                                                        <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-CONDIT.OTF#Myriad Pro" />
-                                                    </OnPlatform>
-                                                </Label.FontFamily>
-                                            </Label>
+                                                FontSize="{StaticResource Header3FontSize}"
+                                                FontFamily="Myriad Pro Condensed Italic" />
                                         </Grid>
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
@@ -343,24 +333,15 @@
                     Text="&#xfcba;"
                     TextColor="White"
                     FontSize="{StaticResource Header2FontSize}"
+                    FontFamily="Material Design Icons"
                     CornerRadius="12"
                     WidthRequest="{StaticResource DefaultIconSize}" HeightRequest="{StaticResource DefaultIconSize}"
-                    Clicked="AlternativeBackButton_Clicked">
-                    <Button.FontFamily>
-                        <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
-                            <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
-                        </OnPlatform>
-                    </Button.FontFamily>
-                </Button>
+                    Clicked="AlternativeBackButton_Clicked" />
                 <Label
                     Grid.Column="1"
                     HorizontalOptions="Center" VerticalOptions="Center"
-                    LineBreakMode="TailTruncation">
-                    <Label.FontFamily>
-                        <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Regular">
-                            <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-REGULAR.OTF#Myriad Pro" />
-                        </OnPlatform>
-                    </Label.FontFamily>
+                    LineBreakMode="TailTruncation"
+                    FontFamily="Myriad Pro Regular">
                     <Label.FontSize>
                         <OnPlatform x:TypeArguments="x:Double" Default="36"></OnPlatform>
                     </Label.FontSize>

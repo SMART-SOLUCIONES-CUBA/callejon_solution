@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using MediaToolkit;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
@@ -62,11 +63,18 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard
             appContext.RegisterServices(services);
 
             services.AddSingleton<Helpers.Localization.GlobalViewLocalizationHelper>();
+
             services.AddSingleton<IApplicationContext>(appContext);
+
             services.AddSingleton<Core.Web.Security.Licensing.ILicenseValidator, Licensing.LicenseValidator>();
+
             services.AddTransient<Core.Web.Security.Models.View.IUserProfileViewModel, Models.View.UserProfileViewModel>();
+
             services.AddScoped<Core.Web.Security.Facades.Manager.IUserProfileManagerFacade, Managers.UserProfileManager>();
             services.AddSingleton<Middleware.Media.Web.Common.Facades.Manager.IMediaFileManagerFacade, Managers.MediaFileManager>();
+
+            services.AddMediaToolkit(configuration["FFmpeg:MainBinaryPath"]);
+
             services.AddSingleton<Core.Web.Common.ModelBinding.IConcretModelBindHelper, ModelBinding.ConcretModelBindHelper>();
 
             services.AddSingleton<IStringLocalizer<PresentationsController>, Helpers.Localization.GlobalViewLocalizationHelper>();
@@ -111,7 +119,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, Microsoft.Extensions.Options.IOptions<Business.Billboard.Cinema.Web.Common.Options.FfmpegOptions> ffmpegOptions)
         {
-            FFMediaToolkit.FFmpegLoader.FFmpegPath = System.IO.Path.GetDirectoryName(ffmpegOptions.Value.Path);
+            //FFMediaToolkit.FFmpegLoader.FFmpegPath = System.IO.Path.GetDirectoryName(ffmpegOptions.Value.BinariesPath);
 
             loggerFactory.AddSerilog(Log.Logger);
 

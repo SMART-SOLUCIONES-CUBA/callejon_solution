@@ -359,13 +359,8 @@
                                                 TextColor="White"
                                                 LineBreakMode="TailTruncation"
                                                 MaxLines="3"
-                                                FontSize="{StaticResource Header3FontSize}">
-                                                <Label.FontFamily>
-                                                    <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed Italic">
-                                                        <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-CONDIT.OTF#Myriad Pro" />
-                                                    </OnPlatform>
-                                                </Label.FontFamily>
-                                            </Label>
+                                                FontSize="{StaticResource Header3FontSize}"
+                                                FontFamily="Myriad Pro Condensed Italic" />
                                         </Grid>
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
@@ -432,13 +427,8 @@
                                                 TextColor="{StaticResource DefaultBackgroundColor}"
                                                 LineBreakMode="TailTruncation"
                                                 MaxLines="3"
-                                                FontSize="{StaticResource Header3FontSize}">
-                                                <Label.FontFamily>
-                                                    <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed Italic">
-                                                        <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-CONDIT.OTF#Myriad Pro" />
-                                                    </OnPlatform>
-                                                </Label.FontFamily>
-                                            </Label>
+                                                FontSize="{StaticResource Header3FontSize}"
+                                                FontFamily="Myriad Pro Condensed Italic" />
                                         </Grid>
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
@@ -469,13 +459,8 @@
                     HorizontalTextAlignment="Center"
                     Text="Revise antes de completar"
                     TextColor="{StaticResource SecoundaryTextColor}"
-                    FontSize="{StaticResource Header5FontSize}">
-                    <Label.FontFamily>
-                        <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Condensed Italic">
-                            <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-CONDIT.OTF#Myriad Pro" />
-                        </OnPlatform>
-                    </Label.FontFamily>
-                </Label>
+                    FontSize="{StaticResource Header5FontSize}"
+                    FontFamily="Myriad Pro Condensed Italic" />
                 <Button
                     Grid.Column="2" Grid.Row="5"
                     IsEnabled="{Binding Path=IsBusy, Converter={StaticResource BoolToBoolNegationConverter}}"

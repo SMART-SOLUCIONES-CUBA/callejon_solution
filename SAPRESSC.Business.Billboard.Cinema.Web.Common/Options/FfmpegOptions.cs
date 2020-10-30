@@ -2,6 +2,8 @@
 {
     public class FfmpegOptions
     {
-        public string Path { get; set; }
+        public string BinariesPath { get; set; }
+
+        public string MainBinaryPath { get; set; }
     }
 }

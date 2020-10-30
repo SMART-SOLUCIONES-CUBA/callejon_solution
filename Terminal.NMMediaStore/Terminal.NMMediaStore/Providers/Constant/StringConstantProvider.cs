@@ -12,6 +12,8 @@
 
         public const string UNSPECIFIED_STORAGE_DEVICE_EXCEPTION_MESSAGE = "Dispositivo de almacenamiento no especificado.";
 
+        public const string LOCKED_AUDIOVISUAL_FOR_FETCH_LIST_EXCEPTION_MESSAGE = "La lista de Audio Visuales a descargar no puede ser modificada durante el proceso de descarga";
+
         public static string UPGRADE_REQUIRED_EXCEPTION_MESSAGE = string.Format("Es necearia la actualización de esta aplicación para poder continuar.{1}{1}{0}", SUPPORT_ORIENTATION_MESSAGE, System.Environment.NewLine);
 
         public static string UNSPECTED_API_RESPONSE_EXCEPTION_MESSAGE = string.Format("Respuesta del proveedor del sistema no esperada.{1}{1}{0}", SUPPORT_ORIENTATION_MESSAGE, System.Environment.NewLine);

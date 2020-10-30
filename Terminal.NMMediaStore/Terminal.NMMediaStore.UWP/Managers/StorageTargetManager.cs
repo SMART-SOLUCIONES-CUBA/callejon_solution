@@ -59,7 +59,37 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Managers
             return result.ToArray();
         }
 
-        public Models.StorageModel GetStorageTarget()
+        public async System.Threading.Tasks.Task<Models.StorageModel> GetReloadedTargetStorageAsync()
+        {
+            using (var httpClient = new System.Net.Http.HttpClient())
+            {
+                var storageDevice = Windows.Devices.Portable.StorageDevice.FromId(target.Id);
+
+                var response = await httpClient.GetAsync(string.Format("http://127.0.0.1:{0}/api/driveinfo/{1}", Supporter.Api.Common.Constants.SUPPORT_KESTREL_PORT, storageDevice.Path));
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                try
+                {
+                    var storageDriveInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<Supporter.Api.Common.Models.DriveInfoModel>(responseContent);
+
+                    var totalSpace = storageDriveInfo.TotalSize;
+                    var usedSpace = totalSpace - storageDriveInfo.TotalFreeSpace;
+
+                    target.Caption = storageDevice.DisplayName;
+                    target.TotalSpace = totalSpace;
+                    target.UsedSpace = usedSpace;
+                }
+                catch
+                {
+                    return target;
+                }
+            }
+
+            return target;
+        }
+
+        public Models.StorageModel GetTargetStorage()
         {
             return target;
         }

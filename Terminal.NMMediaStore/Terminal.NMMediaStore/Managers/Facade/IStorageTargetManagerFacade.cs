@@ -4,7 +4,9 @@
     {
         void ConfigurateCallbacks(System.Action targeRemovedCallbackAction);
 
-        Models.StorageModel GetStorageTarget();
+        Models.StorageModel GetTargetStorage();
+
+        System.Threading.Tasks.Task<Models.StorageModel> GetReloadedTargetStorageAsync();
 
         void TargetStorage(Models.StorageModel target);
 

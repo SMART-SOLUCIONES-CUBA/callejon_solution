@@ -8,6 +8,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Extensions
         {
             var bindingContextModel = (target.MainPage as Xamarin.Forms.MasterDetailPage).Master.BindingContext as Models.Page.MasterPageModel;
 
+            if (bindingContextModel.IsBusy) throw new Exceptions.LockedAudioVisualForFetchListException();
+
             if (bindingContextModel.Target.Storage == null) throw new Exceptions.UnspecifiedStorageDeviceException();
 
             var afterSpace =  bindingContextModel.Target.Storage.UsedSpace + bindingContextModel.FetchOrderAudioVisuals.ToStorageSpace() + model.FileSize;
@@ -22,6 +24,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Extensions
         public static void RemoveAudioVisualForFetch(this Xamarin.Forms.Application target, SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.AudioVisualModel model)
         {
             var bindingContextModel = (target.MainPage as Xamarin.Forms.MasterDetailPage).Master.BindingContext as Models.Page.MasterPageModel;
+
+            if (bindingContextModel.IsBusy) throw new Exceptions.LockedAudioVisualForFetchListException();
 
             var removeTarget = bindingContextModel.FetchOrderAudioVisuals.First(item => item.Id == model.Id);
 

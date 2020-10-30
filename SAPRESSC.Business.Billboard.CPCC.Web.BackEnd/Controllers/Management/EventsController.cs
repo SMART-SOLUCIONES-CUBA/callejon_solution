@@ -26,24 +26,23 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Contr
         private const string POSTER_IMAGE_FILE_FIELD_NAME = "PosterImageFile";
         private const string PROMO_VIDEO_FILE_FIELD_NAME = "PromoVideoFile";
 
-        private readonly Microsoft.Extensions.Options.IOptions<Cinema.Web.Common.Options.FfmpegOptions> ffmpegOptions;
-
         private readonly IEntityRepository<Thumbnail, Guid> thumbnailRepository;
         private readonly IEntityRepository<Video, Guid> videoRepository;
         private readonly IEntityRepository<Image, Guid> imageRepository;
-        private readonly IMediaFileManagerFacade mediaFileManagerFacade;
+        private readonly IMediaFileManagerFacade mediaFileManager;
         private readonly IEntityRepository<Personality, long> personalityRepository;
         private readonly Microsoft.EntityFrameworkCore.DbContext dbContext;
+        private readonly MediaToolkit.Services.IMediaToolkitService mediaToolkitService;
 
-        public EventsController(Microsoft.Extensions.Options.IOptions<Cinema.Web.Common.Options.FfmpegOptions> ffmpegOptions, IEntityRepository<Thumbnail, Guid> thumbnailRepository, IEntityRepository<Video, Guid> videoRepository, Microsoft.EntityFrameworkCore.DbContext dbContext, IEntityRepository<Personality, long> personalityRepository, IMediaFileManagerFacade mediaFileManagerFacade, IEntityRepository<Image, Guid> imageRepository, IEntityRepository<Event, Guid> repository, Microsoft.Extensions.Localization.IStringLocalizer<EventsController> localizer, ILogger<EventsController> logger) : base(repository, localizer, logger)
+        public EventsController(MediaToolkit.Services.IMediaToolkitService mediaToolkitService, IEntityRepository<Thumbnail, Guid> thumbnailRepository, IEntityRepository<Video, Guid> videoRepository, Microsoft.EntityFrameworkCore.DbContext dbContext, IEntityRepository<Personality, long> personalityRepository, IMediaFileManagerFacade mediaFileManager, IEntityRepository<Image, Guid> imageRepository, IEntityRepository<Event, Guid> repository, Microsoft.Extensions.Localization.IStringLocalizer<EventsController> localizer, ILogger<EventsController> logger) : base(repository, localizer, logger)
         {
-            this.ffmpegOptions = ffmpegOptions;
             this.thumbnailRepository = thumbnailRepository;
             this.videoRepository = videoRepository;
             this.imageRepository = imageRepository;
-            this.mediaFileManagerFacade = mediaFileManagerFacade;
+            this.mediaFileManager = mediaFileManager;
             this.personalityRepository = personalityRepository;
             this.dbContext = dbContext;
+            this.mediaToolkitService = mediaToolkitService;
         }
 
         protected override string GetFilterSessionID()
@@ -127,33 +126,43 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Contr
 
                             var videoId = Guid.NewGuid();
 
-                            mediaFileManagerFacade.SaveVideoFileContent(videoId, memoryStream.ToArray(), extension);
+                            mediaFileManager.SaveVideoFileContent(videoId, memoryStream.ToArray(), extension);
 
-                            mediaFileManagerFacade.EnsureThumbnailsDirectoryExist();
+                            mediaFileManager.EnsureThumbnailsDirectoryExist();
 
                             try
                             {
-                                var videoMediaFile = new MediaToolkit.Model.MediaFile(mediaFileManagerFacade.GetVideoFilePath(videoId, extension));
+                                var videoPath = mediaFileManager.GetVideoFilePath(videoId, extension);
+                                var thumbnailPath = mediaFileManager.GetThumbnailFilePath(thumbnailId, Cinema.Web.Common.Constants.VIDEO_THUMBNAIL_EXTENSION);
 
-                                var thumbnailMediaFile = new MediaToolkit.Model.MediaFile(mediaFileManagerFacade.GetThumbnailFilePath(thumbnailId, Cinema.Web.Common.Constants.VIDEO_THUMBNAIL_EXTENSION));
+                                var getMetadataFfTask = new MediaToolkit.Tasks.FfTaskGetMetadata(videoPath);
 
-                                using (var engine = new MediaToolkit.Engine(ffmpegOptions.Value.Path))
-                                {
-                                    engine.GetMetadata(videoMediaFile);
+                                var getMEtadataTask = mediaToolkitService.ExecuteAsync(getMetadataFfTask);
 
-                                    var resolutionParts = videoMediaFile.Metadata.VideoData.FrameSize.Split('x').Select(s => int.Parse(s)).ToArray();
+                                getMEtadataTask.RunSynchronously();
 
-                                    var minResolutionPart = Math.Min(resolutionParts[0], resolutionParts[1]);
+                                var getMetadataResult = getMEtadataTask.Result;
 
-                                    if (minResolutionPart > 720) throw new InvalidOperationException();
+                                var videoMediaStream = getMetadataResult.Metadata.Streams.First(stream => stream.CodecType == "video");
+                                var auduioMediaStream = getMetadataResult.Metadata.Streams.FirstOrDefault(stream => stream.CodecType == "audio");
 
-                                    engine.GetThumbnail(videoMediaFile, thumbnailMediaFile, new MediaToolkit.Options.ConversionOptions());
-                                }
+                                var videoDuration = TimeSpan.FromSeconds(double.Parse(getMetadataResult.Metadata.Format.Duration.Replace(".", ",")));
+
+                                var saveThumbnailFfTask = new MediaToolkit.Tasks.FfTaskSaveThumbnail(
+                                    videoPath,
+                                    thumbnailPath,
+                                    TimeSpan.FromSeconds(10)
+                                );
+
+                                var saveThumbnailTask = mediaToolkitService.ExecuteAsync(saveThumbnailFfTask);
+
+                                saveThumbnailTask.RunSynchronously();
+
+                                if (videoMediaStream.Height > 720) throw new System.InvalidOperationException();
 
                                 try
                                 {
-                                    var videoMediaFileInfo = new System.IO.FileInfo(videoMediaFile.Filename);
-                                    var thumbnailMediaFileInfo = new System.IO.FileInfo(thumbnailMediaFile.Filename);
+                                    var thumbnailMediaFileInfo = new System.IO.FileInfo(thumbnailPath);
 
                                     var thumbnail = new Thumbnail
                                     {
@@ -168,14 +177,14 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Contr
                                         Id = videoId,
                                         Thumbnail = thumbnail,
                                         Extension = extension,
-                                        Length = videoMediaFileInfo.Length,
-                                        Duration = videoMediaFile.Metadata.Duration,
-                                        Format = videoMediaFile.Metadata.VideoData.Format,
-                                        FrameSize = videoMediaFile.Metadata.VideoData.FrameSize,
-                                        ColorModel = videoMediaFile.Metadata.VideoData.ColorModel,
-                                        Fps = videoMediaFile.Metadata.VideoData.Fps,
-                                        AudioFormat = videoMediaFile.Metadata.AudioData.Format,
-                                        AudioChannelOutput = videoMediaFile.Metadata.AudioData.ChannelOutput,
+                                        Length = memoryStream.Length,
+                                        Duration = videoDuration,
+                                        Format = string.Format("{0} ({1})", videoMediaStream.CodecName, videoMediaStream.CodecLongName),
+                                        FrameSize = string.Format("{0}x{1}", videoMediaStream.Width, videoMediaStream.Height),
+                                        ColorModel = videoMediaStream.PixFmt,
+                                        Fps = 0,
+                                        AudioFormat = auduioMediaStream?.CodecLongName,
+                                        AudioChannelOutput = auduioMediaStream?.ChannelLayout,
                                         About = "Promo Event " + entity.Id
                                     };
 
@@ -183,14 +192,14 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Contr
                                 }
                                 catch (Exception ex)
                                 {
-                                    mediaFileManagerFacade.DeleteThumbnailFile(thumbnailId, Cinema.Web.Common.Constants.VIDEO_THUMBNAIL_EXTENSION);
+                                    mediaFileManager.DeleteThumbnailFile(thumbnailId, Cinema.Web.Common.Constants.VIDEO_THUMBNAIL_EXTENSION);
 
                                     throw ex;
                                 }
                             }
                             catch (Exception ex)
                             {
-                                mediaFileManagerFacade.DeleteVideoFile(videoId, extension);
+                                mediaFileManager.DeleteVideoFile(videoId, extension);
 
                                 throw ex;
                             }
@@ -203,7 +212,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Contr
 
                         var image = new Image { ContentType = modelInput.PosterImageFile.ContentType, Length = modelInput.PosterImageFile.Length, About = "Event " + entity.Id };
 
-                        mediaFileManagerFacade.SaveImageFileContent(image.Id, memoryStream.ToArray());
+                        mediaFileManager.SaveImageFileContent(image.Id, memoryStream.ToArray());
 
                         entity.PosterImage = image;
                     }
@@ -309,8 +318,8 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Contr
 
                             try
                             {
-                                mediaFileManagerFacade.DeleteThumbnailFile(thumbnailId, Cinema.Web.Common.Constants.VIDEO_THUMBNAIL_EXTENSION);
-                                mediaFileManagerFacade.DeleteVideoFile(videoId, videoExtension);
+                                mediaFileManager.DeleteThumbnailFile(thumbnailId, Cinema.Web.Common.Constants.VIDEO_THUMBNAIL_EXTENSION);
+                                mediaFileManager.DeleteVideoFile(videoId, videoExtension);
                             }
                             catch { }
                         }
@@ -327,33 +336,43 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Contr
 
                             var videoId = Guid.NewGuid();
 
-                            mediaFileManagerFacade.SaveVideoFileContent(videoId, memoryStream.ToArray(), extension);
+                            mediaFileManager.SaveVideoFileContent(videoId, memoryStream.ToArray(), extension);
 
-                            mediaFileManagerFacade.EnsureThumbnailsDirectoryExist();
+                            mediaFileManager.EnsureThumbnailsDirectoryExist();
 
                             try
                             {
-                                var videoMediaFile = new MediaToolkit.Model.MediaFile(mediaFileManagerFacade.GetVideoFilePath(videoId, extension));
+                                var videoPath = mediaFileManager.GetVideoFilePath(videoId, extension);
+                                var thumbnailPath = mediaFileManager.GetThumbnailFilePath(thumbnailId, Cinema.Web.Common.Constants.VIDEO_THUMBNAIL_EXTENSION);
 
-                                var thumbnailMediaFile = new MediaToolkit.Model.MediaFile(mediaFileManagerFacade.GetThumbnailFilePath(thumbnailId, Cinema.Web.Common.Constants.VIDEO_THUMBNAIL_EXTENSION));
+                                var getMetadataFfTask = new MediaToolkit.Tasks.FfTaskGetMetadata(videoPath);
 
-                                using (var engine = new MediaToolkit.Engine(ffmpegOptions.Value.Path))
-                                {
-                                    engine.GetMetadata(videoMediaFile);
+                                var getMEtadataTask = mediaToolkitService.ExecuteAsync(getMetadataFfTask);
 
-                                    var resolutionParts = videoMediaFile.Metadata.VideoData.FrameSize.Split('x').Select(s => int.Parse(s)).ToArray();
+                                getMEtadataTask.RunSynchronously();
 
-                                    var minResolutionPart = Math.Min(resolutionParts[0], resolutionParts[1]);
+                                var getMetadataResult = getMEtadataTask.Result;
 
-                                    if (minResolutionPart > 720) throw new InvalidOperationException();
+                                var videoMediaStream = getMetadataResult.Metadata.Streams.First(stream => stream.CodecType == "video");
+                                var auduioMediaStream = getMetadataResult.Metadata.Streams.FirstOrDefault(stream => stream.CodecType == "audio");
 
-                                    engine.GetThumbnail(videoMediaFile, thumbnailMediaFile, new MediaToolkit.Options.ConversionOptions());
-                                }
+                                var videoDuration = TimeSpan.FromSeconds(double.Parse(getMetadataResult.Metadata.Format.Duration.Replace(".", ",")));
+
+                                var saveThumbnailFfTask = new MediaToolkit.Tasks.FfTaskSaveThumbnail(
+                                    videoPath,
+                                    thumbnailPath,
+                                    TimeSpan.FromSeconds(10)
+                                );
+
+                                var saveThumbnailTask = mediaToolkitService.ExecuteAsync(saveThumbnailFfTask);
+
+                                saveThumbnailTask.RunSynchronously();
+
+                                if (videoMediaStream.Height > 720) throw new System.InvalidOperationException();
 
                                 try
                                 {
-                                    var videoMediaFileInfo = new System.IO.FileInfo(videoMediaFile.Filename);
-                                    var thumbnailMediaFileInfo = new System.IO.FileInfo(thumbnailMediaFile.Filename);
+                                    var thumbnailMediaFileInfo = new System.IO.FileInfo(thumbnailPath);
 
                                     var thumbnail = new Thumbnail
                                     {
@@ -368,14 +387,14 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Contr
                                         Id = videoId,
                                         Thumbnail = thumbnail,
                                         Extension = extension,
-                                        Length = videoMediaFileInfo.Length,
-                                        Duration = videoMediaFile.Metadata.Duration,
-                                        Format = videoMediaFile.Metadata.VideoData.Format,
-                                        FrameSize = videoMediaFile.Metadata.VideoData.FrameSize,
-                                        ColorModel = videoMediaFile.Metadata.VideoData.ColorModel,
-                                        Fps = videoMediaFile.Metadata.VideoData.Fps,
-                                        AudioFormat = videoMediaFile.Metadata.AudioData.Format,
-                                        AudioChannelOutput = videoMediaFile.Metadata.AudioData.ChannelOutput,
+                                        Length = memoryStream.Length,
+                                        Duration = videoDuration,
+                                        Format = string.Format("{0} ({1})", videoMediaStream.CodecName, videoMediaStream.CodecLongName),
+                                        FrameSize = string.Format("{0}x{1}", videoMediaStream.Width, videoMediaStream.Height),
+                                        ColorModel = videoMediaStream.PixFmt,
+                                        Fps = 0,
+                                        AudioFormat = auduioMediaStream?.CodecLongName,
+                                        AudioChannelOutput = auduioMediaStream?.ChannelLayout,
                                         About = "Promo Event " + entity.Id
                                     };
 
@@ -383,14 +402,14 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Contr
                                 }
                                 catch (Exception ex)
                                 {
-                                    mediaFileManagerFacade.DeleteThumbnailFile(thumbnailId, Cinema.Web.Common.Constants.VIDEO_THUMBNAIL_EXTENSION);
+                                    mediaFileManager.DeleteThumbnailFile(thumbnailId, Cinema.Web.Common.Constants.VIDEO_THUMBNAIL_EXTENSION);
 
                                     throw ex;
                                 }
                             }
                             catch (Exception ex)
                             {
-                                mediaFileManagerFacade.DeleteVideoFile(videoId, extension);
+                                mediaFileManager.DeleteVideoFile(videoId, extension);
 
                                 throw ex;
                             }
@@ -405,7 +424,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Contr
 
                             var image = new Image { ContentType = modelInput.PosterImageFile.ContentType, Length = modelInput.PosterImageFile.Length, About = "Event " + entity.Id };
 
-                            mediaFileManagerFacade.SaveImageFileContent(image.Id, memoryStream.ToArray());
+                            mediaFileManager.SaveImageFileContent(image.Id, memoryStream.ToArray());
 
                             entity.PosterImage = image;
                         }
@@ -479,7 +498,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Contr
             {
                 imageRepository.Delete(imageRepository.Get(modelInput.PosterImageId), User.Identity.Name);
 
-                mediaFileManagerFacade.DeleteImageFile(modelInput.PosterImageId);
+                mediaFileManager.DeleteImageFile(modelInput.PosterImageId);
             }
 
             if (modelInput.PromoVideoFile != null && modelInput.PromoVideoId != Guid.Empty)
@@ -498,8 +517,8 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Contr
 
                 try
                 {
-                    mediaFileManagerFacade.DeleteThumbnailFile(thumbnailId, Cinema.Web.Common.Constants.VIDEO_THUMBNAIL_EXTENSION);
-                    mediaFileManagerFacade.DeleteVideoFile(modelInput.PromoVideoId, videoExtension);
+                    mediaFileManager.DeleteThumbnailFile(thumbnailId, Cinema.Web.Common.Constants.VIDEO_THUMBNAIL_EXTENSION);
+                    mediaFileManager.DeleteVideoFile(modelInput.PromoVideoId, videoExtension);
                 }
                 catch { }
             }
@@ -509,15 +528,15 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.BackEnd.Contr
         {
             base.PostDelete(entity);
 
-            mediaFileManagerFacade.DeleteImageFile(entity.PosterImage.Id);
+            mediaFileManager.DeleteImageFile(entity.PosterImage.Id);
 
             imageRepository.Delete(entity.PosterImage, User.Identity.Name);
 
             if (entity.PromoVideo != null)
             {
-                mediaFileManagerFacade.DeleteVideoFile(entity.PromoVideo.Id, entity.PromoVideo.Extension);
+                mediaFileManager.DeleteVideoFile(entity.PromoVideo.Id, entity.PromoVideo.Extension);
 
-                mediaFileManagerFacade.DeleteThumbnailFile(entity.PromoVideo.Thumbnail.Id, Cinema.Web.Common.Constants.VIDEO_THUMBNAIL_EXTENSION);
+                mediaFileManager.DeleteThumbnailFile(entity.PromoVideo.Thumbnail.Id, Cinema.Web.Common.Constants.VIDEO_THUMBNAIL_EXTENSION);
 
                 var thumbnail = entity.PromoVideo.Thumbnail;
 

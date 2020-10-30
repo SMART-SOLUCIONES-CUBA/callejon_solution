@@ -479,12 +479,8 @@
                 <Label
                     Grid.Column="1"
                     HorizontalOptions="Center" VerticalOptions="Center"
-                    LineBreakMode="TailTruncation">
-                    <Label.FontFamily>
-                        <OnPlatform x:TypeArguments="x:String" Default="Myriad Pro Regular">
-                            <On Platform="UWP" Value="/Assets/Fonts/MYRIADPRO-REGULAR.OTF#Myriad Pro" />
-                        </OnPlatform>
-                    </Label.FontFamily>
+                    LineBreakMode="TailTruncation"
+                    FontFamily="Myriad Pro Regular">
                     <Label.FontSize>
                         <OnPlatform x:TypeArguments="x:Double" Default="36"></OnPlatform>
                     </Label.FontSize>
@@ -515,14 +511,9 @@
                     Clicked="HomePivotButton_Clicked">
                     <Button.ImageSource>
                         <FontImageSource
-                        Glyph="&#xf4dc;"
-                        Color="White">
-                            <FontImageSource.FontFamily>
-                                <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
-                                    <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
-                                </OnPlatform>
-                            </FontImageSource.FontFamily>
-                        </FontImageSource>
+                            Glyph="&#xf4dc;"
+                            Color="White"
+                            FontFamily="Material Design Icons" />
                     </Button.ImageSource>
                 </Button>
                 <Button
@@ -533,14 +524,9 @@
                     Clicked="LibraryPivotButton_Clicked">
                     <Button.ImageSource>
                         <FontImageSource
-                        Glyph="&#xf638;"
-                        Color="White">
-                            <FontImageSource.FontFamily>
-                                <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
-                                    <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
-                                </OnPlatform>
-                            </FontImageSource.FontFamily>
-                        </FontImageSource>
+                            Glyph="&#xf638;"
+                            Color="White"
+                            FontFamily="Material Design Icons" />
                     </Button.ImageSource>
                 </Button>
                 <Button
@@ -550,14 +536,9 @@
                     Style="{StaticResource PivotButtonStyle}">
                     <Button.ImageSource>
                         <FontImageSource
-                        Glyph="&#xf349;"
-                        Color="{StaticResource PrimaryAccentColor}">
-                            <FontImageSource.FontFamily>
-                                <OnPlatform x:TypeArguments="x:String" Default="Material Design Icons">
-                                    <On Platform="UWP" Value="/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons" />
-                                </OnPlatform>
-                            </FontImageSource.FontFamily>
-                        </FontImageSource>
+                            Glyph="&#xf349;"
+                            Color="{StaticResource PrimaryAccentColor}"
+                            FontFamily="Material Design Icons" />
                     </Button.ImageSource>
                 </Button>
             </Grid>

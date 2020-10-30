@@ -38,8 +38,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             {
                 var storageTargetManager = Xamarin.Forms.DependencyService.Get<Managers.Facade.IStorageTargetManagerFacade>();
 
-                var storage = storageTargetManager.GetStorageTarget();
-
                 Master.BindingContext = new Models.Page.MasterPageModel
                 {
                     IsBusy = false,
@@ -51,18 +49,14 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                     },
                     Target = new Models.View.StorageViewModel
                     {
-                        Storage = storage,
-                        FamilyRepresentativeIconGlyph = storage?.Family.ToFamilyRepresentativeIconGlyph() ?? "\uf028",
-                        CurrentUsedPercentFactor = storage?.UsedSpace / storage?.TotalSpace ?? 0.00d
+                        FamilyRepresentativeIconGlyph = "\uf028",
+                        CurrentUsedPercentFactor = 0.00d
                     }
                 };
 
                 (Master as MasterPage).InvalidateTargetStorageStats();
 
-                if (storage == null)
-                {
-                    (Master as MasterPage).PresentForStoragePick();
-                }
+                (Master as MasterPage).PresentForStoragePick();
 
                 PivotToHomePage();
 
