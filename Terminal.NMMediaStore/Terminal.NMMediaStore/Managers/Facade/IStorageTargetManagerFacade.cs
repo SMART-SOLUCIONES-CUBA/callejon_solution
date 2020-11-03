@@ -6,7 +6,7 @@
 
         Models.StorageModel GetTargetStorage();
 
-        System.Threading.Tasks.Task<Models.StorageModel> GetReloadedTargetStorageAsync();
+        System.Threading.Tasks.Task ReloadTargetStorageAsync();
 
         void TargetStorage(Models.StorageModel target);
 

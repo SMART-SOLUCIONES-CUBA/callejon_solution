@@ -59,7 +59,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Managers
             return result.ToArray();
         }
 
-        public async System.Threading.Tasks.Task<Models.StorageModel> GetReloadedTargetStorageAsync()
+        public async System.Threading.Tasks.Task ReloadTargetStorageAsync()
         {
             using (var httpClient = new System.Net.Http.HttpClient())
             {
@@ -76,17 +76,20 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Managers
                     var totalSpace = storageDriveInfo.TotalSize;
                     var usedSpace = totalSpace - storageDriveInfo.TotalFreeSpace;
 
-                    target.Caption = storageDevice.DisplayName;
-                    target.TotalSpace = totalSpace;
-                    target.UsedSpace = usedSpace;
+                    target = new Models.StorageModel
+                    {
+                        Id = target.Id,
+                        Caption = storageDevice.DisplayName,
+                        Family = storageDriveInfo.DriveType == System.IO.DriveType.Fixed ? Enumerations.StorageFamiliy.UsbHDDrive : Enumerations.StorageFamiliy.UsbFlashDrive,
+                        Path = storageDevice.Path,
+                        TotalSpace = totalSpace,
+                        UsedSpace = usedSpace
+                    };
                 }
                 catch
                 {
-                    return target;
                 }
             }
-
-            return target;
         }
 
         public Models.StorageModel GetTargetStorage()

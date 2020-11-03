@@ -25,11 +25,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             }
         }
 
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-        }
-
         private void InvalidateTargetStorageOnMainThread()
         {
             Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
@@ -77,32 +72,15 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             });
         }
 
-        public void InvalidateTargetStorageStats(bool reload = false)
+        public void InvalidateTargetStorageStats()
         {
             var storageTargetManager = Xamarin.Forms.DependencyService.Get<Managers.Facade.IStorageTargetManagerFacade>();
 
-            if (reload)
-            {
-                storageTargetManager.GetReloadedTargetStorageAsync().ContinueWith(task =>
-                {
-                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
-                    {
-                        BindingContextModel.Target.Storage = task.Result;
-                        BindingContextModel.Target.CurrentUsedPercentFactor = BindingContextModel.Target.Storage?.UsedSpace / BindingContextModel.Target.Storage?.TotalSpace ?? 0.00d;
+            BindingContextModel.Target.Storage = storageTargetManager.GetTargetStorage();
+            BindingContextModel.Target.CurrentUsedPercentFactor = BindingContextModel.Target.Storage?.UsedSpace / BindingContextModel.Target.Storage?.TotalSpace ?? 0.00d;
 
-                        StorageSpaceReferenceBoxView.InvalidateWidth();
-                        VirtualStoreUsedSpaceSpan.InvalidateText();
-                    });
-                });
-            }
-            else
-            {
-                BindingContextModel.Target.Storage = storageTargetManager.GetTargetStorage();
-                BindingContextModel.Target.CurrentUsedPercentFactor = BindingContextModel.Target.Storage?.UsedSpace / BindingContextModel.Target.Storage?.TotalSpace ?? 0.00d;
-
-                StorageSpaceReferenceBoxView.InvalidateWidth();
-                VirtualStoreUsedSpaceSpan.InvalidateText();
-            }
+            StorageSpaceReferenceBoxView.InvalidateWidth();
+            VirtualStoreUsedSpaceSpan.InvalidateText();
         }
 
         public void PresentForStoragePick()
@@ -236,37 +214,47 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
         {
             Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
             {
-                if (exception != null)
+                BindingContextModel.BusyProgressMessage = "Actualizando ...";
+
+                BindingContextModel.DownloadingIndex = 0;
+            });
+
+            Xamarin.Forms.DependencyService.Get<Managers.Facade.IStorageTargetManagerFacade>().ReloadTargetStorageAsync().ContinueWith(_ =>
+            {
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
-                    // TODO Delete incomplete download FetchOrder
-
-                    XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Helpers.Facade.IExceptionHandlingHelperFacade>().HandleException(exception);
-                }
-                else
-                {
-                    var timeSpanToFullStringConverter = new Converters.TimeSpanToFullStringConverter();
-
-                    DisplayAlert(Providers.Constant.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, string.Format("Lista de descarga procesada con éxito en {1}.{0}{0}Los archivos descargados podrá encontrarlos en el dispositivo '{2}' carpeta 'Mediateca Nuevo Mundo' subcarpeta '{3}'.{0}{0}Puede continuar explorando nuestros contenidos y realizar nuevas descargas si así lo desea.", System.Environment.NewLine, timeSpanToFullStringConverter.Convert(elapsedTime, typeof(System.TimeSpan), null, System.Globalization.CultureInfo.CurrentCulture), BindingContextModel.MasterBindingContext.Target.Storage.Caption, orderFolderName), Providers.Constant.StringConstantProvider.OK_ACTION);
-
-                    var donwloadCenterDependPage = ((Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Detail as Xamarin.Forms.NavigationPage).CurrentPage as Base.FetchOrderAudioVisualPresentBaseContentPage;
-
-                    var items = BindingContextModel.MasterBindingContext.FetchOrderAudioVisuals.ToArray();
-
-                    foreach (var item in items)
+                    if (exception != null)
                     {
-                        BindingContextModel.MasterBindingContext.FetchOrderAudioVisuals.Remove(item);
+                        // TODO Delete incomplete download FetchOrder
 
-                        donwloadCenterDependPage?.OnAudioViualFetchMarkToogle(item);
+                        XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Helpers.Facade.IExceptionHandlingHelperFacade>().HandleException(exception);
+                    }
+                    else
+                    {
+                        var timeSpanToFullStringConverter = new Converters.TimeSpanToFullStringConverter();
+
+                        DisplayAlert(Providers.Constant.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, string.Format("Lista de descarga procesada con éxito en {1}.{0}{0}Los archivos descargados podrá encontrarlos en el dispositivo '{2}' carpeta 'Mediateca Nuevo Mundo' subcarpeta '{3}'.{0}{0}Puede continuar explorando nuestros contenidos y realizar nuevas descargas si así lo desea.", System.Environment.NewLine, timeSpanToFullStringConverter.Convert(elapsedTime, typeof(System.TimeSpan), null, System.Globalization.CultureInfo.CurrentCulture), BindingContextModel.MasterBindingContext.Target.Storage.Caption, orderFolderName), Providers.Constant.StringConstantProvider.OK_ACTION);
+
+                        var donwloadCenterDependPage = ((Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Detail as Xamarin.Forms.NavigationPage).CurrentPage as Base.FetchOrderAudioVisualPresentBaseContentPage;
+
+                        var items = BindingContextModel.MasterBindingContext.FetchOrderAudioVisuals.ToArray();
+
+                        foreach (var item in items)
+                        {
+                            BindingContextModel.MasterBindingContext.FetchOrderAudioVisuals.Remove(item);
+
+                            donwloadCenterDependPage?.OnAudioViualFetchMarkToogle(item);
+                        }
+
+                        BindingContextModel.MasterBindingContext.RaiseFetchOrderAudioVisualsChanged();
                     }
 
-                    BindingContextModel.MasterBindingContext.RaiseFetchOrderAudioVisualsChanged();
-                }
+                    Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().UnbindCallbacks();
 
-                InvalidateTargetStorageStats();
+                    InvalidateTargetStorageStats();
 
-                Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().UnbindCallbacks();
-
-                BindingContextModel.IsBusy = false;
+                    BindingContextModel.IsBusy = false;
+                });
             });
         }
 
@@ -274,13 +262,13 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
         {
             Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
             {
-                BindingContextModel.MasterBindingContext.BusyProgressMessage = "Descargando ...";
+                BindingContextModel.BusyProgressMessage = "Descargando ...";
 
-                BindingContextModel.MasterBindingContext.DownloadingIndex = index;
-                BindingContextModel.MasterBindingContext.Time = elapsedTime;
-                BindingContextModel.MasterBindingContext.TransferProgress = transferProgress;
-                BindingContextModel.MasterBindingContext.TransferLength = transferLength;
-                BindingContextModel.MasterBindingContext.ProgressPercent = decimal.Round(new decimal(transferProgress) / new decimal(transferLength), 2);
+                BindingContextModel.DownloadingIndex = index;
+                BindingContextModel.Time = elapsedTime;
+                BindingContextModel.TransferProgress = transferProgress;
+                BindingContextModel.TransferLength = transferLength;
+                BindingContextModel.ProgressPercent = decimal.Round(new decimal(transferProgress) / new decimal(transferLength), 2);
             });
         }
     }

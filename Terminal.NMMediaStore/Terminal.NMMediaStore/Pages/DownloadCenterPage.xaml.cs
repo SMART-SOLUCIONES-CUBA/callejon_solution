@@ -141,6 +141,10 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
                     DisplayAlert(Providers.Constant.StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, string.Format("Lista de descarga procesada con éxito en {1}.{0}{0}Los archivos descargados podrá encontrarlos en el dispositivo '{2}' carpeta 'Mediateca Nuevo Mundo' subcarpeta '{3}'.{0}{0}Puede continuar explorando nuestros contenidos y realizar nuevas descargas si así lo desea.", System.Environment.NewLine, timeSpanToFullStringConverter.Convert(elapsedTime, typeof(System.TimeSpan), null, System.Globalization.CultureInfo.CurrentCulture), BindingContextModel.MasterBindingContext.Target.Storage.Caption, orderFolderName), Providers.Constant.StringConstantProvider.OK_ACTION);
 
+                    BindingContextModel.MasterBindingContext.BusyProgressMessage = "Actualizando ...";
+
+                    BindingContextModel.MasterBindingContext.DownloadingIndex = 0; 
+                    
                     var donwloadCenterDependPage = ((Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Detail as Xamarin.Forms.NavigationPage).CurrentPage as Base.FetchOrderAudioVisualPresentBaseContentPage;
 
                     var items = BindingContextModel.MasterBindingContext.FetchOrderAudioVisuals.ToArray();
@@ -152,16 +156,21 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                         donwloadCenterDependPage?.OnAudioViualFetchMarkToogle(item);
                     }
 
-                    ((Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Master as MasterPage).InvalidateTargetStorageStats();
+                    Xamarin.Forms.DependencyService.Get<Managers.Facade.IStorageTargetManagerFacade>().ReloadTargetStorageAsync().ContinueWith(_ =>
+                    {
+                        Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                        {
+                            ((Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Master as MasterPage).InvalidateTargetStorageStats();
 
-                    TargetStorageVirtualTotalSpaceBoxView.InvalidateWidth();
-                    VirtualStoreUsedSpaceSpan.InvalidateText();
+                            BindingContextModel.MasterBindingContext.RaiseFetchOrderAudioVisualsChanged();
 
-                    BindingContextModel.MasterBindingContext.RaiseFetchOrderAudioVisualsChanged();
+                            Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().UnbindCallbacks();
 
-                    Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().UnbindCallbacks();
+                            BindingContextModel.MasterBindingContext.IsBusy = false;
 
-                    this.NavigationPopModalPageAsync();
+                            this.NavigationPopModalPageAsync();
+                        });
+                    });
                 }
             });
         }
