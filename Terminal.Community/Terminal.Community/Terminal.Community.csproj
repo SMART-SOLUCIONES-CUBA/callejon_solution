@@ -47,8 +47,8 @@
     <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.2" />
     <PackageReference Include="SkiaSharp.QrCode" Version="0.3.2" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.3" />
-    <PackageReference Include="SSCXFToolKit.Mvvm" Version="0.4.0-alpha" />
-    <PackageReference Include="SSCXFToolKit.Presentation" Version="0.4.5-alpha" />
+    <PackageReference Include="SSCXFToolKit.Mvvm" Version="0.4.10-alpha" />
+    <PackageReference Include="SSCXFToolKit.Presentation" Version="0.4.10-alpha" />
     <PackageReference Include="Xam.Plugin.Media" Version="4.0.1.5" />
     <PackageReference Include="Xam.Plugins.Forms.ImageCircle" Version="3.0.0.5" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />

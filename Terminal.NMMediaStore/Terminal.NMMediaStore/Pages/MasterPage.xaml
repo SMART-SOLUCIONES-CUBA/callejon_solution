@@ -25,7 +25,7 @@
             <converters:MasterPageModelToVirtualStorageUsedSpaceConverter x:Key="MasterPageModelToVirtualStorageUsedSpaceConverter" />
             <converters:TimeSpanToFullStringConverter x:Key="TimeSpanToFullStringConverter" />
 
-            <sscxftoolkitpresentationconverters:FileSizeLongToStringConverter x:Key="FileSizeLongToStringConverter" />
+            <sscxftoolkitpresentationconverters:FileSizeLongToStringConverter x:Key="FileSizeLongToStringConverter" IncludeDecimalPositions="True" />
             <sscxftoolkitpresentationconverters:EnumerationToCountConverter x:Key="EnumerationToCountConverter" />
             <sscxftoolkitpresentationconverters:NullToBooleanConverter x:Key="NullToBooleanConverter" />
             <sscxftoolkitpresentationconverters:NotNullToBooleanConverter x:Key="NotNullToBooleanConverter" />
