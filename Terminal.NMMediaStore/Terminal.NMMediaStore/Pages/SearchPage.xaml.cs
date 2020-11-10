@@ -99,6 +99,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             (Xamarin.Forms.Application.Current.MainPage as MainPage).PivotToLibraryPage();
         }
 
+        private void PickGenresButton_Clicked(object sender, System.EventArgs eventArgs)
+        {
+            this.NavigationPushPageAsync(new PickGenresPage(BindingContextModel.Genres, GenresPicked_Callback));
+        }
+
         private void SearchFormResetButton_Click(object sender, System.EventArgs eventArgs)
         {
             DisplayAlert("Confirmar", "Está seguro que desea recomenzar la definición de su búsqueda?", "Recomenzar", "Cancelar").ContinueWith(task =>
@@ -135,6 +140,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
         private void SearchItem_Tapped(object sender, System.EventArgs eventArgs)
         {
             this.NavigationPushPageAsync(new FilterResultPage((sender as Xamarin.Forms.BindableObject).BindingContext as SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel));
+        }
+
+        private void GenresPicked_Callback(System.Collections.Generic.List<SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.GenreModel> choices)
+        {
+            BindingContextModel.Genres = choices;
         }
 
         private async System.Threading.Tasks.Task LoadSearchsAsync()

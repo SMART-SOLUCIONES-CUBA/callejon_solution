@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sscxftoolkitmvvmpages:BindingContextedContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pagemodels="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Models.Page"
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    xmlns:mg="clr-namespace:MagicGradients;assembly=MagicGradients"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages.YearsPage"
+    x:TypeArguments="pagemodels:YearsPageModel"
+    NavigationPage.HasNavigationBar="False"
+    Style="{StaticResource BasePageStyle}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <sscxftoolkitpresentationconverters:BindingLayoutWidthToResponsiveChildWidthConverter x:Key="BindingLayoutWidthToResponsiveChildWidthConverter" ChildMinWidth="120" ChildAbsoluteHorizontalMargin="10" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid ColumnSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <ScrollView Grid.RowSpan="2" Orientation="Vertical">
+                <StackLayout
+                    Padding="5,56,5,5"
+                    Spacing="4">
+                    <Label
+                        Margin="12,12,12,0"
+                        Text="Años"
+                        TextColor="{StaticResource SecoundaryTextColor}"
+                        FontSize="{StaticResource Header5FontSize}" />
+                    <Grid>
+                        <FlexLayout
+                            Wrap="Wrap"
+                            AlignContent="Start" AlignItems="Start"
+                            BindableLayout.ItemsSource="{Binding Path=Items}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid 
+                                        WidthRequest="{Binding Source={x:RelativeSource AncestorType={x:Type FlexLayout}}, Path=Width, Converter={StaticResource BindingLayoutWidthToResponsiveChildWidthConverter}}" HeightRequest="67"
+                                        Margin="5">
+                                        <Grid.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="Item_Tapped" />
+                                        </Grid.GestureRecognizers>
+                                        <mg:GradientView VerticalOptions="FillAndExpand" >
+                                            <mg:GradientView.GradientSource>
+                                                <mg:CssGradientSource>
+                                                    <x:String>
+                                                        <![CDATA[
+                                                            linear-gradient(0, rgb(255,255,255) 0%, transparent 100%), linear-gradient(0, rgb(255, 255, 255) 0%, transparent 100%), linear-gradient(135deg, rgba(96, 96, 96, 0.21) 0%, rgba(96, 96, 96, 0.21) 50%, rgba(45, 45, 45, 0.21) 50%, rgba(45, 45, 45, 0.21) 100%), linear-gradient(0, rgba(220, 220, 220, 0.2) 0%, rgba(220, 220, 220, 0.2) 31%, rgba(200, 200, 200, 0.2) 31%, rgba(200, 200, 200, 0.2) 100%), linear-gradient(0, rgba(124, 124, 124, 0.26) 0%, rgba(124, 124, 124, 0.26) 15%, rgba(218, 218, 218, 0.26) 15%, rgba(218, 218, 218, 0.26) 100%), linear-gradient(45deg, rgba(157, 157, 157, 0.14) 0%, rgba(157, 157, 157, 0.14) 46%, rgba(26, 26, 26, 0.14) 46%, rgba(26, 26, 26, 0.14) 100%), linear-gradient(45deg, rgba(180, 180, 180, 0.1) 0%, rgba(180, 180, 180, 0.1) 45%, rgba(62, 62, 62, 0.1) 46%, rgba(62, 62, 62, 0.1) 100%), linear-gradient(135deg, rgba(33, 33, 33, 0.22) 0%, rgba(33, 33, 33, 0.22) 59%, rgba(164, 164, 164, 0.22) 59%, rgba(164, 164, 164, 0.22) 100%), linear-gradient(135deg, rgba(24, 24, 24, 0.11) 0%, rgba(24, 24, 24, 0.11) 71%, rgba(245, 245, 245, 0.11) 71%, rgba(245, 245, 245, 0.11) 100%), linear-gradient(0, rgba(5, 5, 5, 0.15) 0%, rgba(5, 5, 5, 0.15) 91%, rgba(50, 50, 50, 0.15) 91%, rgba(50, 50, 50, 0.15) 100%), linear-gradient(90deg, rgb(198, 198, 198), rgb(158, 158, 158))
+                                                        ]]>
+                                                    </x:String>
+                                                </mg:CssGradientSource>
+                                            </mg:GradientView.GradientSource>
+                                            </mg:GradientView>
+                                        <Label
+                                            Margin="10,6"
+                                            Text="{Binding .}"
+                                            TextColor="{StaticResource DefaultBackgroundColor}"
+                                            FontSize="{StaticResource Header1FontSize}"
+                                            FontFamily="Myriad Pro Condensed Italic" />
+                                    </Grid>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </FlexLayout>
+                        <ActivityIndicator
+                            Margin="12"
+                            HorizontalOptions="Center"
+                            HeightRequest="32" WidthRequest="32"
+                            IsVisible="{Binding Path=IsBusy}"
+                            IsRunning="{Binding Path=IsBusy}" />
+                    </Grid>
+                </StackLayout>
+            </ScrollView>
+            <Grid
+                Grid.Row="0"
+                BackgroundColor="#CC000000"
+                HeightRequest="56">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button
+                    Grid.Column="0"
+                    Margin="8,0,0,0"
+                    VerticalOptions="Center" HorizontalOptions="Start"
+                    Padding="0"
+                    BackgroundColor="Transparent"
+                    Text="&#xfcba;"
+                    TextColor="White"
+                    FontSize="{StaticResource Header2FontSize}"
+                    FontFamily="Material Design Icons"
+                    CornerRadius="12"
+                    WidthRequest="{StaticResource DefaultIconSize}" HeightRequest="{StaticResource DefaultIconSize}"
+                    Clicked="AlternativeBackButton_Clicked" />
+                <Label
+                    Grid.Column="1"
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    LineBreakMode="TailTruncation"
+                    FontFamily="Myriad Pro Regular">
+                    <Label.FontSize>
+                        <OnPlatform x:TypeArguments="x:Double" Default="36"></OnPlatform>
+                    </Label.FontSize>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <FormattedString.Spans>
+                                <Span Text="Mediateca " TextColor="{StaticResource PrimaryTextColor}" />
+                                <Span Text="Nuevo Mundo" TextColor="{StaticResource SecoundaryTextColor}" />
+                            </FormattedString.Spans>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</sscxftoolkitmvvmpages:BindingContextedContentPage>

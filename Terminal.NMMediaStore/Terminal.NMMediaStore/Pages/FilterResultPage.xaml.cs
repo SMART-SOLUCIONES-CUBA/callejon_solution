@@ -138,6 +138,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
+                    if (BindingContextModel == null) return;
+
                     BindingContextModel.PaginationCurrentPage = result.Page;
 
                     if (result.SerializedContext != null)

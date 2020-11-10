@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sscxftoolkitmvvmpages:BindingContextedContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pagemodels="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Models.Page"
+    xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Converters"
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    xmlns:ffil="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages.ProducerHousesPage"
+    x:TypeArguments="pagemodels:ProducerHousesPageModel"
+    NavigationPage.HasNavigationBar="False"
+    Style="{StaticResource BasePageStyle}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ImageModelToImageSourceConverter x:Key="ImageModelToImageSourceConverter" />
+            
+            <sscxftoolkitpresentationconverters:BindingLayoutWidthToResponsiveChildWidthConverter x:Key="BindingLayoutWidthToResponsiveChildWidthConverter" ChildMinWidth="240" ChildAbsoluteHorizontalMargin="10" />
+            <sscxftoolkitpresentationconverters:FractionConverter x:Key="FractionConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <Grid ColumnSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <ScrollView Grid.RowSpan="2" Orientation="Vertical">
+                <StackLayout
+                    Padding="5,56,5,5"
+                    Spacing="4">
+                    <Label
+                        Margin="12,12,12,0"
+                        Text="Casas Productoras"
+                        TextColor="{StaticResource SecoundaryTextColor}"
+                        FontSize="{StaticResource Header5FontSize}" />
+                    <Grid>
+                        <FlexLayout
+                            Wrap="Wrap"
+                            AlignContent="Start" AlignItems="Start"
+                            BindableLayout.ItemsSource="{Binding Path=Items}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout 
+                                        WidthRequest="{Binding Source={x:RelativeSource AncestorType={x:Type FlexLayout}}, Path=Width, Converter={StaticResource BindingLayoutWidthToResponsiveChildWidthConverter}}"
+                                        Margin="5">
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="Item_Tapped" />
+                                        </StackLayout.GestureRecognizers>
+                                        <ffil:CachedImage
+                                            Source="{Binding Path=Image, Converter={StaticResource ImageModelToImageSourceConverter}}"
+                                            Aspect="AspectFill"
+                                            CacheType="Disk"
+                                            CacheDuration="8760:00:00"
+                                            HeightRequest="{Binding Source={x:RelativeSource Mode=Self}, Path=Width, Converter={StaticResource FractionConverter}, ConverterParameter=1.777777777777778}"/>
+                                        <Label Text="{Binding Path=Name}" />
+                                    </StackLayout>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </FlexLayout>
+                        <ActivityIndicator
+                            Margin="12"
+                            HorizontalOptions="Center"
+                            HeightRequest="32" WidthRequest="32"
+                            IsVisible="{Binding Path=IsBusy}"
+                            IsRunning="{Binding Path=IsBusy}" />
+                    </Grid>
+                </StackLayout>
+            </ScrollView>
+            <Grid
+                Grid.Row="0"
+                BackgroundColor="#CC000000"
+                HeightRequest="56">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button
+                    Grid.Column="0"
+                    Margin="8,0,0,0"
+                    VerticalOptions="Center" HorizontalOptions="Start"
+                    Padding="0"
+                    BackgroundColor="Transparent"
+                    Text="&#xfcba;"
+                    TextColor="White"
+                    FontSize="{StaticResource Header2FontSize}"
+                    FontFamily="Material Design Icons"
+                    CornerRadius="12"
+                    WidthRequest="{StaticResource DefaultIconSize}" HeightRequest="{StaticResource DefaultIconSize}"
+                    Clicked="AlternativeBackButton_Clicked" />
+                <Label
+                    Grid.Column="1"
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    LineBreakMode="TailTruncation"
+                    FontFamily="Myriad Pro Regular">
+                    <Label.FontSize>
+                        <OnPlatform x:TypeArguments="x:Double" Default="36"></OnPlatform>
+                    </Label.FontSize>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <FormattedString.Spans>
+                                <Span Text="Mediateca " TextColor="{StaticResource PrimaryTextColor}" />
+                                <Span Text="Nuevo Mundo" TextColor="{StaticResource SecoundaryTextColor}" />
+                            </FormattedString.Spans>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</sscxftoolkitmvvmpages:BindingContextedContentPage>

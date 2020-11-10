@@ -11,14 +11,14 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Providers
             return Common.Helpers.HttpClientHelper.Instance.GetAsync<PaginationModel<PersonalityModel>>(string.Format("{0}/page/{1}/limit/{2}", TARGET_API_BASE_QUERY, page, limit));
         }
 
-        public System.Threading.Tasks.Task<PersonalityModel[]> GetRelevantActorsAsync()
+        public System.Threading.Tasks.Task<PersonalityModel[]> GetRelevantActorsAsync(int limit = 20)
         {
-            return Common.Helpers.HttpClientHelper.Instance.GetAsync<PersonalityModel[]>(string.Format("{0}/relevant/actors/20", TARGET_API_BASE_QUERY));
+            return Common.Helpers.HttpClientHelper.Instance.GetAsync<PersonalityModel[]>(string.Format("{0}/relevant/actors/{1}", TARGET_API_BASE_QUERY, limit));
         }
 
-        public System.Threading.Tasks.Task<PersonalityModel[]> GetRelevantDirectorsAsync()
+        public System.Threading.Tasks.Task<PersonalityModel[]> GetRelevantDirectorsAsync(int limit = 20)
         {
-            return Common.Helpers.HttpClientHelper.Instance.GetAsync<PersonalityModel[]>(string.Format("{0}/relevant/directors/20", TARGET_API_BASE_QUERY));
+            return Common.Helpers.HttpClientHelper.Instance.GetAsync<PersonalityModel[]>(string.Format("{0}/relevant/directors/{1}", TARGET_API_BASE_QUERY, limit));
         }
     }
 }

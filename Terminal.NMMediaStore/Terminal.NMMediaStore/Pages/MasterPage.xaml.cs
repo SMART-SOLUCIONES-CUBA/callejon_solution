@@ -89,6 +89,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
             storageTargetManager.GetAvailableStoragesAsync().ContinueWith(getAvailableStoragesTask =>
             {
+                if (getAvailableStoragesTask.Result.Length <= 0) return;
+
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
                     if (getAvailableStoragesTask.Exception != null)

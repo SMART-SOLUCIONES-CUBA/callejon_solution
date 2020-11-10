@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sscxftoolkitmvvmpages:BindingContextedContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pagemodels="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Models.Page"
+    xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
+    xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
+    mc:Ignorable="d"
+    x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages.PickGenresPage"
+    x:TypeArguments="pagemodels:PickGenresPageModel"
+    NavigationPage.HasNavigationBar="False"
+    Style="{StaticResource BasePageStyle}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <sscxftoolkitpresentationconverters:BindingLayoutWidthToResponsiveChildWidthConverter x:Key="BindingLayoutWidthToResponsiveChildWidthConverter" ChildMinWidth="240" ChildAbsoluteHorizontalMargin="16" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid ColumnSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <ScrollView Grid.RowSpan="2" Orientation="Vertical">
+                <StackLayout
+                    Padding="5,56,5,5"
+                    Spacing="4">
+                    <Label
+                        Margin="12,12,12,0"
+                        Text="Géneros"
+                        TextColor="{StaticResource SecoundaryTextColor}"
+                        FontSize="{StaticResource Header5FontSize}" />
+                    <Grid>
+                        <FlexLayout
+                            Wrap="Wrap"
+                            AlignItems="Start"
+                            AlignContent="Start"
+                            Margin="8"
+                            BindableLayout.ItemsSource="{Binding Path=Choises}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout
+                                    WidthRequest="{Binding Source={x:RelativeSource AncestorType={x:Type FlexLayout}}, Path=Width, Converter={StaticResource BindingLayoutWidthToResponsiveChildWidthConverter}}"
+                                    Padding="8">
+                                        <Label
+                                        Text="{Binding Path=Genre.Name}" />
+                                        <Switch IsToggled="{Binding Path=Choised}"  />
+                                    </StackLayout>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </FlexLayout>
+                        <ActivityIndicator
+                            Margin="12"
+                            HorizontalOptions="Center"
+                            HeightRequest="32" WidthRequest="32"
+                            IsVisible="{Binding Path=IsBusy}"
+                            IsRunning="{Binding Path=IsBusy}" />
+                    </Grid>
+                </StackLayout>                
+            </ScrollView>
+            <Grid
+                Grid.Row="0"
+                BackgroundColor="#CC000000"
+                HeightRequest="56">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <StackLayout
+                    Grid.Column="2"
+                    Margin="0,0,8,0"
+                    VerticalOptions="Center" HorizontalOptions="End"
+                    Orientation="Horizontal"
+                    Spacing="8">
+                    <Button
+                        Padding="0"
+                        BackgroundColor="Transparent"
+                        Text="&#xf12c;"
+                        TextColor="White"
+                        FontSize="{StaticResource Header2FontSize}"
+                        FontFamily="Material Design Icons"
+                        CornerRadius="12"
+                        WidthRequest="{StaticResource DefaultIconSize}" HeightRequest="{StaticResource DefaultIconSize}"
+                        Clicked="ApplyToolbarItem_Activated" />
+                    <Button
+                        Padding="0"
+                        BackgroundColor="Transparent"
+                        Text="&#xf156;"
+                        TextColor="White"
+                        FontSize="{StaticResource Header2FontSize}"
+                        FontFamily="Material Design Icons"
+                        CornerRadius="12"
+                        WidthRequest="{StaticResource DefaultIconSize}" HeightRequest="{StaticResource DefaultIconSize}"
+                        Clicked="CancelToolbarItem_Activated" />
+                </StackLayout>
+                <Label
+                    Grid.Column="1"
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    LineBreakMode="TailTruncation"
+                    FontFamily="Myriad Pro Regular">
+                    <Label.FontSize>
+                        <OnPlatform x:TypeArguments="x:Double" Default="36"></OnPlatform>
+                    </Label.FontSize>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <FormattedString.Spans>
+                                <Span Text="Mediateca " TextColor="{StaticResource PrimaryTextColor}" />
+                                <Span Text="Nuevo Mundo" TextColor="{StaticResource SecoundaryTextColor}" />
+                            </FormattedString.Spans>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</sscxftoolkitmvvmpages:BindingContextedContentPage>

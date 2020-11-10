@@ -140,10 +140,11 @@
                             Grid.Row="1" Grid.Column="0"
                             BackgroundColor="{StaticResource DarkBackgroundColor}"
                             IsReadOnly="True"
-                            Text="{Binding Path=Genres, Converter={StaticResource EmptyCollectionToJoinedStringBindingConverter}}" />
+                            Text="{Binding Path=Genres, Converter={StaticResource EmptyCollectionToJoinedStringBindingConverter}, Mode=OneWay}" />
                         <Button
                             Grid.Row="1" Grid.Column="1"
-                            Text="Seleccionar" />
+                            Text="Seleccionar"
+                            Clicked="PickGenresButton_Clicked" />
                     </Grid>
                     <Grid
                         Margin="16,8,16,0">

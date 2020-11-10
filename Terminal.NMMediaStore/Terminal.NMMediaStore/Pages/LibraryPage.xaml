@@ -21,6 +21,7 @@
             <sscxftoolkitpresentationconverters:NotNullToBooleanConverter x:Key="NotNullToBooleanConverter" />
 
             <converters:ImageModelToImageSourceConverter x:Key="ImageModelToImageSourceConverter" />
+            <converters:PersonalityModelToImageSourceConverter x:Key="PersonalityModelToImageSourceConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
@@ -47,7 +48,7 @@
                             </LinearGradientBrush>
                         </StackLayout.Background>
                         <Label
-                            Margin="10,0"
+                            Margin="10,0,10,2"
                             Text="Categorías"
                             TextColor="{StaticResource SecoundaryTextColor}"
                             FontSize="{StaticResource Header5FontSize}" />
@@ -87,23 +88,43 @@
                             </FlexLayout>
                         </ScrollView>
                     </StackLayout>
-                    <StackLayout 
+                    <Grid 
                         Padding="0,10,0,0"
                         IsVisible="{Binding Path=RelevantGenres, Converter={StaticResource NotNullToBooleanConverter}}">
-                        <StackLayout.Background>
+                        <Grid.Background>
                             <LinearGradientBrush
                                 StartPoint="0,0"
                                 EndPoint="0,1">
                                 <GradientStop Color="{StaticResource DefaultBackgroundColor}" Offset="0.0" />
                                 <GradientStop Color="{StaticResource DarkBackgroundColor}" Offset="1.0" />
                             </LinearGradientBrush>
-                        </StackLayout.Background>
+                        </Grid.Background>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
                         <Label
-                            Margin="10,0"
+                            Grid.Column="0" Grid.Row="0"
+                            Margin="10,0,10,2"
                             Text="Géneros"
                             TextColor="{StaticResource SecoundaryTextColor}"
                             FontSize="{StaticResource Header5FontSize}" />
-                        <ScrollView Orientation="Horizontal">
+                        <Button 
+                            IsVisible="{Binding Path=HasMoreGenres}"
+                            Grid.Column="1" Grid.Row="0"
+                            Padding="4,0" Margin="10,0"
+                            BackgroundColor="Transparent"
+                            Text="ver todos"
+                            TextColor="{StaticResource PrimaryActionColor}"
+                            FontSize="{StaticResource MiddleTextFontSize}"
+                            Clicked="AllGenresButton_Clicked" />
+                        <ScrollView 
+                            Grid.ColumnSpan="2" Grid.Row="1"
+                            Orientation="Horizontal">
                             <FlexLayout
                                 Padding="5,0"
                                 BindableLayout.ItemsSource="{Binding Path=RelevantGenres}">
@@ -139,24 +160,44 @@
                                 </BindableLayout.ItemTemplate>
                             </FlexLayout>
                         </ScrollView>
-                    </StackLayout>
-                    <StackLayout 
+                    </Grid>
+                    <Grid 
                         Padding="0,10,0,0"
                         IsVisible="{Binding Path=RelevantProducerHouses, Converter={StaticResource NotNullToBooleanConverter}}">
-                        <StackLayout.Background>
+                        <Grid.Background>
                             <LinearGradientBrush
                                 StartPoint="0,0"
                                 EndPoint="0,1">
                                 <GradientStop Color="{StaticResource DefaultBackgroundColor}" Offset="0.0" />
                                 <GradientStop Color="{StaticResource DarkBackgroundColor}" Offset="1.0" />
                             </LinearGradientBrush>
-                        </StackLayout.Background>
+                        </Grid.Background>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
                         <Label
-                            Margin="10,0"
+                            Grid.Column="0" Grid.Row="0"
+                            Margin="10,0,10,2"
                             Text="Casas Productoras"
                             TextColor="{StaticResource SecoundaryTextColor}"
                             FontSize="{StaticResource Header5FontSize}" />
-                        <ScrollView Orientation="Horizontal">
+                        <Button 
+                            IsVisible="{Binding Path=HasMoreProducerHouses}"
+                            Grid.Column="1" Grid.Row="0"
+                            Padding="4,0" Margin="10,0"
+                            BackgroundColor="Transparent"
+                            Text="ver todos"
+                            TextColor="{StaticResource PrimaryActionColor}"
+                            FontSize="{StaticResource MiddleTextFontSize}"
+                            Clicked="AllProducerHousesButton_Clicked" />
+                        <ScrollView 
+                            Grid.ColumnSpan="2" Grid.Row="1"
+                            Orientation="Horizontal">
                             <FlexLayout
                                 Padding="5,0"
                                 BindableLayout.ItemsSource="{Binding Path=RelevantProducerHouses}">
@@ -179,24 +220,44 @@
                                 </BindableLayout.ItemTemplate>
                             </FlexLayout>
                         </ScrollView>
-                    </StackLayout>
-                    <StackLayout 
+                    </Grid>
+                    <Grid 
                         Padding="0,10,0,0"
                         IsVisible="{Binding Path=RelevantYears, Converter={StaticResource NotNullToBooleanConverter}}">
-                        <StackLayout.Background>
+                        <Grid.Background>
                             <LinearGradientBrush
                                 StartPoint="0,0"
                                 EndPoint="0,1">
                                 <GradientStop Color="{StaticResource DefaultBackgroundColor}" Offset="0.0" />
                                 <GradientStop Color="{StaticResource DarkBackgroundColor}" Offset="1.0" />
                             </LinearGradientBrush>
-                        </StackLayout.Background>
+                        </Grid.Background>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
                         <Label
-                            Margin="10,0"
+                            Grid.Column="0" Grid.Row="0"
+                            Margin="10,0,10,2"
                             Text="Años"
                             TextColor="{StaticResource SecoundaryTextColor}"
                             FontSize="{StaticResource Header5FontSize}" />
-                        <ScrollView Orientation="Horizontal">
+                        <Button 
+                            IsVisible="{Binding Path=HasMoreYears}"
+                            Grid.Column="1" Grid.Row="0"
+                            Padding="4,0" Margin="10,0"
+                            BackgroundColor="Transparent"
+                            Text="ver todos"
+                            TextColor="{StaticResource PrimaryActionColor}"
+                            FontSize="{StaticResource MiddleTextFontSize}"
+                            Clicked="AllYearsButton_Clicked" />
+                        <ScrollView 
+                            Grid.ColumnSpan="2" Grid.Row="1"
+                            Orientation="Horizontal">
                             <FlexLayout
                                 Padding="5,0"
                                 BindableLayout.ItemsSource="{Binding Path=RelevantYears}">
@@ -230,24 +291,44 @@
                                 </BindableLayout.ItemTemplate>
                             </FlexLayout>
                         </ScrollView>
-                    </StackLayout>
-                    <StackLayout 
+                    </Grid>
+                    <Grid 
                         Padding="0,10,0,0"
                         IsVisible="{Binding Path=RelevantPerformancePersonalities, Converter={StaticResource NotNullToBooleanConverter}}">
-                        <StackLayout.Background>
+                        <Grid.Background>
                             <LinearGradientBrush
                                 StartPoint="0,0"
                                 EndPoint="0,1">
                                 <GradientStop Color="{StaticResource DefaultBackgroundColor}" Offset="0.0" />
                                 <GradientStop Color="{StaticResource DarkBackgroundColor}" Offset="1.0" />
                             </LinearGradientBrush>
-                        </StackLayout.Background>
+                        </Grid.Background>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
                         <Label
-                            Margin="10,0"
+                            Grid.Column="0" Grid.Row="0"
+                            Margin="10,0,10,2"
                             Text="Actores"
                             TextColor="{StaticResource SecoundaryTextColor}"
                             FontSize="{StaticResource Header5FontSize}" />
-                        <ScrollView Orientation="Horizontal">
+                        <Button 
+                            IsVisible="{Binding Path=HasMorePerformancePersonalities}"
+                            Grid.Column="1" Grid.Row="0"
+                            Padding="4,0" Margin="10,0"
+                            BackgroundColor="Transparent"
+                            Text="ver todos"
+                            TextColor="{StaticResource PrimaryActionColor}"
+                            FontSize="{StaticResource MiddleTextFontSize}"
+                            Clicked="AllPerformancePersonalitiesButton_Clicked" />
+                        <ScrollView 
+                            Grid.ColumnSpan="2" Grid.Row="1"
+                            Orientation="Horizontal">
                             <FlexLayout
                                 Padding="5,0"
                                 BindableLayout.ItemsSource="{Binding Path=RelevantPerformancePersonalities}">
@@ -262,7 +343,7 @@
                                             <ic:CircleImage
                                                 Margin="0,5,0,0"
                                                 HorizontalOptions="Center" VerticalOptions="Center"
-                                                Source="{Binding Path=Image, Converter={StaticResource ImageModelToImageSourceConverter}}"
+                                                Source="{Binding Converter={StaticResource PersonalityModelToImageSourceConverter}}"
                                                 BorderThickness="2"
                                                 BorderColor="Snow"
                                                 WidthRequest="{StaticResource DefaultAvatarSize}"
@@ -283,24 +364,44 @@
                                 </BindableLayout.ItemTemplate>
                             </FlexLayout>
                         </ScrollView>
-                    </StackLayout>
-                    <StackLayout 
+                    </Grid>
+                    <Grid 
                         Padding="0,10,0,0"
                         IsVisible="{Binding Path=RelevantDirectionPersonalities, Converter={StaticResource NotNullToBooleanConverter}}">
-                        <StackLayout.Background>
+                        <Grid.Background>
                             <LinearGradientBrush
                                 StartPoint="0,0"
                                 EndPoint="0,1">
                                 <GradientStop Color="{StaticResource DefaultBackgroundColor}" Offset="0.0" />
                                 <GradientStop Color="{StaticResource DarkBackgroundColor}" Offset="1.0" />
                             </LinearGradientBrush>
-                        </StackLayout.Background>
+                        </Grid.Background>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
                         <Label
-                            Margin="10,0"
+                            Grid.Column="0" Grid.Row="0"
+                            Margin="10,0,10,2"
                             Text="Directores"
                             TextColor="{StaticResource SecoundaryTextColor}"
                             FontSize="{StaticResource Header5FontSize}" />
-                        <ScrollView Orientation="Horizontal">
+                        <Button 
+                            IsVisible="{Binding Path=HasMoreDirectionPersonalities}"
+                            Grid.Column="1" Grid.Row="0"
+                            Padding="4,0" Margin="10,0"
+                            BackgroundColor="Transparent"
+                            Text="ver todos"
+                            TextColor="{StaticResource PrimaryActionColor}"
+                            FontSize="{StaticResource MiddleTextFontSize}"
+                            Clicked="AllDirectionPersonalitiesButton_Clicked" />
+                        <ScrollView 
+                            Grid.ColumnSpan="2" Grid.Row="1"
+                            Orientation="Horizontal">
                             <FlexLayout
                                 Padding="5,0"
                                 BindableLayout.ItemsSource="{Binding Path=RelevantDirectionPersonalities}">
@@ -315,7 +416,7 @@
                                             <ic:CircleImage
                                                 Margin="0,5,0,0"
                                                 HorizontalOptions="Center" VerticalOptions="Center"
-                                                Source="{Binding Path=Image, Converter={StaticResource ImageModelToImageSourceConverter}}"
+                                                Source="{Binding Converter={StaticResource PersonalityModelToImageSourceConverter}}"
                                                 BorderThickness="2"
                                                 BorderColor="Snow"
                                                 WidthRequest="{StaticResource DefaultAvatarSize}"
@@ -336,7 +437,7 @@
                                 </BindableLayout.ItemTemplate>
                             </FlexLayout>
                         </ScrollView>
-                    </StackLayout>
+                    </Grid>
                 </StackLayout>
             </ScrollView>
             <Grid

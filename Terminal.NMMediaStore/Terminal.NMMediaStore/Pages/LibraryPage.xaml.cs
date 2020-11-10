@@ -1,4 +1,5 @@
 ﻿using SmartSolucionesCuba.XFToolKit.Mvvm.Extensions;
+using System.Linq;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 {
@@ -40,20 +41,25 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                 var personalityProvider = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Providers.Facade.IPersonalityProviderFacade>();
 
                 var categories = await categoryProvider.GetByParentAsync(null);
-                var relevantProducerHouses = await producerHouseProvider.GetRelevantsAsync();
-                var relevantGenres = await genreProvider.GetRelevantsAsync();
-                var relevantYears = await yearProvider.GetRelevantsAsync();
-                var relevantPerformancePersonalities = await personalityProvider.GetRelevantActorsAsync();
-                var relevantDirectionPersonalities = await personalityProvider.GetRelevantDirectorsAsync();
+                var relevantProducerHouses = await producerHouseProvider.GetRelevantsAsync(11);
+                var relevantGenres = await genreProvider.GetRelevantsAsync(11);
+                var relevantYears = await yearProvider.GetRelevantsAsync(11);
+                var relevantPerformancePersonalities = await personalityProvider.GetRelevantActorsAsync(21);
+                var relevantDirectionPersonalities = await personalityProvider.GetRelevantDirectorsAsync(21);
 
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
                     BindingContextModel.Categories = categories;
-                    BindingContextModel.RelevantProducerHouses = relevantProducerHouses;
-                    BindingContextModel.RelevantGenres = relevantGenres;
-                    BindingContextModel.RelevantYears = relevantYears;
+                    BindingContextModel.RelevantProducerHouses = relevantProducerHouses.Take(10).ToArray();
+                    BindingContextModel.HasMoreProducerHouses = relevantProducerHouses.Length > 10;
+                    BindingContextModel.RelevantGenres = relevantGenres.Take(10).ToArray();
+                    BindingContextModel.HasMoreGenres = relevantGenres.Length > 10;
+                    BindingContextModel.RelevantYears = relevantYears.Take(10).ToArray();
+                    BindingContextModel.HasMoreYears = relevantYears.Length > 10;
                     BindingContextModel.RelevantPerformancePersonalities = relevantPerformancePersonalities;
+                    BindingContextModel.HasMorePerformancePersonalities = relevantPerformancePersonalities.Length > 20; 
                     BindingContextModel.RelevantDirectionPersonalities = relevantDirectionPersonalities;
+                    BindingContextModel.HasMoreDirectionPersonalities = relevantDirectionPersonalities.Length > 20;
 
                     BindingContextModel.IsBusy = false;
 
@@ -90,6 +96,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             }));
         }
 
+        private void AllProducerHousesButton_Clicked(object sender, System.EventArgs eventArgs)
+        {
+            this.NavigationPushPageAsync(new ProducerHousesPage());
+        }
+
         private void ProducerHouseItem_Tapped(object sender, System.EventArgs eventArgs)
         {
             this.NavigationPushPageAsync(new FilterResultPage(new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel
@@ -97,6 +108,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                 SubscriptionId = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Managers.Facade.ISubscriptionManagerFacade>().GetAuthenticatedSubscritor().Subscription.Id,
                 ProducerHouse = (sender as Xamarin.Forms.BindableObject).BindingContext as SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.ProducerHouseModel
             }));
+        }
+
+        private void AllGenresButton_Clicked(object sender, System.EventArgs eventArgs)
+        {
+            this.NavigationPushPageAsync(new GenresPage());
         }
 
         private void GenreItem_Tapped(object sender, System.EventArgs eventArgs)
@@ -108,6 +124,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             }));
         }
 
+        private void AllYearsButton_Clicked(object sender, System.EventArgs eventArgs)
+        {
+            this.NavigationPushPageAsync(new YearsPage());
+        }
+
         private void YearItem_Tapped(object sender, System.EventArgs eventArgs)
         {
             this.NavigationPushPageAsync(new FilterResultPage(new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel
@@ -115,6 +136,16 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                 SubscriptionId = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Managers.Facade.ISubscriptionManagerFacade>().GetAuthenticatedSubscritor().Subscription.Id,
                 Year = (int)(sender as Xamarin.Forms.BindableObject).BindingContext
             }));
+        }
+
+        private void AllPerformancePersonalitiesButton_Clicked(object sender, System.EventArgs eventArgs)
+        {
+            this.NavigationPushPageAsync(new PerformancePersonalitiesPage());
+        }
+
+        private void AllDirectionPersonalitiesButton_Clicked(object sender, System.EventArgs eventArgs)
+        {
+            this.NavigationPushPageAsync(new DirectionPersonalitiesPage());
         }
 
         private void PersonalityItem_Tapped(object sender, System.EventArgs eventArgs)

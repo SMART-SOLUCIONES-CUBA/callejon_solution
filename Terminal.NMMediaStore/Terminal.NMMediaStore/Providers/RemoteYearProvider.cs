@@ -9,9 +9,9 @@
             return Common.Helpers.HttpClientHelper.Instance.GetAsync<int[]>(TARGET_API_BASE_QUERY);
         }
 
-        public System.Threading.Tasks.Task<int[]> GetRelevantsAsync()
+        public System.Threading.Tasks.Task<int[]> GetRelevantsAsync(int limit = 10)
         {
-            return Common.Helpers.HttpClientHelper.Instance.GetAsync<int[]>(string.Format("{0}/relevant", TARGET_API_BASE_QUERY));
+            return Common.Helpers.HttpClientHelper.Instance.GetAsync<int[]>(string.Format("{0}/relevant/{1}", TARGET_API_BASE_QUERY, limit));
         }
     }
 }

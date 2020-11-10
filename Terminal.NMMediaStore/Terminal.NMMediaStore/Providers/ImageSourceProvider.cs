@@ -7,6 +7,11 @@
             return Xamarin.Forms.ImageSource.FromUri(new System.Uri(string.Format("http://sgc.elcallejon.net/media/default/image/{0}", model.Id)));
         }
 
+        public Xamarin.Forms.ImageSource GetByModel(SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.PersonalityModel model)
+        {
+            return Xamarin.Forms.ImageSource.FromUri(new System.Uri( model.Image != null ? string.Format("http://sgc.elcallejon.net/media/default/image/{0}", model.Image.Id) : "http://sgc.elcallejon.net/img/default-person-picture.jpg"));
+        }
+
         public Xamarin.Forms.ImageSource GetForSubscriptor(Models.SubscriptorModel model)
         {
             if (model.ThumbnailContent == null)
