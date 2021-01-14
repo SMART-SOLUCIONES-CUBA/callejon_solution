@@ -1,10 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
     <TargetFrameworks>netstandard1.2;netstandard2.0</TargetFrameworks>
     <AssemblyName>SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Common</AssemblyName>
     <RootNamespace>SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Common</RootNamespace>
     <PackageId>SAPRESSC.Business.Billboard.CPCC.Web.Api.Common</PackageId>
-    <Version>0.5.4-alpha</Version>
+    <Version>0.6.0-alpha</Version>
     <Authors>SSC DevTeam</Authors>
     <Company>SMART SOLUCIONES CUBA (SSC)</Company>
     <Copyright>SMART SOLUCIONES CUBA 2018 - Todos los derechos reservados.</Copyright>

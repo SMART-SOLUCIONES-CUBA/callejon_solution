@@ -40,20 +40,20 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
             animation.Begin();
 
-            Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().BindCallbacks(FetchOrderDownloadRequeastEnd_Callback, FetchOrderDownloadRequestProgress_Callback);
+            Xamarin.Forms.DependencyService.Get<Managers.Facade.IFileStorageManagerFacade>().BindFetchOrderHandlingCallbacks(FetchOrderDownloadRequeastEnd_Callback, FetchOrderDownloadRequestProgress_Callback);
 
-            BindingContextModel.IsBusy = Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().IsDownloading;
+            BindingContextModel.IsBusy = Xamarin.Forms.DependencyService.Get<Managers.Facade.IFileStorageManagerFacade>().IsFetchOrderHandling;
         }
 
         private void BackButton_Clicked(object sender, System.EventArgs eventArgs)
         {
             if (BindingContextModel.MasterBindingContext.ProgressPercent > 95) return;
 
-            Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().UnbindCallbacks();
+            Xamarin.Forms.DependencyService.Get<Managers.Facade.IFileStorageManagerFacade>().UnbindFetchOderHandlingCallbacks();
 
             this.NavigationPopModalPageAsync();
 
-            if (!Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().IsDownloading) return;
+            if (!Xamarin.Forms.DependencyService.Get<Managers.Facade.IFileStorageManagerFacade>().IsFetchOrderHandling) return;
 
             ((Xamarin.Forms.Application.Current.MainPage as Xamarin.Forms.MasterDetailPage).Master as MasterPage).HandleFetchOrderDownloadProgressPresentation();
         }
@@ -105,7 +105,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                     BindingContextModel.MasterBindingContext.BusyProgressMessage = "Inicando ...";
                 });
 
-                await Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().RequestAsync(orderId, BindingContextModel.MasterBindingContext.Target.Storage.Path);                
+                await Xamarin.Forms.DependencyService.Get<Managers.Facade.IFileStorageManagerFacade>().HandleFetchOrderAsync(orderId, BindingContextModel.MasterBindingContext.Target.Storage.Path);                
             }).ContinueWith(task =>
             {
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
@@ -156,7 +156,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                         donwloadCenterDependPage?.OnAudioViualFetchMarkToogle(item);
                     }
 
-                    Xamarin.Forms.DependencyService.Get<Managers.Facade.IStorageTargetManagerFacade>().ReloadTargetStorageAsync().ContinueWith(_ =>
+                    Xamarin.Forms.DependencyService.Get<Managers.Facade.IFileStorageManagerFacade>().ReloadTargetStorageAsync().ContinueWith(_ =>
                     {
                         Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                         {
@@ -164,7 +164,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
                             BindingContextModel.MasterBindingContext.RaiseFetchOrderAudioVisualsChanged();
 
-                            Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().UnbindCallbacks();
+                            Xamarin.Forms.DependencyService.Get<Managers.Facade.IFileStorageManagerFacade>().UnbindFetchOderHandlingCallbacks();
 
                             BindingContextModel.MasterBindingContext.IsBusy = false;
 

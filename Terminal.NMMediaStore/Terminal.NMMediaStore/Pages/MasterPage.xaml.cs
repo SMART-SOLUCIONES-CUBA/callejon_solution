@@ -14,7 +14,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
         {
             InitializeComponent();
 
-            Xamarin.Forms.DependencyService.Get<Managers.Facade.IStorageTargetManagerFacade>().ConfigurateCallbacks(InvalidateTargetStorageOnMainThread);
+            Xamarin.Forms.DependencyService.Get<Managers.Facade.IFileStorageManagerFacade>().BindStorageTargetCallbacks(InvalidateTargetStorageOnMainThread);
         }
 
         private Models.Page.MasterPageModel BindingContextModel
@@ -29,7 +29,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
         {
             Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
             {
-                var storageTargetManager = Xamarin.Forms.DependencyService.Get<Managers.Facade.IStorageTargetManagerFacade>();
+                var storageTargetManager = Xamarin.Forms.DependencyService.Get<Managers.Facade.IFileStorageManagerFacade>();
 
                 var storage = storageTargetManager.GetTargetStorage();
 
@@ -74,7 +74,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
         public void InvalidateTargetStorageStats()
         {
-            var storageTargetManager = Xamarin.Forms.DependencyService.Get<Managers.Facade.IStorageTargetManagerFacade>();
+            var storageTargetManager = Xamarin.Forms.DependencyService.Get<Managers.Facade.IFileStorageManagerFacade>();
 
             BindingContextModel.Target.Storage = storageTargetManager.GetTargetStorage();
             BindingContextModel.Target.CurrentUsedPercentFactor = BindingContextModel.Target.Storage?.UsedSpace / BindingContextModel.Target.Storage?.TotalSpace ?? 0.00d;
@@ -85,7 +85,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
         public void PresentForStoragePick()
         {
-            var storageTargetManager = Xamarin.Forms.DependencyService.Get<Managers.Facade.IStorageTargetManagerFacade>();
+            var storageTargetManager = Xamarin.Forms.DependencyService.Get<Managers.Facade.IFileStorageManagerFacade>();
 
             storageTargetManager.GetAvailableStoragesAsync().ContinueWith(getAvailableStoragesTask =>
             {
@@ -131,7 +131,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
         public void HandleFetchOrderDownloadProgressPresentation()
         {
-            Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().BindCallbacks(FetchOrderDownloadRequeastEnd_Callback, FetchOrderDownloadRequestProgress_Callback);
+            Xamarin.Forms.DependencyService.Get<Managers.Facade.IFileStorageManagerFacade>().BindFetchOrderHandlingCallbacks(FetchOrderDownloadRequeastEnd_Callback, FetchOrderDownloadRequestProgress_Callback);
 
             MainScrollView.ScrollToAsync(0, 0, true).ContinueWith(_ => { });
 
@@ -221,7 +221,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                 BindingContextModel.DownloadingIndex = 0;
             });
 
-            Xamarin.Forms.DependencyService.Get<Managers.Facade.IStorageTargetManagerFacade>().ReloadTargetStorageAsync().ContinueWith(_ =>
+            Xamarin.Forms.DependencyService.Get<Managers.Facade.IFileStorageManagerFacade>().ReloadTargetStorageAsync().ContinueWith(_ =>
             {
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
@@ -251,7 +251,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                         BindingContextModel.MasterBindingContext.RaiseFetchOrderAudioVisualsChanged();
                     }
 
-                    Xamarin.Forms.DependencyService.Get<Helpers.Facade.IFetchOrderDownloadRequestHelper>().UnbindCallbacks();
+                    Xamarin.Forms.DependencyService.Get<Managers.Facade.IFileStorageManagerFacade>().UnbindFetchOderHandlingCallbacks();
 
                     InvalidateTargetStorageStats();
 

@@ -36,7 +36,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             }
             else
             {
-                var storageTargetManager = Xamarin.Forms.DependencyService.Get<Managers.Facade.IStorageTargetManagerFacade>();
+                var storageTargetManager = Xamarin.Forms.DependencyService.Get<Managers.Facade.IFileStorageManagerFacade>();
 
                 Master.BindingContext = new Models.Page.MasterPageModel
                 {

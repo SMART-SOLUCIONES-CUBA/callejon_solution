@@ -1,6 +1,8 @@
 ﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.AppService;
+using Windows.ApplicationModel.Background;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -12,6 +14,12 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP
     /// </summary>
     sealed partial class App : Application
     {
+        public static BackgroundTaskDeferral AppServiceDeferral = null;
+        public static AppServiceConnection Connection = null;
+        public static event EventHandler AppService_Disconnected;
+        public static event EventHandler<AppServiceTriggerDetails> AppService_Connected;
+        public static bool IsForeground = false;
+
         private Windows.System.Display.DisplayRequest displayRequest;
 
         /// <summary>
@@ -26,7 +34,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP
 
             Windows.UI.ViewManagement.ApplicationView.PreferredLaunchWindowingMode = Windows.UI.ViewManagement.ApplicationViewWindowingMode.FullScreen;
 
-            Suspending += OnSuspending;
+            Suspending += App_Suspending;
+            EnteredBackground += App_EnteredBackground;
+            LeavingBackground += App_LeavingBackground;
         }
 
         /// <summary>
@@ -34,9 +44,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected async override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            Frame rootFrame = Window.Current.Content as Frame;
+            var rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
@@ -57,10 +67,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP
                 Xamarin.Forms.Forms.SetFlags("Brush_Experimental", "Expander_Experimental");
                 //Xamarin.Forms.Forms.SetFlags("Shapes_Experimental");
 
-                var assembliesToInclude = new System.Collections.Generic.List<System.Reflection.Assembly>();
-                
-                assembliesToInclude.Add(typeof(CarouselView.FormsPlugin.UWP.CarouselViewRenderer).Assembly);
-                
+                var assembliesToInclude = new System.Collections.Generic.List<System.Reflection.Assembly>
+                {
+                    typeof(CarouselView.FormsPlugin.UWP.CarouselViewRenderer).Assembly
+                };
+
                 Xamarin.Forms.Forms.Init(e, assembliesToInclude);
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
@@ -70,6 +81,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP
 
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
+
+                if (Windows.Foundation.Metadata.ApiInformation.IsApiContractPresent("Windows.ApplicationModel.FullTrustAppContract", 1, 0))
+                {
+                    await FullTrustProcessLauncher.LaunchFullTrustProcessForCurrentAppAsync();
+                }
             }
 
             if (rootFrame.Content == null)
@@ -90,9 +106,33 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP
         /// </summary>
         /// <param name="sender">The Frame which failed navigation</param>
         /// <param name="e">Details about the navigation failure</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
+        }
+
+        /// <summary>
+        /// Handles connection requests to the app service
+        /// </summary>
+        protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
+        {
+            base.OnBackgroundActivated(args);
+
+            if (args.TaskInstance.TriggerDetails is AppServiceTriggerDetails details)
+            {
+                // only accept connections from callers in the same package
+                if (details.CallerPackageFamilyName == Package.Current.Id.FamilyName)
+                {
+                    // connection established from the fulltrust process
+                    AppServiceDeferral = args.TaskInstance.GetDeferral();
+                    
+                    args.TaskInstance.Canceled += BackgroundActivationTask_Canceled;
+
+                    Connection = details.AppServiceConnection;
+
+                    AppService_Connected?.Invoke(this, args.TaskInstance.TriggerDetails as AppServiceTriggerDetails);
+                }
+            }
         }
 
         /// <summary>
@@ -102,7 +142,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP
         /// </summary>
         /// <param name="sender">The source of the suspend request.</param>
         /// <param name="e">Details about the suspend request.</param>
-        private void OnSuspending(object sender, SuspendingEventArgs e)
+        private void App_Suspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
@@ -113,6 +153,29 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP
                 displayRequest.RequestRelease();
             }
             catch { }
+        }
+
+        private void App_LeavingBackground(object sender, LeavingBackgroundEventArgs e)
+        {
+            IsForeground = true;
+        }
+
+        private void App_EnteredBackground(object sender, EnteredBackgroundEventArgs e)
+        {
+            IsForeground = false;
+        }
+
+        /// <summary>
+        /// Task canceled here means the app service client is gone
+        /// </summary>
+        private void BackgroundActivationTask_Canceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason)
+        {
+            AppServiceDeferral?.Complete();
+
+            AppServiceDeferral = null;
+            Connection = null;
+
+            AppService_Disconnected?.Invoke(this, null);
         }
     }
 }

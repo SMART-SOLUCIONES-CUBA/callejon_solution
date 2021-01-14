@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Common</AssemblyName>
+    <RootNamespace>SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Common</RootNamespace>
+  </PropertyGroup>
+
+</Project>
