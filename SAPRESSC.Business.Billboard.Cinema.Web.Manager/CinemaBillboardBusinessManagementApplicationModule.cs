@@ -17,6 +17,14 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager
                 {
                     Action = "index",
                     Area = "cinemabillboard",
+                    Controller = "advertisements",
+                    Role = CinemaBillboardBusinessManagementRoleCodes.AdvertisementManagerViewer,
+                    Title = "Anuncios"
+                },
+                new DashboardManageItemViewModel
+                {
+                    Action = "index",
+                    Area = "cinemabillboard",
                     Controller = "categories",
                     Role = CinemaBillboardBusinessManagementRoleCodes.CategoryManagerViewer,
                     Title = "Categories"

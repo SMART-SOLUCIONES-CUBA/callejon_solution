@@ -10,6 +10,47 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.SecurityLoc
         {
             var roleDbSet = context.Set<Role>();
 
+            // Tag Advertisements definition!!
+            if (!roleDbSet.AnyAsync(role => role.Code.Equals(CinemaBillboardBusinessManagementRoleCodes.AdvertisementManagerViewer)).Result)
+            {
+                roleDbSet.Add(new Role
+                {
+                    Name = "AdvertisementManagementRoleViewerTitle",
+                    Code = CinemaBillboardBusinessManagementRoleCodes.AdvertisementManagerViewer,
+                    Description = "AdvertisementManagementRoleViewerDescription"
+                });
+            }
+
+            if (!roleDbSet.AnyAsync(role => role.Code.Equals(CinemaBillboardBusinessManagementRoleCodes.AdvertisementManagerCreator)).Result)
+            {
+                roleDbSet.Add(new Role
+                {
+                    Name = "AdvertisementManagementRoleCreatorTitle",
+                    Code = CinemaBillboardBusinessManagementRoleCodes.AdvertisementManagerCreator,
+                    Description = "AdvertisementManagementRoleCreatorDescription"
+                });
+            }
+
+            if (!roleDbSet.AnyAsync(role => role.Code.Equals(CinemaBillboardBusinessManagementRoleCodes.AdvertisementManagerEditor)).Result)
+            {
+                roleDbSet.Add(new Role
+                {
+                    Name = "AdvertisementManagementRoleEditorTitle",
+                    Code = CinemaBillboardBusinessManagementRoleCodes.AdvertisementManagerEditor,
+                    Description = "AdvertisementManagementRoleEditorDescription"
+                });
+            }
+
+            if (!roleDbSet.AnyAsync(role => role.Code.Equals(CinemaBillboardBusinessManagementRoleCodes.AdvertisementManagerRemover)).Result)
+            {
+                roleDbSet.Add(new Role
+                {
+                    Name = "AdvertisementManagementRoleRemoverTitle",
+                    Code = CinemaBillboardBusinessManagementRoleCodes.AdvertisementManagerRemover,
+                    Description = "AdvertisementManagementRoleRemoverDescription"
+                });
+            }
+
             // Tag Roles definition!!
             if (!roleDbSet.AnyAsync(role => role.Code.Equals(CinemaBillboardBusinessManagementRoleCodes.TagManagerViewer)).Result)
             {

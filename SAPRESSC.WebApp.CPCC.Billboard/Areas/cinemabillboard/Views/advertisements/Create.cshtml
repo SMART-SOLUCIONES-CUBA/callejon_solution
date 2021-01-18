@@ -1,0 +1,68 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+
+@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.AdvertisementInputViewModel
+
+@{
+    ViewData["Title"] = "Agregar Anuncio";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Anuncios",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Agregar"
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+@using (Html.BeginForm("create", "advertisements", new { Area = "cinemabillboard" }, FormMethod.Post, true, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4>@ViewData["Title"]</h4></div>
+
+        <div class="panel-body">
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.Title, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Title, null, new { @class = "text-danger" })
+            </div>
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.PlacardImageFile, new { @class = "control-label" })
+                @Html.EditorFor(model => model.PlacardImageFile, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PlacardImageFile, null, new { @class = "text-danger" })
+            </div>
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.Action, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.Action, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Action, null, new { @class = "text-danger" })
+            </div>
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.About, new { @class = "control-label" })
+                @Html.TextAreaFor(model => model.About, 5, 0, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.About, null, new { @class = "text-danger" })
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">Agregar</button>
+                <a class="btn btn-default" href="@Url.Action("index")">Cancelar</a>
+            </div>
+        </div>
+    </div>
+}

@@ -2,6 +2,11 @@
 {
     public static class CinemaBillboardBusinessManagementRoleCodes
     {
+        public const string AdvertisementManagerViewer = "CINEMABILLBOARD_ADVERTISEMENT_MANAGER_VIEWER";
+        public const string AdvertisementManagerCreator = "CINEMABILLBOARD_ADVERTISEMENT_MANAGER_CREATOR";
+        public const string AdvertisementManagerEditor = "CINEMABILLBOARD_ADVERTISEMENT_MANAGER_EDITOR";
+        public const string AdvertisementManagerRemover = "CINEMABILLBOARD_ADVERTISEMENT_MANAGER_REMOVER";
+
         public const string TagManagerViewer = "CINEMABILLBOARD_TAG_MANAGER_VIEWER";
         public const string TagManagerCreator = "CINEMABILLBOARD_TAG_MANAGER_CREATOR";
         public const string TagManagerEditor = "CINEMABILLBOARD_TAG_MANAGER_EDITOR";

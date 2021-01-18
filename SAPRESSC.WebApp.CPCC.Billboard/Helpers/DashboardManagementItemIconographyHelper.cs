@@ -8,7 +8,7 @@
 
             if (model.Controller == "groups") return "<span class=\"glyphicon glyphicon-tower\"></span>";
 
-            if (model.Controller == "advises") return "<span class=\"glyphicon glyphicon-bullhorn\"></span>";
+            if (model.Controller == "advises") return "<span class=\"glyphicon glyphicon-flash\"></span>";
 
             if (model.Controller == "events") return "<span class=\"glyphicon glyphicon-file\"></span>";
 
@@ -43,6 +43,8 @@
             if (model.Controller.EndsWith("collections")) return "<span class=\"glyphicon glyphicon-list\"></span>";
 
             if (model.Controller.EndsWith("tags")) return "<span class=\"glyphicon glyphicon-tags\"></span>";
+
+            if (model.Controller.EndsWith("advertisements")) return "<span class=\"glyphicon glyphicon-bullhorn\"></span>";
 
             return "<span class=\"glyphicon glyphicon-file\"></span>";
         }

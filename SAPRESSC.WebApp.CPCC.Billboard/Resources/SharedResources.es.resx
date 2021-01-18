@@ -450,4 +450,7 @@
   <data name="PlacardImage" xml:space="preserve">
     <value>Imagen de Pancarta</value>
   </data>
+  <data name="Action" xml:space="preserve">
+    <value>Acción</value>
+  </data>
 </root>
