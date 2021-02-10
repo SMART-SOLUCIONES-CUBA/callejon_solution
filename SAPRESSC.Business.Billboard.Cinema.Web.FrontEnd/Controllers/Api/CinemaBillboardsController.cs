@@ -27,7 +27,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.FrontEnd.Co
         {
             var entities = repository.GetAll();
 
-            var publicsOnly = !Request.Headers.Contains(new KeyValuePair<string, Microsoft.Extensions.Primitives.StringValues>("x-client", new Microsoft.Extensions.Primitives.StringValues("SAPRESSC.WpfApp.CPCC.Billboard.ReferenceClient")));
+            var publicsOnly = !Request.Headers.ContainsKey("x-client");
 
             var models = new List<CinemaBillboardModel>();
 

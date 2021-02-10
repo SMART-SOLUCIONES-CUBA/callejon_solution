@@ -24,6 +24,7 @@
 
             <converters:CollectionToJoinedStringBindingConverter x:Key="CollectionToJoinedStringBindingConverter" />
             <converters:AudioVisualToPlacardContentViewConverter x:Key="AudioVisualToPlacardContentViewConverter" DownsampleHeight="180" />
+            <converters:ImageModelToImageSourceConverter x:Key="ImageModelToImageSourceConverter" />
 
             <DataTemplate x:Key="AudioVisualWidthPlacardDataTemplate">
                 <StackLayout 
@@ -86,9 +87,27 @@
                         CurrentPageIndicatorTintColor="{StaticResource PrimaryAccentColor}">
                         <cvc:CarouselViewControl.ItemTemplate>
                             <DataTemplate>
-                                <ffil:CachedImage
-                                    Source="{Binding Path=PlacardImage, Converter={StaticResource ImageModelToImageSourceConverter}}"
-                                    Aspect="AspectFill" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <ffil:CachedImage
+                                        Grid.ColumnSpan="2"
+                                        Source="{Binding Path=PlacardImage, Converter={StaticResource ImageModelToImageSourceConverter}}"
+                                        Aspect="AspectFill" />
+                                    <Label 
+                                        Margin="30" Padding="20,15"
+                                        VerticalOptions="Start" HorizontalOptions="Start"
+                                        Grid.Column="0"
+                                        BackgroundColor="#AA000000"
+                                        Text="{Binding Path=Title}"
+                                        TextColor="White">
+                                        <Label.FontSize>
+                                            <OnPlatform x:TypeArguments="x:Double" Default="24"></OnPlatform>
+                                        </Label.FontSize>
+                                    </Label>
+                                </Grid>
                             </DataTemplate>
                         </cvc:CarouselViewControl.ItemTemplate>
                     </cvc:CarouselViewControl>
@@ -165,7 +184,7 @@
                         IsVisible="{Binding Path=IsBusy, Converter={StaticResource BoolToBoolNegationConverter}}"
                         HorizontalOptions="Center" HorizontalTextAlignment="Center"
                         Margin="20,20,20,10"
-                        Text="Proyecto Callejón de los Milagros - Centro Provincial de Cine Camagüey - SMART SOLUCIONES CUBA - 2020"
+                        Text="Proyecto Callejón de los Milagros - Centro Provincial de Cine Camagüey - SMART SOLUCIONES CUBA - 2021"
                         TextColor="{StaticResource SecoundaryTextColor}"
                         FontSize="Caption" />
                 </StackLayout>

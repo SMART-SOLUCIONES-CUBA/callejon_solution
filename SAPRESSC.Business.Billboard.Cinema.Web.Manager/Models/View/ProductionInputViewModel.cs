@@ -74,12 +74,12 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Mod
 
         public bool ResetTrailerVideo { get; set; }
 
-        [System.ComponentModel.DataAnnotations.Display(Name = "Collection")]
+        [Display(Name = "Collection")]
         public System.Guid CollectionId { get; set; }
 
         public List<SelectListItem> AvailableCollectionSelectListItems { get; set; }
 
-        [System.ComponentModel.DataAnnotations.Display(Name = "Category")]
+        [Display(Name = "Category")]
         public System.Guid CategoryId { get; set; }
 
         public List<SelectListItem> AvailableCategorySelectListItems { get; set; }
@@ -149,9 +149,12 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Mod
             }
             else
             {
-                if (CategoryId != System.Guid.Empty && entity.CategoryId.Value != CategoryId)
+                if (CategoryId != System.Guid.Empty)
                 {
-                    entity.CategoryId = CategoryId;
+                    if (entity.CategoryId.Value != CategoryId)
+                    {
+                        entity.CategoryId = CategoryId;
+                    }
                 }
                 else
                 {
@@ -168,9 +171,12 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Mod
             }
             else
             {
-                if (CollectionId != System.Guid.Empty && entity.CollectionId.Value != CollectionId)
+                if (CollectionId != System.Guid.Empty)
                 {
-                    entity.CollectionId = CollectionId;
+                    if (entity.CollectionId.Value != CollectionId)
+                    {
+                        entity.CollectionId = CollectionId;
+                    }
                 }
                 else
                 {

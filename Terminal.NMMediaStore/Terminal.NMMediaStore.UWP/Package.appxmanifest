@@ -7,7 +7,7 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="2c5b796d-6009-4963-b16b-74b0b40bc4fc"
+    Name="SmartSolucionesCuba.CPCC.MediatecaNuevoMundo"
     Publisher="CN=SMART SOLUCIONES CUBA"
     Version="0.8.6.0" />
 
@@ -15,7 +15,7 @@
 
   <Properties>
     <DisplayName>Terminal.NMMediaStore.UWP</DisplayName>
-    <PublisherDisplayName>9968836c-b46a-4142-a8e8-5ee8f0570a96</PublisherDisplayName>
+    <PublisherDisplayName>SMART SOLUCIONES CUBA (SSC)</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 

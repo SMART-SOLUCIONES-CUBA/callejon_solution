@@ -29,7 +29,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
 
             System.Linq.Expressions.Expression<System.Func<Persistence.Entities.Event, bool>> criteria = entity => ((startEdgeDate <= entity.Start.Date) || (startEdgeDate <= entity.End.Date));
 
-            var publicsOnly = !Request.Headers.Contains(new KeyValuePair<string, Microsoft.Extensions.Primitives.StringValues>("x-client", new Microsoft.Extensions.Primitives.StringValues("SAPRESSC.WpfApp.CPCC.Billboard.ReferenceClient")));
+            var publicsOnly = !Request.Headers.ContainsKey("x-client");
 
             if (publicsOnly)
             {

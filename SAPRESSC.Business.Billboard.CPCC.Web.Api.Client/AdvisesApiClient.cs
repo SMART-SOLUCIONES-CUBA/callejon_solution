@@ -6,20 +6,22 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Client
 {
     public static class AdvisesApiClient
     {
-        public static ICollection<AdviseModel> Get(System.Uri apiServerBaseUri)
+        public static ICollection<AdviseModel> Get(System.Uri apiServerBaseUri, string apiKey)
         {
-            var task = GetAsyncTask(apiServerBaseUri);
+            var task = GetAsyncTask(apiServerBaseUri, apiKey);
 
             task.Wait();
 
             return task.Result;
         }
 
-        private static async System.Threading.Tasks.Task<ICollection<AdviseModel>> GetAsyncTask(System.Uri baseAddress)
+        private static async System.Threading.Tasks.Task<ICollection<AdviseModel>> GetAsyncTask(System.Uri baseAddress, string apiKey)
         {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = baseAddress;
+
+                client.DefaultRequestHeaders.Add("X-Api-Key", apiKey);
 
                 client.Timeout = System.TimeSpan.FromSeconds(30);
 

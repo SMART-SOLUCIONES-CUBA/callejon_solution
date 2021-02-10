@@ -6,16 +6,16 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Client
 {
     public static class EventsApiClient
     {
-        public static ICollection<EventModel> Get(System.Uri apiServerBaseUri, bool cached, string clientId = null, long startDateTicks = 0, long endDateTicks = 0)
+        public static ICollection<EventModel> Get(System.Uri apiServerBaseUri, string apiKey, bool cached, string clientId = null, long startDateTicks = 0, long endDateTicks = 0)
         {
-            var task = GetAsyncTask(apiServerBaseUri, cached, clientId, startDateTicks, endDateTicks);
+            var task = GetAsyncTask(apiServerBaseUri, apiKey, cached, clientId, startDateTicks, endDateTicks);
 
             task.Wait();
 
             return task.Result;
         }
 
-        private static async System.Threading.Tasks.Task<ICollection<EventModel>> GetAsyncTask(System.Uri baseAddress, bool cached, string clientId, long startDateTicks, long endDateTicks)
+        private static async System.Threading.Tasks.Task<ICollection<EventModel>> GetAsyncTask(System.Uri baseAddress, string apiKey, bool cached, string clientId, long startDateTicks, long endDateTicks)
         {
             using (var client = new HttpClient())
             {
@@ -27,6 +27,8 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.Api.Client
                 {
                     client.DefaultRequestHeaders.Add("x-client", clientId);
                 }
+
+                client.DefaultRequestHeaders.Add("X-Api-Key", apiKey);
 
                 var nowDateTicks = System.DateTime.Today.Ticks;
 

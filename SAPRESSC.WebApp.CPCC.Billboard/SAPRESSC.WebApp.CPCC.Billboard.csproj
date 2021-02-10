@@ -4,10 +4,10 @@
     <AssemblyName>SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard</AssemblyName>
     <RootNamespace>SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard</RootNamespace>
     <PackageId>SAPRESSC.WebApp.CPCC.Billboard</PackageId>
-    <Version>0.9.9-relese-candidate</Version>
+    <Version>0.10.2-relese-candidate-2</Version>
     <Authors>SSC DevTeam</Authors>
     <Company>SMART SOLUCIONES CUBA (SSC)</Company>
-    <Copyright>SMART SOLUCIONES CUBA 2018 - Todos los derechos reservados.</Copyright>
+    <Copyright>SMART SOLUCIONES CUBA 2018 - 2021 Todos los derechos reservados.</Copyright>
     <ReleaseVersion>0.2</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Console (Development)' ">

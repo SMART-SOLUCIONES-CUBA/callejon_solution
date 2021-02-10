@@ -8,7 +8,7 @@
   IgnorableNamespaces="uap rescap desktop">
 
   <Identity
-    Name="711d7574-405e-4ac2-a76e-86ebb46f72a4"
+    Name="SmartSolucionesCuba.CPCC.MediatecaNuevoMundo"
     Publisher="CN=SMART SOLUCIONES CUBA"
     Version="0.1.0.0" />
 

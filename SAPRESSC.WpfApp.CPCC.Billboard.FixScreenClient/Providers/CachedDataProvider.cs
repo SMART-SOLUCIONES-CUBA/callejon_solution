@@ -64,14 +64,14 @@ namespace SmartSolucionesCuba.SAPRESSC.WpfApp.CPCC.Billboard.FixScreenClient.Pro
 
         public void UpdateConfiguration()
         {
-            Configuration = FixScreenClientConfigurationsClient.Get(ApiServerBaseUri, FixScreenClientID);
+            Configuration = FixScreenClientConfigurationsClient.Get(ApiServerBaseUri, ConfigurationManager.AppSettings.Get("ApiKey"), FixScreenClientID);
         }
 
         public void UpdateAdvises()
         {
             AdviseSyncronized = false;
 
-            Advises = AdvisesApiClient.Get(ApiServerBaseUri).ToList();
+            Advises = AdvisesApiClient.Get(ApiServerBaseUri, ConfigurationManager.AppSettings.Get("ApiKey")).ToList();
 
             AdviseSyncronized = true;
         }
@@ -80,7 +80,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WpfApp.CPCC.Billboard.FixScreenClient.Pro
         {
             if (Configuration == null || Configuration.ShowEvents)
             {
-                Events = EventsApiClient.Get(ApiServerBaseUri, true).ToList();
+                Events = EventsApiClient.Get(ApiServerBaseUri, ConfigurationManager.AppSettings.Get("ApiKey"), true).ToList();
             }
         }
 
@@ -90,7 +90,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WpfApp.CPCC.Billboard.FixScreenClient.Pro
             {
                 var rnd = new System.Random();
 
-                CinemaBillboards = Business.Billboard.Cinema.Web.Api.Client.CinemaBillboardsApiClient.Get(ApiServerBaseUri, true).ToList();
+                CinemaBillboards = Business.Billboard.Cinema.Web.Api.Client.CinemaBillboardsApiClient.Get(ApiServerBaseUri, ConfigurationManager.AppSettings.Get("ApiKey"), true).ToList();
 
                 if (CinemaBillboards.Count > 1)
                 {

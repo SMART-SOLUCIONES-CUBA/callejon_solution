@@ -4,51 +4,89 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mg="clr-namespace:MagicGradients;assembly=MagicGradients"
     xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
     mc:Ignorable="d"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages.SignInPage" 
     Style="{StaticResource BasePageStyle}">
     <ContentPage.Content>
-        <ScrollView>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <StackLayout
+        <Grid>
+            <mg:GradientView VerticalOptions="FillAndExpand" >
+                <mg:GradientView.GradientSource>
+                    <mg:CssGradientSource>
+                        <x:String>
+                            <![CDATA[
+                                linear-gradient(283deg, rgba(228, 228, 228, 0.04) 0%, rgba(228, 228, 228, 0.04) 30%, rgba(130, 130, 130, 0.04) 30%, rgba(130, 130, 130, 0.04) 49%, rgba(31, 31, 31, 0.04) 49%, rgba(31, 31, 31, 0.04) 100%), linear-gradient(297deg, rgba(228, 228, 228, 0.04) 0%, rgba(228, 228, 228, 0.04) 20%, rgba(130, 130, 130, 0.04) 20%, rgba(130, 130, 130, 0.04) 60%, rgba(31, 31, 31, 0.04) 60%, rgba(31, 31, 31, 0.04) 100%), linear-gradient(242deg, rgba(228, 228, 228, 0.04) 0%, rgba(228, 228, 228, 0.04) 29%, rgba(130, 130, 130, 0.04) 29%, rgba(130, 130, 130, 0.04) 48%, rgba(31, 31, 31, 0.04) 48%, rgba(31, 31, 31, 0.04) 100%), linear-gradient(90deg, rgb(0, 0, 0), rgb(0, 0, 0))
+                            ]]>
+                        </x:String>
+                    </mg:CssGradientSource>
+                </mg:GradientView.GradientSource>
+            </mg:GradientView>
+            <ScrollView>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <StackLayout
                         Grid.Row="1"
                         Padding="0,30"
                         HorizontalOptions="Center" VerticalOptions="Center"
                         WidthRequest="280">
-                    <Entry
-                        TabIndex="1"
-                        Text="{Binding Path=SubscriptorId}"
-                        Placeholder="Usuario" />
-                    <Entry 
-                        TabIndex="2"
-                        Text="{Binding Path=Password}"
-                        Placeholder="Contraseña" 
-                        IsPassword="True" />
-                    <Button
-                        TabIndex="0"
-                        Margin="0,20,0,0"
-                        BackgroundColor="{StaticResource PrimaryActionColor}"
-                        HorizontalOptions="CenterAndExpand"
-                        Text="Continuar"
-                        TextColor="Black"
-                        Clicked="AuthenticateButton_Clicked" />
-                </StackLayout>
-                <Grid
-                    Grid.RowSpan="3"
-                    IsVisible="{Binding Path=IsBusy}"
-                    BackgroundColor="#CC000000">
-                    <ActivityIndicator 
-                        VerticalOptions="Center" HorizontalOptions="Center"
-                        HeightRequest="48" WidthRequest="48"
-                        IsRunning="True" />
+                        <Image HorizontalOptions="Center">
+                            <Image.Source>
+                                <OnPlatform x:TypeArguments="FileImageSource">
+                                    <On Platform="UWP" Value="Assets/AppLogo.png" />
+                                </OnPlatform>
+                            </Image.Source>
+                        </Image>
+                        <Label
+                            Margin="0,0,0,20"
+                            HorizontalOptions="Center"
+                            LineBreakMode="TailTruncation"
+                            FontFamily="Myriad Pro Regular">
+                            <Label.FontSize>
+                                <OnPlatform x:TypeArguments="x:Double" Default="24"></OnPlatform>
+                            </Label.FontSize>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <FormattedString.Spans>
+                                        <Span Text="Mediateca " TextColor="{StaticResource PrimaryTextColor}" />
+                                        <Span Text="Nuevo Mundo" TextColor="{StaticResource SecoundaryTextColor}" />
+                                    </FormattedString.Spans>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Entry
+                            TabIndex="1"
+                            Text="{Binding Path=SubscriptorId}"
+                            Placeholder="Usuario" />
+                        <Entry 
+                            TabIndex="2"
+                            Text="{Binding Path=Password}"
+                            Placeholder="Contraseña" 
+                            IsPassword="True" />
+                        <Button
+                            TabIndex="0"
+                            Margin="0,20,0,0"
+                            BackgroundColor="{StaticResource PrimaryActionColor}"
+                            HorizontalOptions="CenterAndExpand"
+                            Text="Continuar"
+                            TextColor="Black"
+                            Clicked="AuthenticateButton_Clicked" />
+                    </StackLayout>
+                    <Grid
+                        Grid.RowSpan="3"
+                        IsVisible="{Binding Path=IsBusy}"
+                        BackgroundColor="#CC000000">
+                        <ActivityIndicator 
+                            VerticalOptions="Center" HorizontalOptions="Center"
+                            HeightRequest="48" WidthRequest="48"
+                            IsRunning="True" />
+                    </Grid>
                 </Grid>
-            </Grid>
-        </ScrollView>
+            </ScrollView>
+        </Grid>
     </ContentPage.Content>
 </sscxftoolkitmvvmpages:ContentPage>
