@@ -95,6 +95,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Desktop.Support
                                 iterationDataLength += remoteFile.Length();
                             }
 
+                            var lastNotifiedProgressAt = DateTime.Now;
+
                             foreach (var remoteFile in files)
                             {
                                 long iterationDataCount = 0;
@@ -118,18 +120,27 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Desktop.Support
 
                                         while (totalRead < inputStreamLength)
                                         {
-                                            var data = new byte[65536];
+                                            var data = new byte[8192];
 
-                                            var amountRead = inputStream.Read(data, 0, 65536);
+                                            var amountRead = inputStream.Read(data, 0, 8192);
 
                                             localFileStream.Write(data, 0, amountRead);
 
                                             totalRead += amountRead;
                                             iterationDataCount += amountRead;
 
+                                            var now = DateTime.Now;
+
+                                            var lastProgressNotificationElpsedTime = now - lastNotifiedProgressAt;
+
+                                            if (lastProgressNotificationElpsedTime.TotalSeconds > 1)
+                                            {
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                                            NotifyFetchOrderHandlingProgressAsync(counter, iterationDataCount, iterationDataLength).ContinueWith(_ => { });
+                                                NotifyFetchOrderHandlingProgressAsync(counter, iterationDataCount, iterationDataLength).ContinueWith(_ => { });
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+                                                lastNotifiedProgressAt = now;
+                                            }
                                         }
 
                                         localFileStream.Flush();
