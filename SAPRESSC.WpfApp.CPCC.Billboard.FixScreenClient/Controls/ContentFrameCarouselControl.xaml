@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="SmartSolucionesCuba.SAPRESSC.WpfApp.CPCC.Billboard.FixScreenClient.Controls.ContentFrameCarouselControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SmartSolucionesCuba.SAPRESSC.WpfApp.CPCC.Billboard.FixScreenClient"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+
+        <Style TargetType="{x:Type ContentPresenter}">
+            <Setter Property="LayoutTransform">
+                <Setter.Value>
+                    <ScaleTransform />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Slide and Fade -->
+        <Storyboard x:Key="TransitionInStoryboard" >
+            <ThicknessAnimation Duration="0:0:1" Storyboard.TargetProperty="Margin" From="500,0,-500,0" To="0">
+                <ThicknessAnimation.EasingFunction>
+                    <ElasticEase EasingMode="EaseOut" Oscillations="1"></ElasticEase>
+                </ThicknessAnimation.EasingFunction>
+            </ThicknessAnimation>
+        </Storyboard>
+
+        <Storyboard x:Key="TransitionOutStoryboard">
+            <ThicknessAnimation Duration="0:0:1" Storyboard.TargetProperty="Margin" To="-500,0,500,0">
+                <ThicknessAnimation.EasingFunction>
+                    <ElasticEase EasingMode="EaseIn" Springiness="8" Oscillations="1"></ElasticEase>
+                </ThicknessAnimation.EasingFunction>
+            </ThicknessAnimation>
+        </Storyboard>
+
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ContentControl Grid.Row="0" Name="ContentPresenter">
+            <ContentControl.RenderTransform>
+                <TransformGroup>
+                    <TranslateTransform X="0" Y="0" />
+                </TransformGroup>
+            </ContentControl.RenderTransform>
+        </ContentControl>
+        <Grid Grid.Row="1" HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Border Name="Indicator1" Margin="5,0" Padding="30,2" CornerRadius="2" Background="#FF2C2C2C"></Border>
+                <Border Name="Indicator2" Margin="5,0" Padding="30,2" CornerRadius="2" Background="#FF939393"></Border>
+                <Border Name="Indicator3" Margin="5,0" Padding="30,2" CornerRadius="2" Background="#FF939393"></Border>
+            </StackPanel>
+        </Grid>
+    </Grid>
+
+</UserControl>

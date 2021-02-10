@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="SmartSolucionesCuba.SAPRESSC.WpfApp.CPCC.Billboard.FixScreenClient.Controls.Frame.PresentationFeaturesFrameControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SmartSolucionesCuba.SAPRESSC.WpfApp.CPCC.Billboard.FixScreenClient.Controls.Frame"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.25*" />
+            <RowDefinition Height="0.25*" />
+            <RowDefinition Height="0.25*" />
+            <RowDefinition Height="0.25*" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Viewbox Grid.Row="0" HorizontalAlignment="Left" Margin="0,5">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Name="CountryTextBlock" FontFamily="Helvetica LT Std" FontStretch="Condensed" FontWeight="Bold">EE.UU.</TextBlock>
+                <TextBlock Margin="3,0" FontFamily="Helvetica LT Std" FontStretch="Condensed" FontWeight="Bold">/</TextBlock>
+                <TextBlock Name="YearTextBlock" FontFamily="Helvetica LT Std" FontStretch="Condensed" FontWeight="Bold">2018</TextBlock>
+                <TextBlock Margin="3,0" FontFamily="Helvetica LT Std" FontStretch="Condensed" FontWeight="Bold">/</TextBlock>
+                <TextBlock Name="DurationTextBlock" FontFamily="Helvetica LT Std" FontStretch="Condensed" FontWeight="Bold">3 horas 45 minutos</TextBlock>
+            </StackPanel>
+        </Viewbox>
+        <Viewbox Grid.Row="1" HorizontalAlignment="Left" Margin="0,5">
+            <TextBlock Name="GenresTextBlock" FontFamily="Helvetica LT Std" FontStretch="Condensed" FontWeight="Medium">Thriller, Comedia, Ciencia-Ficción</TextBlock>
+        </Viewbox>
+        <Viewbox Grid.Row="2" HorizontalAlignment="Left" Margin="0,10">
+            <TextBlock Name="CategoryTextBlock" FontFamily="Helvetica LT Std" FontStretch="Condensed" FontWeight="Medium">Mayores de 16 años</TextBlock>
+        </Viewbox>
+        <Viewbox Grid.Row="3" HorizontalAlignment="Left" Margin="0,4">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Foreground="#FF404040" FontFamily="Helvetica LT Std" FontStretch="Condensed" FontWeight="Bold">Dirección:</TextBlock>
+                <TextBlock Name="DirectionTextBlock" Margin="3,0,0,0" FontFamily="Helvetica LT Std" FontStretch="Condensed" FontWeight="Medium">James Gun</TextBlock>
+            </StackPanel>
+        </Viewbox>
+        <TextBlock Name="InterpretationsWrapTextBlock" TextWrapping="WrapWithOverflow" Grid.Row="7" Margin="0,8,0,0" FontFamily="Helvetica LT Std" FontStretch="Condensed" FontWeight="Medium" FontSize="27">
+            <TextBlock FontWeight="Bold" Margin="0,0,3,0" Foreground="#FF404040">Reparto:</TextBlock>
+            <TextBlock TextWrapping="Wrap" Name="InterpretationsTextBlock" Margin="0,0,3,0">Juan del Potro, Juan del Potro, Juan del Potro, Juan del Potro, Juan del Potro</TextBlock>
+        </TextBlock>
+    </Grid>
+</UserControl>

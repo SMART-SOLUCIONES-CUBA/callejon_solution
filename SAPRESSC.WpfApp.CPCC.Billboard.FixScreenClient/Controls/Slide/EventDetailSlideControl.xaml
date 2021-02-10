@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="SmartSolucionesCuba.SAPRESSC.WpfApp.CPCC.Billboard.FixScreenClient.Controls.Slide.EventDetailSlideControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SmartSolucionesCuba.SAPRESSC.WpfApp.CPCC.Billboard.FixScreenClient.Controls.Frame"
+             mc:Ignorable="d" 
+             d:DesignHeight="720" d:DesignWidth="1280" Loaded="UserControl_Loaded">
+    <Grid>
+        <Canvas Name="BackgroundAnimationContainer" />
+        <Canvas>
+            <Grid Name="WrapContainer" Background="White" Width="1280" Height="750">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" BorderThickness="10" BorderBrush="#FF808a8e">
+                    <Image Name="PosterImage" />
+                </Border>
+                <Grid Grid.Column="1" Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="0.5*" />
+                        <RowDefinition Height="0.3*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="0.25*" />
+                        <RowDefinition Height="0.25*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Name="HeaderTextBlock" TextTrimming="CharacterEllipsis" Text="Evento" FontFamily="Myriad Pro" FontStretch="Condensed" FontStyle="Italic" FontSize="36" FontWeight="Bold" Margin="0,0,0,10"></TextBlock>
+                    <Viewbox Grid.Row="1" HorizontalAlignment="Left">
+                        <TextBlock Name="TitleTextBlock" Foreground="#FFC22926" FontFamily="Helvetica LT Std Compressed">TALLER DE LA CRITICA</TextBlock>
+                    </Viewbox>
+                    <Viewbox Grid.Row="2" HorizontalAlignment="Left" Margin="0,10">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Name="StartTimeTextBlock" FontFamily="Helvetica LT Std" FontStretch="Condensed" FontWeight="Bold">9:00 AM</TextBlock>
+                            <TextBlock Margin="3,0" FontFamily="Helvetica LT Std" FontStretch="Condensed">/</TextBlock>
+                            <TextBlock Name="PlaceTextBlock" FontFamily="Helvetica LT Std" FontStretch="Condensed">Centro Cultural Fotograma</TextBlock>
+                        </StackPanel>
+                    </Viewbox>
+                    <TextBlock Grid.Row="3" Foreground="#FF404040" Name="EndDateTextBlock" FontFamily="Helvetica LT Std" FontStretch="Condensed" FontSize="26" Margin="0,2,0,8" FontWeight="Medium">Todo el día</TextBlock>
+                    <Viewbox Grid.Row="4" HorizontalAlignment="Left" Margin="0, 10">
+                        <TextBlock Name="ThematicTextBlock" FontFamily="Helvetica LT Std" FontStretch="Condensed" FontWeight="Medium">Homenaje a Desiderio Navarro, pionero en el uso de lo digital en función de la promoción cultural en Cuba.</TextBlock>
+                    </Viewbox>
+                    <Viewbox Grid.Row="5" HorizontalAlignment="Left" Margin="0,10">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Foreground="#FF404040" FontFamily="Helvetica LT Std" FontStretch="Condensed" FontWeight="Bold">Organiza:</TextBlock>
+                            <TextBlock Name="OrganizarTextBlock" Margin="3,0,0,0" FontFamily="Helvetica LT Std" FontStretch="Condensed" FontWeight="Bold">James Gun</TextBlock>
+                        </StackPanel>
+                    </Viewbox>
+                    <TextBlock Name="WithInsWrapTextBlock" TextWrapping="WrapWithOverflow" Grid.Row="6" Margin="0,10,0,10" FontFamily="Helvetica LT Std" FontStretch="Condensed" FontWeight="Medium" FontSize="28">
+                        <TextBlock FontWeight="Bold" Margin="0,0,3,0" Foreground="#FF404040">Invitados:</TextBlock>
+                        <TextBlock TextWrapping="Wrap" Name="WithInsTextBlock">Juan del Potro, Juan del Potro, Juan del Potro, Juan del Potro, Juan del Potro</TextBlock>
+                    </TextBlock>
+                    <TextBlock TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis" Name="AboutTextBlock" Grid.Row="7" FontFamily="Helvetica LT Std" FontStretch="Condensed" FontWeight="Medium" FontSize="27" Margin="0,10,0,0"></TextBlock>
+                </Grid>
+                <local:BillboardSidebarFrameControl x:Name="BillboardSidebar" Grid.Column="2" />
+            </Grid>
+        </Canvas>
+        <Canvas Name="ForegroundAnimationContainer" />
+    </Grid>
+</UserControl>

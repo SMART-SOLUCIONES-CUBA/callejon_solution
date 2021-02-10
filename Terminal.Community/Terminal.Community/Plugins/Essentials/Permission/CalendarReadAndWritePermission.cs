@@ -33,5 +33,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Plugins.Essentials.Per
 
             return PermissionStatus.Unknown;
         }
+
+        public override bool ShouldShowRationale()
+        {
+            // TODO Research what this do!!
+            return true;
+        }
     }
 }

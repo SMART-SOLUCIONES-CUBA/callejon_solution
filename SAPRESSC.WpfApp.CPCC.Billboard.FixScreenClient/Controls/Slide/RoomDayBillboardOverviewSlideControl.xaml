@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="SmartSolucionesCuba.SAPRESSC.WpfApp.CPCC.Billboard.FixScreenClient.Controls.Slide.RoomDayBillboardOverviewSlideControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SmartSolucionesCuba.SAPRESSC.WpfApp.CPCC.Billboard.FixScreenClient.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="768" d:DesignWidth="1336" Loaded="UserControl_Loaded">
+
+    <Grid>
+        <Canvas>
+            <Grid Name="WrapContainer" Background="White">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="17" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Name="DateNumericDayTextBlock" Padding="20" FontSize="96pt" Foreground="White" Background="Black" TextAlignment="Center" Height="116pt" LineHeight="112pt" LineStackingStrategy="BlockLineHeight" FontFamily="Kozuka Gothic Pro L">24</TextBlock>
+                <Border Grid.Row="0" Grid.Column="2" BorderThickness="0" Background="#FF939393" Padding="48,0,35,0" CornerRadius="0,0,10,0" Margin="-15,0,0,0">
+                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Name="DateMonthTextBlock" FontFamily="Helvetica LT Std" FontStretch="Condensed" FontSize="28pt" Margin="0,0,0,10" Foreground="#FF3C3C3C" Text="NOVIEMBRE" />
+                        <TextBlock Grid.Row="1" Name="DateLiteralDayTextBlock" FontFamily="Helvetica LT Std" FontStretch="Condensed" FontSize="21pt" Margin="0,0,0,10" Foreground="#FF2C2C2C" Text="JUEVES" />
+                    </Grid>
+                </Border>
+                <Grid Grid.Row="0" Grid.Column="3" Margin="40,0" VerticalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Name="CinemaNameTextBlock"  FontFamily="Helvetica LT Std" FontStretch="Condensed" FontWeight="Medium" FontSize="28pt" Foreground="#FF4C4C4C" Text="Multicine Casa Blanca" />
+                    <TextBlock Grid.Row="1" Name="RoomNameTextBlock"  FontFamily="Helvetica LT Std" FontStretch="Condensed" FontWeight="Medium" FontSize="48pt" Foreground="#FF2C2C2C" Text="Sala Amalia Simoni" />
+                </Grid>
+                <Rectangle Grid.Row="0" Grid.Column="1" RenderTransformOrigin="0.5,0.5" Margin="-20,0,0,0" Fill="Black" >
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform AngleX="-12"/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Grid Grid.Row="1" Grid.ColumnSpan="4" Name="PresentationOverviewsContainer" Margin="0,2,0,0"></Grid>
+            </Grid>
+        </Canvas>
+        <Canvas Name="ForegroundAnimationContainer" />
+    </Grid>
+</UserControl>
