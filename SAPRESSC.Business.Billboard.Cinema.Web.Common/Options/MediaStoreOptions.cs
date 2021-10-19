@@ -1,4 +1,4 @@
-﻿namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Options
+﻿namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common.Options
 {
     public class MediaStoreOptions
     {

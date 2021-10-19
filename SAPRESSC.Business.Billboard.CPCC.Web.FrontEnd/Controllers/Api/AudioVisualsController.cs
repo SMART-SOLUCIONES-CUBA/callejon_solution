@@ -14,7 +14,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
     [Area("mediastore")]
     public class AudioVisualsController : Core.Web.Common.Controllers.BaseWebController
     {
-        private readonly Microsoft.Extensions.Options.IOptions<Options.MediaStoreOptions> mediaStoreOptions;
+        private readonly Microsoft.Extensions.Options.IOptions<Cinema.Web.Common.Options.MediaStoreOptions> mediaStoreOptions;
         private readonly IEntityRepository<Production, long> productionRepository;
         private readonly IEntityRepository<Search, long> searchRepository;
         private readonly IEntityRepository<Category, System.Guid> categoryRepository;
@@ -22,7 +22,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         private readonly IEntityRepository<ProducerHouse, long> producerHouseRepository;
         private readonly MediaToolkit.Services.IMediaToolkitService mediaToolkitService;
 
-        public AudioVisualsController(MediaToolkit.Services.IMediaToolkitService mediaToolkitService, IEntityRepository<ProducerHouse, long> producerHouseRepository, IEntityRepository<Middleware.Region.Persistence.Entities.Country, int> countryRepository, IEntityRepository<Category, System.Guid> categoryRepository, IEntityRepository<Search, long> searchRepository, IEntityRepository<Production, long> productionRepository, Microsoft.Extensions.Options.IOptions<Options.MediaStoreOptions> mediaStoreOptions, Microsoft.Extensions.Localization.IStringLocalizer<AudioVisualsController> localizer, ILogger<AudioVisualsController> logger) : base(localizer, logger)
+        public AudioVisualsController(MediaToolkit.Services.IMediaToolkitService mediaToolkitService, IEntityRepository<ProducerHouse, long> producerHouseRepository, IEntityRepository<Middleware.Region.Persistence.Entities.Country, int> countryRepository, IEntityRepository<Category, System.Guid> categoryRepository, IEntityRepository<Search, long> searchRepository, IEntityRepository<Production, long> productionRepository, Microsoft.Extensions.Options.IOptions<Cinema.Web.Common.Options.MediaStoreOptions> mediaStoreOptions, Microsoft.Extensions.Localization.IStringLocalizer<AudioVisualsController> localizer, ILogger<AudioVisualsController> logger) : base(localizer, logger)
         {
             this.mediaStoreOptions = mediaStoreOptions;
             this.productionRepository = productionRepository;
@@ -209,7 +209,14 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
 
                 foreach (var entity in entities)
                 {
-                    paginationModel.List.Add(await EntityToModelAsync(entity));
+                    try
+                    {
+                        paginationModel.List.Add(await EntityToModelAsync(entity));
+                    }
+                    catch (System.Exception e)
+                    {
+                        logger.LogWarning(e, "XXXXXXXXXXXXXXXXXXXXX La entidad Production con el Id \"{0}\" y el Nombre \"{1}\" fue omitida por producirse un error en su procesazamiento.", entity.Id, entity.Title);
+                    }
                 }
             }
 
@@ -394,10 +401,6 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
             var videoMediaStream = getMetadataResult.Metadata.Streams.First(stream => stream.CodecType == "video");
 
             model.Resolution = string.Format("{0}x{1}", videoMediaStream.Width, videoMediaStream.Height);
-
-            //var avMediaFile = FFMediaToolkit.Decoding.MediaFile.Open(avFileInfo.FullName);
-
-            //model.Resolution = string.Format("{0}x{1}", videoMediaStream.Width, videoMediaStream.Height);
 
             model.Quality = Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.LD;
 

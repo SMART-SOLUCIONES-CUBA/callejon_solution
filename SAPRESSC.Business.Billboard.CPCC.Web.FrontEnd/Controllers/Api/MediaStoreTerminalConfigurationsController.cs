@@ -7,9 +7,9 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
     [Area("mediastore")]
     public class MediaStoreTerminalConfigurationsController : Core.Web.Common.Controllers.BaseWebController
     {
-        private readonly Microsoft.Extensions.Options.IOptions<Options.MediaStoreOptions> mediaStoreOptions;
+        private readonly Microsoft.Extensions.Options.IOptions<Cinema.Web.Common.Options.MediaStoreOptions> mediaStoreOptions;
 
-        public MediaStoreTerminalConfigurationsController(Microsoft.Extensions.Options.IOptions<Options.MediaStoreOptions> mediaStoreOptions, Microsoft.Extensions.Localization.IStringLocalizer<MediaStoreTerminalConfigurationsController> localizer, ILogger<MediaStoreTerminalConfigurationsController> logger) : base(localizer, logger)
+        public MediaStoreTerminalConfigurationsController(Microsoft.Extensions.Options.IOptions<Cinema.Web.Common.Options.MediaStoreOptions> mediaStoreOptions, Microsoft.Extensions.Localization.IStringLocalizer<MediaStoreTerminalConfigurationsController> localizer, ILogger<MediaStoreTerminalConfigurationsController> logger) : base(localizer, logger)
         {
             this.mediaStoreOptions = mediaStoreOptions;
         }

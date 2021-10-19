@@ -71,6 +71,10 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Mod
 
         public string Collection { get; set; }
 
+        public bool? ReadyForMarketplace { get; set; }
+
+        public bool? ReadyForBillbard { get; set; }
+
         public void Import(Production entity)
         {
             Id = entity.Id;

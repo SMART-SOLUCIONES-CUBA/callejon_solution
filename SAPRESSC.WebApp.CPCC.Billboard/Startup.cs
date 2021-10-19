@@ -28,7 +28,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<Options.ApiSecurityOptions>(configuration.GetSection("ApiSecurity"));
-            services.Configure<Business.Billboard.CPCC.Web.FrontEnd.Options.MediaStoreOptions>(configuration.GetSection("MediaStore"));
+            services.Configure<Business.Billboard.Cinema.Web.Common.Options.MediaStoreOptions>(configuration.GetSection("MediaStore"));
             services.Configure<Business.Billboard.Cinema.Web.Common.Options.FfmpegOptions>(configuration.GetSection("FFMPEG"));
 
             services.AddDbContext<Persistence.Context.ApplicationDbContext>(options => options.UseMySql(configuration.GetConnectionString("DefaultConnection"), mySqlOptions =>

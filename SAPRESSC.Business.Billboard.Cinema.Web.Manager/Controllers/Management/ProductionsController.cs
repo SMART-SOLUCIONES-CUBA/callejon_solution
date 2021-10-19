@@ -42,8 +42,9 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
         private readonly IEntityRepository<Category, System.Guid> categoryRepository;
         private readonly IEntityRepository<Collection, System.Guid> collectionRepository;
         private readonly MediaToolkit.Services.IMediaToolkitService mediaToolkitService;
+        private readonly Microsoft.Extensions.Options.IOptions<Common.Options.MediaStoreOptions> mediaStoreOptions;
 
-        public ProductionsController(MediaToolkit.Services.IMediaToolkitService mediaToolkitService, IEntityRepository<Collection, System.Guid> collectionRepository, IEntityRepository<Category, System.Guid> categoryRepository, IEntityRepository<Thumbnail, System.Guid> thumbnailRepository, IEntityRepository<Video, System.Guid> videoRepository, IEntityRepository<Clasification, int> clasificationRepository, IEntityRepository<Participation, long> participationRepository, IEntityRepository<Personality, long> personalityRepository, IEntityRepository<AwardWinning, int> awardWinningRepository, IEntityRepository<Award, int> awardRepository, IEntityRepository<Country, int> countryRepository, IEntityRepository<ProducerHouse, long> producerHouseRepository, IEntityRepository<Genre, int> genreRepository, IEntityRepository<Language, int> languageRepository, IMediaFileManagerFacade mediaFileManager, IEntityRepository<Image, System.Guid> imageRepository, IEntityRepository<Production, long> repository, Microsoft.Extensions.Localization.IStringLocalizer<ProductionsController> localizer, ILogger<ProductionsController> logger) : base(repository, localizer, logger)
+        public ProductionsController(Microsoft.Extensions.Options.IOptions<Common.Options.MediaStoreOptions> mediaStoreOptions, MediaToolkit.Services.IMediaToolkitService mediaToolkitService, IEntityRepository<Collection, System.Guid> collectionRepository, IEntityRepository<Category, System.Guid> categoryRepository, IEntityRepository<Thumbnail, System.Guid> thumbnailRepository, IEntityRepository<Video, System.Guid> videoRepository, IEntityRepository<Clasification, int> clasificationRepository, IEntityRepository<Participation, long> participationRepository, IEntityRepository<Personality, long> personalityRepository, IEntityRepository<AwardWinning, int> awardWinningRepository, IEntityRepository<Award, int> awardRepository, IEntityRepository<Country, int> countryRepository, IEntityRepository<ProducerHouse, long> producerHouseRepository, IEntityRepository<Genre, int> genreRepository, IEntityRepository<Language, int> languageRepository, IMediaFileManagerFacade mediaFileManager, IEntityRepository<Image, System.Guid> imageRepository, IEntityRepository<Production, long> repository, Microsoft.Extensions.Localization.IStringLocalizer<ProductionsController> localizer, ILogger<ProductionsController> logger) : base(repository, localizer, logger)
         {
             this.thumbnailRepository = thumbnailRepository;
             this.videoRepository = videoRepository;
@@ -61,6 +62,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
             this.categoryRepository = categoryRepository;
             this.collectionRepository = collectionRepository;
             this.mediaToolkitService = mediaToolkitService;
+            this.mediaStoreOptions = mediaStoreOptions;
         }
 
         protected override string GetFilterSessionID()
@@ -654,6 +656,21 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
                 var category = categoryRepository.Get(entity.CategoryId.Value);
 
                 modelDisplay.Category = category.GetTreeName();
+
+                try
+                {
+                    var avFolderPath = System.IO.Path.Combine(mediaStoreOptions.Value.AudioVisualsPath, CategoryToStorageRelativePath(category), modelDisplay.Slug);
+
+                    var fileNames = System.IO.Directory.EnumerateFiles(avFolderPath, string.Format("{0}.*", modelDisplay.Slug));
+
+                    _ = fileNames.First(item => mediaStoreOptions.Value.SupportVideoFileExtensions.Any(ext => item.EndsWith(ext, true, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    modelDisplay.ReadyForMarketplace = true;
+                }
+                catch
+                {
+                    modelDisplay.ReadyForMarketplace = false;
+                }
             }
 
             if (entity.CollectionId != null && entity.CollectionId.Value != System.Guid.Empty)
@@ -838,6 +855,11 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
             if (modelInput.ClasificationId <= 0)
             {
                 ModelState.AddModelError("ClasificationId", localizer["ClasificationSelectionRequiredMessage"]);
+            }
+
+            if (modelInput.CategoryId != default)
+            {
+
             }
 
             base.ValidateEdit(modelInput);
@@ -1771,6 +1793,18 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
             TempData[NotificationViewModel.NOTIFICATION_MAP_KEY] = JsonConvert.SerializeObject(notification);
 
             return RedirectToAction("cocountries", new { key = production.Id });
+        }
+
+        private string CategoryToStorageRelativePath(Category entity)
+        {
+            if (entity.Parent == null)
+            {
+                return Common.Providers.SlugHelperProvider.Instance.Get().GenerateSlug(entity.Name);
+            }
+            else
+            {
+                return string.Format("{0}\\{1}", CategoryToStorageRelativePath(entity.Parent), Common.Providers.SlugHelperProvider.Instance.Get().GenerateSlug(entity.Name));
+            }
         }
     }
 }

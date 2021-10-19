@@ -136,6 +136,7 @@
                     <th>Título</th>
                     <th>Año</th>
                     <th>País</th>
+                    <th>Mediateca</th>
                     <th style="width: 232px;">Opciones</th>
                 </tr>
             </thead>
@@ -147,6 +148,20 @@
                         {<span>(@item.LocalizedTitle)</span>}</td>
                         <td style="vertical-align: middle;" title="Año">@item.Year</td>
                         <td style="vertical-align: middle;" title="País">@item.Country.Name</td>
+                        @{
+                            if (item.ReadyForMarketplace == null)
+                            {
+                                <td style="vertical-align: middle;" title="Mediateca: Categoría no especificada!"><span class="glyphicon glyphicon-eye-close" /></td>
+                            }
+                            else if (item.ReadyForMarketplace.Value)
+                            {
+                                <td style="vertical-align: middle;" title="Mediateca: Disponible para su consumo!"><span class="glyphicon glyphicon-eye-open" /></td>
+                            }
+                            else
+                            {
+                                <td style="vertical-align: middle;" title="Mediateca: Omitido por problemas con archivos!"><span class="glyphicon glyphicon-warning-sign" /></td>
+                            }
+                        }
                         <td style="vertical-align: middle;">
                             <div class="btn-group btn-group-sm">
                                 <a role="button" href="#" class="btn btn-default" data-toggle="modal" data-target="#detail-view-production-@item.Id"><span class="glyphicon glyphicon-list-alt"></span></a>
@@ -285,12 +300,13 @@ else
                     <th>Título</th>
                     <th>Año</th>
                     <th>País</th>
+                    <th>Mediateca</th>
                     <th style="width: 232px;">Opciones</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td colspan="4"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
+                    <td colspan="5"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
                 </tr>
             </tbody>
         </table>
