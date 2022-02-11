@@ -69,7 +69,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP
 
                 var assembliesToInclude = new System.Collections.Generic.List<System.Reflection.Assembly>
                 {
-                    typeof(CarouselView.FormsPlugin.UWP.CarouselViewRenderer).Assembly
+                    typeof(CarouselView.FormsPlugin.UWP.CarouselViewRenderer).Assembly,
+                    typeof(ImageCircle.Forms.Plugin.UWP.ImageCircleRenderer).Assembly
                 };
 
                 Xamarin.Forms.Forms.Init(e, assembliesToInclude);
