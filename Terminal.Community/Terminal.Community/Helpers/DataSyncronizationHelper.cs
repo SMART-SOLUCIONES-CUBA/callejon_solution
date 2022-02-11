@@ -161,7 +161,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Helpers
         {
             var protocol = "http";
             //var host = "192.168.1.100";
-            var host = "cartelera.elcallejon.net";
+            var host = "sgc.elcallejon.net";
             //var host = "192.168.200.201";
             var port = 80;
 

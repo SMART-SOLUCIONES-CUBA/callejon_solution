@@ -14,6 +14,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Helpers\Facade\**" />
+    <EmbeddedResource Remove="Helpers\Facade\**" />
+    <None Remove="Helpers\Facade\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\Fonts\HelveticaLTStdBoldCond.otf" />
     <None Remove="Resources\Fonts\HelveticaLTStdCond.otf" />
     <None Remove="Resources\Fonts\HelveticaLTStdUltraComp.otf" />
@@ -147,7 +153,6 @@
   <ItemGroup>
     <Folder Include="Effects\" />
     <Folder Include="Delegates\" />
-    <Folder Include="Helpers\Facade\" />
     <Folder Include="Models\Data\" />
     <Folder Include="Factories\" />
     <Folder Include="Models\Page\Popup\" />

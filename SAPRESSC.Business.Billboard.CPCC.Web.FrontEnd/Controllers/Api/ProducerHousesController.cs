@@ -24,7 +24,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
                 Name = entity.Name,
                 BornDate = entity.BornDate,
                 About = entity.About,
-                Image = new Cinema.Web.Api.Common.Models.ImageModel { Id = entity.Image.Id, ContentType = entity.Image.ContentType }
+                Image = entity.Image != null ? new Cinema.Web.Api.Common.Models.ImageModel { Id = entity.Image.Id, ContentType = entity.Image.ContentType } : null
             }).ToArray());
         }
 
@@ -38,7 +38,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
                 Name = entity.Name,
                 BornDate = entity.BornDate,
                 About = entity.About,
-                Image = new Cinema.Web.Api.Common.Models.ImageModel { Id = entity.Image.Id, ContentType = entity.Image.ContentType }
+                Image = entity.Image != null ? new Cinema.Web.Api.Common.Models.ImageModel { Id = entity.Image.Id, ContentType = entity.Image.ContentType } : null
             }).Take(limit).ToArray());
         }
     }

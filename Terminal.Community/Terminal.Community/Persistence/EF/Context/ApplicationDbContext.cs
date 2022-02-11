@@ -16,8 +16,10 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Persistence.EF.Context
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
-
         public DbSet<Clasification> Clasifications { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Collection> Collections { get; set; }
         public DbSet<Personality> Personalities { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Award> Awards { get; set; }
@@ -65,6 +67,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Persistence.EF.Context
         public DbSet<FixScreenClientConfiguration> FixScreenClientConfigurations { get; set; }
         public DbSet<EventPersonalityBridge> EventPersonalityBridges { get; set; }
         public DbSet<CountryCoProductionBridge> CountryCoProductionBridges { get; set; }
+        public DbSet<CollectionGenreBridge> CollectionGenreBridges { get; set; }
+        public DbSet<CollectionTagBridge> CollectionTagBridges { get; set; }
+        public DbSet<CollectionProducerHouseBridge> CollectionProducerHouseBridges { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<EventComment> EventComments { get; set; }
         public DbSet<ProductionComment> ProductionComments { get; set; }
@@ -73,12 +78,26 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Persistence.EF.Context
         public DbSet<ProductionCommentDelation> ProductionCommentDelations { get; set; }
         public DbSet<PersonalityCommentDelation> PersonalityCommentDelations { get; set; }
         public DbSet<PortableDbDownload> PortableDbDownloads { get; set; }
+        public DbSet<CollectionCheckout> CollectionCheckouts { get; set; }
+        public DbSet<ProductionCheckout> ProductionCheckouts { get; set; }
+        public DbSet<FetchOrder> FetchOrders { get; set; }
+        public DbSet<FetchOrderCollectionBridge> FetchOrderCollectionBridges { get; set; }
+        public DbSet<FetchOrderProductionBridge> FetchOrderProductionBridges { get; set; }
+        public DbSet<Search> Searches { get; set; }
+        public DbSet<SearchGenreBridge> SearchGenreBridges { get; set; }
+        public DbSet<SearchPersonalityBridge> SearchPersonalityBridges { get; set; }
+        public DbSet<SearchTagBridge> SearchTagBridges { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
+        public DbSet<SubscriptionGenreBridge> SubscriptionGenreBridges { get; set; }
+        public DbSet<SubscriptionProducerHouseBridge> SubscriptionProducerHouses { get; set; }
+        public DbSet<SubscriptionTagBridge> SubscriptionTagBridges { get; set; }
+        public DbSet<Advertisement> Advertisements { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            var entityTypeConfigurators = new System.Collections.Generic.List<SmartSolucionesCuba.SAPRESSC.Core.Persistence.Configurations.IEntityTypeConfigurator>
+            var entityTypeConfigurators = new System.Collections.Generic.List<SAPRESSC.Core.Persistence.Configurations.IEntityTypeConfigurator>
             {
                 new ImageEntityTypeConfigurator(),
                 new ThumbnailEntityTypeConfigurator(),
@@ -109,17 +128,38 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Persistence.EF.Context
                 new PostalContactItemEntityTypeConfigurator(),
                 new SocialContactItemEntityTypeConfigurator(),
                 new WebSiteContactItemEntityTypeConfigurator(),
+                new AdvertisementEntityTypeConfigurator(),
                 new AwardEntityTypeConfigurator(),
                 new AwardWinningEntityTypeConfigurator(),
+                new CategoryEntityTypeConfigurator(),
                 new ClasificationEntityTypeConfigurator(),
+                new CollectionCheckoutEntityTypeConfigurator(),
+                new CollectionEntityTypeConfigurator(),
+                new CollectionGenreBridgeEntityTypeConfigurator(),
+                new CollectionProducerHouseBridgeEntityTypeConfigurator(),
+                new CollectionTagBridgeEntityTypeConfigurator(),
+                new FetchOrderCollectionBridgeEntityTypeConfigurator(),
+                new FetchOrderEntityTypeConfigurator(),
+                new FetchOrderProductionBridgeEntityTypeConfigurator(),
                 new GenreEntityTypeConfigurator(),
                 new LanguageEntityTypeConfigurator(),
                 new ParticipationEntityTypeConfigurator(),
                 new PresentationEntityTypeConfigurator(),
                 new ProducerHouseProductionBridgeEntityTypeConfigurator(),
+                new ProductionCheckoutEntityTypeConfigurator(),
                 new ProductionEntityTypeConfigurator(),
                 new ProductionGenreBridgeEntityTypeConfigurator(),
+                new ProductionTagBridgeEntityTypeConfigurator(),
                 new RoomEntityTypeConfigurator(),
+                new SearchEntityTypeConfigurator(),
+                new SearchGenreBridgeEntityTypeConfigurator(),
+                new SearchPersonalityBridgeEntityTypeConfigurator(),
+                new SearchTagBridgeEntityTypeConfigurator(),
+                new SubscriptionEntityTypeConfigurator(),
+                new SubscriptionGenreBridgeEntityTypeConfigurator(),
+                new SubscriptionProducerHouseBridgeEntityTypeConfigurator(),
+                new SubscriptionTagBridgeEntityTypeConfigurator(),
+                new TagEntityTypeConfigurator(),
                 new AdviseEntityTypeConfigurator(),
                 new EventEntityTypeConfigurator(),
                 new EventPersonalityBridgeEntityTypeConfigurator(),

@@ -74,9 +74,12 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Controllers
                         .Include(p => p.Production).ThenInclude(p => p.Country)
                         .Include(p => p.Production).ThenInclude(p => p.Language)
                         .Include(p => p.Production).ThenInclude(p => p.PosterImage)
-                        .Where(e => e.Date.Date == pivotDate && e.Enabled).OrderBy(e => e.Date);
+                        .Include(p => p.Production).ThenInclude(p => p.PlacardImage)
+                        .Include(p => p.Production).ThenInclude(p => p.Category)
+                        .Include(p => p.Production).ThenInclude(p => p.Collection)
+                        .Where(e => e.Date.Date == pivotDate && e.Enabled).OrderBy(e => e.Date).ToArray();
 
-                    if (planedPresentations.Count() > 0)
+                    if (planedPresentations.Length > 0)
                     {
                         foreach (var presentation in planedPresentations)
                         {
@@ -88,6 +91,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Controllers
 
                             portableDbContext.Participations.AddRange(relatedParticipations);
 
+                            // TODO Remove block if not required!!
                             //foreach (var participation in relatedParticipations)
                             //{
                             //    var personalityComments = dbContext.PersonalityComments.Where(entity => !entity.Banish && entity.Personality.Id == participation.Personality.Id);
@@ -119,6 +123,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Controllers
 
                             portableDbContext.CountryCoProductionBridges.AddRange(relatedCoCountries);
 
+                            // TODO Remove block if not required!!
                             //var relatedProductionComments = dbContext.ProductionComments.Where(entity => !entity.Banish && entity.Production.Id == presentation.Production.Id)
                             //    .Include(entity => entity.Client).ThenInclude(entity => entity.Image)
                             //    .Include(entity => entity.Delations).ThenInclude(entity => entity.Client).ThenInclude(entity => entity.Image)
@@ -146,6 +151,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Controllers
 
                     portableDbContext.EventPersonalityBridges.AddRange(relatedPersonalityBridges);
 
+                    // TODO Remove block if not required!!
                     //foreach (var personalityBridge in relatedPersonalityBridges)
                     //{
                     //    var personalityComments = dbContext.PersonalityComments.Where(entity => !entity.Banish && entity.Personality.Id == personalityBridge.PersonalityId);
@@ -153,6 +159,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Controllers
                     //    portableDbContext.PersonalityComments.AddRange(personalityComments);
                     //}
 
+                    // TODO Remove block if not required!!
                     //var relatedEventComments = dbContext.EventComments.Where(entity => !entity.Banish && entity.Event.Id == @event.Id)
                     //            .Include(entity => entity.Client).ThenInclude(entity => entity.Image)
                     //            .Include(entity => entity.Delations).ThenInclude(entity => entity.Client).ThenInclude(entity => entity.Image)
@@ -199,10 +206,6 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Controllers
 
         public IActionResult Portable()
         {
-            var today = System.DateTime.Today;
-
-            var tomorrow = today.AddDays(1);
-
             var targetDate = System.DateTime.MinValue;
 
             var workDirectoryInfo = env.WebRootFileProvider.GetFileInfo(WORK_DIRECTORY);
@@ -221,7 +224,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Controllers
                     {
                         var portabledbDates = portabledbFiles.Select(item => new System.DateTime(long.Parse(Path.GetFileName(item)))).ToArray();
 
-                        var selectablesPortabledbDates = portabledbDates.Where(current => today <= current && current <= tomorrow).OrderByDescending(current => current.Ticks).ToArray();
+                        var selectablesPortabledbDates = portabledbDates.OrderByDescending(current => current.Ticks).Take(1).ToArray();
 
                         targetDate = selectablesPortabledbDates.FirstOrDefault();
                     }

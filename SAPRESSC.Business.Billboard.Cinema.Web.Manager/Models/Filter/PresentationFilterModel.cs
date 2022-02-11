@@ -8,7 +8,7 @@
         {
             if (ProductionTitle == null || ProductionTitle == string.Empty) return null;
 
-            return entity => entity.Production.Title.Contains(ProductionTitle) || entity.Production.LocalizedTitle.Contains(ProductionTitle);
+            return entity => entity.Production.Title.Contains(ProductionTitle.Trim()) || entity.Production.LocalizedTitle.Contains(ProductionTitle.Trim());
         }
     }
 }

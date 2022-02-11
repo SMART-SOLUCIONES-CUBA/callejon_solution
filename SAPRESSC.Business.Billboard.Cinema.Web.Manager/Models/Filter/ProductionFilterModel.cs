@@ -34,7 +34,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Mod
 
             if (!string.IsNullOrEmpty(Title) && !string.IsNullOrWhiteSpace(Title))
             {
-                expression = entity => entity.Title.Contains(Title) || entity.LocalizedTitle.Contains(Title);
+                expression = entity => entity.Title.Contains(Title.Trim()) || entity.LocalizedTitle.Contains(Title.Trim());
             }
 
             if (!string.IsNullOrEmpty(Year) && !string.IsNullOrWhiteSpace(Year))

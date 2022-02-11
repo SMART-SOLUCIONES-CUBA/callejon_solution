@@ -18,7 +18,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
-    <PackageCertificateThumbprint>4BE9C1E16BB4139C372F61C10F90562307FEA5D4</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>A0991B70F6E70694BA0F8CAC95AA3C9FDAC8499D</PackageCertificateThumbprint>
     <PackageCertificateKeyFile />
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
@@ -214,6 +214,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="SSCSelfSignedDeveloperCertificate.pfx" />
     <None Include="Terminal.NMMediaStore.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
