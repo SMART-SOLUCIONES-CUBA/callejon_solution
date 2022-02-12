@@ -33,7 +33,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Desktop.Support
         {
             System.Windows.Threading.Dispatcher.CurrentDispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, new Action(() =>
             {
-                Windows.UI.Xaml.Application.Current.Exit();
+                mainNotifyIcon.ContextMenuStrip = notificationIconContextMenuStrip;
+
+                Environment.Exit(0);
             }));
         }
 
@@ -46,6 +48,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Desktop.Support
 
             switch (command)
             {
+                case Common.Providers.ConstantProvider.COMMAND_EXIT_ENVIRONMENT_REQUEST:
+                    Environment.Exit(0);
+
+                    break;
+
                 case Common.Providers.ConstantProvider.COMMAND_DRIVEINFO_REQUEST:
                     var driveInfo = new System.IO.DriveInfo(args);
 

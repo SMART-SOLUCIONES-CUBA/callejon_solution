@@ -96,10 +96,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Managers
                 TargetStorageDevicePath = targetStorageDeviceRootPath
             };
 
-            var supportInteropServiceRequest = new Windows.Foundation.Collections.ValueSet();
-
-            supportInteropServiceRequest.Add(Common.Providers.ConstantProvider.COMMAND_REQUEST_VALUESET_KEY, Common.Providers.ConstantProvider.COMMAND_HANDLEFETCHORDER_REQUEST);
-            supportInteropServiceRequest.Add(Common.Providers.ConstantProvider.ARGUMENT_MODEL_VALUESET_KEY, Newtonsoft.Json.JsonConvert.SerializeObject(currentFetchOrder));
+            var supportInteropServiceRequest = new Windows.Foundation.Collections.ValueSet
+            {
+                { Common.Providers.ConstantProvider.COMMAND_REQUEST_VALUESET_KEY, Common.Providers.ConstantProvider.COMMAND_HANDLEFETCHORDER_REQUEST },
+                { Common.Providers.ConstantProvider.ARGUMENT_MODEL_VALUESET_KEY, Newtonsoft.Json.JsonConvert.SerializeObject(currentFetchOrder) }
+            };
 
             _ = await App.Connection.SendMessageAsync(supportInteropServiceRequest);
         }

@@ -10,7 +10,7 @@
   <Identity
     Name="SmartSolucionesCuba.CPCC.MediatecaNuevoMundo"
     Publisher="CN=SMART SOLUCIONES CUBA (SSC)"
-    Version="0.9.0.0" />
+    Version="0.9.3.0" />
 
   <Properties>
     <DisplayName>Mediateca Nuevo Mundo</DisplayName>

@@ -171,7 +171,7 @@
       <Version>12.0.2</Version>
     </PackageReference>
     <PackageReference Include="Novell.Directory.Ldap.NETStandard">
-      <Version>3.6.0</Version>
+      <Version>3.3.1</Version>
     </PackageReference>
     <PackageReference Include="SSCXFToolKit.Presentation">
       <Version>0.4.10-alpha</Version>
@@ -215,7 +215,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SSCSelfSignedDeveloperCertificate.pfx" />
-    <None Include="Terminal.NMMediaStore.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <SDKReference Include="WindowsDesktop, Version=10.0.18362.0">

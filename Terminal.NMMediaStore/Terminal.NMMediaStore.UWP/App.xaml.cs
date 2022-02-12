@@ -99,7 +99,19 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP
             // Ensure the current window is active
             Window.Current.Activate();
 
+            Window.Current.Closed += Window_Closed;
+
             displayRequest.RequestActive();
+        }
+
+        private async void Window_Closed(object sender, Windows.UI.Core.CoreWindowEventArgs e)
+        {
+            var supportInteropServiceRequest = new Windows.Foundation.Collections.ValueSet
+            {
+                { Common.Providers.ConstantProvider.COMMAND_REQUEST_VALUESET_KEY, Common.Providers.ConstantProvider.COMMAND_EXIT_ENVIRONMENT_REQUEST }
+            };
+
+            await Connection.SendMessageAsync(supportInteropServiceRequest);
         }
 
         /// <summary>
