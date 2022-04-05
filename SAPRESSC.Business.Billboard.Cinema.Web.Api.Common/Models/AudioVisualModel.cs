@@ -1,4 +1,6 @@
-﻿namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models
+﻿using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations;
+
+namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models
 {
     public class AudioVisualModel : ProductionModel
     {
@@ -10,7 +12,7 @@
 
         public string Format { get; set; }
 
-        public Enumerations.AudioVisualQuality Quality { get; set; }
+        public AudioVisualQuality Quality { get; set; }
 
         public bool HasSubtitle { get; set; }
 

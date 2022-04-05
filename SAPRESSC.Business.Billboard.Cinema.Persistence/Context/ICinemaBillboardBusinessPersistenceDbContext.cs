@@ -50,6 +50,8 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Con
         DbSet<CollectionCheckout> CollectionCheckouts { get; set; }
         
         DbSet<ProductionCheckout> ProductionCheckouts { get; set; }
+
+        DbSet<ProductionAudioVisual> ProductionAudioVisuals { get; set; }
         
         DbSet<FetchOrder> FetchOrders { get; set; }
         

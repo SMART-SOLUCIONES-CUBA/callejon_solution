@@ -207,15 +207,38 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
                     SerializedContext = searchModel?.Id.ToString()
                 };
 
+                var updateRequiredEntities = new System.Collections.Generic.List<Production>();
+
                 foreach (var entity in entities)
                 {
                     try
                     {
+                        var updateWillRequired = entity.AudioVisual == null;
+
                         paginationModel.List.Add(await EntityToModelAsync(entity));
+
+                        if (updateWillRequired && entity.AudioVisual != null)
+                        {
+                            updateRequiredEntities.Add(entity);
+                        }
                     }
                     catch (System.Exception e)
                     {
                         logger.LogWarning(e, "XXXXXXXXXXXXXXXXXXXXX La entidad Production con el Id \"{0}\" y el Nombre \"{1}\" fue omitida por producirse un error en su procesazamiento.", entity.Id, entity.Title);
+                    }
+                }
+
+                if (updateRequiredEntities.Count > 0)
+                {
+                    var counter = 1;
+
+                    var updateRequiredEntitiesCount = updateRequiredEntities.Count;
+
+                    foreach (var item in updateRequiredEntities)
+                    {
+                        productionRepository.Update(item, "system", counter == updateRequiredEntitiesCount);
+
+                        counter++;
                     }
                 }
             }
@@ -376,58 +399,71 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
                 Category = category            
             };
 
-            var avFolderPath = System.IO.Path.Combine(mediaStoreOptions.Value.AudioVisualsPath, category.StorageRelativePath, model.Slug);
-
-            logger.LogInformation("XXXXXXXXXXXXXXXXXXXXX avFolderPath: {0}", avFolderPath);
-
-            var fileNames = System.IO.Directory.EnumerateFiles(avFolderPath, string.Format("{0}.*", model.Slug));
-
-            logger.LogInformation("XXXXXXXXXXXXXXXXXXXXX fileNames: {0}", string.Join(", ", fileNames));
-
-            var avFileName = fileNames.First(item => mediaStoreOptions.Value.SupportVideoFileExtensions.Any(ext => item.EndsWith(ext, true, System.Globalization.CultureInfo.InvariantCulture)));
-
-            var subtitleFileName = fileNames.FirstOrDefault(item => mediaStoreOptions.Value.SupportSubtitleFileExtensions.Any(ext => item.EndsWith(ext, true, System.Globalization.CultureInfo.InvariantCulture)));
-
-            var avFileInfo = new System.IO.FileInfo(avFileName);
-
-            model.HasSubtitle = subtitleFileName != null;
-            model.FileSize = avFileInfo.Length;
-            model.Format = avFileInfo.Extension.Substring(1).ToUpper();
-
-            var getMetadataTask = new MediaToolkit.Tasks.FfTaskGetMetadata(avFileName);
-
-            var getMetadataResult = await mediaToolkitService.ExecuteAsync(getMetadataTask);
-
-            var videoMediaStream = getMetadataResult.Metadata.Streams.First(stream => stream.CodecType == "video");
-
-            model.Resolution = string.Format("{0}x{1}", videoMediaStream.Width, videoMediaStream.Height);
-
-            model.Quality = Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.LD;
-
-            if (videoMediaStream.Height >= 360)
+            if (entity.AudioVisual == null)
             {
-                model.Quality = Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.SD;
+                var avFolderPath = System.IO.Path.Combine(mediaStoreOptions.Value.AudioVisualsPath, category.StorageRelativePath, model.Slug);
+
+                logger.LogInformation("XXXXXXXXXXXXXXXXXXXXX avFolderPath: {0}", avFolderPath);
+
+                var fileNames = System.IO.Directory.EnumerateFiles(avFolderPath, string.Format("{0}.*", model.Slug));
+
+                logger.LogInformation("XXXXXXXXXXXXXXXXXXXXX fileNames: {0}", string.Join(", ", fileNames));
+
+                var avFileName = fileNames.First(item => mediaStoreOptions.Value.SupportVideoFileExtensions.Any(ext => item.EndsWith(ext, true, System.Globalization.CultureInfo.InvariantCulture)));
+
+                var subtitleFileName = fileNames.FirstOrDefault(item => mediaStoreOptions.Value.SupportSubtitleFileExtensions.Any(ext => item.EndsWith(ext, true, System.Globalization.CultureInfo.InvariantCulture)));
+
+                var avFileInfo = new System.IO.FileInfo(avFileName);
+
+                var getMetadataTask = new MediaToolkit.Tasks.FfTaskGetMetadata(avFileName);
+
+                var getMetadataResult = await mediaToolkitService.ExecuteAsync(getMetadataTask);
+
+                var videoMediaStream = getMetadataResult.Metadata.Streams.First(stream => stream.CodecType == "video");
+
+                entity.AudioVisual = new ProductionAudioVisual
+                {
+                    ProductionId = entity.Id,
+                    Production = entity,
+                    HasSubtitle = subtitleFileName != null,
+                    FileSize = avFileInfo.Length,
+                    Format = avFileInfo.Extension.Substring(1).ToUpper(),
+                    Resolution = string.Format("{0}x{1}", videoMediaStream.Width, videoMediaStream.Height)
+                };
+
+                entity.AudioVisual.Quality = AudioVisualQuality.LD;
+
+                if (videoMediaStream.Height >= 360)
+                {
+                    entity.AudioVisual.Quality = AudioVisualQuality.SD;
+                }
+
+                if (videoMediaStream.Width >= 1280 || videoMediaStream.Height >= 720)
+                {
+                    entity.AudioVisual.Quality = AudioVisualQuality.HD;
+                }
+
+                if (videoMediaStream.Width >= 1920 || videoMediaStream.Height >= 1080)
+                {
+                    entity.AudioVisual.Quality = AudioVisualQuality.FHD;
+                }
+
+                if (videoMediaStream.Height >= 2160)
+                {
+                    entity.AudioVisual.Quality = AudioVisualQuality.UHD;
+                }
+
+                if (videoMediaStream.Height >= 4320)
+                {
+                    entity.AudioVisual.Quality = AudioVisualQuality.K8;
+                }
             }
 
-            if (videoMediaStream.Width >= 1280 || videoMediaStream.Height >= 720)
-            {
-                model.Quality = Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.HD;
-            }
-
-            if (videoMediaStream.Width >= 1920 || videoMediaStream.Height >= 1080)
-            {
-                model.Quality = Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.FHD;
-            }
-
-            if (videoMediaStream.Height >= 2160)
-            {
-                model.Quality = Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.UHD;
-            }
-
-            if (videoMediaStream.Height >= 4320)
-            {
-                model.Quality = Cinema.Web.Api.Common.Enumerations.AudioVisualQuality.K8;
-            }
+            model.HasSubtitle = entity.AudioVisual.HasSubtitle;
+            model.FileSize = entity.AudioVisual.FileSize;
+            model.Format = entity.AudioVisual.Format;
+            model.Resolution = entity.AudioVisual.Resolution;
+            model.Quality = entity.AudioVisual.Quality;
 
             return model;
         }

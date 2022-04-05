@@ -1,4 +1,4 @@
-﻿namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Enumerations
+﻿namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Enumerations
 {
     public enum AudioVisualQuality
     {

@@ -37,6 +37,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common
                 new CollectionProducerHouseBridgeEntityTypeConfigurator(),
                 new CollectionTagBridgeEntityTypeConfigurator(),
                 new ProductionCheckoutEntityTypeConfigurator(),
+                new ProductionAudioVisualEntityTypeConfigurator(),
                 new CollectionCheckoutEntityTypeConfigurator(),
                 new FetchOrderEntityTypeConfigurator(),
                 new FetchOrderProductionBridgeEntityTypeConfigurator(),

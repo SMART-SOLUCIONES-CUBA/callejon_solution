@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.2;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <AssemblyName>SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Api.Client</AssemblyName>
     <RootNamespace>SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Api.Client</RootNamespace>
     <PackageId>SAPRESSC.Business.Billboard.Cinema.Web.Api.Client</PackageId>

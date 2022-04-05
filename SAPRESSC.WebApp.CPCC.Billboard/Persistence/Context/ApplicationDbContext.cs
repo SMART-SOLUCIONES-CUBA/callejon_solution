@@ -75,6 +75,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Persistence.Context
         public DbSet<ProductionGenreBridge> ProductionGenreBridges { get; set; }
         public DbSet<ProductionTagBridge> ProductionTagBridges { get; set; }
         public DbSet<ProducerHouseProductionBridge> ProducerHouseProductionBridges { get; set; }
+        public DbSet<ProductionAudioVisual> ProductionAudioVisuals { get; set; }
         public DbSet<Cinema> Cinemas { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Presentation> Presentations { get; set; }

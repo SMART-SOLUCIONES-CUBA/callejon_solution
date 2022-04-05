@@ -69,6 +69,8 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Ent
         [Required, Range(1, 5)]
         public int Rate { get; set; }
 
+        public ProductionAudioVisual AudioVisual { get; set; }
+
         public Production()
         {
             ProductionGenreBridges = new List<ProductionGenreBridge>();
