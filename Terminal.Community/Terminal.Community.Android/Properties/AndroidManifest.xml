@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.smartsolucionescuba.cpcc.pcm.terminal.community" android:installLocation="auto" android:versionCode="1091003" android:versionName="1.9.10-rc3">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.smartsolucionescuba.cpcc.pcm.terminal.community" android:installLocation="auto" android:versionCode="1101003" android:versionName="1.10.10-rc3-nd8">
 	<uses-sdk android:minSdkVersion="19" android:targetSdkVersion="28" />
 	<application android:label="El Callejón" android:usesCleartextTraffic="true" android:icon="@mipmap/icon">
 		<activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" android:theme="@style/CropImageTheme" />

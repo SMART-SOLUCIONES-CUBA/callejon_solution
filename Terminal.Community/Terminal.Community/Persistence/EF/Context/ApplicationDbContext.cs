@@ -92,6 +92,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Persistence.EF.Context
         public DbSet<SubscriptionProducerHouseBridge> SubscriptionProducerHouses { get; set; }
         public DbSet<SubscriptionTagBridge> SubscriptionTagBridges { get; set; }
         public DbSet<Advertisement> Advertisements { get; set; }
+        public DbSet<ProductionAudioVisual> ProductionAudioVisuals { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -172,7 +173,8 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.Community.Persistence.EF.Context
                 new EventCommentDelationEntityTypeConfigurator(),
                 new PersonalityCommentDelationEntityTypeConfigurator(),
                 new ProducerHouseProductionBridgeEntityTypeConfigurator(),
-                new PortableDbDownloadEntityTypeConfigurator()
+                new PortableDbDownloadEntityTypeConfigurator(),
+                new ProductionAudioVisualEntityTypeConfigurator()
             };
 
             foreach (var configurator in entityTypeConfigurators)

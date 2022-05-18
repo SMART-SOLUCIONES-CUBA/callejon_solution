@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.FrontEnd.Extensions;
+using SmartSolucionesCuba.SAPRESSC.Core.Persistence.Repositories;
 using System.Linq;
 
 namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Controllers.Api
@@ -9,27 +10,27 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
     [Area("mediastore")]
     public class PersonalitiesController : Core.Web.Common.Controllers.BaseWebController
     {
-        private readonly Core.Persistence.Repositories.IEntityRepository<Cinema.Persistence.Entities.Personality, long> repository;
+        private readonly IEntityRepository<Cinema.Persistence.Entities.Personality, long> repository;
+        private readonly IEntityRepository<Cinema.Persistence.Entities.Participation, long> participationRepository;
 
-        public PersonalitiesController(Core.Persistence.Repositories.IEntityRepository<Cinema.Persistence.Entities.Personality, long> repository, Microsoft.Extensions.Localization.IStringLocalizer<PersonalitiesController> localizer, ILogger<PersonalitiesController> logger) : base(localizer, logger)
+        public PersonalitiesController(IEntityRepository<Cinema.Persistence.Entities.Participation, long> participationRepository, IEntityRepository<Cinema.Persistence.Entities.Personality, long> repository, Microsoft.Extensions.Localization.IStringLocalizer<PersonalitiesController> localizer, ILogger<PersonalitiesController> logger) : base(localizer, logger)
         {
             this.repository = repository;
+            this.participationRepository = participationRepository;
         }
 
         [HttpGet("relevant/actors")]
         [HttpGet("relevant/actors/{limit}")]
         public virtual IActionResult GetRelevantActors(int limit = 20)
         {
-            // TODO Apply expected filter !!
-            return Ok(repository.GetAll().Select(entity => entity.ToModel()).Take(limit).ToArray());
+            return Ok(participationRepository.FindBy(entity => entity.Role == Cinema.Persistence.Enumerations.ProductionRole.Interpretation).Distinct().Select(entity => entity.Personality.ToModel()).Take(limit).ToArray());
         }
 
         [HttpGet("relevant/directors")]
         [HttpGet("relevant/directors/{limit}")]
         public virtual IActionResult GetRelevantDirectors(int limit = 20)
         {
-            // TODO Apply expected filter !!
-            return Ok(repository.GetAll().Select(entity => entity.ToModel()).Take(limit).ToArray());
+            return Ok(participationRepository.FindBy(entity => entity.Role == Cinema.Persistence.Enumerations.ProductionRole.Direction).Distinct().Select(entity => entity.Personality.ToModel()).Take(limit).ToArray());
         }
 
         [HttpGet]
