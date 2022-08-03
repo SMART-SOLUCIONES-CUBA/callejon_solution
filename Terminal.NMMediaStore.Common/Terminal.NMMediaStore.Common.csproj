@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentFTP" Version="39.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SAPRESSC.Business.Billboard.Cinema.Web.Api.Common\SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.csproj" />
   </ItemGroup>
 
 </Project>

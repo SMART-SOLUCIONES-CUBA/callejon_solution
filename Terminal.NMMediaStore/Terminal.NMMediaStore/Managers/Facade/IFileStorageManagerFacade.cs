@@ -14,7 +14,7 @@
 
         bool IsFetchOrderHandling { get; }
 
-        void BindFetchOrderHandlingCallbacks(System.Action<string, System.TimeSpan, System.Exception> endCallback, System.Action<int, long, long, System.TimeSpan> progressCallaback);
+        void BindFetchOrderHandlingCallbacks(System.Action<string, System.TimeSpan, System.Exception> endCallback, System.Action<int, double, long, long, System.TimeSpan> progressCallaback);
 
         void UnbindFetchOderHandlingCallbacks();
 

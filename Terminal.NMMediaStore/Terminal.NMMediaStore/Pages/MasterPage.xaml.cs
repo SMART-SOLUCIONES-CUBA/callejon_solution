@@ -260,17 +260,17 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             });
         }
 
-        private void FetchOrderDownloadRequestProgress_Callback(int index, long transferProgress, long transferLength, System.TimeSpan elapsedTime)
+        private void FetchOrderDownloadRequestProgress_Callback(int index, double progress, long transferLength, long transferedByteCount, System.TimeSpan elapsedTime)
         {
             Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
             {
-                BindingContextModel.BusyProgressMessage = "Descargando ...";
+                BindingContextModel.MasterBindingContext.BusyProgressMessage = "Descargando ...";
 
-                BindingContextModel.DownloadingIndex = index;
-                BindingContextModel.Time = elapsedTime;
-                BindingContextModel.TransferProgress = transferProgress;
-                BindingContextModel.TransferLength = transferLength;
-                BindingContextModel.ProgressPercent = decimal.Round(new decimal(transferProgress) / new decimal(transferLength), 2);
+                BindingContextModel.MasterBindingContext.DownloadingIndex = index + 1;
+                BindingContextModel.MasterBindingContext.Time = elapsedTime;
+                BindingContextModel.MasterBindingContext.TransferProgress = transferedByteCount;
+                BindingContextModel.MasterBindingContext.TransferLength = transferLength;
+                BindingContextModel.MasterBindingContext.ProgressPercent = decimal.Round((decimal)(progress / 100), 2);
             });
         }
     }

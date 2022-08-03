@@ -10,10 +10,10 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Managers
         private System.Diagnostics.Stopwatch stopwatch;
         private Models.StorageModel target;
         private Windows.Devices.Enumeration.DeviceWatcher targetWatcher;
-        private Supporter.Api.Common.Models.FetchOrderDownloadModel currentFetchOrder;
+        private Common.Models.FetchOrderDownloadModel currentFetchOrder;
 
         private Action<string, TimeSpan, Exception> fetchOrderHandlingEndCallbackAction;
-        private Action<int, long, long, TimeSpan> fetchOrderHandlingProgressCallbackAction;
+        private Action<int, double, long, long, TimeSpan> fetchOrderHandlingProgressCallbackAction;
         private Action targeStorageRemovedCallbackAction;
 
         public FileStorageManager()
@@ -47,8 +47,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Managers
                 case Common.Providers.ConstantProvider.COMMAND_NOTIFYFETCHORDERHANDLINGPROGRESS_REQUEST:
                     fetchOrderHandlingProgressCallbackAction?.Invoke(
                         (int)eventArgs.Request.Message[Common.Providers.ConstantProvider.ARGUMENT_FETCHORDERHANDLINGPROGRESS_INDEX_VALUESET_KEY], 
-                        (long)eventArgs.Request.Message[Common.Providers.ConstantProvider.ARGUMENT_FETCHORDERHANDLINGPROGRESS_TRANSFER_PROGRESSED_VALUESET_KEY], 
+                        (double)eventArgs.Request.Message[Common.Providers.ConstantProvider.ARGUMENT_FETCHORDERHANDLINGPROGRESS_TRANSFER_PROGRESS_VALUESET_KEY],
                         (long)eventArgs.Request.Message[Common.Providers.ConstantProvider.ARGUMENT_FETCHORDERHANDLINGPROGRESS_TRANSFER_LENGHT_VALUESET_KEY],
+                        (long)eventArgs.Request.Message[Common.Providers.ConstantProvider.ARGUMENT_FETCHORDERHANDLINGPROGRESS_TRANSFER_TRANSFERED_VALUESET_KEY],
                         stopwatch.Elapsed);
 
                     break;
@@ -72,7 +73,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Managers
 
         public bool IsFetchOrderHandling { get => currentFetchOrder != null; }
 
-        public void BindFetchOrderHandlingCallbacks(Action<string, TimeSpan, Exception> endCallback, Action<int, long, long, TimeSpan> progressCallaback)
+        public void BindFetchOrderHandlingCallbacks(Action<string, TimeSpan, Exception> endCallback, Action<int, double, long, long, TimeSpan> progressCallaback)
         {
             fetchOrderHandlingEndCallbackAction = endCallback;
             fetchOrderHandlingProgressCallbackAction = progressCallaback;
@@ -90,7 +91,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Managers
 
             stopwatch.Start();
 
-            currentFetchOrder = new Supporter.Api.Common.Models.FetchOrderDownloadModel
+            currentFetchOrder = new Common.Models.FetchOrderDownloadModel
             {
                 FetchOrderId = fetchOrderId,
                 TargetStorageDevicePath = targetStorageDeviceRootPath
