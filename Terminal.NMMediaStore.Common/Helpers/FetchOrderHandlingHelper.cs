@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Common.Helpers
+﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Common.Helpers
 {
     public static class FetchOrderHandlingHelper
     {
