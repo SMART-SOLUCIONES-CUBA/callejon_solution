@@ -200,14 +200,6 @@
       <Project>{a32f7c5c-bd48-4ba1-8c8c-8378272ea735}</Project>
       <Name>Terminal.NMMediaStore.UWP.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Terminal.NMMediaStore.UWP.Supporter.Api.Common\Terminal.NMMediaStore.UWP.Supporter.Api.Common.csproj">
-      <Project>{3d4bdc72-c6b9-4b63-9a24-65ce7c588cf8}</Project>
-      <Name>Terminal.NMMediaStore.UWP.Supporter.Api.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Terminal.NMMediaStore.UWP.Supporter.SignalR.Connect\Terminal.NMMediaStore.UWP.Supporter.SignalR.Connect.csproj">
-      <Project>{EC666ECA-CF24-4361-8E9D-73B050343703}</Project>
-      <Name>Terminal.NMMediaStore.UWP.Supporter.SignalR.Connect</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Terminal.NMMediaStore\Terminal.NMMediaStore.csproj">
       <Project>{C04D6F06-3676-441F-94AD-ABEBACEE66A7}</Project>
       <Name>Terminal.NMMediaStore</Name>
