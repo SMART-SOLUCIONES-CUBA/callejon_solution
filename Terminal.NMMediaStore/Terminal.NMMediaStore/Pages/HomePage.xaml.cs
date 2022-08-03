@@ -93,6 +93,12 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                     {
                         try
                         {
+                            // TODO Check line position
+                            if (BindingContextModel == null)
+                            {
+                                return false;
+                            }
+
                             var nextPosition = AdvertisementsCarouselView.Position + 1;
 
                             AdvertisementsCarouselView.Position = nextPosition >= BindingContextModel.Advertisements.Length ? 0 : nextPosition;

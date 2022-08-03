@@ -22,7 +22,6 @@
   <ItemGroup>
     <ProjectReference Include="..\SAPRESSC.Business.Billboard.CPCC.Web.Api.Common\SAPRESSC.Business.Billboard.CPCC.Web.Api.Common.csproj" />
     <ProjectReference Include="..\Terminal.NMMediaStore.Common\Terminal.NMMediaStore.Common.csproj" />
-    <ProjectReference Include="..\Terminal.NMMediaStore.UWP.Supporter.SignalR.Connect\Terminal.NMMediaStore.UWP.Supporter.SignalR.Connect.csproj" />
   </ItemGroup>
 
 </Project>
