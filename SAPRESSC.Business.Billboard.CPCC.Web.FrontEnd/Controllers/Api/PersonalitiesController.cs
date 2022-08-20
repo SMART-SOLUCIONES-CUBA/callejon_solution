@@ -23,14 +23,14 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         [HttpGet("relevant/actors/{limit}")]
         public virtual IActionResult GetRelevantActors(int limit = 20)
         {
-            return Ok(participationRepository.FindBy(entity => entity.Role == Cinema.Persistence.Enumerations.ProductionRole.Interpretation).Distinct().Select(entity => entity.Personality.ToModel()).Take(limit).ToArray());
+            return Ok(participationRepository.FindBy(entity => entity.Role == Cinema.Persistence.Enumerations.ProductionRole.Interpretation).Select(entity => entity.Personality.ToModel()).Take(limit).ToArray());
         }
 
         [HttpGet("relevant/directors")]
         [HttpGet("relevant/directors/{limit}")]
         public virtual IActionResult GetRelevantDirectors(int limit = 20)
         {
-            return Ok(participationRepository.FindBy(entity => entity.Role == Cinema.Persistence.Enumerations.ProductionRole.Direction).Distinct().Select(entity => entity.Personality.ToModel()).Take(limit).ToArray());
+            return Ok(participationRepository.FindBy(entity => entity.Role == Cinema.Persistence.Enumerations.ProductionRole.Direction).Select(entity => entity.Personality.ToModel()).Take(limit).ToArray());
         }
 
         [HttpGet]

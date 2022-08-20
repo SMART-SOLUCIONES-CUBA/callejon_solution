@@ -56,9 +56,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                     BindingContextModel.HasMoreGenres = relevantGenres.Length > 10;
                     BindingContextModel.RelevantYears = relevantYears.Take(10).ToArray();
                     BindingContextModel.HasMoreYears = relevantYears.Length > 10;
-                    BindingContextModel.RelevantPerformancePersonalities = relevantPerformancePersonalities;
+                    BindingContextModel.RelevantPerformancePersonalities = relevantPerformancePersonalities.Distinct().ToArray();
                     BindingContextModel.HasMorePerformancePersonalities = relevantPerformancePersonalities.Length > 20; 
-                    BindingContextModel.RelevantDirectionPersonalities = relevantDirectionPersonalities;
+                    BindingContextModel.RelevantDirectionPersonalities = relevantDirectionPersonalities.Distinct().ToArray();
                     BindingContextModel.HasMoreDirectionPersonalities = relevantDirectionPersonalities.Length > 20;
 
                     BindingContextModel.IsBusy = false;

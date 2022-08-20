@@ -25,5 +25,23 @@
         {
             return FullName; 
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+
+            if (obj.GetType() != typeof(PersonalityModel)) return false;
+
+            return Id == (obj as PersonalityModel).Id;
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = -2083761535;
+
+            hashCode = hashCode * -1521134295 + Id.GetHashCode();
+
+            return hashCode;
+        }
     }
 }
