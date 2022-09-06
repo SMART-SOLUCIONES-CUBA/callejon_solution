@@ -428,10 +428,9 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
                     HasSubtitle = subtitleFileName != null,
                     FileSize = avFileInfo.Length,
                     Format = avFileInfo.Extension.Substring(1).ToUpper(),
-                    Resolution = string.Format("{0}x{1}", videoMediaStream.Width, videoMediaStream.Height)
+                    Resolution = string.Format("{0}x{1}", videoMediaStream.Width, videoMediaStream.Height),
+                    Quality = AudioVisualQuality.LD
                 };
-
-                entity.AudioVisual.Quality = AudioVisualQuality.LD;
 
                 if (videoMediaStream.Height >= 360)
                 {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.FrontEnd.Extensions;
 using SmartSolucionesCuba.SAPRESSC.Core.Persistence.Repositories;
@@ -23,14 +24,14 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
         [HttpGet("relevant/actors/{limit}")]
         public virtual IActionResult GetRelevantActors(int limit = 20)
         {
-            return Ok(participationRepository.FindBy(entity => entity.Role == Cinema.Persistence.Enumerations.ProductionRole.Interpretation).Select(entity => entity.Personality.ToModel()).Take(limit).ToArray());
+            return Ok(participationRepository.FindBy(entity => entity.Role == Cinema.Persistence.Enumerations.ProductionRole.Interpretation).Take(limit).ToArray().Select(entity => entity.Personality.ToModel()).ToArray());
         }
 
         [HttpGet("relevant/directors")]
         [HttpGet("relevant/directors/{limit}")]
         public virtual IActionResult GetRelevantDirectors(int limit = 20)
         {
-            return Ok(participationRepository.FindBy(entity => entity.Role == Cinema.Persistence.Enumerations.ProductionRole.Direction).Select(entity => entity.Personality.ToModel()).Take(limit).ToArray());
+            return Ok(participationRepository.FindBy(entity => entity.Role == Cinema.Persistence.Enumerations.ProductionRole.Direction).Take(limit).ToArray().Select(entity => entity.Personality.ToModel()).ToArray());
         }
 
         [HttpGet]

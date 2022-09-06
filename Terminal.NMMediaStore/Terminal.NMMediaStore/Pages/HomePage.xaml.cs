@@ -60,19 +60,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                     BindingContextModel.PopularAudioVisuals = popularAudioVisuals;
                 });
 
-                var lastAudioVisualsPagination = await audioVisualProvider.GetLastsAsync(1, 10);
-
-                var lastAudioVisuals = lastAudioVisualsPagination.List.Select(item => new Models.View.AudioVisualViewModel
-                {
-                    AudioVisual = item,
-                    IsMarkedForFetch = Xamarin.Forms.Application.Current.HasAudioVisualForFetch(item)
-                }).ToList();
-
-                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
-                {
-                    BindingContextModel.LastAudioVisuals = lastAudioVisuals;
-                });
-
                 var recomendedAudioVisualsPagination = await audioVisualProvider.GetRecomendedsAsync(1, 10);
 
                 var recomendedAudioVisuals = recomendedAudioVisualsPagination.List.Select(item => new Models.View.AudioVisualViewModel
@@ -84,6 +71,19 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
                     BindingContextModel.RecomendedAudioVisuals = recomendedAudioVisuals;
+                });
+
+                var lastAudioVisualsPagination = await audioVisualProvider.GetLastsAsync(1, 10);
+
+                var lastAudioVisuals = lastAudioVisualsPagination.List.Select(item => new Models.View.AudioVisualViewModel
+                {
+                    AudioVisual = item,
+                    IsMarkedForFetch = Xamarin.Forms.Application.Current.HasAudioVisualForFetch(item)
+                }).ToList();
+
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                {
+                    BindingContextModel.LastAudioVisuals = lastAudioVisuals;
 
                     BindingContextModel.IsBusy = false;
 

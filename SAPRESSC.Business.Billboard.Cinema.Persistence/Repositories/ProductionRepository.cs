@@ -27,5 +27,10 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Rep
                 .Include(entity => entity.FetchOrders)
                 .Include(entity => entity.AudioVisual);
         }
+
+        public override bool IsPagingOrderDescending()
+        {
+            return true;
+        }
     }
 }
