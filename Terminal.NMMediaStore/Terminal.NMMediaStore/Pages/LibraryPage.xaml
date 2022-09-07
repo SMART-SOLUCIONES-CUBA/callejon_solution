@@ -2,15 +2,12 @@
 <sscxftoolkitmvvmpages:ContentPage 
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mg="clr-namespace:MagicGradients;assembly=MagicGradients"
     xmlns:ffil="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:ic="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
     xmlns:sscxftoolkitmvvmpages="clr-namespace:SmartSolucionesCuba.XFToolKit.Mvvm.Pages;assembly=SmartSolucionesCuba.XFToolKit.Mvvm"
     xmlns:sscxftoolkitpresentationconverters="clr-namespace:SmartSolucionesCuba.XFToolKit.Presentation.Converters;assembly=SmartSolucionesCuba.XFToolKit.Presentation"
     xmlns:converters="clr-namespace:SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Converters"
-    mc:Ignorable="d"
     x:Class="SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages.LibraryPage"
     NavigationPage.HasNavigationBar="False"
     Style="{StaticResource BasePageStyle}">
@@ -317,7 +314,7 @@
                             Text="Actores"
                             TextColor="{StaticResource SecoundaryTextColor}"
                             FontSize="{StaticResource Header5FontSize}" />
-                        <Button 
+                        <!--<Button 
                             IsVisible="{Binding Path=HasMorePerformancePersonalities}"
                             Grid.Column="1" Grid.Row="0"
                             Padding="4,0" Margin="10,0"
@@ -325,7 +322,7 @@
                             Text="ver todos"
                             TextColor="{StaticResource PrimaryActionColor}"
                             FontSize="{StaticResource MiddleTextFontSize}"
-                            Clicked="AllPerformancePersonalitiesButton_Clicked" />
+                            Clicked="AllPerformancePersonalitiesButton_Clicked" />-->
                         <ScrollView 
                             Grid.ColumnSpan="2" Grid.Row="1"
                             Orientation="Horizontal">
@@ -390,7 +387,7 @@
                             Text="Directores"
                             TextColor="{StaticResource SecoundaryTextColor}"
                             FontSize="{StaticResource Header5FontSize}" />
-                        <Button 
+                        <!--<Button 
                             IsVisible="{Binding Path=HasMoreDirectionPersonalities}"
                             Grid.Column="1" Grid.Row="0"
                             Padding="4,0" Margin="10,0"
@@ -398,7 +395,7 @@
                             Text="ver todos"
                             TextColor="{StaticResource PrimaryActionColor}"
                             FontSize="{StaticResource MiddleTextFontSize}"
-                            Clicked="AllDirectionPersonalitiesButton_Clicked" />
+                            Clicked="AllDirectionPersonalitiesButton_Clicked" />-->
                         <ScrollView 
                             Grid.ColumnSpan="2" Grid.Row="1"
                             Orientation="Horizontal">
