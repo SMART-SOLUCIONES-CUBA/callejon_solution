@@ -56,7 +56,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Desktop.Support
                 case Common.Providers.ConstantProvider.COMMAND_DRIVEINFO_REQUEST:
                     var driveInfo = new System.IO.DriveInfo(args);
 
-                    var model = new Common.Models.DriveInfoModel
+                    var model = new NMMediaStore.Common.Models.DriveInfoModel
                     {
                         AvailableFreeSpace = driveInfo.AvailableFreeSpace,
                         DriveFormat = driveInfo.DriveFormat,
@@ -73,7 +73,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Desktop.Support
                     break;
 
                 case Common.Providers.ConstantProvider.COMMAND_HANDLEFETCHORDER_REQUEST:
-                    var arg = Newtonsoft.Json.JsonConvert.DeserializeObject<Common.Models.FetchOrderDownloadModel>(args);
+                    var arg = Newtonsoft.Json.JsonConvert.DeserializeObject<NMMediaStore.Common.Models.FetchOrderDownloadModel>(args);
 
                     var orderFolderName = DateTime.Now.ToString("dd-MM-yyyy HH-mm");
 

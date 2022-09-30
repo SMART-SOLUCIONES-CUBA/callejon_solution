@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Common.Models;
+using SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Models;
+using System;
 using Windows.ApplicationModel.AppService;
 
 [assembly: Xamarin.Forms.Dependency(typeof(SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Managers.FileStorageManager))]
@@ -8,9 +10,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Managers
     public class FileStorageManager : NMMediaStore.Managers.Facade.IFileStorageManagerFacade
     {
         private System.Diagnostics.Stopwatch stopwatch;
-        private Models.StorageModel target;
+        private StorageModel target;
         private Windows.Devices.Enumeration.DeviceWatcher targetWatcher;
-        private Common.Models.FetchOrderDownloadModel currentFetchOrder;
+        private FetchOrderDownloadModel currentFetchOrder;
 
         private Action<string, TimeSpan, Exception> fetchOrderHandlingEndCallbackAction;
         private Action<int, double, long, long, TimeSpan> fetchOrderHandlingProgressCallbackAction;
@@ -91,7 +93,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Managers
 
             stopwatch.Start();
 
-            currentFetchOrder = new Common.Models.FetchOrderDownloadModel
+            currentFetchOrder = new FetchOrderDownloadModel
             {
                 FetchOrderId = fetchOrderId,
                 TargetStorageDevicePath = targetStorageDeviceRootPath
@@ -108,51 +110,48 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Managers
 
         public void BindStorageTargetCallbacks(Action targeRemovedCallbackAction)
         {
-            this.targeStorageRemovedCallbackAction = targeRemovedCallbackAction;
+            targeStorageRemovedCallbackAction = targeRemovedCallbackAction;
         }
 
-        public async System.Threading.Tasks.Task<Models.StorageModel[]> GetAvailableStoragesAsync()
+        public async System.Threading.Tasks.Task<StorageModel[]> GetAvailableStoragesAsync()
         {
             var externalDevices = await Windows.Devices.Enumeration.DeviceInformation.FindAllAsync(Windows.Devices.Portable.StorageDevice.GetDeviceSelector());
 
-            var result = new System.Collections.Generic.List<Models.StorageModel>();
+            var result = new System.Collections.Generic.List<StorageModel>();
 
-            using (var httpClient = new System.Net.Http.HttpClient())
+            foreach (var externalDevice in externalDevices)
             {
-                foreach (var externalDevice in externalDevices)
+                try
                 {
-                    try
+                    var storageDevice = Windows.Devices.Portable.StorageDevice.FromId(externalDevice.Id);
+
+                    var supportInteropServiceRequest = new Windows.Foundation.Collections.ValueSet();
+
+                    supportInteropServiceRequest.Add(Common.Providers.ConstantProvider.COMMAND_REQUEST_VALUESET_KEY, Common.Providers.ConstantProvider.COMMAND_DRIVEINFO_REQUEST);
+                    supportInteropServiceRequest.Add(Common.Providers.ConstantProvider.ARGUMENT_MODEL_VALUESET_KEY, storageDevice.Path);
+
+                    var supportInteropServiceResponse = await App.Connection.SendMessageAsync(supportInteropServiceRequest);
+
+                    var responseContent = supportInteropServiceResponse.Message[Common.Providers.ConstantProvider.ARGUMENT_MODEL_VALUESET_KEY].ToString();
+
+                    var storageDriveInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<DriveInfoModel>(responseContent);
+
+                    var totalSpace = storageDriveInfo.TotalSize;
+                    var usedSpace = totalSpace - storageDriveInfo.TotalFreeSpace;
+
+                    result.Add(new StorageModel
                     {
-                        var storageDevice = Windows.Devices.Portable.StorageDevice.FromId(externalDevice.Id);
-
-                        var supportInteropServiceRequest = new Windows.Foundation.Collections.ValueSet();
-                    
-                        supportInteropServiceRequest.Add(Common.Providers.ConstantProvider.COMMAND_REQUEST_VALUESET_KEY, Common.Providers.ConstantProvider.COMMAND_DRIVEINFO_REQUEST);
-                        supportInteropServiceRequest.Add(Common.Providers.ConstantProvider.ARGUMENT_MODEL_VALUESET_KEY, storageDevice.Path);
-
-                        var supportInteropServiceResponse = await App.Connection.SendMessageAsync(supportInteropServiceRequest);
-
-                        var responseContent = supportInteropServiceResponse.Message[Common.Providers.ConstantProvider.ARGUMENT_MODEL_VALUESET_KEY].ToString();
-
-                        var storageDriveInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<Common.Models.DriveInfoModel>(responseContent);
-
-                        var totalSpace = storageDriveInfo.TotalSize;
-                        var usedSpace = totalSpace - storageDriveInfo.TotalFreeSpace;
-
-                        result.Add(new Models.StorageModel
-                        {
-                            Id = externalDevice.Id,
-                            Caption = storageDevice.DisplayName,
-                            Family = storageDriveInfo.DriveType == System.IO.DriveType.Fixed ? Enumerations.StorageFamiliy.UsbHDDrive : Enumerations.StorageFamiliy.UsbFlashDrive,
-                            Path = storageDevice.Path,
-                            TotalSpace = totalSpace,
-                            UsedSpace = usedSpace
-                        });
-                    }
-                    catch
-                    {
-                        continue;
-                    }                   
+                        Id = externalDevice.Id,
+                        Caption = storageDevice.DisplayName,
+                        Family = storageDriveInfo.DriveType == System.IO.DriveType.Fixed ? Enumerations.StorageFamiliy.UsbHDDrive : Enumerations.StorageFamiliy.UsbFlashDrive,
+                        Path = storageDevice.Path,
+                        TotalSpace = totalSpace,
+                        UsedSpace = usedSpace
+                    });
+                }
+                catch
+                {
+                    continue;
                 }
             }
 
@@ -161,42 +160,39 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Managers
 
         public async System.Threading.Tasks.Task ReloadTargetStorageAsync()
         {
-            using (var httpClient = new System.Net.Http.HttpClient())
+            var storageDevice = Windows.Devices.Portable.StorageDevice.FromId(target.Id);
+
+            var supportInteropServiceRequest = new Windows.Foundation.Collections.ValueSet();
+
+            supportInteropServiceRequest.Add(Common.Providers.ConstantProvider.COMMAND_REQUEST_VALUESET_KEY, Common.Providers.ConstantProvider.COMMAND_DRIVEINFO_REQUEST);
+            supportInteropServiceRequest.Add(Common.Providers.ConstantProvider.ARGUMENT_MODEL_VALUESET_KEY, storageDevice.Path);
+
+            var supportInteropServiceResponse = await App.Connection.SendMessageAsync(supportInteropServiceRequest);
+
+            var responseContent = supportInteropServiceResponse.Message[Common.Providers.ConstantProvider.ARGUMENT_MODEL_VALUESET_KEY].ToString();
+
+            var storageDriveInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<DriveInfoModel>(responseContent);
+
+            var totalSpace = storageDriveInfo.TotalSize;
+            var usedSpace = totalSpace - storageDriveInfo.TotalFreeSpace;
+
+            target = new StorageModel
             {
-                var storageDevice = Windows.Devices.Portable.StorageDevice.FromId(target.Id);
-
-                var supportInteropServiceRequest = new Windows.Foundation.Collections.ValueSet();
-
-                supportInteropServiceRequest.Add(Common.Providers.ConstantProvider.COMMAND_REQUEST_VALUESET_KEY, Common.Providers.ConstantProvider.COMMAND_DRIVEINFO_REQUEST);
-                supportInteropServiceRequest.Add(Common.Providers.ConstantProvider.ARGUMENT_MODEL_VALUESET_KEY, storageDevice.Path);
-
-                var supportInteropServiceResponse = await App.Connection.SendMessageAsync(supportInteropServiceRequest);
-
-                var responseContent = supportInteropServiceResponse.Message[Common.Providers.ConstantProvider.ARGUMENT_MODEL_VALUESET_KEY].ToString();
-
-                var storageDriveInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<Common.Models.DriveInfoModel>(responseContent);
-
-                var totalSpace = storageDriveInfo.TotalSize;
-                var usedSpace = totalSpace - storageDriveInfo.TotalFreeSpace;
-
-                target = new Models.StorageModel
-                {
-                    Id = target.Id,
-                    Caption = storageDevice.DisplayName,
-                    Family = storageDriveInfo.DriveType == System.IO.DriveType.Fixed ? Enumerations.StorageFamiliy.UsbHDDrive : Enumerations.StorageFamiliy.UsbFlashDrive,
-                    Path = storageDevice.Path,
-                    TotalSpace = totalSpace,
-                    UsedSpace = usedSpace
-                };
-            }
+                Id = target.Id,
+                Caption = storageDevice.DisplayName,
+                Family = storageDriveInfo.DriveType == System.IO.DriveType.Fixed ? Enumerations.StorageFamiliy.UsbHDDrive : Enumerations.StorageFamiliy.UsbFlashDrive,
+                Path = storageDevice.Path,
+                TotalSpace = totalSpace,
+                UsedSpace = usedSpace
+            };
         }
 
-        public Models.StorageModel GetTargetStorage()
+        public StorageModel GetTargetStorage()
         {
             return target;
         }
 
-        public void TargetStorage(Models.StorageModel target)
+        public void TargetStorage(StorageModel target)
         {
             if (this.target != null)
             {

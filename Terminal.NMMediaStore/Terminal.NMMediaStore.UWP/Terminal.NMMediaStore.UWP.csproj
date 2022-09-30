@@ -18,7 +18,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
-    <PackageCertificateThumbprint>A0991B70F6E70694BA0F8CAC95AA3C9FDAC8499D</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>581A31D30BA40DDB1C1909CEAAA15A95DBA3EC6E</PackageCertificateThumbprint>
     <PackageCertificateKeyFile />
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
@@ -72,7 +72,10 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+    <!-- <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain> -->
+    <!-- For Crash on 1909 LWC -->
+    <UseAppLocalCoreFramework>true</UseAppLocalCoreFramework>
+    <UseDotNetNativeToolchain>false</UseDotNetNativeToolchain>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -199,6 +202,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Terminal.NMMediaStore.Common\Terminal.NMMediaStore.Common.csproj">
+      <Project>{CD96B009-2B5E-4B0B-9A75-1B64A55C5B63}</Project>
+      <Name>Terminal.NMMediaStore.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Terminal.NMMediaStore.UWP.Common\Terminal.NMMediaStore.UWP.Common.csproj">
       <Project>{a32f7c5c-bd48-4ba1-8c8c-8378272ea735}</Project>
       <Name>Terminal.NMMediaStore.UWP.Common</Name>
@@ -207,9 +214,6 @@
       <Project>{C04D6F06-3676-441F-94AD-ABEBACEE66A7}</Project>
       <Name>Terminal.NMMediaStore</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="SSCSelfSignedDeveloperCertificate.pfx" />
   </ItemGroup>
   <ItemGroup>
     <SDKReference Include="WindowsDesktop, Version=10.0.18362.0">

@@ -1,4 +1,4 @@
-﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.UWP.Common.Models
+﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Common.Models
 {
     public class DriveInfoModel
     {

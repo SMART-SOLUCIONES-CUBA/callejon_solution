@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname.terminal.nmmediastore">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.smartsolucionescuba.cpcc.pcm.terminal.nmmediastore">
     <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="28" />
-    <application android:label="Terminal.NMMediaStore.Android"></application>
+    <application android:label="Mediateca Nuevo Mundo"></application>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 </manifest>

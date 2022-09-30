@@ -5,8 +5,8 @@ using Android.OS;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Droid
 {
-    [Activity(Label = "Terminal.NMMediaStore", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = Android.Content.PM.ConfigChanges.ScreenSize | Android.Content.PM.ConfigChanges.Orientation)]
-    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
+    [Activity(Label = "Mediateca Nuevo Mundo", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = Android.Content.PM.ConfigChanges.ScreenSize | Android.Content.PM.ConfigChanges.Orientation)]
+    public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -17,9 +17,12 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Droid
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
 
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init(false);
+
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
-            PanCardView.Droid.CardsViewRenderer.Preserve();
+            // TODO Remove it!
+            //PanCardView.Droid.CardsViewRenderer.Preserve();
 
             LoadApplication(new App());
         }

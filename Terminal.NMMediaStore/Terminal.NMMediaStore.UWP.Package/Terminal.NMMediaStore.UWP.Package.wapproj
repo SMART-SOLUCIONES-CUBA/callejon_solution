@@ -55,11 +55,11 @@
     <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
     <DefaultLanguage>en-US</DefaultLanguage>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
-    <PackageCertificateThumbprint>A0991B70F6E70694BA0F8CAC95AA3C9FDAC8499D</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>581A31D30BA40DDB1C1909CEAAA15A95DBA3EC6E</PackageCertificateThumbprint>
     <EntryPointProjectUniqueName>..\Terminal.NMMediaStore.UWP\Terminal.NMMediaStore.UWP.csproj</EntryPointProjectUniqueName>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
-    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppxBundlePlatforms>x64</AppxBundlePlatforms>
@@ -162,7 +162,6 @@
     <Content Include="Images\Wide310x150Logo.scale-150.png" />
     <Content Include="Images\Wide310x150Logo.scale-200.png" />
     <Content Include="Images\Wide310x150Logo.scale-400.png" />
-    <None Include="SSCSelfSignedDeveloperCertificate.pfx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Terminal.NMMediaStore.UWP.Desktop.Supporter\Terminal.NMMediaStore.UWP.Desktop.Supporter.csproj" />
