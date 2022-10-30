@@ -58,20 +58,12 @@
     <None Remove="wwwroot\temp\**" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Migrations\20190219171954_FixCinemaBillboardSchemaForLocalization.cs" />
-    <Compile Remove="Migrations\20190219171954_FixCinemaBillboardSchemaForLocalization.Designer.cs" />
-    <Compile Remove="Migrations\20190219172556_FixCinemaBillboardSchemaForLocalizationFirstStep.cs" />
-    <Compile Remove="Migrations\20190219172556_FixCinemaBillboardSchemaForLocalizationFirstStep.Designer.cs" />
-    <Compile Remove="Migrations\20190328162432_CommentClassifierIncludeSchema.cs" />
-    <Compile Remove="Migrations\20190328162432_CommentClassifierIncludeSchema.Designer.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App">
       <PrivateAssets Condition="'%(PackageReference.Version)' == ''">all</PrivateAssets>
       <Publish Condition="'%(PackageReference.Version)' == ''">true</Publish>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.1" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.4" />
     <PackageReference Include="SAPRESSC.Middleware.Region.Web.Manager" Version="0.5.0-alpha" />
     <PackageReference Include="SAPRESSC.Middleware.Region.Web.SecurityLocal" Version="0.5.0-alpha" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="1.1.0" />

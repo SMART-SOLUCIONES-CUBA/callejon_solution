@@ -31,10 +31,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard
             services.Configure<Business.Billboard.Cinema.Web.Common.Options.MediaStoreOptions>(configuration.GetSection("MediaStore"));
             services.Configure<Business.Billboard.Cinema.Web.Common.Options.FfmpegOptions>(configuration.GetSection("FFMPEG"));
 
-            services.AddDbContext<Persistence.Context.ApplicationDbContext>(options => options.UseMySql(configuration.GetConnectionString("DefaultConnection"), mySqlOptions =>
-            {
-                mySqlOptions.ServerVersion(new System.Version(5, 5, 24), Pomelo.EntityFrameworkCore.MySql.Infrastructure.ServerType.MySql);
-            }));
+            services.AddDbContext<Persistence.Context.ApplicationDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<DbContext, Persistence.Context.ApplicationDbContext>();
 

@@ -4,20 +4,22 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Persistence.Context;
 
 namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200728190108_MediatecaSupportSchemaMigration")]
-    partial class MediatecaSupportSchemaMigration
+    [Migration("20221030125247_InitialSchema")]
+    partial class InitialSchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Persistence.Entities.Advise", b =>
                 {
@@ -365,6 +367,27 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
                     b.ToTable("productioncommentdelations","cpcc_billboard_cpccbillboard");
                 });
 
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Advertisement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("About");
+
+                    b.Property<string>("Action");
+
+                    b.Property<Guid?>("PlacardImageId");
+
+                    b.Property<string>("Title")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlacardImageId");
+
+                    b.ToTable("advertisements","cpcc_billboard_cinemabillboard");
+                });
+
             modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Award", b =>
                 {
                     b.Property<int>("Id")
@@ -412,7 +435,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<Guid>("ParentId");
+                    b.Property<Guid?>("ParentId");
 
                     b.HasKey("Id");
 
@@ -439,7 +462,12 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("About")
+                        .IsRequired();
+
                     b.Property<Guid>("CategoryId");
+
+                    b.Property<int?>("ClasificationId");
 
                     b.Property<string>("Name")
                         .IsRequired();
@@ -454,6 +482,8 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("ClasificationId");
+
                     b.HasIndex("ParentId");
 
                     b.HasIndex("PlacardImageId");
@@ -461,6 +491,64 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
                     b.HasIndex("PosterImageId");
 
                     b.ToTable("collections","cpcc_billboard_cinemabillboard");
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.CollectionCheckout", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("At");
+
+                    b.Property<Guid>("CollectionId");
+
+                    b.Property<string>("SubscriptorId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CollectionId");
+
+                    b.ToTable("collectioncheckouts","cpcc_billboard_cinemabillboard");
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.CollectionGenreBridge", b =>
+                {
+                    b.Property<Guid>("CollectionId");
+
+                    b.Property<int>("GenreId");
+
+                    b.HasKey("CollectionId", "GenreId");
+
+                    b.HasIndex("GenreId");
+
+                    b.ToTable("collectiongenrebridges","cpcc_billboard_cinemabillboard");
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.CollectionProducerHouseBridge", b =>
+                {
+                    b.Property<Guid>("CollectionId");
+
+                    b.Property<long>("ProducerHouseId");
+
+                    b.HasKey("CollectionId", "ProducerHouseId");
+
+                    b.HasIndex("ProducerHouseId");
+
+                    b.ToTable("collectionproducerhousebridges","cpcc_billboard_cinemabillboard");
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.CollectionTagBridge", b =>
+                {
+                    b.Property<Guid>("CollectionId");
+
+                    b.Property<int>("TagId");
+
+                    b.HasKey("CollectionId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("collectiontagbridges","cpcc_billboard_cinemabillboard");
                 });
 
             modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.CountryCoProductionBridge", b =>
@@ -474,6 +562,47 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
                     b.HasIndex("CountryId");
 
                     b.ToTable("countrycoproductionbridges","cpcc_billboard_cinemabillboard");
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.FetchOrder", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("At");
+
+                    b.Property<string>("SubscriptorId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("fetchorders","cpcc_billboard_cinemabillboard");
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.FetchOrderCollectionBridge", b =>
+                {
+                    b.Property<long>("FetchOrderId");
+
+                    b.Property<Guid>("CollectionId");
+
+                    b.HasKey("FetchOrderId", "CollectionId");
+
+                    b.HasIndex("CollectionId");
+
+                    b.ToTable("fetchordercollectionbridges","cpcc_billboard_cinemabillboard");
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.FetchOrderProductionBridge", b =>
+                {
+                    b.Property<long>("FetchOrderId");
+
+                    b.Property<long>("ProductionId");
+
+                    b.HasKey("FetchOrderId", "ProductionId");
+
+                    b.HasIndex("ProductionId");
+
+                    b.ToTable("fetchorderproductionbridges","cpcc_billboard_cinemabillboard");
                 });
 
             modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Genre", b =>
@@ -569,11 +698,13 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
 
                     b.Property<string>("Argument");
 
-                    b.Property<Guid>("CategoryId");
+                    b.Property<long?>("AudioVisualId");
+
+                    b.Property<Guid?>("CategoryId");
 
                     b.Property<int>("ClasificationId");
 
-                    b.Property<Guid>("CollectionId");
+                    b.Property<Guid?>("CollectionId");
 
                     b.Property<int>("CountryId");
 
@@ -598,6 +729,8 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AudioVisualId");
+
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("ClasificationId");
@@ -615,6 +748,49 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
                     b.HasIndex("TrailerVideoId");
 
                     b.ToTable("productions","cpcc_billboard_cinemabillboard");
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.ProductionAudioVisual", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<long>("FileSize");
+
+                    b.Property<string>("Format");
+
+                    b.Property<bool>("HasSubtitle");
+
+                    b.Property<long>("ProductionId");
+
+                    b.Property<int>("Quality");
+
+                    b.Property<string>("Resolution");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductionId");
+
+                    b.ToTable("productionaudiovisuals","cpcc_billboard_cinemabillboard");
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.ProductionCheckout", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("At");
+
+                    b.Property<long>("ProductionId");
+
+                    b.Property<string>("SubscriptorId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductionId");
+
+                    b.ToTable("productioncheckouts","cpcc_billboard_cinemabillboard");
                 });
 
             modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.ProductionGenreBridge", b =>
@@ -658,6 +834,145 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
                     b.HasIndex("CinemaId");
 
                     b.ToTable("rooms","cpcc_billboard_cinemabillboard");
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Search", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("At");
+
+                    b.Property<Guid?>("CategoryId");
+
+                    b.Property<int?>("CountryId");
+
+                    b.Property<long?>("ProducerHouseId");
+
+                    b.Property<string>("SubscriptionId");
+
+                    b.Property<string>("TitleTemathic");
+
+                    b.Property<int>("Year");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("ProducerHouseId");
+
+                    b.HasIndex("SubscriptionId");
+
+                    b.ToTable("searchs","cpcc_billboard_cinemabillboard");
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.SearchGenreBridge", b =>
+                {
+                    b.Property<long>("SearchId");
+
+                    b.Property<int>("GenreId");
+
+                    b.HasKey("SearchId", "GenreId");
+
+                    b.HasIndex("GenreId");
+
+                    b.ToTable("searchgenrebridges","cpcc_billboard_cinemabillboard");
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.SearchPersonalityBridge", b =>
+                {
+                    b.Property<long>("SearchId");
+
+                    b.Property<long>("PersonalityId");
+
+                    b.HasKey("SearchId", "PersonalityId");
+
+                    b.HasIndex("PersonalityId");
+
+                    b.ToTable("searchpersonalitybridges","cpcc_billboard_cinemabillboard");
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.SearchTagBridge", b =>
+                {
+                    b.Property<long>("SearchId");
+
+                    b.Property<int>("TagId");
+
+                    b.HasKey("SearchId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("searchtagbridges","cpcc_billboard_cinemabillboard");
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Subscription", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Enabled");
+
+                    b.Property<int>("FailAuthenticationCount");
+
+                    b.Property<long>("IdentityId");
+
+                    b.Property<DateTime?>("LastSignInAt");
+
+                    b.Property<string>("Password")
+                        .IsRequired();
+
+                    b.Property<bool>("PasswordChangeRequired");
+
+                    b.Property<DateTime>("ServiceAvailabilityFrom");
+
+                    b.Property<DateTime>("ServiceAvailabilityTo");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentityId");
+
+                    b.ToTable("subscriptions","cpcc_billboard_cinemabillboard");
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.SubscriptionGenreBridge", b =>
+                {
+                    b.Property<string>("SubscriptionId");
+
+                    b.Property<int>("GenreId");
+
+                    b.HasKey("SubscriptionId", "GenreId");
+
+                    b.HasIndex("GenreId");
+
+                    b.ToTable("subscriptiongenrebridges","cpcc_billboard_cinemabillboard");
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.SubscriptionProducerHouseBridge", b =>
+                {
+                    b.Property<string>("SubscriptionId");
+
+                    b.Property<long>("ProducerHouseId");
+
+                    b.HasKey("SubscriptionId", "ProducerHouseId");
+
+                    b.HasIndex("ProducerHouseId");
+
+                    b.ToTable("subscriptionproducerhousebridges","cpcc_billboard_cinemabillboard");
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.SubscriptionTagBridge", b =>
+                {
+                    b.Property<string>("SubscriptionId");
+
+                    b.Property<int>("TagId");
+
+                    b.HasKey("SubscriptionId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("subscriptiontagbridges","cpcc_billboard_cinemabillboard");
                 });
 
             modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Tag", b =>
@@ -1428,6 +1743,13 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
                         .HasForeignKey("CommentId");
                 });
 
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Advertisement", b =>
+                {
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Middleware.Media.Persistence.Entities.Image", "PlacardImage")
+                        .WithMany()
+                        .HasForeignKey("PlacardImageId");
+                });
+
             modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.AwardWinning", b =>
                 {
                     b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Award", "Award")
@@ -1444,9 +1766,8 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
             modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Category", b =>
                 {
                     b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Category", "Parent")
-                        .WithMany()
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId");
                 });
 
             modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Collection", b =>
@@ -1455,6 +1776,10 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Clasification", "Clasification")
+                        .WithMany()
+                        .HasForeignKey("ClasificationId");
 
                     b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Collection", "Parent")
                         .WithMany()
@@ -1470,6 +1795,53 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
                         .HasForeignKey("PosterImageId");
                 });
 
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.CollectionCheckout", b =>
+                {
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Collection", "Collection")
+                        .WithMany()
+                        .HasForeignKey("CollectionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.CollectionGenreBridge", b =>
+                {
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Collection", "Collection")
+                        .WithMany("GenreBridges")
+                        .HasForeignKey("CollectionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Genre", "Genre")
+                        .WithMany("CollectionBridges")
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.CollectionProducerHouseBridge", b =>
+                {
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Collection", "Collection")
+                        .WithMany("ProducerHouseBridges")
+                        .HasForeignKey("CollectionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.ProducerHouse", "ProducerHouse")
+                        .WithMany()
+                        .HasForeignKey("ProducerHouseId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.CollectionTagBridge", b =>
+                {
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Collection", "Collection")
+                        .WithMany("TagBridges")
+                        .HasForeignKey("CollectionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.CountryCoProductionBridge", b =>
                 {
                     b.HasOne("SmartSolucionesCuba.SAPRESSC.Middleware.Region.Persistence.Entities.Country", "Country")
@@ -1479,6 +1851,32 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
 
                     b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Production", "Production")
                         .WithMany("CountryCoProductionBridges")
+                        .HasForeignKey("ProductionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.FetchOrderCollectionBridge", b =>
+                {
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Collection", "Collection")
+                        .WithMany()
+                        .HasForeignKey("CollectionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.FetchOrder", "FetchOrder")
+                        .WithMany("CollectionBridges")
+                        .HasForeignKey("FetchOrderId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.FetchOrderProductionBridge", b =>
+                {
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.FetchOrder", "FetchOrder")
+                        .WithMany("ProductionBridges")
+                        .HasForeignKey("FetchOrderId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Production", "Production")
+                        .WithMany("FetchOrders")
                         .HasForeignKey("ProductionId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -1524,10 +1922,13 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
 
             modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Production", b =>
                 {
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.ProductionAudioVisual", "AudioVisual")
+                        .WithMany()
+                        .HasForeignKey("AudioVisualId");
+
                     b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CategoryId");
 
                     b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Clasification", "Clasification")
                         .WithMany()
@@ -1535,9 +1936,8 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Collection", "Collection")
-                        .WithMany()
-                        .HasForeignKey("CollectionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany("Productions")
+                        .HasForeignKey("CollectionId");
 
                     b.HasOne("SmartSolucionesCuba.SAPRESSC.Middleware.Region.Persistence.Entities.Country", "Country")
                         .WithMany()
@@ -1561,6 +1961,22 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
                     b.HasOne("SmartSolucionesCuba.SAPRESSC.Middleware.Media.Persistence.Entities.Video", "TrailerVideo")
                         .WithMany()
                         .HasForeignKey("TrailerVideoId");
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.ProductionAudioVisual", b =>
+                {
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Production", "Production")
+                        .WithMany()
+                        .HasForeignKey("ProductionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.ProductionCheckout", b =>
+                {
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Production", "Production")
+                        .WithMany("Checkouts")
+                        .HasForeignKey("ProductionId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.ProductionGenreBridge", b =>
@@ -1594,6 +2010,111 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
                     b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Cinema", "Cinema")
                         .WithMany("Rooms")
                         .HasForeignKey("CinemaId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Search", b =>
+                {
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Middleware.Region.Persistence.Entities.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId");
+
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.ProducerHouse", "ProducerHouse")
+                        .WithMany()
+                        .HasForeignKey("ProducerHouseId");
+
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Subscription", "Subscription")
+                        .WithMany()
+                        .HasForeignKey("SubscriptionId");
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.SearchGenreBridge", b =>
+                {
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Genre", "Genre")
+                        .WithMany()
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Search", "Search")
+                        .WithMany("GenreBridges")
+                        .HasForeignKey("SearchId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.SearchPersonalityBridge", b =>
+                {
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Personality", "Personality")
+                        .WithMany()
+                        .HasForeignKey("PersonalityId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Search", "Search")
+                        .WithMany("PersonalityBridges")
+                        .HasForeignKey("SearchId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.SearchTagBridge", b =>
+                {
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Search", "Search")
+                        .WithMany("TagBridges")
+                        .HasForeignKey("SearchId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Subscription", b =>
+                {
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Middleware.Identity.Persistence.Entities.Person", "Identity")
+                        .WithMany()
+                        .HasForeignKey("IdentityId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.SubscriptionGenreBridge", b =>
+                {
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Genre", "Genre")
+                        .WithMany()
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Subscription", "Subscription")
+                        .WithMany("PreferedGenreBridges")
+                        .HasForeignKey("SubscriptionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.SubscriptionProducerHouseBridge", b =>
+                {
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.ProducerHouse", "ProducerHouse")
+                        .WithMany()
+                        .HasForeignKey("ProducerHouseId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Subscription", "Subscription")
+                        .WithMany("PreferedProducerHouseBridges")
+                        .HasForeignKey("SubscriptionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.SubscriptionTagBridge", b =>
+                {
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Subscription", "Subscription")
+                        .WithMany("PreferedTagBridges")
+                        .HasForeignKey("SubscriptionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
