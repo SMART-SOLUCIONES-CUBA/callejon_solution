@@ -35,7 +35,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Mod
 
         public System.DateTime ServiceAvailabilityTo { get; set; }
 
-        public Subscription Export()
+        public virtual Subscription Export()
         {
             var entity = new Subscription
             {

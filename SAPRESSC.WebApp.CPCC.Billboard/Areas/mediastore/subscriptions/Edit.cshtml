@@ -1,10 +1,10 @@
 ﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
 @using SmartSolucionesCuba.SAPRESSC.Middleware.Identity.Persistence.Enumerations;
 
-@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.PersonalityInputViewModel
+@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.SubscriptionInputViewModel
 
 @{
-    ViewData["Title"] = "Modificar Personalidad";
+    ViewData["Title"] = "Modificar Subscripción";
 
     ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
     {
@@ -20,7 +20,7 @@
         },
         new BreadcrumbViewModel
         {
-            Caption = "Personalidades",
+            Caption = "Subscripciones",
             Url = Url.Action("index")
         },
         new BreadcrumbViewModel
@@ -34,6 +34,14 @@
 
 @section styles {
     <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+
+    <style type="text/css">
+        #ImageFile {
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+    </style>
 }
 
 @section scripts {
@@ -42,81 +50,124 @@
     <script src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 
     <script type="text/javascript">
-        $('#borndate-picker').datetimepicker({
+        $('#service-availability-from-picker').datetimepicker({
             locale: 'es',
             ignoreReadonly: true,
             format: 'DD/MM/YYYY'
         });
+        $('#service-availability-to-picker').datetimepicker({
+            locale: 'es',
+            ignoreReadonly: true,
+            format: 'DD/MM/YYYY'
+        });
+
+        $(function () {
+            $(document).on("change", "#ImageFile", function () {
+                var files = !!this.files ? this.files : [];
+
+                if (!files.length || !window.FileReader) return; // no file selected, or no FileReader support
+
+                if (/^image/.test(files[0].type)) {
+                    var reader = new FileReader();
+
+                    reader.readAsDataURL(files[0]);
+
+                    reader.onloadend = function () {
+                        $('#ImageFilePreview').attr('src', this.result);
+                    }
+                }
+
+            });
+        });
     </script>
 }
 
-@using (Html.BeginForm("edit", "personalities", new { Area = "cinemabillboard", key = string.Empty }, FormMethod.Post, true, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("edit", "subscriptions", new { Area = "mediastore", key = string.Empty }, FormMethod.Post, true, new { enctype = "multipart/form-data" }))
 {
     @Html.ValidationSummary(true)
 
     @Html.HiddenFor(model => model.Id)
-
-    var sexDropDownListItems = new[]
-    {
-        new SelectListItem { Value = Sex.Male.ToString(), Text = "Masculino" },
-        new SelectListItem { Value = Sex.Famale.ToString(), Text = "Femenino" }
-    };
 
     <div class="panel panel-default">
         <div class="panel-heading"><h4>@ViewData["Title"]</h4></div>
 
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-6" style="margin-bottom: 20px;">
-                    @Html.LabelFor(model => model.Name, new { @class = "control-label" })
-                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" })
+                <div class="col-lg-3 col-md-4 col-sm-4" style="margin-bottom: 20px;">
+                    <div class="card">
+                        @if (Model.ImageId == System.Guid.Empty)
+                        {
+                            <img src="~/img/default-person-picture.jpg" class="card-img-top" id="ImageFilePreview" />
+                        }
+                        else
+                        {
+                            <img src="@Url.Action("image", "default", new { Area = "media", key = Model.ImageId })" class="card-img-top" id="ImageFilePreview" />
+                        }
+                        <label class="btn btn-light" style="border-top-left-radius: 0; border-top-right-radius: 0; margin-bottom: 0;">
+                            <span>Seleccionar ...</span>
+                            @Html.EditorFor(model => model.ImageFile)
+                        </label>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ImageFile, null, new { @class = "text-danger" })
                 </div>
-                <div class="col-md-6" style="margin-bottom: 20px;">
-                    @Html.LabelFor(model => model.LastName, new { @class = "control-label" })
-                    @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.LastName, null, new { @class = "text-danger" })
+                <div class="col-lg-9 col-md-8 col-sm-8" style="margin-bottom: 20px;">
+                    <div style="margin-bottom: 20px;">
+                        @Html.LabelFor(model => model.Id, new { @class = "control-label" })
+                        <div>@Model.Id</div>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" })
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        @Html.LabelFor(model => model.LastName, new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.LastName, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4" style="margin-bottom: 20px;">
+                    <div class="checkbox">
+                        <label>
+                            @Html.EditorFor(model => model.Enabled) Habilitado
+                            @Html.ValidationMessageFor(model => model.Enabled)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-sm-4" style="margin-bottom: 20px;">
+                    <div class="checkbox">
+                        <label>
+                            @Html.EditorFor(model => model.PasswordChangeRequired) Debe cambiar la contraseña?
+                            @Html.ValidationMessageFor(model => model.PasswordChangeRequired)
+                        </label>
+                    </div>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-6" style="margin-bottom: 20px;">
-                    @Html.LabelFor(model => model.BornDate, new { @class = "control-label" })
-                    <div class="input-group date" id="borndate-picker">
-                        @Html.TextBoxFor(model => model.BornDate, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.LabelFor(model => model.ServiceAvailabilityFrom, new { @class = "control-label" })
+                    <div class="input-group date" id="service-availability-from-picker">
+                        @Html.TextBoxFor(model => model.ServiceAvailabilityFrom, new { @class = "form-control", @readonly = "readonly" })
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
                     </div>
-                    @Html.ValidationMessageFor(model => model.BornDate, null, new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.ServiceAvailabilityFrom, null, new { @class = "text-danger" })
                 </div>
                 <div class="col-md-6" style="margin-bottom: 20px;">
-                    @Html.LabelFor(model => model.Sex, new { @class = "control-label" })
-                    @Html.DropDownListFor(model => model.Sex, sexDropDownListItems, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Sex, null, new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-2 col-md-3" style="margin-bottom: 20px;">
-                    @{
-                        var imageUrl = Model.ImageId != System.Guid.Empty ? Url.Action("image", "default", new { Area = "media", key = Model.ImageId }) : "/img/default-person-picture.jpg";
-                    }
-                    <img class="img-circle img-responsive" src="@imageUrl" />
-                </div>
-                <div class="col-lg-10 col-md-9" style="margin-bottom: 20px;">
-                    @Html.LabelFor(model => model.ImageFile, new { @class = "control-label" })
-                    @Html.EditorFor(model => model.ImageFile, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.ImageFile, null, new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div style="margin-bottom: 20px;">
-                <div class="checkbox">
-                    <label>
-                        @Html.EditorFor(model => model.ResetImage) Quitar imagen
-                        @Html.ValidationMessageFor(model => model.ResetImage)
-                    </label>
+                    @Html.LabelFor(model => model.ServiceAvailabilityTo, new { @class = "control-label" })
+                    <div class="input-group date" id="service-availability-to-picker">
+                        @Html.TextBoxFor(model => model.ServiceAvailabilityTo, new { @class = "form-control", @readonly = "readonly" })
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ServiceAvailabilityTo, null, new { @class = "text-danger" })
                 </div>
             </div>
 

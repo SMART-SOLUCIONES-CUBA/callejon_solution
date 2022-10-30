@@ -1,6 +1,6 @@
 ﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
 
-@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.SubscriptionInputViewModel
+@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.SubscriptionCreateViewModel
 
 @{
     ViewData["Title"] = "Agregar Subscripción";
@@ -132,7 +132,7 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-4 style="margin-bottom: 20px;"">
+                <div class="col-sm-4" style="margin-bottom: 20px;">
                     <div class="checkbox">
                         <label>
                             @Html.EditorFor(model => model.Enabled) Habilitado
@@ -146,15 +146,6 @@
                         <label>
                             @Html.EditorFor(model => model.PasswordChangeRequired) Debe cambiar la contraseña?
                             @Html.ValidationMessageFor(model => model.PasswordChangeRequired)
-                        </label>
-                    </div>
-                </div>
-
-                <div class="col-sm-4" style="margin-bottom: 20px;">
-                    <div class="checkbox">
-                        <label>
-                            @Html.EditorFor(model => model.HasFullAccess) Es super usuario?
-                            @Html.ValidationMessageFor(model => model.HasFullAccess)
                         </label>
                     </div>
                 </div>

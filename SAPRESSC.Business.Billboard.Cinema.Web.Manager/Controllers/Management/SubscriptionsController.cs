@@ -2,8 +2,10 @@
 using Microsoft.Extensions.Logging;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.SecurityShared;
+using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Common.Extensions;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.Filter;
 using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View;
+using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
 using SmartSolucionesCuba.SAPRESSC.Core.Persistence.Repositories;
 using SmartSolucionesCuba.SAPRESSC.Core.Web.Security.Filters;
 
@@ -44,7 +46,11 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
         [RequiresRoleBasePermission(CinemaBillboardBusinessManagementRoleCodes.SubscriptioManagerCreator)]
         public override IActionResult Create()
         {
-            return base.Create();
+            var modelInput = new SubscriptionCreateViewModel();
+
+            ConfigureCreate(modelInput);
+
+            return View(modelInput);
         }
 
         [RequiresRoleBasePermission(CinemaBillboardBusinessManagementRoleCodes.SubscriptioManagerCreator)]
@@ -66,7 +72,61 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
                 }
             }
 
-            return base.Create(modelInput);
+            var notification = new NotificationViewModel
+            {
+                Type = NotificationType.Danger,
+                Message = GetInvalidMessage()
+            };
+
+            Request.Form.TryGetValue("Password", out Microsoft.Extensions.Primitives.StringValues passwords);
+            Request.Form.TryGetValue("ConfirmPassword", out Microsoft.Extensions.Primitives.StringValues confirmations);
+
+            modelInput = new SubscriptionCreateViewModel
+            {
+                Password = passwords.Count > 0 ? passwords.ToArray()[0] : string.Empty,
+                ConfirmPassword = confirmations.Count > 0 ? confirmations.ToArray()[0] : string.Empty,
+                Enabled = modelInput.Enabled,
+                Id = modelInput.Id,
+                Name = modelInput.Name,
+                LastName = modelInput.LastName,
+                About = modelInput.About,
+                ImageFile = modelInput.ImageFile,
+                ImageId = modelInput.ImageId,
+                PasswordChangeRequired = modelInput.PasswordChangeRequired,
+                ServiceAvailabilityFrom = modelInput.ServiceAvailabilityFrom,
+                ServiceAvailabilityTo = modelInput.ServiceAvailabilityTo
+            };
+
+            if (TryValidateModel(modelInput))
+            {
+                var entity = modelInput.Export();
+
+                PreCreate(entity, modelInput);
+
+                try
+                {
+                    Repository.Add(entity, User.Identity.Name);
+
+                    PostCreate(entity, modelInput);
+
+                    notification.Type = NotificationType.Success;
+                    notification.Message = GetCreationSuccessMessage();
+
+                    TempData[NotificationViewModel.NOTIFICATION_MAP_KEY] = Newtonsoft.Json.JsonConvert.SerializeObject(notification);
+
+                    return RedirectToAction(GetDefaultActionName());
+                }
+                catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
+                {
+                    logger.LogError(e.Message, e.InnerException);
+
+                    ModelState.AddModelError("Id", "UserNameTakedMessage");
+                }
+            }
+
+            TempData[NotificationViewModel.NOTIFICATION_MAP_KEY] = Newtonsoft.Json.JsonConvert.SerializeObject(notification);
+
+            return View(modelInput);
         }
 
         [RequiresRoleBasePermission(CinemaBillboardBusinessManagementRoleCodes.SubscriptioManagerEditor)]
@@ -125,6 +185,8 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
         protected override void PreCreate(Subscription entity, SubscriptionInputViewModel modelInput)
         {
             base.PreCreate(entity, modelInput);
+
+            entity.Password = entity.Password.ToHashedPassword();
 
             if (modelInput.ImageFile != null)
             {
@@ -191,6 +253,60 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
             {
                 mediaFileManager.DeleteImageFile(entity.Identity.Image.Id);
             }
+        }
+
+        [RequiresRoleBasePermission(CinemaBillboardBusinessManagementRoleCodes.SubscriptioManagerEditor)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePassword(SubscriptionChangePasswordViewModel model)
+        {
+            var notification = new NotificationViewModel
+            {
+                Type = NotificationType.Warning,
+                Title = "Cambiar Contraseña.",
+                Message = "Los datos especificados no son correctos."
+            };
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var entity = Repository.Get(model.Id);
+
+                    entity.Password = model.NewPassword.ToHashedPassword();
+                    entity.PasswordChangeRequired = model.PasswordChangeRequired;
+
+                    Repository.Update(entity, User.Identity.Name);
+
+                    notification.Type = NotificationType.Success;
+                    notification.Message = "Contraseña modificada con éxito.";
+                }
+                catch
+                {
+                    notification.Type = NotificationType.Danger;
+                    notification.Message = GetNotFoundMessage();
+                }
+            }
+            else
+            {
+                var validationErrorMessages = new System.Collections.Generic.List<string>();
+
+                foreach (var record in ModelState)
+                {
+                    foreach (var error in record.Value.Errors)
+                    {
+                        validationErrorMessages.Add(error.ErrorMessage);
+                    }
+                }
+
+                notification.Type = NotificationType.Danger;
+                notification.Title = "Cambiar Contraseña." + (validationErrorMessages.Count > 1 ? " Múltiples errores." : string.Empty);
+                notification.Messages = validationErrorMessages.ToArray();
+            }
+
+            TempData[NotificationViewModel.NOTIFICATION_MAP_KEY] = Newtonsoft.Json.JsonConvert.SerializeObject(notification);
+
+            return RedirectToAction("index");
         }
     }
 }
