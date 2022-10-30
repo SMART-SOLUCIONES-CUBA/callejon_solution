@@ -1,0 +1,198 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+
+@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.SubscriptionInputViewModel
+
+@{
+    ViewData["Title"] = "Agregar Subscripción";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Subscripciones",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Agregar"
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+
+    <style type="text/css">
+        #ImageFile {
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+    </style>
+}
+
+@section scripts {
+    <script src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script type="text/javascript">
+        $('#service-availability-from-picker').datetimepicker({
+            locale: 'es',
+            ignoreReadonly: true,
+            format: 'DD/MM/YYYY'
+        });
+        $('#service-availability-to-picker').datetimepicker({
+            locale: 'es',
+            ignoreReadonly: true,
+            format: 'DD/MM/YYYY'
+        });
+
+        $(function () {
+            $(document).on("change", "#ImageFile", function () {
+                var files = !!this.files ? this.files : [];
+
+                if (!files.length || !window.FileReader) return; // no file selected, or no FileReader support
+
+                if (/^image/.test(files[0].type)) {
+                    var reader = new FileReader();
+
+                    reader.readAsDataURL(files[0]);
+
+                    reader.onloadend = function () {
+                        $('#ImageFilePreview').attr('src', this.result);
+                    }
+                }
+
+            });
+        });
+    </script>
+}
+
+@using (Html.BeginForm("create", "subscriptions", new { Area = "mediastore" }, FormMethod.Post, true, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4>@ViewData["Title"]</h4></div>
+
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-3 col-md-4 col-sm-4" style="margin-bottom: 20px;">
+                    <div class="card">
+                        <img src="~/img/default-person-picture.jpg" class="card-img-top" id="ImageFilePreview" />
+                        <label class="btn btn-light" style="border-top-left-radius: 0; border-top-right-radius: 0; margin-bottom: 0;">
+                            <span>Seleccionar ...</span>
+                            @Html.EditorFor(model => model.ImageFile)
+                        </label>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ImageFile, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-lg-9 col-md-8 col-sm-8" style="margin-bottom: 20px;">
+                    <div style="margin-bottom: 20px;">
+                        @Html.LabelFor(model => model.Id, new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.Id, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Id, null, new { @class = "text-danger" })
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" })
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        @Html.LabelFor(model => model.LastName, new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.LastName, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>            
+
+            <div class="row">
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.Password, new { @class = "control-label" })
+                    @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Password, null, new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6">
+                    @Html.LabelFor(model => model.ConfirmPassword, new { @class = "control-label" })
+                    @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ConfirmPassword, null, new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4 style="margin-bottom: 20px;"">
+                    <div class="checkbox">
+                        <label>
+                            @Html.EditorFor(model => model.Enabled) Habilitado
+                            @Html.ValidationMessageFor(model => model.Enabled)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-sm-4" style="margin-bottom: 20px;">
+                    <div class="checkbox">
+                        <label>
+                            @Html.EditorFor(model => model.PasswordChangeRequired) Debe cambiar la contraseña?
+                            @Html.ValidationMessageFor(model => model.PasswordChangeRequired)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-sm-4" style="margin-bottom: 20px;">
+                    <div class="checkbox">
+                        <label>
+                            @Html.EditorFor(model => model.HasFullAccess) Es super usuario?
+                            @Html.ValidationMessageFor(model => model.HasFullAccess)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.ServiceAvailabilityFrom, new { @class = "control-label" })
+                    <div class="input-group date" id="service-availability-from-picker">
+                        @Html.TextBoxFor(model => model.ServiceAvailabilityFrom, new { @class = "form-control", @readonly = "readonly" })
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ServiceAvailabilityFrom, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.ServiceAvailabilityTo, new { @class = "control-label" })
+                    <div class="input-group date" id="service-availability-to-picker">
+                        @Html.TextBoxFor(model => model.ServiceAvailabilityTo, new { @class = "form-control", @readonly = "readonly" })
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ServiceAvailabilityTo, null, new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                @Html.LabelFor(model => model.About, new { @class = "control-label" })
+                @Html.TextAreaFor(model => model.About, 5, 0, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.About, null, new { @class = "text-danger" })
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-primary">Crear</button>
+                <a class="btn btn-default" href="@Url.Action("index")">Cancelar</a>
+            </div>
+        </div>
+    </div>
+}

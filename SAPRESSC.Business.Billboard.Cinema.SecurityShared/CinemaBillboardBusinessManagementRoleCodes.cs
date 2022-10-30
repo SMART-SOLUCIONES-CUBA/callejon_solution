@@ -66,5 +66,10 @@
         public const string PresentationManagerCreator = "CINEMABILLBOARD_PRESENTATION_MANAGER_CREATOR";
         public const string PresentationManagerEditor = "CINEMABILLBOARD_PRESENTATION_MANAGER_EDITOR";
         public const string PresentationManagerRemover = "CINEMABILLBOARD_PRESENTATION_MANAGER_REMOVER";
+
+        public const string SubscriptioManagerViewer = "MEDIASTORE_SUBSCRIPTION_MANAGER_VIEWEr";
+        public const string SubscriptioManagerCreator = "MEDIASTORE_SUBSCRIPTION_MANAGER_CREATOR";
+        public const string SubscriptioManagerEditor = "MEDIASTORE_SUBSCRIPTION_MANAGER_EDITOR";
+        public const string SubscriptioManagerRemover = "MEDIASTORE_SUBSCRIPTION_MANAGER_REMOVER";
     }
 }

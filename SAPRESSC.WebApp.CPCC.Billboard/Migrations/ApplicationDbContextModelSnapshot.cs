@@ -908,7 +908,22 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("Enabled");
+
+                    b.Property<int>("FailAuthenticationCount");
+
+                    b.Property<long>("IdentityId");
+
+                    b.Property<DateTime?>("LastSignInAt");
+
+                    b.Property<string>("Password")
+                        .IsRequired();
+
+                    b.Property<bool>("PasswordChangeRequired");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("IdentityId");
 
                     b.ToTable("subscriptions","cpcc_billboard_cinemabillboard");
                 });
@@ -2045,6 +2060,14 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
                     b.HasOne("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Tag", "Tag")
                         .WithMany()
                         .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Entities.Subscription", b =>
+                {
+                    b.HasOne("SmartSolucionesCuba.SAPRESSC.Middleware.Identity.Persistence.Entities.Person", "Identity")
+                        .WithMany()
+                        .HasForeignKey("IdentityId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

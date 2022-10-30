@@ -21,9 +21,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Droid
 
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
-            // TODO Remove it!
-            //PanCardView.Droid.CardsViewRenderer.Preserve();
-
             LoadApplication(new App());
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)

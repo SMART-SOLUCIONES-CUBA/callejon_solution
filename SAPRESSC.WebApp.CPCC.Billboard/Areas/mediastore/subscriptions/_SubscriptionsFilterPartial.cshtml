@@ -1,0 +1,18 @@
+﻿@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.Filter.SubscriptionFilterModel
+
+@using (Html.BeginForm("filter", "subscriptions", new { Area = "mediastore" }, FormMethod.Post, true, null))
+{
+    <fieldset>
+        <legend>Filtro de Subscripciones</legend>
+        <div style="margin-bottom: 20px;">
+            @Html.LabelFor(model => model.FullName, "Nombre", new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.FullName, new { @class = "form-control" })
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-filter"></span> Filtrar</button>
+            <button type="button" class="btn btn-default filter-form-reseter"><span class="glyphicon glyphicon-remove-circle"></span> Limpiar</button>
+        </div>
+    </fieldset>
+}
+

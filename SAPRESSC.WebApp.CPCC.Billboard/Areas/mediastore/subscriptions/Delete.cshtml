@@ -1,0 +1,67 @@
+﻿@using SmartSolucionesCuba.SAPRESSC.Core.Common.Models.View;
+
+@model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.SubscriptionDisplayViewModel
+
+@{
+    ViewData["Title"] = "Eliminar Subscripción";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"glyphicon glyphicon-home\"></span> Inicio",
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración",
+            Url = Url.Action("index", "management", new { Area = string.Empty })
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Subscripciones",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Eliminar"
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+<h3>Esta seguro que desea eliminar la subscripción detallada a continuación?</h3>
+
+<br />
+
+<div class="row">
+    <div class="col-lg-2 col-md-3">
+        @if (Model.ImageId != System.Guid.Empty)
+        {
+            <img class="img-circle" src="@Url.Action("image", "default", new { Area = "media", key = Model.ImageId })" />
+        }
+        else
+        {
+            <img class="img-circle" src="/img/default-person-picture.jpg" />
+        }
+    </div>
+    <div class="col-lg-10 col-md-9">
+        <dl>
+            <dt>Nombre(s)</dt>
+            <dd>@Html.DisplayFor(model => model.Name)</dd>
+            <dt>Apellido(s)</dt>
+            <dd>@Html.DisplayFor(model => model.LastName)</dd>
+            <dt>Acerca de</dt>
+            <dd>@Html.DisplayFor(model => model.About)</dd>
+        </dl>
+    </div>
+</div>
+@using (Html.BeginForm("delete", "subscriptions", new { Area = "mediastore", key = string.Empty }, FormMethod.Post, true, null))
+{
+    @Html.HiddenFor(model => model.Id)
+    <div>
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a class="btn btn-default" href="@Url.Action("index")">Cancelar</a>
+    </div>
+}

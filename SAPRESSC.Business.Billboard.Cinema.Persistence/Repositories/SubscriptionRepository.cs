@@ -11,6 +11,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Persistence.Rep
         protected override System.Linq.IQueryable<Entities.Subscription> GetQueryableDbSet()
         {
             return base.GetQueryableDbSet()
+                .Include(entity => entity.Identity).ThenInclude(entity => entity.Image)
                 .Include(entity => entity.PreferedTagBridges).ThenInclude(bridge => bridge.Tag)
                 .Include(entity => entity.PreferedGenreBridges).ThenInclude(bridge => bridge.Genre)
                 .Include(entity => entity.PreferedProducerHouseBridges).ThenInclude(bridge => bridge.ProducerHouse).ThenInclude(entity => entity.Image);

@@ -25,7 +25,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             var subscriptionManager = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Managers.Facade.ISubscriptionManagerFacade>();
 
             var subscriptor = subscriptionManager.GetAuthenticatedSubscritor();
-            
+
             if (subscriptor == null)
             {
                 this.NavigationPushModalPageAsync(new SignInPage(OnAppearing));

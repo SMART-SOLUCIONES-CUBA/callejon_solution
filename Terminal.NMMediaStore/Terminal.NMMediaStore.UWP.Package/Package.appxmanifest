@@ -10,7 +10,7 @@
   <Identity
     Name="MOROPO.CPCC.MediatecaNuevoMundo.UWP"
     Publisher="CN=MOROPO S.U.R.L."
-    Version="0.10.2.0" />
+    Version="0.10.3.0" />
 
   <Properties>
     <DisplayName>Mediateca Nuevo Mundo</DisplayName>

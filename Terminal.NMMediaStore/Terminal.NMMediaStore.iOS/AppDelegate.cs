@@ -17,8 +17,6 @@
         {
             Xamarin.Forms.Forms.Init();
 
-            PanCardView.iOS.CardsViewRenderer.Preserve();
-
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);
