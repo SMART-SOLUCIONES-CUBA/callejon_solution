@@ -921,6 +921,10 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Migrations
 
                     b.Property<bool>("PasswordChangeRequired");
 
+                    b.Property<DateTime>("ServiceAvailabilityFrom");
+
+                    b.Property<DateTime>("ServiceAvailabilityTo");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IdentityId");
