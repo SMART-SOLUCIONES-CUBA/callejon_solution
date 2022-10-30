@@ -123,7 +123,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager
                     Area = "mediastore",
                     Controller = "subscriptions",
                     Role = CinemaBillboardBusinessManagementRoleCodes.SubscriptioManagerViewer,
-                    Title = "Tags"
+                    Title = "Suscripciones"
                 }
             };
         }
