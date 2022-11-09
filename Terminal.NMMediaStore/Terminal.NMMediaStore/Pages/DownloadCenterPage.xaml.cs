@@ -96,7 +96,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             {
                 var orderId = await XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Managers.Facade.IFetchOrderManagerFacade>().Create(new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.FetchOrderModel
                 {
-                    SubscriptorId = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Managers.Facade.ISubscriptionManagerFacade>().GetAuthenticatedSubscritor().Subscription.Id,
+                    SubscriptorId = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Managers.Facade.ISubscriptionManagerFacade>().GetAuthenticatedSubscrition().Id,
                     AudioVisuals = BindingContextModel.MasterBindingContext.FetchOrderAudioVisuals.ToList()
                 });
 

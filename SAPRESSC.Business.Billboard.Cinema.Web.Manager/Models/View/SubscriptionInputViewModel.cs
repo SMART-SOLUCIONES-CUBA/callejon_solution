@@ -6,6 +6,14 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Mod
 {
     public class SubscriptionInputViewModel : Core.Web.Management.Models.View.IEntityInputViewModel<Subscription, string>
     {
+        public SubscriptionInputViewModel()
+        {
+            ServiceAvailabilityFrom = System.DateTime.Now.Date;
+            ServiceAvailabilityTo = ServiceAvailabilityFrom.AddMonths(1);
+        }
+
+        [Required(ErrorMessage = "RequiredValidationErrorMessage")]
+        [Display(Name = "User")]
         public string Id { get; set; }
 
         [Required(ErrorMessage = "RequiredValidationErrorMessage")]
@@ -31,8 +39,10 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Mod
 
         public bool Enabled { get; set; }
 
+        [Display(Name = "ServiceAvailabilityFrom")]
         public System.DateTime ServiceAvailabilityFrom { get; set; }
 
+        [Display(Name = "ServiceAvailabilityTo")]
         public System.DateTime ServiceAvailabilityTo { get; set; }
 
         public virtual Subscription Export()

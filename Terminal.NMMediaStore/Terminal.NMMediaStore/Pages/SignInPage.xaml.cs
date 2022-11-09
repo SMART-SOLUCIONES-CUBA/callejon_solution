@@ -2,7 +2,6 @@
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 {
-    [Xamarin.Forms.Xaml.XamlCompilation(Xamarin.Forms.Xaml.XamlCompilationOptions.Compile)]
     public partial class SignInPage : XFToolKit.Mvvm.Pages.ContentPage
     {
         private System.Action callbackAction;

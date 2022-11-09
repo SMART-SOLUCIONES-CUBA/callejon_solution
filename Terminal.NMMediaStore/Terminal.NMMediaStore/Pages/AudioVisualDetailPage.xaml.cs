@@ -44,7 +44,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                 await productionCheckoutManager.AddAsync(new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.ProductionCkeckoutModel
                 {
                     ProductionId = BindingContextModel.AudioVisual.Id,
-                    SubscriptorId = subscriptionManager.GetAuthenticatedSubscritor().Subscription.Id
+                    SubscriptorId = subscriptionManager.GetAuthenticatedSubscrition().Id
                 });
 
                 var checkoutCount = await productionCheckoutManager.CountByProductionIdAsync(BindingContextModel.AudioVisual.Id);

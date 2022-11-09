@@ -3,7 +3,7 @@
 @model PaginationViewModel<SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.SubscriptionDisplayViewModel>
 
 @{
-    ViewData["Title"] = "Gestión de Subscripciones";
+    ViewData["Title"] = "Gestión de Suscripciones";
 
     ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
     {
@@ -19,7 +19,7 @@
         },
         new BreadcrumbViewModel
         {
-            Caption = "Subscripciones"
+            Caption = "Suscripciones"
         }
     };
 
@@ -131,9 +131,10 @@
     <table class="table" style="margin: 0;">
         <thead>
             <tr>
+                <th>Usuario</th>
                 <th>Nombre(s)</th>
                 <th>Apellido(s)</th>
-                <th style="width: 184px;">Opciones</th>
+                <th style="width:314px;">Opciones</th>
             </tr>        
         </thead>
         <tbody>
@@ -142,17 +143,18 @@
             @foreach (var item in Model.List)
             {
                 <tr>
+                    <td style="vertical-align: middle;" title="Usuario">@item.Id</td>
                     <td style="vertical-align: middle;" title="Nombre(s)">@item.Name</td>
                     <td style="vertical-align: middle;" title="Apellidos(s)">@item.LastName</td>
                     <td style="vertical-align: middle;">
                         <div class="btn-group btn-group-sm">
                             <a role="button" href="#" class="btn btn-default" data-toggle="modal" data-target="#detail-view-subscription-@item.Id"><span class="glyphicon glyphicon-eye-open"></span></a>
-                            <a role="button" href="#" class="btn btn-default" data-toggle="modal" data-target="#change-password-@item.Id"><span class="glyphicon glyphicon-reset"></span> Contrase&ntilde;a</a>
+                            <a role="button" href="#" class="btn btn-default" data-toggle="modal" data-target="#change-password-@item.Id"><span class="glyphicon glyphicon-refresh"></span> Contrase&ntilde;a</a>
                             <a role="button" href="@Url.Action("edit", new { key = item.Id })" class="btn btn-default" title="Editar"><span class="glyphicon glyphicon-edit"></span><span class="hidden-xs"> Modificar</span></a>
                             <a role="button" href="@Url.Action("delete", new {key = item.Id})" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
                         </div>
 
-                        @await Html.PartialAsync("_ChangePasswordPartial", new SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.SubscriptionChangePasswordViewModel { Id = item.Id });
+                        @await Html.PartialAsync("_ChangePasswordPartial", new SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.SubscriptionChangePasswordViewModel { Id = item.Id })
 
                         <div class="modal fade" id="detail-view-subscription-@item.Id" tabindex="-1" role="dialog" aria-labelledby="detail-view-subscription-@item.Id-lable" aria-hidden="true">
                             <div class="modal-dialog">
@@ -163,12 +165,19 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="row">
-                                            <div class="col-md-6" style="text-align: center; margin-bottom: 20px;">
-                                                <img class="img-thumbnail" src="@Url.Action("image", "default", new { Area = "media", key = item.ImageId })" />
+                                            <div class="col-md-4" style="text-align: center; margin-bottom: 20px;">
+                                            @if (item.ImageId == System.Guid.Empty)
+                                            {
+                                                <img src="~/img/default-person-picture-alt.jpg" class="img-responsive img-circle" />
+                                            }
+                                            else
+                                            {
+                                                <img src="@Url.Action("image", "default", new { Area = "media", key = item.ImageId })" class="img-responsive img-circle" />
+                                            }
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-8">
                                                 <dl style="margin-bottom: 0;">
-                                                    <dt>Identificador</dt>
+                                                    <dt>Usuario</dt>
                                                     <dd>@item.Id</dd>
                                                     <dt>Nombre(s)</dt>
                                                     <dd>@item.Name</dd>
@@ -196,7 +205,7 @@
         else
         {
             <tr>
-                <td colspan="3"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
+                <td colspan="4"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
             </tr>    
         }
         </tbody>

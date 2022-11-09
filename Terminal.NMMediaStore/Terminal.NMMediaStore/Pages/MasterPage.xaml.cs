@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 {
-    [Xamarin.Forms.Xaml.XamlCompilation(Xamarin.Forms.Xaml.XamlCompilationOptions.Compile)]
     public partial class MasterPage : Xamarin.Forms.ContentPage
     {
         private const string FETCH_ORDER_AUDIO_VISUAL_OPTION_DETAIL = "Mostrar Detalles";

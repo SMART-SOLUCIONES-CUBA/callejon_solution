@@ -3,7 +3,7 @@
 @model SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Models.View.SubscriptionCreateViewModel
 
 @{
-    ViewData["Title"] = "Agregar Subscripción";
+    ViewData["Title"] = "Agregar Suscripción";
 
     ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
     {
@@ -19,7 +19,7 @@
         },
         new BreadcrumbViewModel
         {
-            Caption = "Subscripciones",
+            Caption = "Suscripciones",
             Url = Url.Action("index")
         },
         new BreadcrumbViewModel
@@ -44,6 +44,8 @@
 }
 
 @section scripts {
+    <script src="~/lib/moment/min/moment.min.js"></script>
+    <script src="~/lib/moment/locale/es.js"></script>
     <script src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 
     <script type="text/javascript">
@@ -88,17 +90,17 @@
 
         <div class="panel-body">
             <div class="row">
-                <div class="col-lg-3 col-md-4 col-sm-4" style="margin-bottom: 20px;">
-                    <div class="card">
-                        <img src="~/img/default-person-picture.jpg" class="card-img-top" id="ImageFilePreview" />
-                        <label class="btn btn-light" style="border-top-left-radius: 0; border-top-right-radius: 0; margin-bottom: 0;">
+                <div class="col-lg-2 col-md-3 col-sm-4" style="margin-bottom: 20px;">
+                    <div>
+                        <img src="~/img/default-person-picture-alt.jpg" class="img-responsive img-circle" id="ImageFilePreview" style="text-align: center;" />
+                        <label class="btn btn-default" style="margin-top: 6px;">
                             <span>Seleccionar ...</span>
                             @Html.EditorFor(model => model.ImageFile)
                         </label>
                     </div>
                     @Html.ValidationMessageFor(model => model.ImageFile, null, new { @class = "text-danger" })
                 </div>
-                <div class="col-lg-9 col-md-8 col-sm-8" style="margin-bottom: 20px;">
+                <div class="col-lg-10 col-md-9 col-sm-8" style="margin-bottom: 20px;">
                     <div style="margin-bottom: 20px;">
                         @Html.LabelFor(model => model.Id, new { @class = "control-label" })
                         @Html.TextBoxFor(model => model.Id, new { @class = "form-control" })
@@ -118,7 +120,7 @@
             </div>            
 
             <div class="row">
-                <div class="col-md-6" style="margin-bottom: 20px;">
+                <div class="col-md-6" style="margin-bottom: 10px;">
                     @Html.LabelFor(model => model.Password, new { @class = "control-label" })
                     @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.Password, null, new { @class = "text-danger" })
@@ -131,8 +133,10 @@
                 </div>
             </div>
 
+            <button type="submit" class="btn btn-default" style="margin-bottom: 20px;">Generar Contraseña</button>
+
             <div class="row">
-                <div class="col-sm-4" style="margin-bottom: 20px;">
+                <div class="col-sm-6" style="margin-bottom: 20px;">
                     <div class="checkbox">
                         <label>
                             @Html.EditorFor(model => model.Enabled) Habilitado
@@ -141,7 +145,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-4" style="margin-bottom: 20px;">
+                <div class="col-sm-6" style="margin-bottom: 20px;">
                     <div class="checkbox">
                         <label>
                             @Html.EditorFor(model => model.PasswordChangeRequired) Debe cambiar la contraseña?

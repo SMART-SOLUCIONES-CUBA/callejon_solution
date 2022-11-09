@@ -1,11 +1,13 @@
-﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Managers.Facade
+﻿using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models;
+
+namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Managers.Facade
 {
     public interface ISubscriptionManagerFacade
     {
-        Models.SubscriptorModel GetAuthenticatedSubscritor();
+        SubscriptionModel GetAuthenticatedSubscrition();
 
         System.Threading.Tasks.Task AuthenticateAsync(string id, string password);
 
-        System.Threading.Tasks.Task PersistSubscriptionAsync(SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SubscriptionModel model);
+        System.Threading.Tasks.Task SubscriptionCompleteAsync(GenreModel[] genres, ProducerHouseModel[] producerHouses, TagModel[] tags);
     }
 }

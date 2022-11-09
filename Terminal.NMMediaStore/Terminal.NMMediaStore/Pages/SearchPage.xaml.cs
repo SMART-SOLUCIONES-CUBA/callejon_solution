@@ -125,7 +125,7 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
         {
             this.NavigationPushPageAsync(new FilterResultPage(new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SearchModel
             {
-                SubscriptionId = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Managers.Facade.ISubscriptionManagerFacade>().GetAuthenticatedSubscritor().Subscription.Id,
+                SubscriptionId = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Managers.Facade.ISubscriptionManagerFacade>().GetAuthenticatedSubscrition().Id,
                 TitleTemathic = BindingContextModel.TitleTemathic,
                 Category = BindingContextModel.Category,
                 Country = BindingContextModel.Country,
@@ -152,10 +152,10 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
             var subscriptionManager = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Managers.Facade.ISubscriptionManagerFacade>();
             var searchProvider = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Providers.Facade.ISearchProviderFacade>();
 
-            var subscriptor = subscriptionManager.GetAuthenticatedSubscritor();
+            var subscriptor = subscriptionManager.GetAuthenticatedSubscrition();
 
-            var subscriptorSearches = await searchProvider.GetLastSubscriptorSearchesAsync(subscriptor.Subscription.Id);
-            var otherSubscriptorsSearches = await searchProvider.GetLastOtherSubscriptorsSearchesAsync(subscriptor.Subscription.Id);
+            var subscriptorSearches = await searchProvider.GetLastSubscriptorSearchesAsync(subscriptor.Id);
+            var otherSubscriptorsSearches = await searchProvider.GetLastOtherSubscriptorsSearchesAsync(subscriptor.Id);
 
             Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
             {

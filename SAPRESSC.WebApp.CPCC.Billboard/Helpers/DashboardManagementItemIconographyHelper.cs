@@ -46,6 +46,8 @@
 
             if (model.Controller.EndsWith("advertisements")) return "<span class=\"glyphicon glyphicon-bullhorn\"></span>";
 
+            if (model.Controller.EndsWith("subscriptions")) return "<span class=\"glyphicon glyphicon-ok-circle\"></span>";
+
             return "<span class=\"glyphicon glyphicon-file\"></span>";
         }
     }

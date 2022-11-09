@@ -453,4 +453,10 @@
   <data name="Action" xml:space="preserve">
     <value>Acción</value>
   </data>
+  <data name="ServiceAvailabilityFrom" xml:space="preserve">
+    <value>Servicio Disponible desde</value>
+  </data>
+  <data name="ServiceAvailabilityTo" xml:space="preserve">
+    <value>Servicio Disponible hasta</value>
+  </data>
 </root>

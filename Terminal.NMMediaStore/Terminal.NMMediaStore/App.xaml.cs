@@ -52,30 +52,21 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore
                 return;
             }
             
-            if (exception.InnerException is Novell.Directory.Ldap.LdapException)
-            {
-                var concreteException = exception.InnerException as Novell.Directory.Ldap.LdapException;
-
-                switch (concreteException.ResultCode)
-                {
-                    case Novell.Directory.Ldap.LdapException.InvalidCredentials:
-                        MainPage.DisplayAlert(StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, StringConstantProvider.INVALID_CREDENTIALS_LDAP_EXCEPTION_MESSAGE, StringConstantProvider.OK_ACTION).ContinueWith(_ => { callbackAction?.Invoke(); });
-
-                        break;
-
-                    default:
-                        MainPage.DisplayAlert(StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, StringConstantProvider.UNSPECTED_LDAP_EXCEPTION_MESSAGE, StringConstantProvider.OK_ACTION).ContinueWith(_ => { callbackAction?.Invoke(); });
-
-                        break;
-                }
-            }
-            else if (exception.InnerException is Common.Exceptions.UnspectedHttpStatusException)
+            if (exception.InnerException is Common.Exceptions.UnspectedHttpStatusException)
             {
                 var concreteException = exception.InnerException as Common.Exceptions.UnspectedHttpStatusException;
 
                 if (concreteException.HttpStatusCode == System.Net.HttpStatusCode.UpgradeRequired)
                 {
                     MainPage.DisplayAlert(StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, StringConstantProvider.UPGRADE_REQUIRED_EXCEPTION_MESSAGE, StringConstantProvider.OK_ACTION).ContinueWith(_ => { callbackAction?.Invoke(); });
+                }
+                else if (concreteException.HttpStatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    MainPage.DisplayAlert(StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, StringConstantProvider.INVALID_CREDENTIALS_EXCEPTION_MESSAGE, StringConstantProvider.OK_ACTION).ContinueWith(_ => { callbackAction?.Invoke(); });
+                }
+                else if (concreteException.HttpStatusCode == System.Net.HttpStatusCode.Forbidden)
+                {
+                    MainPage.DisplayAlert(StringConstantProvider.ADVICE_ALERT_DIALOG_TITLE, StringConstantProvider.SUBSCRIPTION_DISABLED_EXCEPTION_MESSAGE, StringConstantProvider.OK_ACTION).ContinueWith(_ => { callbackAction?.Invoke(); });
                 }
                 else
                 {

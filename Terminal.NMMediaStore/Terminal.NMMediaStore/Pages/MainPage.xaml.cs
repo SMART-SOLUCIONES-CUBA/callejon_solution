@@ -1,12 +1,10 @@
-﻿using SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Extensions;
-using SmartSolucionesCuba.XFToolKit.Mvvm.Extensions;
+﻿using SmartSolucionesCuba.XFToolKit.Mvvm.Extensions;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 {
     // Learn more about making custom code visible in the Xamarin.Forms previewer
     // by visiting https://aka.ms/xamarinforms-previewer
     [System.ComponentModel.DesignTimeVisible(false)]
-    [Xamarin.Forms.Xaml.XamlCompilation(Xamarin.Forms.Xaml.XamlCompilationOptions.Compile)]
     public partial class MainPage : Xamarin.Forms.MasterDetailPage
     {
         public MainPage()
@@ -24,13 +22,13 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
             var subscriptionManager = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Managers.Facade.ISubscriptionManagerFacade>();
 
-            var subscriptor = subscriptionManager.GetAuthenticatedSubscritor();
+            var subscription = subscriptionManager.GetAuthenticatedSubscrition();
 
-            if (subscriptor == null)
+            if (subscription == null)
             {
                 this.NavigationPushModalPageAsync(new SignInPage(OnAppearing));
             }
-            else if (subscriptor.Subscription == null)
+            else if (subscription.LastSignInAt == null)
             {
                 this.NavigationPushModalPageAsync(new SubscriptionConfigurationPage(OnAppearing));
             }
@@ -43,9 +41,9 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
                     IsBusy = false,
                     Subscriptor = new Models.View.SubscriptorViewModel
                     {
-                        Name = subscriptor.Name,
-                        LastName = subscriptor.LastName,
-                        ImageSource = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Providers.Facade.IImageSourceProviderFacade>().GetForSubscriptor(subscriptor)
+                        Name = subscription.Name,
+                        LastName = subscription.LastName,
+                        ImageSource = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Providers.Facade.IImageSourceProviderFacade>().GetByModel(subscription)
                     },
                     Target = new Models.View.StorageViewModel
                     {

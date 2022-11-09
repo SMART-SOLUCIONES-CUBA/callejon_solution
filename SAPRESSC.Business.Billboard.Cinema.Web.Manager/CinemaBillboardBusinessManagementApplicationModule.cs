@@ -16,6 +16,14 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager
                 new DashboardManageItemViewModel
                 {
                     Action = "index",
+                    Area = "mediastore",
+                    Controller = "subscriptions",
+                    Role = CinemaBillboardBusinessManagementRoleCodes.SubscriptioManagerViewer,
+                    Title = "Suscripciones"
+                },
+                new DashboardManageItemViewModel
+                {
+                    Action = "index",
                     Area = "cinemabillboard",
                     Controller = "advertisements",
                     Role = CinemaBillboardBusinessManagementRoleCodes.AdvertisementManagerViewer,
@@ -116,14 +124,6 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager
                     Controller = "tags",
                     Role = CinemaBillboardBusinessManagementRoleCodes.TagManagerViewer,
                     Title = "Tags"
-                },
-                new DashboardManageItemViewModel
-                {
-                    Action = "index",
-                    Area = "mediastore",
-                    Controller = "subscriptions",
-                    Role = CinemaBillboardBusinessManagementRoleCodes.SubscriptioManagerViewer,
-                    Title = "Suscripciones"
                 }
             };
         }

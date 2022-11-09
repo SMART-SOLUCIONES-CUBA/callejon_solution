@@ -16,7 +16,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
             this.repository = repository;
         }
 
-        [HttpGet("{id}/{pwd}")]
+        [HttpGet("{id}/{password}")]
         public virtual IActionResult Get(string id, string password)
         {
             try
@@ -70,7 +70,7 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.CPCC.Web.FrontEnd.Cont
             }
             catch
             {
-                return NoContent();
+                return Unauthorized();
             }
         }
 

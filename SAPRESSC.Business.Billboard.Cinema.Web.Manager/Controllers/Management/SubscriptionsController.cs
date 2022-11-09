@@ -97,6 +97,8 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
                 ServiceAvailabilityTo = modelInput.ServiceAvailabilityTo
             };
 
+            ValidateCreate(modelInput);
+
             if (TryValidateModel(modelInput))
             {
                 var entity = modelInput.Export();
@@ -252,6 +254,38 @@ namespace SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Manager.Con
             if (entity.Identity.Image != null)
             {
                 mediaFileManager.DeleteImageFile(entity.Identity.Image.Id);
+            }
+        }
+
+        protected override void ValidateCreate(SubscriptionInputViewModel modelInput)
+        {
+            base.ValidateCreate(modelInput);
+
+            if (modelInput.ServiceAvailabilityTo.Date <= System.DateTime.Now.Date)
+            {
+                ModelState.AddModelError("ServiceAvailabilityTo", localizer["ServiceAvailabilityToInvalidMesssage"]);
+            }
+
+            if (modelInput.ServiceAvailabilityTo <= modelInput.ServiceAvailabilityFrom)
+            {
+                ModelState.AddModelError("ServiceAvailabilityTo", localizer["ServiceAvailabilityToCompareMesssage"]);
+                ModelState.AddModelError("ServiceAvailabilityFrom", localizer["ServiceAvailabilityFromCompareMesssage"]);
+            }
+        }
+
+        protected override void ValidateEdit(SubscriptionInputViewModel modelInput)
+        {
+            base.ValidateEdit(modelInput);
+
+            if (modelInput.ServiceAvailabilityTo.Date <= System.DateTime.Now.Date)
+            {
+                ModelState.AddModelError("ServiceAvailabilityTo", localizer["ServiceAvailabilityToInvalidMesssage"]);
+            }
+
+            if (modelInput.ServiceAvailabilityTo <= modelInput.ServiceAvailabilityFrom)
+            {
+                ModelState.AddModelError("ServiceAvailabilityTo", localizer["ServiceAvailabilityToCompareMesssage"]);
+                ModelState.AddModelError("ServiceAvailabilityFrom", localizer["ServiceAvailabilityFromCompareMesssage"]);
             }
         }
 

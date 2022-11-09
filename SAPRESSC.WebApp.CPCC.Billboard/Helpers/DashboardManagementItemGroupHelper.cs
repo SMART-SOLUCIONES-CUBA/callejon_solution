@@ -29,7 +29,7 @@ namespace SmartSolucionesCuba.SAPRESSC.WebApp.CPCC.Billboard.Helpers
                         var rawItems = (module as IManagementApplicationModule).GetDashboardManagementItems();
 
                         var publicsControllers = new string[] { "advises", "events", "presentations", "fixscreenclientconfigurations" };
-                        var mediaLibraryControllers = new string[] { "subscriptions", "advertisements", "productions", "collections", "categories", "subscriptions" };
+                        var mediaLibraryControllers = new string[] { "subscriptions", "advertisements", "productions", "collections", "categories" };
                         var supportControllers = new string[] { "genres", "awards", "languages", "cinemas", "producerhouses", "personalities", "clasifications", "tags" };
 
                         billboardItems.AddRange(rawItems.Where(item => publicsControllers.Contains(item.Controller)).ToArray());

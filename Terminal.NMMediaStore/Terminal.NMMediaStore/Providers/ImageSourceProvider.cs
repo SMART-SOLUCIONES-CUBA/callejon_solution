@@ -4,24 +4,22 @@
     {
         public Xamarin.Forms.ImageSource GetByModel(SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.ImageModel model)
         {
-            return Xamarin.Forms.ImageSource.FromUri(new System.Uri(string.Format("http://sgc.elcallejon.net/media/default/image/{0}", model.Id)));
+            return GetByImageId(model.Id);
         }
 
         public Xamarin.Forms.ImageSource GetByModel(SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.PersonalityModel model)
         {
-            return Xamarin.Forms.ImageSource.FromUri(new System.Uri( model.Image != null ? string.Format("http://sgc.elcallejon.net/media/default/image/{0}", model.Image.Id) : "http://sgc.elcallejon.net/img/default-person-picture.jpg"));
+            return GetByImageId(model.Image?.Id);
         }
 
-        public Xamarin.Forms.ImageSource GetForSubscriptor(Models.SubscriptorModel model)
+        private Xamarin.Forms.ImageSource GetByImageId(System.Guid? imageId)
         {
-            if (model.ThumbnailContent == null)
-            {
-                var randomizer = new System.Random();
+            return Xamarin.Forms.ImageSource.FromUri(new System.Uri(imageId != null ? string.Format("http://sgc.elcallejon.net/media/default/image/{0}", imageId) : "http://sgc.elcallejon.net/img/default-person-picture.jpg"));
+        }
 
-                return Xamarin.Forms.ImageSource.FromResource(string.Format("SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Resources.Images.{0}.jpg", randomizer.Next(1, 1)), typeof(App).Assembly);
-            }
-
-            return Xamarin.Forms.ImageSource.FromStream(() => new System.IO.MemoryStream(model.ThumbnailContent));
+        public Xamarin.Forms.ImageSource GetByModel(SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SubscriptionModel model)
+        {
+            return GetByImageId(model.ImageId);
         }
     }
 }

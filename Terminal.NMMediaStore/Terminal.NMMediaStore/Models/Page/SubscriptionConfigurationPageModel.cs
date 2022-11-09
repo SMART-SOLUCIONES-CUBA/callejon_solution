@@ -11,8 +11,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Models.Page
         private ProducerHouseModel[] choisedProducerHouses;
         private TagModel[] choisedTags;
 
-        public SubscriptorModel Subscriptor { get; set; }
-
         public View.GenreChoiseViewModel[] GenreChoises { get => genreChoises; set => SetProperty(ref genreChoises, value); }
 
         public View.ProducerHouseChoiseViewModel[] ProducerHouseChoises { get => producerHouseChoises; set => SetProperty(ref producerHouseChoises, value); }
@@ -36,8 +34,6 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Models.Page
             ChoisedGenres = null;
             ChoisedProducerHouses = null;
             ChoisedTags = null;
-
-            Subscriptor = null;
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Linq;
 
 namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 {
-    [Xamarin.Forms.Xaml.XamlCompilation(Xamarin.Forms.Xaml.XamlCompilationOptions.Compile)]
     public partial class SubscriptionConfigurationPage : XFToolKit.Mvvm.Pages.CarouselPage
     {
         private System.Action callbackAction;
@@ -99,12 +98,11 @@ namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Pages
 
             var subscriptionManager = XFToolKit.IoC.TinyIoCContainer.Current.Resolve<Managers.Facade.ISubscriptionManagerFacade>();
 
-            subscriptionManager.PersistSubscriptionAsync(new SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SubscriptionModel
-            {
-                PreferedGenres = BindingContextModel.GenreChoises.Where(item => item.Choised).Select(item => item.Genre).ToArray(),
-                PreferedProducerHouses = BindingContextModel.ProducerHouseChoises.Where(item => item.Choised).Select(item => item.ProducerHouse).ToArray(),
-                PreferedTags = BindingContextModel.TagChoises.Where(item => item.Choised).Select(item => item.Tag).ToArray()
-            }).ContinueWith(persistTask =>
+            subscriptionManager.SubscriptionCompleteAsync(
+                BindingContextModel.GenreChoises.Where(item => item.Choised).Select(item => item.Genre).ToArray(),
+                BindingContextModel.ProducerHouseChoises.Where(item => item.Choised).Select(item => item.ProducerHouse).ToArray(),
+                BindingContextModel.TagChoises.Where(item => item.Choised).Select(item => item.Tag).ToArray()
+            ).ContinueWith(persistTask =>
             {
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {

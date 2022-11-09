@@ -1,86 +1,32 @@
-﻿namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Managers
+﻿using SmartSolucionesCuba.SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models;
+
+namespace SmartSolucionesCuba.CPCC.PCM.Terminal.NMMediaStore.Managers
 {
     public class SubscriptionManager : Facade.ISubscriptionManagerFacade
     {
-        private const string FIRST_NAME_LDAP_USER_ATTRIBUTE = "givenName";
-        private const string LAST_NAME_LDAP_USER_ATTRIBUTE = "sn";
-        private const string THUMBNAIL_PHOTO_LDAP_USER_ATTRIBUTE = "thumbnailPhoto";
-
-        private const string AUTHORITY = "ElCallejon.net";
-
         private const string TARGET_API_BASE_QUERY = "mediastore/subscriptions";
 
-        private Models.SubscriptorModel authenticatedSubscriptor;
+        private SubscriptionModel authenticatedSubscription;
 
         public async System.Threading.Tasks.Task AuthenticateAsync(string id, string password)
         {
-            var userPrincipalName = string.Format("{1}@{0}", "ElCallejon.net", id);
-
-            var ldapConnetion = new Novell.Directory.Ldap.LdapConnection();
-
-            ldapConnetion.Connect(AUTHORITY, Novell.Directory.Ldap.LdapConnection.DefaultPort);
-
-            ldapConnetion.Bind(Novell.Directory.Ldap.LdapConnection.LdapV3, userPrincipalName, password);
-
-            var ldapConnetionSearchConstraints = ldapConnetion.SearchConstraints;
-
-            ldapConnetionSearchConstraints.ReferralFollowing = true;
-
-            ldapConnetion.Constraints = ldapConnetionSearchConstraints;
-
-            var searchResultQueue = ldapConnetion.Search("DC=ElCallejon,DC=net", Novell.Directory.Ldap.LdapConnection.ScopeSub, string.Format("(&(objectClass=user)(objectClass=person)(sAMAccountName={0}))", id), new string[] { FIRST_NAME_LDAP_USER_ATTRIBUTE, LAST_NAME_LDAP_USER_ATTRIBUTE, THUMBNAIL_PHOTO_LDAP_USER_ATTRIBUTE }, false, null, null);
-
-            Novell.Directory.Ldap.LdapMessage message;
-
-            while ((message = searchResultQueue.GetResponse()) != null)
-            {
-                if (!(message is Novell.Directory.Ldap.LdapSearchResult)) continue;
-
-                var entry = (message as Novell.Directory.Ldap.LdapSearchResult).Entry;
-
-                var attributeSet = entry.GetAttributeSet();
-
-                var subscriptor = new Models.SubscriptorModel
-                {
-                    Id = id,
-                    Name = attributeSet[FIRST_NAME_LDAP_USER_ATTRIBUTE].StringValue,
-                    LastName = attributeSet[LAST_NAME_LDAP_USER_ATTRIBUTE].StringValue,
-                    ThumbnailContent = attributeSet.ContainsKey(THUMBNAIL_PHOTO_LDAP_USER_ATTRIBUTE) ? attributeSet[THUMBNAIL_PHOTO_LDAP_USER_ATTRIBUTE].ByteValue : null
-                };
-
-                try
-                {
-                    subscriptor.Subscription = await Common.Helpers.HttpClientHelper.Instance.GetAsync<SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SubscriptionModel>(string.Format("{0}/{1}", TARGET_API_BASE_QUERY, id));
-                }
-                catch (Common.Exceptions.UnspectedHttpStatusException unspectedHttpStatusException)
-                {
-                    if (unspectedHttpStatusException.HttpStatusCode != System.Net.HttpStatusCode.NoContent) throw;
-                }
-                catch
-                {
-                    throw;
-                }
-
-                authenticatedSubscriptor = subscriptor;
-
-                break;
-            }
-
-            ldapConnetion.Disconnect();
+            authenticatedSubscription = await Common.Helpers.HttpClientHelper.Instance.GetAsync<SubscriptionModel>(string.Format("{0}/{1}/{2}", TARGET_API_BASE_QUERY, id, password));
         }
 
-        public Models.SubscriptorModel GetAuthenticatedSubscritor()
+        public SubscriptionModel GetAuthenticatedSubscrition()
         {
-            return authenticatedSubscriptor;
+            return authenticatedSubscription;
         }
 
-        public async System.Threading.Tasks.Task PersistSubscriptionAsync(SAPRESSC.Business.Billboard.Cinema.Web.Api.Common.Models.SubscriptionModel model)
+        public async System.Threading.Tasks.Task SubscriptionCompleteAsync(GenreModel[] genres, ProducerHouseModel[] producerHouses, TagModel[] tags)
         {
-            model.Id = authenticatedSubscriptor.Id;
+            authenticatedSubscription.PreferedGenres = genres;
+            authenticatedSubscription.PreferedProducerHouses = producerHouses;
+            authenticatedSubscription.PreferedTags = tags;
 
-            await Common.Helpers.HttpClientHelper.Instance.PostAsync(TARGET_API_BASE_QUERY, model);
+            await Common.Helpers.HttpClientHelper.Instance.PutAsync(TARGET_API_BASE_QUERY, authenticatedSubscription);
 
-            authenticatedSubscriptor.Subscription = model;
+            authenticatedSubscription.LastSignInAt = System.DateTime.Now;
         }
     }
 }

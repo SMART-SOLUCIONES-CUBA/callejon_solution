@@ -4,9 +4,9 @@
     {
         private const string SUPPORT_ORIENTATION_MESSAGE = "Por favor contacte con el personal de asistencia técnica para notificar esta situación.";
 
-        public const string INVALID_CREDENTIALS_LDAP_EXCEPTION_MESSAGE = "Usuario y/o contraseña incorrectos.";
+        public const string INVALID_CREDENTIALS_EXCEPTION_MESSAGE = "Usuario y/o contraseña incorrectos.";
 
-        public static string UNSPECTED_LDAP_EXCEPTION_MESSAGE = string.Format("Error al contactar con el servicio de autenticación.{1}{1}{0}", SUPPORT_ORIENTATION_MESSAGE, System.Environment.NewLine);
+        public static string SUBSCRIPTION_DISABLED_EXCEPTION_MESSAGE = string.Format("Usuario deshabilitado.{1}{1}{0}", SUPPORT_ORIENTATION_MESSAGE, System.Environment.NewLine);
 
         public const string INSUFFICIENT_STORAGE_SPACE_EXCEPTION_MESSAGE = "El espacio de almacenamiento disponible en su dispositivo no será suficiente para descargar este audio visual.";
 
